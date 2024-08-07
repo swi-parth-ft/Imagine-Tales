@@ -11,12 +11,14 @@ import SwiftUI
 struct ContentView: View {
     @State private var characters = ""
     @State private var genre = "Adventure"
-    @State private var theme = ""
+    @State private var theme = "Forest"
     @State private var story = ""
     @State private var isLoading = false
     @State private var words:[String] =  ["apple", "pinnaple", "orange", "tomato", "banana", "grape", "kiwi", "mango", "pear"]
     @State private var loaded = false
     @State private var isRandom = false
+    @State private var themes = ["Forest", "Car", "Plane", "Dark", "Colorful", "Cartoon", "Space", "Underwater", "Desert", "Cityscape", "Fantasy", "Sci-Fi", "Nature", "Retro", "Abstract", "Minimalist", "Industrial", "Vintage", "Cyberpunk", "Steampunk"]
+    
     
     @State private var scale: CGFloat = 1.0
     let genres = [
@@ -108,7 +110,11 @@ struct ContentView: View {
                                         Text(genre).tag(genre)
                                     }
                                 }
-                                TextField("Theme...", text: $theme)
+                                Picker("Theme", selection: $theme) {
+                                    ForEach(themes, id: \.self) { theme in
+                                        Text(theme).tag(theme)
+                                    }
+                                }
                             }
                             .listRowBackground(Color.white.opacity(0.5))
                             
@@ -132,18 +138,11 @@ struct ContentView: View {
                             }
                         }
                     }
-                    
-                    
                         Button(action: generateStory) {
                             Text(!loaded ? "Generate Story ✨" : "Regenerate ✨")
                                 .foregroundStyle(.white)
                         }
                         .buttonStyle()
-                    
-                   
-                    
-                    
-                    
                     
                 }
                 .onAppear {
@@ -161,7 +160,7 @@ struct ContentView: View {
                         characters = ""
                         genre = "Adventure"
                         story = ""
-                        theme = ""
+                        theme = "Forest"
                         loaded = false
                         isRandom = false
                     }
@@ -260,39 +259,13 @@ struct ButtonViewModifier: ViewModifier {
     }
 }
 
-struct GradientBackgroundModifier: ViewModifier {
-    @State private var gradientOffset: CGFloat = -600
-    
-    func body(content: Content) -> some View {
-        ZStack {
-            // Animated gradient background
-            LinearGradient(
-                gradient: Gradient(colors: [.blue, .purple, .pink, .orange]),
-                startPoint: .leading,
-                endPoint: .trailing
-            )
-            .frame(width: 100)
-            .offset(x: gradientOffset)
-            .animation(
-                Animation.linear(duration: 4)
-                    .repeatForever(autoreverses: false)
-            )
-            .mask(content) // Mask the gradient to the content shape
-        }
-        .onAppear {
-            gradientOffset = 300
-        }
-    }
-}
+
 
 extension View {
     func buttonStyle() -> some View {
         modifier(ButtonViewModifier())
     }
-    
-    func gradientBackground() -> some View {
-        self.modifier(GradientBackgroundModifier())
-    }
+  
 }
 
 #Preview {
