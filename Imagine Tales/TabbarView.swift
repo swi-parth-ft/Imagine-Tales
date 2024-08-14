@@ -18,17 +18,20 @@ struct TabbarView: View {
         BottomBarItem(icon: "person", color: Color.iconColor)
     ]
     
-    @State public var selectedIndex: Int = 0
+    @State public var selectedIndex: Int = 2
+    @Binding var showSignInView: Bool
     
-    let viewList = [ContentView(),
-                    ContentView(),
-                    ContentView(),
-                    ContentView(),
-                    ContentView()]
+    
     
     var body: some View {
         
         ZStack {
+            
+            let viewList = [AnyView(ContentView()),
+                            AnyView(ContentView()),
+                            AnyView(ContentView()),
+                            AnyView(ContentView()),
+                            AnyView(ProfileView(showSignInView: $showSignInView))]
             
             NavigationView {
             viewList[selectedIndex]
@@ -49,53 +52,11 @@ struct TabbarView: View {
                 
             }
         }
-//        TabView {
-//            NavigationStack {
-//                ContentView()
-//            }
-//            .tabItem {
-//                Image(systemName: "circle.grid.hex")
-//                Text("Imagine")
-//            }
-//            
-//            NavigationStack {
-//                ContentView()
-//            }
-//            .tabItem {
-//                Image(systemName: "magnifyingglass")
-//                Text("Imagine")
-//            }
-//            
-//            NavigationStack {
-//                ContentView()
-//            }
-//            .tabItem {
-//                Image(systemName: "plus")
-//                Text("Imagine")
-//            }
-//            
-//            NavigationStack {
-//                ContentView()
-//            }
-//            .tabItem {
-//                Image(systemName: "heart")
-//                Text("Imagine")
-//            }
-//            
-//            NavigationStack {
-//                ContentView()
-//            }
-//            .tabItem {
-//                Image(systemName: "person")
-//                Text("Imagine")
-//            }
-//        }
-//        .background(.white)
         
        
     }
 }
 
 #Preview {
-    TabbarView()
+    TabbarView(showSignInView: .constant(false))
 }

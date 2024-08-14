@@ -8,9 +8,27 @@
 import SwiftUI
 
 struct RootView: View {
+    
+    @State private var showSignInView = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            TabbarView(showSignInView: $showSignInView)
+        }
+        .onAppear {
+            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+            self.showSignInView = authUser == nil
+        }
+        .sheet(isPresented: $showSignInView) {
+            NavigationStack {
+                AuthenticationView(showSignInView: $showSignInView)
+                    .presentationDetents([.fraction(0.7), .medium])
+            }
+            
+        }
+        
     }
+        
 }
 
 #Preview {

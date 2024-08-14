@@ -10,6 +10,16 @@
 		0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F34E2C6D5D79006C86AA /* RootView.swift */; };
 		0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3502C6D5DCA006C86AA /* TabbarView.swift */; };
 		0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3532C6D5F3F006C86AA /* FloatingTabBar */; };
+		0711F3582C6D63F1006C86AA /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3572C6D63F1006C86AA /* AuthenticationView.swift */; };
+		0711F3642C6D6C6F006C86AA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3632C6D6C6F006C86AA /* FirebaseAnalytics */; };
+		0711F3662C6D6C6F006C86AA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3652C6D6C6F006C86AA /* FirebaseAuth */; };
+		0711F3682C6D6D0D006C86AA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0711F3672C6D6D0D006C86AA /* GoogleService-Info.plist */; };
+		0711F36B2C6D6E2B006C86AA /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F36A2C6D6E2B006C86AA /* GoogleSignIn */; };
+		0711F36D2C6D6E2B006C86AA /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F36C2C6D6E2B006C86AA /* GoogleSignInSwift */; };
+		0711F3702C6D71EC006C86AA /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F36F2C6D71EC006C86AA /* AuthenticationManager.swift */; };
+		0711F3722C6D7244006C86AA /* SignInGoogleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3712C6D7244006C86AA /* SignInGoogleHelper.swift */; };
+		0711F3742C6D725C006C86AA /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3732C6D725C006C86AA /* Utilities.swift */; };
+		0711F3762C6D7433006C86AA /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3752C6D7433006C86AA /* ProfileView.swift */; };
 		07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */; };
 		07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB384A2C62BEAB0070EEFA /* ContentView.swift */; };
 		07FB384D2C62BEAC0070EEFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07FB384C2C62BEAC0070EEFA /* Assets.xcassets */; };
@@ -24,6 +34,12 @@
 /* Begin PBXFileReference section */
 		0711F34E2C6D5D79006C86AA /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		0711F3502C6D5DCA006C86AA /* TabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
+		0711F3572C6D63F1006C86AA /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		0711F3672C6D6D0D006C86AA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0711F36F2C6D71EC006C86AA /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
+		0711F3712C6D7244006C86AA /* SignInGoogleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInGoogleHelper.swift; sourceTree = "<group>"; };
+		0711F3732C6D725C006C86AA /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		0711F3752C6D7433006C86AA /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		07FB38452C62BEAB0070EEFA /* Imagine Tales.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Imagine Tales.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imagine_TalesApp.swift; sourceTree = "<group>"; };
 		07FB384A2C62BEAB0070EEFA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -42,6 +58,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0711F36D2C6D6E2B006C86AA /* GoogleSignInSwift in Frameworks */,
+				0711F3642C6D6C6F006C86AA /* FirebaseAnalytics in Frameworks */,
+				0711F36B2C6D6E2B006C86AA /* GoogleSignIn in Frameworks */,
+				0711F3662C6D6C6F006C86AA /* FirebaseAuth in Frameworks */,
 				0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,6 +69,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0711F36E2C6D7046006C86AA /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				0711F3732C6D725C006C86AA /* Utilities.swift */,
+				0711F3712C6D7244006C86AA /* SignInGoogleHelper.swift */,
+				0711F3572C6D63F1006C86AA /* AuthenticationView.swift */,
+				0711F36F2C6D71EC006C86AA /* AuthenticationManager.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
 		07FB383C2C62BEAA0070EEFA = {
 			isa = PBXGroup;
 			children = (
@@ -68,7 +99,9 @@
 		07FB38472C62BEAB0070EEFA /* Imagine Tales */ = {
 			isa = PBXGroup;
 			children = (
+				0711F36E2C6D7046006C86AA /* Authentication */,
 				07FB38622C63B3250070EEFA /* Imagine-Tales-Info.plist */,
+				0711F3672C6D6D0D006C86AA /* GoogleService-Info.plist */,
 				07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */,
 				0711F34E2C6D5D79006C86AA /* RootView.swift */,
 				0711F3502C6D5DCA006C86AA /* TabbarView.swift */,
@@ -80,6 +113,7 @@
 				07FB384E2C62BEAC0070EEFA /* Preview Content */,
 				07FB38602C63B2360070EEFA /* Config.xcconfig */,
 				07FB38632C63B3720070EEFA /* Environment.swift */,
+				0711F3752C6D7433006C86AA /* ProfileView.swift */,
 			);
 			path = "Imagine Tales";
 			sourceTree = "<group>";
@@ -138,6 +172,8 @@
 			mainGroup = 07FB383C2C62BEAA0070EEFA;
 			packageReferences = (
 				0711F3522C6D5F3F006C86AA /* XCRemoteSwiftPackageReference "FloatingTabBar" */,
+				0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				0711F3692C6D6E2B006C86AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = 07FB38462C62BEAB0070EEFA /* Products */;
 			projectDirPath = "";
@@ -153,6 +189,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0711F3682C6D6D0D006C86AA /* GoogleService-Info.plist in Resources */,
 				07FB38502C62BEAC0070EEFA /* Preview Assets.xcassets in Resources */,
 				07FB38612C63B2360070EEFA /* Config.xcconfig in Resources */,
 				07FB384D2C62BEAC0070EEFA /* Assets.xcassets in Resources */,
@@ -169,10 +206,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */,
+				0711F3702C6D71EC006C86AA /* AuthenticationManager.swift in Sources */,
 				07FB38592C62D2630070EEFA /* AnimationLoading.swift in Sources */,
 				07FB38642C63B3720070EEFA /* Environment.swift in Sources */,
+				0711F3722C6D7244006C86AA /* SignInGoogleHelper.swift in Sources */,
+				0711F3582C6D63F1006C86AA /* AuthenticationView.swift in Sources */,
 				07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */,
 				07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */,
+				0711F3742C6D725C006C86AA /* Utilities.swift in Sources */,
+				0711F3762C6D7433006C86AA /* ProfileView.swift in Sources */,
 				0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -393,6 +435,22 @@
 				kind = branch;
 			};
 		};
+		0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+		0711F3692C6D6E2B006C86AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -400,6 +458,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0711F3522C6D5F3F006C86AA /* XCRemoteSwiftPackageReference "FloatingTabBar" */;
 			productName = FloatingTabBar;
+		};
+		0711F3632C6D6C6F006C86AA /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		0711F3652C6D6C6F006C86AA /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		0711F36A2C6D6E2B006C86AA /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0711F3692C6D6E2B006C86AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		0711F36C2C6D6E2B006C86AA /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0711F3692C6D6E2B006C86AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

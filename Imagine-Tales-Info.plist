@@ -4,5 +4,20 @@
 <dict>
 	<key>API_KEY</key>
 	<string>$(API_KEY)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>googleSignIn</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.500615670694-qdgqa8agkf4otbds3qgoh7iriv8cu366</string>
+			</array>
+		</dict>
+	</array>
+	<key>GIDClientID</key>
+	<string>500615670694-qdgqa8agkf4otbds3qgoh7iriv8cu366.apps.googleusercontent.com</string>
 </dict>
 </plist>
