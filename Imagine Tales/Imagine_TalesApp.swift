@@ -11,7 +11,7 @@ import SwiftUI
 struct Imagine_TalesApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
         }
     }
 }

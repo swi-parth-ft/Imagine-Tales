@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F34E2C6D5D79006C86AA /* RootView.swift */; };
+		0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3502C6D5DCA006C86AA /* TabbarView.swift */; };
+		0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3532C6D5F3F006C86AA /* FloatingTabBar */; };
 		07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */; };
 		07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB384A2C62BEAB0070EEFA /* ContentView.swift */; };
 		07FB384D2C62BEAC0070EEFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07FB384C2C62BEAC0070EEFA /* Assets.xcassets */; };
@@ -19,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0711F34E2C6D5D79006C86AA /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		0711F3502C6D5DCA006C86AA /* TabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
 		07FB38452C62BEAB0070EEFA /* Imagine Tales.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Imagine Tales.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imagine_TalesApp.swift; sourceTree = "<group>"; };
 		07FB384A2C62BEAB0070EEFA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -37,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +70,8 @@
 			children = (
 				07FB38622C63B3250070EEFA /* Imagine-Tales-Info.plist */,
 				07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */,
+				0711F34E2C6D5D79006C86AA /* RootView.swift */,
+				0711F3502C6D5DCA006C86AA /* TabbarView.swift */,
 				07FB38562C62D21F0070EEFA /* Animation.gif */,
 				07FB385C2C62D6F00070EEFA /* Animation2.gif */,
 				07FB384A2C62BEAB0070EEFA /* ContentView.swift */,
@@ -128,6 +136,9 @@
 				Base,
 			);
 			mainGroup = 07FB383C2C62BEAA0070EEFA;
+			packageReferences = (
+				0711F3522C6D5F3F006C86AA /* XCRemoteSwiftPackageReference "FloatingTabBar" */,
+			);
 			productRefGroup = 07FB38462C62BEAB0070EEFA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -157,10 +168,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */,
 				07FB38592C62D2630070EEFA /* AnimationLoading.swift in Sources */,
 				07FB38642C63B3720070EEFA /* Environment.swift in Sources */,
 				07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */,
 				07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */,
+				0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,6 +383,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0711F3522C6D5F3F006C86AA /* XCRemoteSwiftPackageReference "FloatingTabBar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/claudiaeng/FloatingTabBar.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0711F3532C6D5F3F006C86AA /* FloatingTabBar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0711F3522C6D5F3F006C86AA /* XCRemoteSwiftPackageReference "FloatingTabBar" */;
+			productName = FloatingTabBar;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 07FB383D2C62BEAA0070EEFA /* Project object */;
 }
