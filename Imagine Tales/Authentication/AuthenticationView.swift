@@ -17,8 +17,11 @@ final class AuthenticationViewModel: ObservableObject {
     
     @Published var didSignInWithApple = false
     
-    func signInGoogle() async throws {
-        
+    func signInGoogle() async throws -> AuthDataResultModel?{
+        let helper = SignInGoogleHelper()
+        let tokens = try await helper.signIn()
+        return try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
+      
     }
     
     func signInWithEmail() async throws -> AuthDataResultModel? {
@@ -109,8 +112,9 @@ struct AuthenticationView: View {
                 GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .dark, style: .icon, state: .normal)) {
                     Task {
                         do {
-                            //                        try await viewModel.signInGoogle()
-                            showSignInView = false
+                            if let _ = try await viewModel.signInGoogle() {
+                                showSignInView = false
+                            }
                         } catch {
                             print(error.localizedDescription)
                         }
