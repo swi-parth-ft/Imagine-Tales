@@ -31,6 +31,7 @@
 		0711F3892C6DB68B006C86AA /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3882C6DB68B006C86AA /* GoogleSignIn */; };
 		0711F38B2C6DB68B006C86AA /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F38A2C6DB68B006C86AA /* GoogleSignInSwift */; };
 		0711F38D2C6DB698006C86AA /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F38C2C6DB698006C86AA /* FloatingTabBar */; };
+		073F2CEA2C6EC85200BCF6F0 /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 073F2CE92C6EC85200BCF6F0 /* FirebaseVertexAI-Preview */; };
 		07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */; };
 		07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB384A2C62BEAB0070EEFA /* ContentView.swift */; };
 		07FB384D2C62BEAC0070EEFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07FB384C2C62BEAC0070EEFA /* Assets.xcassets */; };
@@ -82,6 +83,7 @@
 				0711F3852C6DB62D006C86AA /* FirebaseAuth in Frameworks */,
 				0711F3662C6D6C6F006C86AA /* FirebaseAuth in Frameworks */,
 				0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */,
+				073F2CEA2C6EC85200BCF6F0 /* FirebaseVertexAI-Preview in Frameworks */,
 				0711F37F2C6D96EC006C86AA /* DotLottie in Frameworks */,
 				0711F3832C6DB62D006C86AA /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				0711F3872C6DB67D006C86AA /* DotLottie in Frameworks */,
@@ -103,10 +105,18 @@
 			path = Authentication;
 			sourceTree = "<group>";
 		};
+		073F2CE82C6EC85200BCF6F0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		07FB383C2C62BEAA0070EEFA = {
 			isa = PBXGroup;
 			children = (
 				07FB38472C62BEAB0070EEFA /* Imagine Tales */,
+				073F2CE82C6EC85200BCF6F0 /* Frameworks */,
 				07FB38462C62BEAB0070EEFA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -556,6 +566,11 @@
 		0711F38C2C6DB698006C86AA /* FloatingTabBar */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FloatingTabBar;
+		};
+		073F2CE92C6EC85200BCF6F0 /* FirebaseVertexAI-Preview */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseVertexAI-Preview";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

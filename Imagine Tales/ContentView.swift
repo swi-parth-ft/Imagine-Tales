@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DotLottie
+import FirebaseVertexAI
 
 struct ContentView: View {
     @State private var characters = ""
@@ -23,6 +24,9 @@ struct ContentView: View {
     @State private var scale: CGFloat = 1.0
     @State private var generatedImage: UIImage? = nil
     @State private var isImageLoading = true
+    
+    let vertex = VertexAI.vertexAI()
+   // let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
     
     let genres = [
         "Adventure",
@@ -174,7 +178,15 @@ struct ContentView: View {
                     }
                     Button{
                         generatedImage = nil
-                        generateStory()
+                      //  generateStory()
+                        Task {
+                            do {
+                                try await generateStoryWithGemini()
+                            } catch {
+                                
+                            }
+                        }
+                        
                         generateImageUsingOpenAI()
                     } label: {
                             Text(!loaded ? "Generate Story ✨" : "Regenerate ✨")
@@ -256,6 +268,30 @@ The scene should include key elements from the story, such as important actions,
                 self.generatedImage = image
             case .failure(let error):
                 print("Error generating image: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func generateStoryWithGemini() async throws {
+        
+        withAnimation {
+            isLoading = true
+        }
+        words = extractWords(from: characters)
+        words.append(genre)
+        words.append(theme)
+        
+        let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
+        let prompt = "Create a story with characters: \(characters), genre: \(genre), and theme: \(theme) and finish it in 150 words."
+        let response = try await model.generateContent(prompt)
+        if let text = response.text {
+            DispatchQueue.main.async {
+                self.story = text
+                withAnimation {
+                    self.isLoading = false
+                    self.loaded = true
+                }
+                
             }
         }
     }
