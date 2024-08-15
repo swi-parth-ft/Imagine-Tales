@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import DotLottie
 
 struct ContentView: View {
     @State private var characters = ""
@@ -21,6 +21,9 @@ struct ContentView: View {
     
     
     @State private var scale: CGFloat = 1.0
+    @State private var generatedImage: UIImage? = nil
+    @State private var isImageLoading = true
+    
     let genres = [
         "Adventure",
         "Fantasy",
@@ -87,13 +90,46 @@ struct ContentView: View {
                             
                         } else {
                             // Show story text after loading
-                            ScrollView {
-                                Text(story)
-                                    .padding()
-                                    .foregroundColor(.white)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
-                            .frame(height: 500) // Adjust as needed
+                            
+                                ZStack {
+                                   
+                                    
+                                    RoundedRectangle(cornerRadius: 22)
+                                        .fill(Color.white.opacity(0.5))
+                                        .frame(width: 360, height: 480)
+                                    
+                                    VStack {
+                                        
+                                        
+                                        ScrollView {
+                                            
+                                            if let image = generatedImage {
+                                                Image(uiImage: image)
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .padding([.bottom, .top])
+                                                    .frame(width: 340, height: 250)
+                                                    .cornerRadius(22)
+                                                    .shadow(radius: 10)
+                                            }
+                                            
+                                            if isImageLoading {
+                                                
+                                                DotLottieAnimation(fileName: "imageLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
+                                                    .frame(width: 340, height: 150)
+                                            }
+                                            
+                                            Text(story)
+                                                .padding()
+                                                .foregroundColor(.white)
+                                            
+                                        }
+                                        .frame(width: 350, height: 470)
+                                    }
+                                    
+                                }
+                            
+                            
                         }
                     }
                     
@@ -127,22 +163,25 @@ struct ContentView: View {
                                 if !isRandom {
                                     ForEach(row, id: \.self) { word in
                                         Text(word)
-                                            .padding()
+                                            .padding(10)
                                             .background(Color.white.opacity(0.5))
                                             .cornerRadius(22)
-                                            .scaleEffect(scale)
-                                            .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true), value: scale)
                                         
                                     }
                                 }
                             }
                         }
                     }
-                        Button(action: generateStory) {
+                    Button{
+                        generatedImage = nil
+                        generateStory()
+                        generateImageUsingOpenAI()
+                    } label: {
                             Text(!loaded ? "Generate Story ✨" : "Regenerate ✨")
                                 .foregroundStyle(.white)
                         }
                         .buttonStyle()
+                        .padding(.bottom, 70)
                     
                 }
                 .onAppear {
@@ -197,6 +236,28 @@ struct ContentView: View {
         // Trim whitespace and filter out any empty strings
         return wordArray.map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
+    }
+    
+    
+    func generateImageUsingOpenAI() {
+        
+        let prompt = """
+Create an image that depicts a story with the following elements:
+- Characters: \(characters)
+- Genre: \(genre)
+- Theme: \(theme)
+
+The scene should include key elements from the story, such as important actions, interactions, or settings described. The overall mood should reflect the essence of the story, whether it's dark and mysterious, cheerful and colorful, adventurous, or calm and serene. The setting should be visually appropriate for the genre, such as a magical forest for fantasy, a futuristic city for science fiction, or a cozy home for a slice-of-life theme. Ensure the characters are dressed and posed in a manner that reflects their roles and the plot of the story.
+"""
+        OpenAIService.shared.generateImage(from: prompt) { result in
+            isImageLoading = false
+            switch result {
+            case .success(let image):
+                self.generatedImage = image
+            case .failure(let error):
+                print("Error generating image: \(error.localizedDescription)")
+            }
+        }
     }
     
     func generateStory() {

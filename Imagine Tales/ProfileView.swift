@@ -9,6 +9,11 @@ import SwiftUI
 
 final class ProfileViewModel: ObservableObject {
     
+    @Published private(set) var user: AuthDataResultModel? = nil
+    
+    func loadUser() throws {
+        user = try AuthenticationManager.shared.getAuthenticatedUser()
+    }
     func logOut() throws {
         try AuthenticationManager.shared.SignOut()
     }
@@ -20,21 +25,38 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
     var body: some View {
-        
-            List {
-                Button("Log out") {
-                    Task {
-                        do {
-                            try viewModel.logOut()
-                            showSignInView = true
-                        } catch {
-                            
+        NavigationStack {
+            ZStack {
+                LinearGradient(colors: [.purple, .black, .black], startPoint: .bottom, endPoint: .top)
+                    .ignoresSafeArea()
+                VStack {
+                    List {
+                        Text(viewModel.user?.email ?? "N/A")
+                            .listRowBackground(Color.white.opacity(0.5))
+                        Button("Log out") {
+                            Task {
+                                do {
+                                    try viewModel.logOut()
+                                    showSignInView = true
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                                
+                            }
                         }
-                            
+                        .listRowBackground(Color.white.opacity(0.5))
                     }
+                    .onAppear {
+                        try? viewModel.loadUser()
+                    }
+                    .scrollContentBackground(.hidden)
                 }
+                .padding([.trailing, .leading])
+                .navigationTitle("Profile")
             }
-            .navigationTitle("Profile")
+        }
+        .preferredColorScheme(.dark)
+        
             
         
     }
@@ -42,4 +64,5 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView(showSignInView: .constant(false))
+        .preferredColorScheme(.dark)
 }

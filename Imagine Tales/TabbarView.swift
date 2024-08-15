@@ -12,7 +12,7 @@ struct TabbarView: View {
    
     @State var items: [BottomBarItem] = [
         BottomBarItem(icon: "circle.grid.hex", color: Color.iconColor),
-        BottomBarItem(icon: "bookmark", color: Color.iconColor),
+        BottomBarItem(icon: "magnifyingglass", color: Color.iconColor),
         BottomBarItem(icon: "plus", color: Color.iconColor),
         BottomBarItem(icon: "heart", color: Color.iconColor),
         BottomBarItem(icon: "person", color: Color.iconColor)
@@ -26,7 +26,8 @@ struct TabbarView: View {
     var body: some View {
         
         ZStack {
-            
+            LinearGradient(colors: [.purple, .black, .black], startPoint: .bottom, endPoint: .top)
+                .ignoresSafeArea()
             let viewList = [AnyView(ContentView()),
                             AnyView(ContentView()),
                             AnyView(ContentView()),
@@ -35,6 +36,7 @@ struct TabbarView: View {
             
             NavigationView {
             viewList[selectedIndex]
+                   
             }
             
             VStack {
@@ -45,6 +47,12 @@ struct TabbarView: View {
                         .shadow(color: Color.darkTextColorMain.opacity(0.1), radius: 10,
                                 x: 10,
                                 y: 5)
+                        .background(
+                            Capsule()
+                                .fill(Color.white.opacity(0.6))
+                                
+                            
+                        )
                 }.padding(EdgeInsets(top: 0,
                                      leading: 40,
                                      bottom: -10,
