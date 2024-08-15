@@ -30,8 +30,8 @@
             filePath = "Imagine Tales/Authentication/AuthenticationView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "Imagine Tales/Authentication/AuthenticationView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>

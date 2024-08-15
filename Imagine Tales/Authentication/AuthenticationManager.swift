@@ -81,5 +81,10 @@ final class AuthenticationManager {
         
         try await user.delete()
     }
+    
+    func signInWithApple(tokens: signInWithAppleResult) async throws -> AuthDataResultModel {
+        let credential = OAuthProvider.credential(providerID: AuthProviderID(rawValue: "apple.com")!, idToken: tokens.token, accessToken: tokens.nonce)
+        return try await signIn(credential: credential)
+    }
 }
 

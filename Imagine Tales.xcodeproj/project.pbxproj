@@ -20,6 +20,7 @@
 		0711F3722C6D7244006C86AA /* SignInGoogleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3712C6D7244006C86AA /* SignInGoogleHelper.swift */; };
 		0711F3742C6D725C006C86AA /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3732C6D725C006C86AA /* Utilities.swift */; };
 		0711F3762C6D7433006C86AA /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3752C6D7433006C86AA /* ProfileView.swift */; };
+		0711F3782C6D7CDB006C86AA /* SignInAppleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3772C6D7CDA006C86AA /* SignInAppleHelper.swift */; };
 		07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */; };
 		07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB384A2C62BEAB0070EEFA /* ContentView.swift */; };
 		07FB384D2C62BEAC0070EEFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07FB384C2C62BEAC0070EEFA /* Assets.xcassets */; };
@@ -40,6 +41,7 @@
 		0711F3712C6D7244006C86AA /* SignInGoogleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInGoogleHelper.swift; sourceTree = "<group>"; };
 		0711F3732C6D725C006C86AA /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		0711F3752C6D7433006C86AA /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		0711F3772C6D7CDA006C86AA /* SignInAppleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAppleHelper.swift; sourceTree = "<group>"; };
 		07FB38452C62BEAB0070EEFA /* Imagine Tales.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Imagine Tales.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imagine_TalesApp.swift; sourceTree = "<group>"; };
 		07FB384A2C62BEAB0070EEFA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 		0711F36E2C6D7046006C86AA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				0711F3772C6D7CDA006C86AA /* SignInAppleHelper.swift */,
 				0711F3732C6D725C006C86AA /* Utilities.swift */,
 				0711F3712C6D7244006C86AA /* SignInGoogleHelper.swift */,
 				0711F3572C6D63F1006C86AA /* AuthenticationView.swift */,
@@ -213,6 +216,7 @@
 				0711F3582C6D63F1006C86AA /* AuthenticationView.swift in Sources */,
 				07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */,
 				07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */,
+				0711F3782C6D7CDB006C86AA /* SignInAppleHelper.swift in Sources */,
 				0711F3742C6D725C006C86AA /* Utilities.swift in Sources */,
 				0711F3762C6D7433006C86AA /* ProfileView.swift in Sources */,
 				0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */,

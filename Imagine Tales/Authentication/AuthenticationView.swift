@@ -14,8 +14,9 @@ final class AuthenticationViewModel: ObservableObject {
     
     @Published var email = ""
     @Published var password = ""
-    
     @Published var didSignInWithApple = false
+
+    let signInAppleHelper = SignInAppleHelper()
     
     func signInGoogle() async throws -> AuthDataResultModel?{
         let helper = SignInGoogleHelper()
@@ -42,6 +43,25 @@ final class AuthenticationViewModel: ObservableObject {
         }
         
         return try await AuthenticationManager.shared.createUser(email: email, password: password)
+    }
+    
+    func signInApple() async throws {
+        signInAppleHelper.startSignInWithAppleFlow { result in
+            switch result {
+            case .success(let signInAppleResult):
+                Task {
+                    do {
+                        let _ = try await AuthenticationManager.shared.signInWithApple(tokens: signInAppleResult)
+                        self.didSignInWithApple = true
+                    } catch {
+                        
+                    }
+                }
+                
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }
 
@@ -109,7 +129,7 @@ struct AuthenticationView: View {
                 }
                 .padding()
                 
-                GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .dark, style: .icon, state: .normal)) {
+                GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {
                     Task {
                         do {
                             if let _ = try await viewModel.signInGoogle() {
@@ -121,7 +141,30 @@ struct AuthenticationView: View {
                     }
                 }
                 .cornerRadius(12)
-                .padding()
+                .padding([.trailing, .leading])
+                
+                
+                
+                Button {
+                    Task {
+                        do {
+                            try await viewModel.signInApple()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                } label: {
+                    signInWithAppleButtonViewRepresentable(type: .signIn, style: .white)
+                        .allowsHitTesting(false)
+                }
+                .frame(height: 40)
+                .cornerRadius(12)
+                .onChange(of: viewModel.didSignInWithApple) { oldValue, newValue in
+                    if newValue {
+                        showSignInView = false
+                    }
+                }
+                .padding([.trailing, .leading])
                 
             }
             .navigationTitle("Sign In")
