@@ -9,29 +9,39 @@ import Foundation
 import FirebaseFirestore
 import FirebaseAuth
 
-struct Movie: Codable {
-    let id: String
-    let title: String
-    let isPopular: Bool
+enum gender: String {
+    case male
+    case female
 }
 
 struct UserModel: Codable {
     let userId: String
-    let createdAt: Date?
+    let name: String
+    let birthDate: Date?
     let email: String?
-    let photoURL: String?
-    let isPremeum: Bool?
-    let favMovie: Movie?
-    let preferences: [String]?
+    let gender: String
+    let country: String
+    let number: String
+//    init(auth: AuthDataResultModel) {
+//        self.userId = auth.uid
+//        self.name = ""
+//        self.email = auth.email
+//        self.gender = ""
+//        self.photoURL = auth.photoURL
+//        self.birthDate = Date()
+//        self.isPremeum = false
+//        self.preferences = []
+//        self.country = ""
+//    }
     
-    init(auth: AuthDataResultModel) {
-        self.userId = auth.uid
-        self.email = auth.email
-        self.photoURL = auth.photoURL
-        self.createdAt = Date()
-        self.isPremeum = false
-        self.favMovie = nil
-        self.preferences = []
+    init(userId: String, name: String, birthDate: Date?, email: String?, gender: String, country: String, number: String) {
+        self.userId = userId
+        self.name = name
+        self.birthDate = birthDate
+        self.email = email
+        self.gender = gender
+        self.country = country
+        self.number = number
     }
 }
 
@@ -72,6 +82,7 @@ final class UserManager {
         try await userDocument(userId: userId).getDocument(as: UserModel.self)
     }
     
+    
     func updateUserPremiumStatus(userId: String, isPremium: Bool) async throws {
         let data: [String : Any] = [
             "isPremeum" : isPremium
@@ -94,55 +105,4 @@ final class UserManager {
 
         try await userDocument(userId: userId).updateData(data)
     }
-    
-    func addFavoriteMovie(userId: String, movie: Movie) async throws {
-        guard let data = try? encoder.encode(movie) else {
-            throw URLError(.badURL)
-        }
-        
-        let dict: [String:Any] = [
-            "favMovie" : data
-        ]
-
-        try await userDocument(userId: userId).updateData(dict)
-    }
-    
-    func removeFavoriteMovie(userId: String) async throws {
-        let data: [String:Any?] = [
-            "favMovie" : nil
-        ]
-
-        try await userDocument(userId: userId).updateData(data as [AnyHashable : Any])
-    }
-    
-    func addUserFavoriteProduct(userId: String, productId: Int) async throws {
-        let document = userFavoriteProductCollection(userId: userId).document()
-        let documentId = document.documentID
-        
-        let data: [String:Any] = [
-            "id" : documentId,
-            "productId" : productId,
-            "dateCreated" : Timestamp()
-        ]
-        
-        try await document.setData(data, merge: true)
-    }
-    
-    func removeUserFavoriteProduct(userId: String, favoriteProductId: String) async throws {
-        try await userFavoriteProductDocument(userId: userId, favoriteProductId: favoriteProductId).delete()
-    }
-    
-    func getAllUserFavoriteProducts(userId: String) async throws -> [UserFavoriteProduct] {
-        try await userFavoriteProductCollection(userId: userId).getDocuments(as: UserFavoriteProduct.self)
-    }
-    
-   
-    
-}
-
-struct UserFavoriteProduct: Codable {
-    let id: String
-    let productId: Int
-    let dateCreated: Date
-    
 }

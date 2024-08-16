@@ -18,16 +18,12 @@ struct ContentView: View {
     @State private var words:[String] =  ["apple", "pinnaple", "orange", "tomato", "banana", "grape", "kiwi", "mango", "pear"]
     @State private var loaded = false
     @State private var isRandom = false
-    @State private var themes = ["Forest", "Car", "Plane", "Dark", "Colorful", "Cartoon", "Space", "Underwater", "Desert", "Cityscape", "Fantasy", "Sci-Fi", "Nature", "Retro", "Abstract", "Minimalist", "Industrial", "Vintage", "Cyberpunk", "Steampunk"]
-    
-    
     @State private var scale: CGFloat = 1.0
     @State private var generatedImage: UIImage? = nil
     @State private var isImageLoading = true
     @State private var promptForImage = ""
     
     let vertex = VertexAI.vertexAI()
-   // let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
     
     let genres = [
         "Adventure",
@@ -52,18 +48,14 @@ struct ContentView: View {
         "Supernatural",
         "Western"
     ]
+    let themes = ["Forest", "Car", "Plane", "Dark", "Colorful", "Cartoon", "Space", "Underwater", "Desert", "Cityscape", "Fantasy", "Sci-Fi", "Nature", "Retro", "Abstract", "Minimalist", "Industrial", "Vintage", "Cyberpunk", "Steampunk"]
     
     var body: some View {
         NavigationStack {
             ZStack {
-                
                 LinearGradient(colors: [.purple, .black, .black], startPoint: .bottom, endPoint: .top)
                     .ignoresSafeArea()
                 VStack {
-                    
-                    
-                    
-                    
                     if story == "" && !isLoading {
                         VStack {
                             ContentUnavailableView("Imagine Tales", systemImage: "moon.stars.fill", description: Text("Provide Characters, Genre and Theme to create your tale!"))
@@ -84,65 +76,43 @@ struct ContentView: View {
                         
                     } else {
                         if isLoading {
-                           
-                                // Show GIF while loading
-                                GifImage("Animation2") // Ensure "Animation" matches your GIF asset name
-                                    .frame(width: 200, height: 150, alignment: .center)
-                                    .padding(.top, 50)
-                                
-                                
-                                
-                            
+                            DotLottieAnimation(fileName: "StoryLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
+                                .frame(width: 340, height: 150)
                         } else {
-                            // Show story text after loading
-                            
-                                ZStack {
-                                   
-                                    
-                                    RoundedRectangle(cornerRadius: 22)
-                                        .fill(Color.white.opacity(0.5))
-                                        .frame(width: 360, height: 480)
-                                    
-                                    VStack {
-                                        
-                                        
-                                        ScrollView {
-                                            
-                                            if let image = generatedImage {
-                                                Image(uiImage: image)
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .padding([.bottom, .top])
-                                                    .frame(width: 340, height: 250)
-                                                    .cornerRadius(22)
-                                                    .shadow(radius: 10)
-                                            }
-                                            
-                                            if isImageLoading {
-                                                
-                                                DotLottieAnimation(fileName: "imageLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
-                                                    .frame(width: 340, height: 150)
-                                            }
-                                            
-                                            Text(story)
-                                                .padding()
-                                                .foregroundColor(.white)
-                                            
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 22)
+                                    .fill(Color.white.opacity(0.5))
+                                    .frame(width: 360, height: 480)
+                                VStack {
+                                    ScrollView {
+                                        if let image = generatedImage {
+                                            Image(uiImage: image)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .padding([.bottom, .top])
+                                                .frame(width: 340, height: 250)
+                                                .cornerRadius(22)
+                                                .shadow(radius: 10)
                                         }
-                                        .frame(width: 350, height: 470)
+                                        
+                                        if isImageLoading {
+                                            DotLottieAnimation(fileName: "imageLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
+                                                .frame(width: 340, height: 150)
+                                        }
+                                        
+                                        Text(story)
+                                            .padding()
+                                            .foregroundColor(.white)
                                     }
-                                    
+                                    .frame(width: 350, height: 470)
                                 }
-                            
-                            
+                            }
                         }
                     }
                     
-                    
-                    
                     Spacer()
+                    
                     if !isLoading && !loaded{
-                        
                         Form {
                             Section {
                                 TextField("Characters: Tom, John, and Jenny", text: $characters)
@@ -158,7 +128,6 @@ struct ContentView: View {
                                 }
                             }
                             .listRowBackground(Color.white.opacity(0.5))
-                            
                         }
                         .frame(height: 200)
                         .scrollContentBackground(.hidden)
@@ -171,7 +140,6 @@ struct ContentView: View {
                                             .padding(10)
                                             .background(Color.white.opacity(0.5))
                                             .cornerRadius(22)
-                                        
                                     }
                                 }
                             }
@@ -179,24 +147,19 @@ struct ContentView: View {
                     }
                     Button{
                         generatedImage = nil
-                      //  generateStory()
                         Task {
                             do {
                                 try await generateStoryWithGemini()
-                               
                             } catch {
-                                
+                                print(error.localizedDescription)
                             }
                         }
-                        
-                      //  generateImageUsingOpenAI()
                     } label: {
-                            Text(!loaded ? "Generate Story ✨" : "Regenerate ✨")
-                                .foregroundStyle(.white)
-                        }
-                        .buttonStyle()
-                        .padding(.bottom, 70)
-                    
+                        Text(!loaded ? "Generate Story ✨" : "Regenerate ✨")
+                            .foregroundStyle(.white)
+                    }
+                    .buttonStyle()
+                    .padding(.bottom, 70)
                 }
                 .onAppear {
                     withAnimation {
@@ -221,8 +184,6 @@ struct ContentView: View {
                 }
             }
         }
-        
-        
     }
     
     func chunkArray<T>(array: [T], chunkSize: Int) -> [[T]] {
@@ -252,9 +213,7 @@ struct ContentView: View {
             .filter { !$0.isEmpty }
     }
     
-    
     func generateImageUsingOpenAI() {
-        
         let prompt = """
 Create an image that depicts a story with the following prompt: \(promptForImage)
 """
@@ -270,7 +229,6 @@ Create an image that depicts a story with the following prompt: \(promptForImage
     }
     
     func generateStoryWithGemini() async throws {
-        
         withAnimation {
             isLoading = true
         }
@@ -288,7 +246,6 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                     self.isLoading = false
                     self.loaded = true
                 }
-                
             }
             Task {
                 do {
@@ -303,6 +260,7 @@ Create an image that depicts a story with the following prompt: \(promptForImage
     func generateImagePrompt() async throws {
         let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
         let prompt = "Generate me a prompt to create a story book Image using this story \(self.story). within 100 words"
+        print("PROMT FOR IMAGE IS : \(prompt)")
         let response = try await model.generateContent(prompt)
         if let text = response.text {
             DispatchQueue.main.async {
@@ -313,12 +271,8 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                     self.isLoading = false
                     self.loaded = true
                 }
-                
             }
-            
-            
         }
-
     }
     
     func generateStory() {
@@ -381,13 +335,11 @@ struct ButtonViewModifier: ViewModifier {
     }
 }
 
-
-
 extension View {
     func buttonStyle() -> some View {
         modifier(ButtonViewModifier())
     }
-  
+    
 }
 
 #Preview {

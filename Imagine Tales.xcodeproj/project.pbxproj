@@ -32,14 +32,15 @@
 		0711F38B2C6DB68B006C86AA /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F38A2C6DB68B006C86AA /* GoogleSignInSwift */; };
 		0711F38D2C6DB698006C86AA /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F38C2C6DB698006C86AA /* FloatingTabBar */; };
 		073F2CEA2C6EC85200BCF6F0 /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 073F2CE92C6EC85200BCF6F0 /* FirebaseVertexAI-Preview */; };
+		073F2CED2C6F98D500BCF6F0 /* StoryLoading.json in Resources */ = {isa = PBXBuildFile; fileRef = 073F2CEC2C6F98D500BCF6F0 /* StoryLoading.json */; };
+		073F2CF02C6F9B4600BCF6F0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 073F2CEF2C6F9B4600BCF6F0 /* FirebaseFirestore */; };
+		073F2CF22C6F9C1F00BCF6F0 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073F2CF12C6F9C1F00BCF6F0 /* UserManager.swift */; };
+		073F2CF42C6FA0A800BCF6F0 /* SignInWithEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */; };
+		073F2CF62C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */; };
 		07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */; };
 		07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB384A2C62BEAB0070EEFA /* ContentView.swift */; };
 		07FB384D2C62BEAC0070EEFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07FB384C2C62BEAC0070EEFA /* Assets.xcassets */; };
 		07FB38502C62BEAC0070EEFA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07FB384F2C62BEAC0070EEFA /* Preview Assets.xcassets */; };
-		07FB38572C62D21F0070EEFA /* Animation.gif in Resources */ = {isa = PBXBuildFile; fileRef = 07FB38562C62D21F0070EEFA /* Animation.gif */; };
-		07FB38592C62D2630070EEFA /* AnimationLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38582C62D2630070EEFA /* AnimationLoading.swift */; };
-		07FB385D2C62D6F00070EEFA /* Animation2.gif in Resources */ = {isa = PBXBuildFile; fileRef = 07FB385C2C62D6F00070EEFA /* Animation2.gif */; };
-		07FB38612C63B2360070EEFA /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 07FB38602C63B2360070EEFA /* Config.xcconfig */; };
 		07FB38642C63B3720070EEFA /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38632C63B3720070EEFA /* Environment.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,16 +56,17 @@
 		0711F3772C6D7CDA006C86AA /* SignInAppleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAppleHelper.swift; sourceTree = "<group>"; };
 		0711F3792C6D8BEB006C86AA /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		0711F37B2C6D96C5006C86AA /* imageLoading.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = imageLoading.json; sourceTree = "<group>"; };
+		073F2CEC2C6F98D500BCF6F0 /* StoryLoading.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StoryLoading.json; sourceTree = "<group>"; };
+		073F2CF12C6F9C1F00BCF6F0 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithEmailView.swift; sourceTree = "<group>"; };
+		073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ComicNeue-Regular.ttf"; sourceTree = "<group>"; };
 		07FB38452C62BEAB0070EEFA /* Imagine Tales.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Imagine Tales.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imagine_TalesApp.swift; sourceTree = "<group>"; };
 		07FB384A2C62BEAB0070EEFA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		07FB384C2C62BEAC0070EEFA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07FB384F2C62BEAC0070EEFA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		07FB38562C62D21F0070EEFA /* Animation.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Animation.gif; sourceTree = "<group>"; };
-		07FB38582C62D2630070EEFA /* AnimationLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationLoading.swift; sourceTree = "<group>"; };
-		07FB385C2C62D6F00070EEFA /* Animation2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Animation2.gif; sourceTree = "<group>"; };
 		07FB38602C63B2360070EEFA /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		07FB38622C63B3250070EEFA /* Imagine-Tales-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Imagine-Tales-Info.plist"; sourceTree = SOURCE_ROOT; };
+		07FB38622C63B3250070EEFA /* Imagine-Tales-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Imagine-Tales-Info.plist"; sourceTree = SOURCE_ROOT; };
 		07FB38632C63B3720070EEFA /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -81,6 +83,7 @@
 				0711F3642C6D6C6F006C86AA /* FirebaseAnalytics in Frameworks */,
 				0711F36B2C6D6E2B006C86AA /* GoogleSignIn in Frameworks */,
 				0711F3852C6DB62D006C86AA /* FirebaseAuth in Frameworks */,
+				073F2CF02C6F9B4600BCF6F0 /* FirebaseFirestore in Frameworks */,
 				0711F3662C6D6C6F006C86AA /* FirebaseAuth in Frameworks */,
 				0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */,
 				073F2CEA2C6EC85200BCF6F0 /* FirebaseVertexAI-Preview in Frameworks */,
@@ -96,10 +99,12 @@
 		0711F36E2C6D7046006C86AA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				073F2CF12C6F9C1F00BCF6F0 /* UserManager.swift */,
 				0711F3772C6D7CDA006C86AA /* SignInAppleHelper.swift */,
 				0711F3732C6D725C006C86AA /* Utilities.swift */,
 				0711F3712C6D7244006C86AA /* SignInGoogleHelper.swift */,
 				0711F3572C6D63F1006C86AA /* AuthenticationView.swift */,
+				073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */,
 				0711F36F2C6D71EC006C86AA /* AuthenticationManager.swift */,
 			);
 			path = Authentication;
@@ -110,6 +115,23 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		073F2CEB2C6F981300BCF6F0 /* AIService */ = {
+			isa = PBXGroup;
+			children = (
+				0711F3792C6D8BEB006C86AA /* OpenAIService.swift */,
+			);
+			path = AIService;
+			sourceTree = "<group>";
+		};
+		073F2CEE2C6F9A3300BCF6F0 /* LoadingAnimations */ = {
+			isa = PBXGroup;
+			children = (
+				073F2CEC2C6F98D500BCF6F0 /* StoryLoading.json */,
+				0711F37B2C6D96C5006C86AA /* imageLoading.json */,
+			);
+			path = LoadingAnimations;
 			sourceTree = "<group>";
 		};
 		07FB383C2C62BEAA0070EEFA = {
@@ -132,23 +154,21 @@
 		07FB38472C62BEAB0070EEFA /* Imagine Tales */ = {
 			isa = PBXGroup;
 			children = (
-				0711F3792C6D8BEB006C86AA /* OpenAIService.swift */,
-				0711F36E2C6D7046006C86AA /* Authentication */,
-				07FB38622C63B3250070EEFA /* Imagine-Tales-Info.plist */,
-				0711F3672C6D6D0D006C86AA /* GoogleService-Info.plist */,
 				07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */,
 				0711F34E2C6D5D79006C86AA /* RootView.swift */,
 				0711F3502C6D5DCA006C86AA /* TabbarView.swift */,
-				0711F37B2C6D96C5006C86AA /* imageLoading.json */,
-				07FB38562C62D21F0070EEFA /* Animation.gif */,
-				07FB385C2C62D6F00070EEFA /* Animation2.gif */,
 				07FB384A2C62BEAB0070EEFA /* ContentView.swift */,
-				07FB38582C62D2630070EEFA /* AnimationLoading.swift */,
+				0711F3752C6D7433006C86AA /* ProfileView.swift */,
+				07FB38632C63B3720070EEFA /* Environment.swift */,
+				073F2CEB2C6F981300BCF6F0 /* AIService */,
+				0711F36E2C6D7046006C86AA /* Authentication */,
+				073F2CEE2C6F9A3300BCF6F0 /* LoadingAnimations */,
 				07FB384C2C62BEAC0070EEFA /* Assets.xcassets */,
+				073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */,
 				07FB384E2C62BEAC0070EEFA /* Preview Content */,
 				07FB38602C63B2360070EEFA /* Config.xcconfig */,
-				07FB38632C63B3720070EEFA /* Environment.swift */,
-				0711F3752C6D7433006C86AA /* ProfileView.swift */,
+				0711F3672C6D6D0D006C86AA /* GoogleService-Info.plist */,
+				07FB38622C63B3250070EEFA /* Imagine-Tales-Info.plist */,
 			);
 			path = "Imagine Tales";
 			sourceTree = "<group>";
@@ -189,7 +209,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 1610;
 				TargetAttributes = {
 					07FB38442C62BEAB0070EEFA = {
 						CreatedOnToolsVersion = 16.0;
@@ -226,12 +246,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				0711F3682C6D6D0D006C86AA /* GoogleService-Info.plist in Resources */,
+				073F2CED2C6F98D500BCF6F0 /* StoryLoading.json in Resources */,
+				073F2CF62C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf in Resources */,
 				07FB38502C62BEAC0070EEFA /* Preview Assets.xcassets in Resources */,
-				07FB38612C63B2360070EEFA /* Config.xcconfig in Resources */,
 				07FB384D2C62BEAC0070EEFA /* Assets.xcassets in Resources */,
 				0711F37C2C6D96C5006C86AA /* imageLoading.json in Resources */,
-				07FB38572C62D21F0070EEFA /* Animation.gif in Resources */,
-				07FB385D2C62D6F00070EEFA /* Animation2.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,9 +264,10 @@
 				0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */,
 				0711F3702C6D71EC006C86AA /* AuthenticationManager.swift in Sources */,
 				0711F37A2C6D8BEB006C86AA /* OpenAIService.swift in Sources */,
-				07FB38592C62D2630070EEFA /* AnimationLoading.swift in Sources */,
+				073F2CF22C6F9C1F00BCF6F0 /* UserManager.swift in Sources */,
 				07FB38642C63B3720070EEFA /* Environment.swift in Sources */,
 				0711F3722C6D7244006C86AA /* SignInGoogleHelper.swift in Sources */,
+				073F2CF42C6FA0A800BCF6F0 /* SignInWithEmailView.swift in Sources */,
 				0711F3582C6D63F1006C86AA /* AuthenticationView.swift in Sources */,
 				07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */,
 				07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */,
@@ -571,6 +591,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseVertexAI-Preview";
+		};
+		073F2CEF2C6F9B4600BCF6F0 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
