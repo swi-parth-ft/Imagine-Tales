@@ -19,12 +19,17 @@ struct RootView: View {
             let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
             self.showSignInView = authUser == nil
         }
-        .sheet(isPresented: $showSignInView) {
+//        .sheet(isPresented: $showSignInView) {
+//            NavigationStack {
+//                AuthenticationView(showSignInView: $showSignInView)
+//                   // .presentationDetents([.fraction(0.7), .medium])
+//            }
+//            
+//        }
+        .fullScreenCover(isPresented: $showSignInView) {
             NavigationStack {
                 AuthenticationView(showSignInView: $showSignInView)
-                    .presentationDetents([.fraction(0.7), .medium])
             }
-            
         }
         
         
