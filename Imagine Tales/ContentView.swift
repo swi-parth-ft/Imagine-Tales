@@ -24,6 +24,7 @@ struct ContentView: View {
     @State private var scale: CGFloat = 1.0
     @State private var generatedImage: UIImage? = nil
     @State private var isImageLoading = true
+    @State private var promptForImage = ""
     
     let vertex = VertexAI.vertexAI()
    // let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
@@ -182,12 +183,13 @@ struct ContentView: View {
                         Task {
                             do {
                                 try await generateStoryWithGemini()
+                               
                             } catch {
                                 
                             }
                         }
                         
-                        generateImageUsingOpenAI()
+                      //  generateImageUsingOpenAI()
                     } label: {
                             Text(!loaded ? "Generate Story ✨" : "Regenerate ✨")
                                 .foregroundStyle(.white)
@@ -254,12 +256,7 @@ struct ContentView: View {
     func generateImageUsingOpenAI() {
         
         let prompt = """
-Create an image that depicts a story with the following elements:
-- Characters: \(characters)
-- Genre: \(genre)
-- Theme: \(theme)
-
-The scene should include key elements from the story, such as important actions, interactions, or settings described. The overall mood should reflect the essence of the story, whether it's dark and mysterious, cheerful and colorful, adventurous, or calm and serene. The setting should be visually appropriate for the genre, such as a magical forest for fantasy, a futuristic city for science fiction, or a cozy home for a slice-of-life theme. Ensure the characters are dressed and posed in a manner that reflects their roles and the plot of the story.
+Create an image that depicts a story with the following prompt: \(promptForImage)
 """
         OpenAIService.shared.generateImage(from: prompt) { result in
             isImageLoading = false
@@ -293,7 +290,35 @@ The scene should include key elements from the story, such as important actions,
                 }
                 
             }
+            Task {
+                do {
+                    try await generateImagePrompt()
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
         }
+    }
+    
+    func generateImagePrompt() async throws {
+        let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
+        let prompt = "Generate me a prompt to create a story book Image using this story \(self.story). within 100 words"
+        let response = try await model.generateContent(prompt)
+        if let text = response.text {
+            DispatchQueue.main.async {
+                self.promptForImage = text
+                generateImageUsingOpenAI()
+                print(promptForImage)
+                withAnimation {
+                    self.isLoading = false
+                    self.loaded = true
+                }
+                
+            }
+            
+            
+        }
+
     }
     
     func generateStory() {
