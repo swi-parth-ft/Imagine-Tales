@@ -50,7 +50,7 @@ struct AuthenticationView: View {
     @StateObject var viewModel = AuthenticationViewModel()
     
     @State private var newUser = true
-    
+  
     var body: some View {
         NavigationStack {
             ZStack {
@@ -72,10 +72,8 @@ struct AuthenticationView: View {
                 }
                 .edgesIgnoringSafeArea(.all)
                
-                                    
-                            
                 VStack {
-                    GeometryReader { geometry in
+                    
                         VStack(spacing: -10) {
                             Image("OnBoardingImageLogo")
                                 
@@ -83,30 +81,45 @@ struct AuthenticationView: View {
                                 
                                 RoundedRectangle(cornerRadius: 50)
                                     .fill(Color(hex: "#8AC640"))
-                                    .frame(width: geometry.size.width * 0.6, height: geometry.size.height * 0.5)
+                                    .frame(width:  UIScreen.main.bounds.width * 0.7, height:  UIScreen.main.bounds.height * 0.5)
                                 
                                 VStack(alignment: .center) {
                                     
                                     Text("Welcome to KidScribe")
-                                        .font(.custom("ComicNeue-Regular", size: 32))
+                                        .font(.custom("ComicNeue-Bold", size: 32))
+                                      
                                     
                                     Text("The Number One Best Ebook Store & Reader Application in this Century")
                                         .font(.custom("ComicNeue-Regular", size: 24))
                                         .multilineTextAlignment(.center)
-                                    
+                                    Spacer()
                                     NavigationLink {
                                         SignInWithEmailView(showSignInView: $showSignInView)
                                     } label: {
                                         Text("Sign in with email")
                                             .font(.custom("ComicNeue-Regular", size: 24))
-                                            .frame(height: 40)
+                                            .frame(height: 55)
                                             .frame(maxWidth: .infinity)
                                             .background(Color.orange)
                                             .cornerRadius(12)
                                             .foregroundStyle(.white)
                                     }
                                     
-                                    GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {
+//                                    GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {
+//                                        Task {
+//                                            do {
+//                                                if let _ = try await viewModel.signInGoogle() {
+//                                                    showSignInView = false
+//                                                }
+//                                            } catch {
+//                                                print(error.localizedDescription)
+//                                            }
+//                                        }
+//                                    }
+//                                    .cornerRadius(12)
+                                    
+                                    
+                                    Button {
                                         Task {
                                             do {
                                                 if let _ = try await viewModel.signInGoogle() {
@@ -116,8 +129,22 @@ struct AuthenticationView: View {
                                                 print(error.localizedDescription)
                                             }
                                         }
+                                    } label: {
+                                        HStack {
+                                            Image("googleIcon") // Make sure the image name matches the asset catalog
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 18, height: 18) // Adjust the size as needed
+                                            
+                                            Text("Sign in with Google")
+                                                .font(.system(size: 20))
+                                                .foregroundColor(.black)
+                                        }
+                                        .frame(height: 55)
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color.white)
+                                        .cornerRadius(12)
                                     }
-                                    .cornerRadius(12)
                                     
                                     Button {
                                         Task {
@@ -131,7 +158,7 @@ struct AuthenticationView: View {
                                         signInWithAppleButtonViewRepresentable(type: .signIn, style: .white)
                                             .allowsHitTesting(false)
                                     }
-                                    .frame(height: 40)
+                                    .frame(height: 55)
                                     .cornerRadius(12)
                                     .onChange(of: viewModel.didSignInWithApple) { oldValue, newValue in
                                         if newValue {
@@ -141,18 +168,17 @@ struct AuthenticationView: View {
                                     
                                     
                                 }
-                                .frame(width: geometry.size.width * 0.5, height: geometry.size.height * 0.4)
+                                .frame(width:  UIScreen.main.bounds.width * 0.6, height:  UIScreen.main.bounds.height * 0.4)
                                 
                                 
                             }
                             .frame(maxWidth: .infinity)
                         }
                         .frame(maxWidth: .infinity)
-                    }
+                    
                 }
                 .frame(maxWidth: .infinity)
-                .navigationTitle("Sign In")
-                .preferredColorScheme(.dark)
+                .navigationTitle("Welcome onboard")
                 .interactiveDismissDisabled()
             }
         }

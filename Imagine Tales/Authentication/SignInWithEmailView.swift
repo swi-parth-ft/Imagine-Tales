@@ -74,41 +74,52 @@ struct SignInWithEmailView: View {
                 }
                 .edgesIgnoringSafeArea(.all)
                 VStack {
-                    
-                    GeometryReader { geometry in
-                        
-                        ZStack(alignment: .leading) {
+                     
+                    ZStack(alignment: .leading) {
+                            
+                        HStack {
+                            
                             Button {
                                 
                             } label: {
-                                Circle()
-                                    .foregroundStyle(.white)
-                                    .frame(width: 75, height: 75)
-                                    .shadow(radius: 10)
+                                ZStack {
+                                    Circle()
+                                        .foregroundStyle(.white)
+                                        .frame(width: 75, height: 75)
+                                        .shadow(radius: 10)
+                                    
+                                    Image(systemName: "chevron.left")
+                                        .font(.largeTitle)
+                                        .foregroundColor(.black) // You can change the color as per your requirement
+                                }
                             }
                             
+                            Spacer()
                             
-                            HStack {
-                                Capsule()
-                                    .foregroundStyle(.orange)
-                                    .frame(width: 100, height: 10)
-                                    .shadow(radius: 10)
+                        }
                                 
-                                Capsule()
-                                    .foregroundStyle(.white)
-                                    .frame(width: 100, height: 10)
-                                    .shadow(radius: 10)
-                                
-                                Capsule()
-                                    .foregroundStyle(.white)
-                                    .frame(width: 100, height: 10)
-                                    .shadow(radius: 10)
-                            }.frame(maxWidth: .infinity)
-                
+                                HStack {
+                                    Capsule()
+                                        .foregroundStyle(.orange)
+                                        .frame(width: 100, height: 7)
+                                        .shadow(radius: 10)
+                                    
+                                    Capsule()
+                                        .foregroundStyle(.white)
+                                        .frame(width: 100, height: 7)
+                                        .shadow(radius: 10)
+                                    
+                                    Capsule()
+                                        .foregroundStyle(.white)
+                                        .frame(width: 100, height: 7)
+                                        .shadow(radius: 10)
+                                }.frame(maxWidth: .infinity)
+                            
                            
                         }
                         .padding([.leading, .trailing], 100)
-                        .padding(.top, 50)
+                        .padding(.top, 40)
+                        .frame(width: UIScreen.main.bounds.width)
                             
                         
                         
@@ -134,38 +145,26 @@ struct SignInWithEmailView: View {
                                 if newUser {
                                     VStack {
                                         TextField("Name", text: $viewModel.name)
-                                            .padding()
-                                            .background(.white)
-                                            .frame(width: geometry.size.width * 0.7)
-                                            .cornerRadius(12)
+                                            .customTextFieldStyle()
+                                            
                                         TextField("Email", text: $viewModel.email)
-                                            .padding()
-                                            .background(.white)
-                                            .frame(width: geometry.size.width * 0.7)
-                                            .cornerRadius(12)
+                                            .customTextFieldStyle()
+                   
                                         TextField("Phone", text: $viewModel.number)
-                                            .padding()
-                                            .background(.white)
-                                            .frame(width: geometry.size.width * 0.7)
-                                            .cornerRadius(12)
+                                            .customTextFieldStyle()
+                                      
                                         TextField("gender", text: $viewModel.gender)
-                                            .padding()
-                                            .background(.white)
-                                            .frame(width: geometry.size.width * 0.7)
-                                            .cornerRadius(12)
+                                            .customTextFieldStyle()
+                                        
                                         TextField("country", text: $viewModel.country)
-                                            .padding()
-                                            .background(.white)
-                                            .frame(width: geometry.size.width * 0.7)
-                                            .cornerRadius(12)
+                                            .customTextFieldStyle()
+                                        
                                         SecureField("Password", text: $viewModel.password)
-                                            .padding()
-                                            .background(.white)
-                                            .frame(width: geometry.size.width * 0.7)
-                                            .cornerRadius(12)
+                                            .customTextFieldStyle()
                                         
                                     }
                                     .padding(.top)
+                                    .frame(width:  UIScreen.main.bounds.width * 0.7)
                                     Spacer()
                                     
                                     Button("Sign Up") {
@@ -182,7 +181,7 @@ struct SignInWithEmailView: View {
                                         }
                                     }
                                     .padding()
-                                    .frame(width: geometry.size.width * 0.7)
+                                    .frame(width:  UIScreen.main.bounds.width * 0.7)
                                     .background(Color(hex: "#FF6F61"))
                                     .foregroundStyle(.white)
                                     .cornerRadius(12)
@@ -214,13 +213,29 @@ struct SignInWithEmailView: View {
                                 .padding()
                             }
                         }
-                        .frame(width: geometry.size.width * 0.8, height: geometry.size.height * 0.8)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .frame(width:  UIScreen.main.bounds.width * 0.8, height:  UIScreen.main.bounds.height * 0.7)
+                        .frame(maxWidth: .infinity)
                         .padding(.top, 40)
-                    }
+                    
                 }
             }
         }
+    }
+}
+
+struct CustomTextFieldModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding()
+            .background(Color.white)
+            .frame(width: UIScreen.main.bounds.width * 0.7)
+            .cornerRadius(12)
+    }
+}
+
+extension View {
+    func customTextFieldStyle() -> some View {
+        self.modifier(CustomTextFieldModifier())
     }
 }
 
