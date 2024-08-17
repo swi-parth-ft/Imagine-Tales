@@ -37,6 +37,7 @@
 		073F2CF22C6F9C1F00BCF6F0 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073F2CF12C6F9C1F00BCF6F0 /* UserManager.swift */; };
 		073F2CF42C6FA0A800BCF6F0 /* SignInWithEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */; };
 		073F2CF62C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */; };
+		07AF26DD2C703B2C00E41509 /* ComicNeue-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07AF26DC2C703B2C00E41509 /* ComicNeue-Bold.ttf */; };
 		07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */; };
 		07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB384A2C62BEAB0070EEFA /* ContentView.swift */; };
 		07FB384D2C62BEAC0070EEFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07FB384C2C62BEAC0070EEFA /* Assets.xcassets */; };
@@ -60,6 +61,7 @@
 		073F2CF12C6F9C1F00BCF6F0 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithEmailView.swift; sourceTree = "<group>"; };
 		073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ComicNeue-Regular.ttf"; sourceTree = "<group>"; };
+		07AF26DC2C703B2C00E41509 /* ComicNeue-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ComicNeue-Bold.ttf"; sourceTree = "<group>"; };
 		07FB38452C62BEAB0070EEFA /* Imagine Tales.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Imagine Tales.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imagine_TalesApp.swift; sourceTree = "<group>"; };
 		07FB384A2C62BEAB0070EEFA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				073F2CEE2C6F9A3300BCF6F0 /* LoadingAnimations */,
 				07FB384C2C62BEAC0070EEFA /* Assets.xcassets */,
 				073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */,
+				07AF26DC2C703B2C00E41509 /* ComicNeue-Bold.ttf */,
 				07FB384E2C62BEAC0070EEFA /* Preview Content */,
 				07FB38602C63B2360070EEFA /* Config.xcconfig */,
 				0711F3672C6D6D0D006C86AA /* GoogleService-Info.plist */,
@@ -245,6 +248,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07AF26DD2C703B2C00E41509 /* ComicNeue-Bold.ttf in Resources */,
 				0711F3682C6D6D0D006C86AA /* GoogleService-Info.plist in Resources */,
 				073F2CED2C6F98D500BCF6F0 /* StoryLoading.json in Resources */,
 				073F2CF62C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf in Resources */,

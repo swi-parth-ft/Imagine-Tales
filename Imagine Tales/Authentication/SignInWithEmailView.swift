@@ -55,6 +55,9 @@ struct SignInWithEmailView: View {
     @State private var settingPassword = false
     @State private var confirmPassword = ""
     @Binding var showSignInView: Bool
+    @State private var isSignedUp = false
+    
+    let gridItems = Array(repeating: GridItem(.fixed(100)), count: 5)
     @State private var err = ""
     var body: some View {
         NavigationStack {
@@ -82,18 +85,28 @@ struct SignInWithEmailView: View {
                             
                         HStack {
                             
-                            Button {
-                                dismiss()
-                            } label: {
-                                ZStack {
-                                    Circle()
-                                        .foregroundStyle(.white)
-                                        .frame(width: 75, height: 75)
-                                        .shadow(radius: 10)
-                                    
-                                    Image(systemName: "chevron.left")
-                                        .font(.largeTitle)
-                                        .foregroundColor(.black) // You can change the color as per your requirement
+                            if !isSignedUp {
+                                Button {
+                                    if !settingPassword {
+                                        dismiss()
+                                    } else {
+                                        withAnimation {
+                                            if settingPassword {
+                                                settingPassword = false
+                                            }
+                                        }
+                                    }
+                                } label: {
+                                    ZStack {
+                                        Circle()
+                                            .foregroundStyle(.white)
+                                            .frame(width: 75, height: 75)
+                                            .shadow(radius: 10)
+                                        
+                                        Image(systemName: "chevron.left")
+                                            .font(.largeTitle)
+                                            .foregroundColor(.black) // You can change the color as per your requirement
+                                    }
                                 }
                             }
                             
@@ -107,12 +120,12 @@ struct SignInWithEmailView: View {
                                         .shadow(radius: 10)
                                     
                                     Capsule()
-                                        .foregroundStyle(settingPassword ? .orange : .white)
+                                        .foregroundStyle(settingPassword || isSignedUp ? .orange : .white)
                                         .frame(width: 100, height: 7)
                                         .shadow(radius: 10)
                                     
                                     Capsule()
-                                        .foregroundStyle(.white)
+                                        .foregroundStyle(isSignedUp ? .orange : .white)
                                         .frame(width: 100, height: 7)
                                         .shadow(radius: 10)
                                 }.frame(maxWidth: .infinity)
@@ -132,24 +145,12 @@ struct SignInWithEmailView: View {
                             VStack {
                                 
                                 VStack(alignment: .leading) {
-                                    Text(settingPassword ? "Create Password" : "Personal Details")
+                                    Text(settingPassword ? "Create Password" : (isSignedUp ? "Add Children" : "Personal Details"))
                                         .font(.custom("ComicNeue-Bold", size: 32))
                                     
-                                    Text(settingPassword ? "Enter Password" : "Enter Personal Details")
+                                    Text(settingPassword ? "Enter Password" : (isSignedUp ? "Add accounts for personalised experience": "Enter Personal Details"))
                                         .font(.custom("ComicNeue-Regular", size: 24))
                                     
-                                    
-                                    if settingPassword {
-                                        Button("Back", systemImage: "lessthan") {
-                                            withAnimation {
-                                                settingPassword = false
-                                            }
-                                        }
-                                        .padding()
-                                        .tint(.orange)
-                                        .background(.white.opacity(0.5))
-                                        .cornerRadius(12)
-                                    }
                                 }
                                 .padding([.top, .leading], 40)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -159,7 +160,7 @@ struct SignInWithEmailView: View {
                                     
                                     VStack {
                                         
-                                        if !settingPassword {
+                                        if !settingPassword && !isSignedUp {
                                             TextField("Name", text: $viewModel.name)
                                                 .customTextFieldStyle()
                                             
@@ -168,9 +169,6 @@ struct SignInWithEmailView: View {
                                             
                                             TextField("Phone", text: $viewModel.number)
                                                 .customTextFieldStyle()
-                                            
-                                            //                                        TextField("gender", text: $viewModel.gender)
-                                            //                                            .customTextFieldStyle()
                                             
                                             VStack {
                                                 Picker("Gender", selection: $viewModel.gender) {
@@ -185,7 +183,7 @@ struct SignInWithEmailView: View {
                                             
                                             TextField("country", text: $viewModel.country)
                                                 .customTextFieldStyle()
-                                        } else {
+                                        } else if settingPassword {
                                             SecureField("Password", text: $viewModel.password)
                                                 .customTextFieldStyle()
                                             
@@ -195,40 +193,84 @@ struct SignInWithEmailView: View {
                                             Text(err)
                                         }
                                         
+                                        if isSignedUp {
+                                            VStack(alignment: .leading) {
+                                                ScrollView {
+                                                    LazyVGrid(columns: gridItems, spacing: 20) {
+                                                        ZStack {
+                                                            Circle()
+                                                                .fill(Color(hex: "#DFFFDF"))
+                                                                .frame(width: 100, height: 100)
+                                                            
+                                                            Image(systemName: "plus")
+                                                                .font(.system(size: 40))
+                                                                
+                                                        }
+//                                                        ForEach(0..<1) { index in
+//                                                            Circle()
+//                                                                .fill(Color.blue)
+//                                                                .frame(width: 100, height: 100)
+                                                            
+                                                     //   }
+                                                    }
+                                                    .padding()
+                                                    
+                                                }
+                                            }
+                                            .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                            
+                                        }
+                                        
                                     }
                                     .padding(.top)
                                     .frame(width:  UIScreen.main.bounds.width * 0.7)
                                     Spacer()
-                                    
-                                    Button(settingPassword ? "Sign up" : "Next") {
-                                        
-                                        if settingPassword {
-                                            if viewModel.password == confirmPassword {
-                                                Task {
-                                                    do {
-                                                        if let _ = try await viewModel.createAccount() {
-                                                            showSignInView = false
-                                                            try await viewModel.createUserProfile()
-                                                        }
-                                                        return
-                                                    } catch {
-                                                        print(error.localizedDescription)
-                                                    }
+                                    VStack {
+                                        Button(settingPassword ? "Sign up" : (isSignedUp ? "Continue" : "Next")) {
+                                            
+                                            if settingPassword {
+                                                if viewModel.password == confirmPassword {
+                                                    isSignedUp = true
+                                                    settingPassword = false
+                                                    //                                                Task {
+                                                    //                                                    do {
+                                                    //                                                        if let _ = try await viewModel.createAccount() {
+                                                    //                                                            showSignInView = false
+                                                    //                                                            try await viewModel.createUserProfile()
+                                                    //                                                        }
+                                                    //                                                        return
+                                                    //                                                    } catch {
+                                                    //                                                        print(error.localizedDescription)
+                                                    //                                                    }
+                                                    //                                                }
+                                                } else {
+                                                    err = "passwords don't match, Try again."
                                                 }
                                             } else {
-                                                err = "passwords don't match, Try again."
-                                            }
-                                        } else {
-                                            withAnimation {
-                                                settingPassword = true
+                                                withAnimation {
+                                                    settingPassword = true
+                                                }
                                             }
                                         }
+                                        .padding()
+                                        .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                        .background(Color(hex: "#FF6F61"))
+                                        .foregroundStyle(.white)
+                                        .cornerRadius(12)
+                                        
+                                        if isSignedUp {
+                                            Button("Add Later") {
+                                                
+                                            }
+                                            .padding()
+                                            .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                            .background(Color(hex: "#DFFFDF"))
+                                            .foregroundStyle(.black)
+                                            .cornerRadius(12)
+                                        }
                                     }
-                                    .padding()
-                                    .frame(width:  UIScreen.main.bounds.width * 0.7)
-                                    .background(Color(hex: "#FF6F61"))
-                                    .foregroundStyle(.white)
-                                    .cornerRadius(12)
+                                    .padding(.bottom, isSignedUp ? 40 : 0)
+                                    
                                     
                                     
                                     
@@ -251,10 +293,12 @@ struct SignInWithEmailView: View {
                                     }
                                 }
                                 
-                                Button(newUser ? "Already have an account? Sign in" : "Create an Account.") {
-                                    newUser.toggle()
+                                if !isSignedUp {
+                                    Button(newUser ? "Already have an account? Sign in" : "Create an Account.") {
+                                        newUser.toggle()
+                                    }
+                                    .padding()
                                 }
-                                .padding()
                             }
                         }
                         .frame(width:  UIScreen.main.bounds.width * 0.8, height:  UIScreen.main.bounds.height * 0.7)
