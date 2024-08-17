@@ -62,8 +62,8 @@ struct SignInWithEmailView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                //Background
                 Color(hex: "#F5F5DC").ignoresSafeArea()
-                
                 VStack {
                     Spacer()
                     HStack {
@@ -79,12 +79,11 @@ struct SignInWithEmailView: View {
                     }
                 }
                 .edgesIgnoringSafeArea(.all)
+                
                 VStack {
-                     
                     ZStack(alignment: .leading) {
-                            
                         HStack {
-                            
+                            //Back Button
                             if !isSignedUp {
                                 Button {
                                     if !settingPassword {
@@ -109,36 +108,33 @@ struct SignInWithEmailView: View {
                                     }
                                 }
                             }
-                            
                             Spacer()
                             
                         }
-                                HStack {
-                                    Capsule()
-                                        .foregroundStyle(.orange)
-                                        .frame(width: 100, height: 7)
-                                        .shadow(radius: 10)
-                                    
-                                    Capsule()
-                                        .foregroundStyle(settingPassword || isSignedUp ? .orange : .white)
-                                        .frame(width: 100, height: 7)
-                                        .shadow(radius: 10)
-                                    
-                                    Capsule()
-                                        .foregroundStyle(isSignedUp ? .orange : .white)
-                                        .frame(width: 100, height: 7)
-                                        .shadow(radius: 10)
-                                }.frame(maxWidth: .infinity)
+                        //Stepper View
+                        HStack {
+                                Capsule()
+                                    .foregroundStyle(.orange)
+                                    .frame(width: 100, height: 7)
+                                    .shadow(radius: 10)
+                                
+                                Capsule()
+                                    .foregroundStyle(settingPassword || isSignedUp ? .orange : .white)
+                                    .frame(width: 100, height: 7)
+                                    .shadow(radius: 10)
+                                
+                                Capsule()
+                                    .foregroundStyle(isSignedUp ? .orange : .white)
+                                    .frame(width: 100, height: 7)
+                                    .shadow(radius: 10)
+                            }.frame(maxWidth: .infinity)
                         }
                         .padding([.leading, .trailing], 100)
                         .padding(.top, 40)
                         .frame(width: UIScreen.main.bounds.width)
                             
-                        
-                        
-                        
+                        //MARK: Form
                         ZStack {
-                            
                             RoundedRectangle(cornerRadius: 50)
                                 .fill(Color(hex: "#8AC640"))
                                 
@@ -156,10 +152,12 @@ struct SignInWithEmailView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 
+                                //New User View
                                 if newUser {
                                     
                                     VStack {
                                         
+                                        //User detail view
                                         if !settingPassword && !isSignedUp {
                                             TextField("Name", text: $viewModel.name)
                                                 .customTextFieldStyle()
@@ -183,7 +181,10 @@ struct SignInWithEmailView: View {
                                             
                                             TextField("country", text: $viewModel.country)
                                                 .customTextFieldStyle()
-                                        } else if settingPassword {
+                                        }
+                                        
+                                        //Setting Password View
+                                        else if settingPassword {
                                             SecureField("Password", text: $viewModel.password)
                                                 .customTextFieldStyle()
                                             
@@ -193,6 +194,7 @@ struct SignInWithEmailView: View {
                                             Text(err)
                                         }
                                         
+                                        //Add Children View
                                         if isSignedUp {
                                             VStack(alignment: .leading) {
                                                 ScrollView {
@@ -225,7 +227,11 @@ struct SignInWithEmailView: View {
                                     .padding(.top)
                                     .frame(width:  UIScreen.main.bounds.width * 0.7)
                                     Spacer()
+                                    
+                                    //Buttons
                                     VStack {
+                                        
+                                        //Main Button
                                         Button(settingPassword ? "Sign up" : (isSignedUp ? "Continue" : "Next")) {
                                             
                                             if settingPassword {
@@ -258,6 +264,7 @@ struct SignInWithEmailView: View {
                                         .foregroundStyle(.white)
                                         .cornerRadius(12)
                                         
+                                        //Add Later Button
                                         if isSignedUp {
                                             Button("Add Later") {
                                                 
@@ -274,11 +281,16 @@ struct SignInWithEmailView: View {
                                     
                                     
                                     
-                                } else {
-                                    Form {
+                                }
+                                
+                                //Sign In View
+                                else {
+                                    VStack {
                                         TextField("Email", text: $viewModel.email)
+                                            .customTextFieldStyle()
                                         SecureField("Password", text: $viewModel.password)
-                                        
+                                            .customTextFieldStyle()
+                                        Spacer()
                                         Button("Sign in") {
                                             Task {
                                                 do {
@@ -290,6 +302,11 @@ struct SignInWithEmailView: View {
                                                 }
                                             }
                                         }
+                                        .padding()
+                                        .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                        .background(Color(hex: "#FF6F61"))
+                                        .foregroundStyle(.white)
+                                        .cornerRadius(12)
                                     }
                                 }
                                 
