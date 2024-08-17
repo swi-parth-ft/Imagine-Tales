@@ -95,6 +95,7 @@ struct AuthenticationView: View {
                                     Spacer()
                                     NavigationLink {
                                         SignInWithEmailView(showSignInView: $showSignInView)
+                                            
                                     } label: {
                                         Text("Sign in with email")
                                             .font(.custom("ComicNeue-Regular", size: 24))

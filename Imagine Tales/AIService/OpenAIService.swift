@@ -16,7 +16,7 @@ class OpenAIService {
        
     }
     
-    private let apiKey = "\(Environment.apikey)"
+    private let apiKey = "\(Env.apikey)"
     private let url = URL(string: "https://api.openai.com/v1/images/generations")!
     
     func generateImage(from prompt: String, completion: @escaping (Result<UIImage, Error>) -> Void) {

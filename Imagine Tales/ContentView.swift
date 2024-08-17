@@ -284,7 +284,7 @@ Create an image that depicts a story with the following prompt: \(promptForImage
         words.append(theme)
         
         let prompt = "Create a story with characters: \(characters), genre: \(genre), and theme: \(theme) and finish it in 150 words."
-        let apiKey = "\(Environment.apikey)"
+        let apiKey = "\(Env.apikey)"
         let url = URL(string: "https://api.openai.com/v1/chat/completions")!
         
         var request = URLRequest(url: url)

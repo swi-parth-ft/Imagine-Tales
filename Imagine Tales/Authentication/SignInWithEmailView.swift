@@ -13,7 +13,7 @@ final class SignInWithEmailViewModel: ObservableObject {
     @Published var password = ""
     @Published var name = ""
     @Published var date = Date()
-    @Published var gender = ""
+    @Published var gender = "Male"
     @Published var country = ""
     @Published var number = ""
     var userId = ""
@@ -50,9 +50,12 @@ final class SignInWithEmailViewModel: ObservableObject {
 
 struct SignInWithEmailView: View {
     @StateObject var viewModel = SignInWithEmailViewModel()
+    @Environment(\.dismiss) var dismiss
     @State private var newUser = true
-    
+    @State private var settingPassword = false
+    @State private var confirmPassword = ""
     @Binding var showSignInView: Bool
+    @State private var err = ""
     var body: some View {
         NavigationStack {
             ZStack {
@@ -80,7 +83,7 @@ struct SignInWithEmailView: View {
                         HStack {
                             
                             Button {
-                                
+                                dismiss()
                             } label: {
                                 ZStack {
                                     Circle()
@@ -97,7 +100,6 @@ struct SignInWithEmailView: View {
                             Spacer()
                             
                         }
-                                
                                 HStack {
                                     Capsule()
                                         .foregroundStyle(.orange)
@@ -105,7 +107,7 @@ struct SignInWithEmailView: View {
                                         .shadow(radius: 10)
                                     
                                     Capsule()
-                                        .foregroundStyle(.white)
+                                        .foregroundStyle(settingPassword ? .orange : .white)
                                         .frame(width: 100, height: 7)
                                         .shadow(radius: 10)
                                     
@@ -114,8 +116,6 @@ struct SignInWithEmailView: View {
                                         .frame(width: 100, height: 7)
                                         .shadow(radius: 10)
                                 }.frame(maxWidth: .infinity)
-                            
-                           
                         }
                         .padding([.leading, .trailing], 100)
                         .padding(.top, 40)
@@ -132,51 +132,95 @@ struct SignInWithEmailView: View {
                             VStack {
                                 
                                 VStack(alignment: .leading) {
-                                    Text("Personal Details")
-                                        .font(.custom("ComicNeue-Regular", size: 32))
+                                    Text(settingPassword ? "Create Password" : "Personal Details")
+                                        .font(.custom("ComicNeue-Bold", size: 32))
                                     
-                                    Text("Enter Personal Details")
+                                    Text(settingPassword ? "Enter Password" : "Enter Personal Details")
                                         .font(.custom("ComicNeue-Regular", size: 24))
+                                    
+                                    
+                                    if settingPassword {
+                                        Button("Back", systemImage: "lessthan") {
+                                            withAnimation {
+                                                settingPassword = false
+                                            }
+                                        }
+                                        .padding()
+                                        .tint(.orange)
+                                        .background(.white.opacity(0.5))
+                                        .cornerRadius(12)
+                                    }
                                 }
                                 .padding([.top, .leading], 40)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 
                                 if newUser {
+                                    
                                     VStack {
-                                        TextField("Name", text: $viewModel.name)
+                                        
+                                        if !settingPassword {
+                                            TextField("Name", text: $viewModel.name)
+                                                .customTextFieldStyle()
+                                            
+                                            TextField("Email", text: $viewModel.email)
+                                                .customTextFieldStyle()
+                                            
+                                            TextField("Phone", text: $viewModel.number)
+                                                .customTextFieldStyle()
+                                            
+                                            //                                        TextField("gender", text: $viewModel.gender)
+                                            //                                            .customTextFieldStyle()
+                                            
+                                            VStack {
+                                                Picker("Gender", selection: $viewModel.gender) {
+                                                    Text("Male").tag("Male")
+                                                    Text("Female").tag("Female")
+                                                }
+                                                .pickerStyle(.segmented)
+                                                
+                                            }
                                             .customTextFieldStyle()
                                             
-                                        TextField("Email", text: $viewModel.email)
-                                            .customTextFieldStyle()
-                   
-                                        TextField("Phone", text: $viewModel.number)
-                                            .customTextFieldStyle()
-                                      
-                                        TextField("gender", text: $viewModel.gender)
-                                            .customTextFieldStyle()
-                                        
-                                        TextField("country", text: $viewModel.country)
-                                            .customTextFieldStyle()
-                                        
-                                        SecureField("Password", text: $viewModel.password)
-                                            .customTextFieldStyle()
+                                            
+                                            TextField("country", text: $viewModel.country)
+                                                .customTextFieldStyle()
+                                        } else {
+                                            SecureField("Password", text: $viewModel.password)
+                                                .customTextFieldStyle()
+                                            
+                                            SecureField("Confirm Password", text: $confirmPassword)
+                                                .customTextFieldStyle()
+                                            
+                                            Text(err)
+                                        }
                                         
                                     }
                                     .padding(.top)
                                     .frame(width:  UIScreen.main.bounds.width * 0.7)
                                     Spacer()
                                     
-                                    Button("Sign Up") {
-                                        Task {
-                                            do {
-                                                if let _ = try await viewModel.createAccount() {
-                                                    showSignInView = false
-                                                    try await viewModel.createUserProfile()
+                                    Button(settingPassword ? "Sign up" : "Next") {
+                                        
+                                        if settingPassword {
+                                            if viewModel.password == confirmPassword {
+                                                Task {
+                                                    do {
+                                                        if let _ = try await viewModel.createAccount() {
+                                                            showSignInView = false
+                                                            try await viewModel.createUserProfile()
+                                                        }
+                                                        return
+                                                    } catch {
+                                                        print(error.localizedDescription)
+                                                    }
                                                 }
-                                                return
-                                            } catch {
-                                                print(error.localizedDescription)
+                                            } else {
+                                                err = "passwords don't match, Try again."
+                                            }
+                                        } else {
+                                            withAnimation {
+                                                settingPassword = true
                                             }
                                         }
                                     }
@@ -219,6 +263,7 @@ struct SignInWithEmailView: View {
                     
                 }
             }
+            .navigationBarBackButtonHidden(true)
         }
     }
 }
