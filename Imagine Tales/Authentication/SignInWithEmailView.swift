@@ -96,6 +96,7 @@ struct SignInWithEmailView: View {
     
     @State private var selectedAgeRange: AgeRange? = nil
 @State private var addingChildDetails = false
+    @State private var selectedChild: UserChildren?
     
         enum AgeRange: String, CaseIterable {
             case sixToEight = "6-8"
@@ -274,28 +275,32 @@ struct SignInWithEmailView: View {
                                             if isSignedUp {
                                                 VStack(alignment: .leading) {
                                                     ScrollView {
-                                                        LazyVGrid(columns: gridItems, spacing: 20) {
+                                                        LazyVGrid(columns: gridItems, spacing: 40) {
+                                                            VStack {
                                                             ZStack {
                                                                 
                                                                 Circle()
                                                                     .fill(Color(hex: "#DFFFDF"))
                                                                     .frame(width: 100, height: 100)
-                                                                    .onTapGesture {
-                                                                        if isSignedUp {
-                                                                            withAnimation {
-                                                                                settingPassword = false
-                                                                                isSignedUp = false
-                                                                                isAddingChild = true
-                                                                            }
-                                                                        }
-                                                                    }
+                                                                   
+                                                                    
                                                                 
                                                                 Image(systemName: "plus")
                                                                     .font(.system(size: 40))
-                                                                    .onTapGesture {
-                                                                        addingChildDetails = true
-                                                                    }
+                                                                   
                                                                 
+                                                            }
+                                                            
+                                                                Text("Add")
+                                                        }
+                                                            .onTapGesture {
+                                                                if isSignedUp {
+                                                                    withAnimation {
+                                                                        settingPassword = false
+                                                                        isSignedUp = false
+                                                                        isAddingChild = true
+                                                                    }
+                                                                }
                                                             }
                                                             ForEach(viewModel.children) { child in
                                                                 VStack {
