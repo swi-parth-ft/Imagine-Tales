@@ -48,7 +48,7 @@ final class AuthenticationViewModel: ObservableObject {
 struct AuthenticationView: View {
     @Binding var showSignInView: Bool
     @StateObject var viewModel = AuthenticationViewModel()
-    
+    @State private var isParent = true
     @State private var newUser = true
   
     var body: some View {
@@ -94,16 +94,29 @@ struct AuthenticationView: View {
                                         .multilineTextAlignment(.center)
                                     Spacer()
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView)
+                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: true)
                                             
                                     } label: {
-                                        Text("Sign in with email")
+                                        Text("Continue as Parent")
                                             .font(.custom("ComicNeue-Regular", size: 24))
                                             .frame(height: 55)
                                             .frame(maxWidth: .infinity)
-                                            .background(Color.orange)
+                                            .background(Color(hex: "#DFFFDF"))
                                             .cornerRadius(12)
-                                            .foregroundStyle(.white)
+                                            .foregroundStyle(.black)
+                                    }
+                                    
+                                    NavigationLink {
+                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: false)
+                                            
+                                    } label: {
+                                        Text("Setup for Child")
+                                            .font(.custom("ComicNeue-Regular", size: 24))
+                                            .frame(height: 55)
+                                            .frame(maxWidth: .infinity)
+                                            .background(Color(hex: "#DFFFDF"))
+                                            .cornerRadius(12)
+                                            .foregroundStyle(.black)
                                     }
                                     
 //                                    GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {

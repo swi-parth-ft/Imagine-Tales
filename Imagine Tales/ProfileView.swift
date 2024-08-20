@@ -55,7 +55,7 @@ struct ProfileView: View {
                 .navigationTitle("Profile")
             }
         }
-        .preferredColorScheme(.dark)
+     
         
             
         

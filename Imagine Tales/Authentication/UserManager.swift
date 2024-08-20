@@ -22,6 +22,7 @@ struct UserModel: Codable {
     let gender: String
     let country: String
     let number: String
+    let isParent: Bool
 //    init(auth: AuthDataResultModel) {
 //        self.userId = auth.uid
 //        self.name = ""
@@ -34,7 +35,7 @@ struct UserModel: Codable {
 //        self.country = ""
 //    }
     
-    init(userId: String, name: String, birthDate: Date?, email: String?, gender: String, country: String, number: String) {
+    init(userId: String, name: String, birthDate: Date?, email: String?, gender: String, country: String, number: String, isParent: Bool) {
         self.userId = userId
         self.name = name
         self.birthDate = birthDate
@@ -42,6 +43,7 @@ struct UserModel: Codable {
         self.gender = gender
         self.country = country
         self.number = number
+        self.isParent = isParent
     }
 }
 
