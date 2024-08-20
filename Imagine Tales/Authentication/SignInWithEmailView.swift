@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 final class SignInWithEmailViewModel: ObservableObject {
+    
+    @Published var children: [UserChildren] = []
     
     @Published var email = ""
     @Published var password = ""
@@ -18,6 +21,31 @@ final class SignInWithEmailViewModel: ObservableObject {
     @Published var number = ""
     var userId = ""
     
+//    @MainActor
+//    func getChildren() {
+//      
+//            children =  UserManager.shared.getAllUserChildren(userId: userId)
+//            print("children: \(children)")
+//        
+//    }
+    
+    func getChildren() {
+       
+        Firestore.firestore().collection("users").document(userId).collection("Children").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+                return
+            }
+            
+            self.children = querySnapshot?.documents.compactMap { document in
+                try? document.data(as: UserChildren.self)
+            } ?? []
+            print(self.children)
+            
+        }
+    }
+    
+    
     func signInWithEmail() async throws -> AuthDataResultModel? {
         
         guard !email.isEmpty, !password.isEmpty else {
@@ -25,6 +53,7 @@ final class SignInWithEmailViewModel: ObservableObject {
             return nil
         }
         let authResult = try await AuthenticationManager.shared.signIn(email: email, password: password)
+        userId = authResult.uid
         return authResult
          
     }
@@ -268,20 +297,29 @@ struct SignInWithEmailView: View {
                                                                     }
                                                                 
                                                             }
-                                                            //                                                        ForEach(0..<1) { index in
-                                                            //                                                            Circle()
-                                                            //                                                                .fill(Color.blue)
-                                                            //                                                                .frame(width: 100, height: 100)
-                                                            
-                                                            //   }
+                                                            ForEach(viewModel.children) { child in
+                                                                VStack {
+                                                                    Circle()
+                                                                        .fill(Color.blue)
+                                                                        .frame(width: 100, height: 100)
+                                                                    
+                                                                    Text(child.name)
+                                                                }
+                                                            }
                                                         }
                                                         .padding()
                                                         
                                                     }
                                                 }
                                                 .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                                .onAppear {
+                                                    viewModel.getChildren()
+                                                }
+                                              
+                                               
                                                 
                                             }
+                                                
                                             
                                             
                                             
@@ -307,6 +345,7 @@ struct SignInWithEmailView: View {
                                                                     isSignedUp = true
                                                                     settingPassword = false
                                                                     try await viewModel.createUserProfile(isParent: isParent)
+                                                                    viewModel.getChildren()
                                                                 }
                                                                 return
                                                             } catch {
@@ -364,7 +403,10 @@ struct SignInWithEmailView: View {
                                                 Task {
                                                     do {
                                                         if let _ = try await viewModel.signInWithEmail() {
-                                                            showSignInView = false
+                                                            isSignedUp = true
+                                                            settingPassword = false
+                                                            newUser = true
+                                                         //   viewModel.getChildren()
                                                         }
                                                     } catch {
                                                         print(error.localizedDescription)
@@ -408,11 +450,13 @@ struct SignInWithEmailView: View {
                                                         settingPassword = false
                                                         isSignedUp = true
                                                         isAddingChild = false
+                                                        viewModel.getChildren()
                                                         
                                                     } catch {
                                                         print(error.localizedDescription)
                                                     }
                                                 }
+                                                
                                             }
                                             .padding()
                                             .frame(width:  UIScreen.main.bounds.width * 0.7)

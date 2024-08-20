@@ -60,6 +60,7 @@ final class UserManager {
         userDocument(userId: userId).collection("Children")
     }
     
+    
 //    private func childDocument(userId: String, favoriteProductId: String) -> DocumentReference {
 //        childCollection(userId: userId).document(favoriteProductId)
 //    }
@@ -122,4 +123,51 @@ final class UserManager {
         
         try await document.setData(data, merge: true)
     }
+   
+    
+   
+    
+    func getAllUserChildren(userId: String) -> [UserChildren] {
+        var items:[UserChildren] = []
+        Firestore.firestore().collection("users").document(userId).collection("Children").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+                return
+            }
+            
+            items = querySnapshot?.documents.compactMap { document in
+                try? document.data(as: UserChildren.self)
+            } ?? []
+            print(items)
+            
+        }
+        return items
+    }
+}
+
+struct UserChildren: Codable, Identifiable {
+    
+    let id: String
+    let parentId: String
+    let name: String
+    let age: String
+    let dateCreated: Date
+}
+
+extension Query {
+    
+//    func getDocuments<T>(as type: T.Type) async throws -> [T] where T : Decodable {
+//        try await getDocumentsWithSnapshot(as: type).children
+//    }
+    
+    func getDocumentsWithSnapshot<T>(as type: T.Type) async throws -> (children: [T], lastDocument: DocumentSnapshot?) where T : Decodable {
+        let snapshot = try await self.getDocuments()
+        
+        let children = try snapshot.documents.map({ document in
+            try document.data(as: T.self)
+        })
+        
+        return (children, snapshot.documents.last)
+    }
+    
 }
