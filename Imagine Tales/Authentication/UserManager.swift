@@ -56,13 +56,13 @@ final class UserManager {
     private func userDocument(userId: String) -> DocumentReference {
         userCollection.document(userId)
     }
-    private func userFavoriteProductCollection(userId: String) -> CollectionReference {
-        userDocument(userId: userId).collection("favorite_products")
+    private func childCollection(userId: String) -> CollectionReference {
+        userDocument(userId: userId).collection("Children")
     }
     
-    private func userFavoriteProductDocument(userId: String, favoriteProductId: String) -> DocumentReference {
-        userFavoriteProductCollection(userId: userId).document(favoriteProductId)
-    }
+//    private func childDocument(userId: String, favoriteProductId: String) -> DocumentReference {
+//        childCollection(userId: userId).document(favoriteProductId)
+//    }
     
     private let encoder: Firestore.Encoder = {
         let encoder = Firestore.Encoder()
@@ -106,5 +106,20 @@ final class UserManager {
         ]
 
         try await userDocument(userId: userId).updateData(data)
+    }
+    
+    func addChild(userId: String, name: String, age: String) async throws {
+        let document = childCollection(userId: userId).document()
+        let documentId = document.documentID
+        
+        let data: [String:Any] = [
+            "id" : documentId,
+            "parentId" : userId,
+            "name" : name,
+            "age" : age,
+            "dateCreated" : Timestamp()
+        ]
+        
+        try await document.setData(data, merge: true)
     }
 }

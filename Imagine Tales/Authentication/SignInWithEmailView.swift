@@ -45,6 +45,10 @@ final class SignInWithEmailViewModel: ObservableObject {
         let _ = try await UserManager.shared.createNewUser(user: user)
     }
     
+    func addChild(age: String) async throws {
+        let _ = try await UserManager.shared.addChild(userId: userId, name: name, age: age)
+    }
+    
     
 }
 
@@ -62,7 +66,8 @@ struct SignInWithEmailView: View {
     @State private var err = ""
     
     @State private var selectedAgeRange: AgeRange? = nil
-
+@State private var addingChildDetails = false
+    
         enum AgeRange: String, CaseIterable {
             case sixToEight = "6-8"
             case eightToTen = "8-10"
@@ -167,11 +172,25 @@ struct SignInWithEmailView: View {
                                 
                                 //title
                                 VStack(alignment: .leading) {
-                                    Text(settingPassword ? "Create Password" : (isSignedUp ? "Add Children" : (isAddingChild ? "Add Child" : "Personal Details")))
-                                        .font(.custom("ComicNeue-Bold", size: 32))
-                                    
-                                    Text(settingPassword ? "Enter Password" : (isSignedUp ? "Add accounts for personalised experience": "Enter Personal Details"))
-                                        .font(.custom("ComicNeue-Regular", size: 24))
+                                    if isParent {
+                                        Text(settingPassword ? "Create Password" : (isSignedUp ? "Add Children" : (isAddingChild ? "Add Child" : "Personal Details")))
+                                            .font(.custom("ComicNeue-Bold", size: 32))
+                                        
+                                        Text(settingPassword ? "Enter Password" : (isSignedUp ? "Add accounts for personalised experience": "Enter Personal Details"))
+                                            .font(.custom("ComicNeue-Regular", size: 24))
+                                    } else {
+                                        if !newUser {
+                                            Text("Sign In as Parent")
+                                                .font(.custom("ComicNeue-Bold", size: 32))
+                                        } else {
+                                            Text("Sign Up as Parent")
+                                                .font(.custom("ComicNeue-Bold", size: 32))
+                                        }
+                                            Text("Sign in or create a new parent account")
+                                                .font(.custom("ComicNeue-Regular", size: 24))
+                                        
+                                        
+                                    }
                                     
                                 }
                                 .padding([.top, .leading], 40)
@@ -244,6 +263,9 @@ struct SignInWithEmailView: View {
                                                                 
                                                                 Image(systemName: "plus")
                                                                     .font(.system(size: 40))
+                                                                    .onTapGesture {
+                                                                        addingChildDetails = true
+                                                                    }
                                                                 
                                                             }
                                                             //                                                        ForEach(0..<1) { index in
@@ -261,6 +283,8 @@ struct SignInWithEmailView: View {
                                                 
                                             }
                                             
+                                            
+                                            
                                         }
                                         .padding(.top)
                                         .frame(width:  UIScreen.main.bounds.width * 0.7)
@@ -275,12 +299,13 @@ struct SignInWithEmailView: View {
                                                 
                                                 if settingPassword {
                                                     if viewModel.password == confirmPassword {
-                                                        isSignedUp = true
-                                                        settingPassword = false
+                                                        
                                                         Task {
                                                             do {
                                                                 if let _ = try await viewModel.createAccount() {
-                                                                    showSignInView = false
+                                                                    
+                                                                    isSignedUp = true
+                                                                    settingPassword = false
                                                                     try await viewModel.createUserProfile(isParent: isParent)
                                                                 }
                                                                 return
@@ -312,7 +337,7 @@ struct SignInWithEmailView: View {
                                             //Add Later Button
                                             if isSignedUp {
                                                 Button("Add Later") {
-                                                    
+                                                    showSignInView = false
                                                 }
                                                 .padding()
                                                 .frame(width:  UIScreen.main.bounds.width * 0.7)
@@ -377,7 +402,17 @@ struct SignInWithEmailView: View {
                                             
                                             //Main Button
                                             Button("Add Child") {
-                                                
+                                                Task {
+                                                    do {
+                                                        try await viewModel.addChild(age: selectedAgeRange?.rawValue ?? "n/a")
+                                                        settingPassword = false
+                                                        isSignedUp = true
+                                                        isAddingChild = false
+                                                        
+                                                    } catch {
+                                                        print(error.localizedDescription)
+                                                    }
+                                                }
                                             }
                                             .padding()
                                             .frame(width:  UIScreen.main.bounds.width * 0.7)
@@ -402,6 +437,8 @@ struct SignInWithEmailView: View {
                                     }
                                     .frame(width:  UIScreen.main.bounds.width * 0.7)
                                 }
+                                
+                                
                                 if !isSignedUp && !isAddingChild {
                                     Button(newUser ? "Already have an account? Sign in" : "Create an Account.") {
                                         newUser.toggle()
