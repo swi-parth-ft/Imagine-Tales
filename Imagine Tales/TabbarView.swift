@@ -20,7 +20,7 @@ struct TabbarView: View {
     
     @State public var selectedIndex: Int = 2
     @Binding var showSignInView: Bool
-    
+    @Binding var selectedChild: UserChildren
     
     
     var body: some View {
@@ -32,7 +32,7 @@ struct TabbarView: View {
                             AnyView(ContentView()),
                             AnyView(ContentView()),
                             AnyView(ContentView()),
-                            AnyView(ProfileView(showSignInView: $showSignInView))]
+                            AnyView(ProfileView(showSignInView: $showSignInView, selectedChild: $selectedChild))]
             
             NavigationView {
             viewList[selectedIndex]
@@ -66,5 +66,5 @@ struct TabbarView: View {
 }
 
 #Preview {
-    TabbarView(showSignInView: .constant(false))
+    TabbarView(showSignInView: .constant(false), selectedChild: .constant(UserChildren(id: "", parentId: "", name: "", age: "", dateCreated: Date.now)))
 }

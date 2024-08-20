@@ -22,7 +22,7 @@ struct ContentView: View {
     @State private var generatedImage: UIImage? = nil
     @State private var isImageLoading = true
     @State private var promptForImage = ""
-    
+ 
     let vertex = VertexAI.vertexAI()
     
     let genres = [

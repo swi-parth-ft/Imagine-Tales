@@ -24,6 +24,7 @@ struct ProfileView: View {
     
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
+    @Binding var selectedChild: UserChildren
     var body: some View {
         NavigationStack {
             ZStack {
@@ -32,6 +33,12 @@ struct ProfileView: View {
                 VStack {
                     List {
                         Text(viewModel.user?.email ?? "N/A")
+                            .listRowBackground(Color.white.opacity(0.5))
+                        
+                        Text(selectedChild.name)
+                            .listRowBackground(Color.white.opacity(0.5))
+                        
+                        Text(selectedChild.id)
                             .listRowBackground(Color.white.opacity(0.5))
                         Button("Log out") {
                             Task {
@@ -63,6 +70,6 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(showSignInView: .constant(false))
+    ProfileView(showSignInView: .constant(false), selectedChild: .constant(UserChildren(id: "", parentId: "", name: "", age: "", dateCreated: Date.now)))
         .preferredColorScheme(.dark)
 }

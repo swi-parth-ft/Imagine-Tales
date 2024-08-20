@@ -93,10 +93,10 @@ struct SignInWithEmailView: View {
     @State var isParent: Bool
     let gridItems = Array(repeating: GridItem(.fixed(100)), count: 5)
     @State private var err = ""
-    
+    @Binding var selectedChild: UserChildren
     @State private var selectedAgeRange: AgeRange? = nil
 @State private var addingChildDetails = false
-    @State private var selectedChild: UserChildren?
+    
     
         enum AgeRange: String, CaseIterable {
             case sixToEight = "6-8"
@@ -309,6 +309,10 @@ struct SignInWithEmailView: View {
                                                                         .frame(width: 100, height: 100)
                                                                     
                                                                     Text(child.name)
+                                                                }
+                                                                .onTapGesture {
+                                                                    selectedChild = child
+                                                                  
                                                                 }
                                                             }
                                                         }
@@ -549,5 +553,5 @@ extension View {
 }
 
 #Preview {
-    SignInWithEmailView(showSignInView: .constant(false), isParent: true)
+    SignInWithEmailView(showSignInView: .constant(false), isParent: true, selectedChild: .constant(UserChildren(id: "", parentId: "", name: "", age: "", dateCreated: Date.now)))
 }

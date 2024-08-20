@@ -50,7 +50,7 @@ struct AuthenticationView: View {
     @StateObject var viewModel = AuthenticationViewModel()
     @State private var isParent = true
     @State private var newUser = true
-  
+    @Binding var selectedChild: UserChildren
     var body: some View {
         NavigationStack {
             ZStack {
@@ -94,7 +94,7 @@ struct AuthenticationView: View {
                                         .multilineTextAlignment(.center)
                                     Spacer()
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: true)
+                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: true, selectedChild: $selectedChild)
                                             
                                     } label: {
                                         Text("Continue as Parent")
@@ -107,7 +107,7 @@ struct AuthenticationView: View {
                                     }
                                     
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: false)
+                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: false, selectedChild: $selectedChild)
                                             
                                     } label: {
                                         Text("Setup for Child")
@@ -200,7 +200,7 @@ struct AuthenticationView: View {
 }
 
 #Preview {
-    AuthenticationView(showSignInView: .constant(false))
+    AuthenticationView(showSignInView: .constant(false), selectedChild: .constant(UserChildren(id: "", parentId: "", name: "", age: "", dateCreated: Date.now)))
 }
 
 
