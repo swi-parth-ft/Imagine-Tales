@@ -90,7 +90,7 @@ struct SignInWithEmailView: View {
     @Binding var showSignInView: Bool
     @State private var isSignedUp = false
     @State private var isAddingChild = false
-    var isParent: Bool
+    @State var isParent: Bool
     let gridItems = Array(repeating: GridItem(.fixed(100)), count: 5)
     @State private var err = ""
     
@@ -203,20 +203,20 @@ struct SignInWithEmailView: View {
                                 //title
                                 VStack(alignment: .leading) {
                                     if isParent {
-                                        Text(settingPassword ? "Create Password" : (isSignedUp ? "Add Children" : (isAddingChild ? "Add Child" : "Personal Details")))
+                                        Text(settingPassword ? "Create Password" : (isSignedUp ? "Add Children" : (isAddingChild ? "Add Child" : (newUser ? "Personal Details" : "Sign In"))))
                                             .font(.custom("ComicNeue-Bold", size: 32))
                                         
                                         Text(settingPassword ? "Enter Password" : (isSignedUp ? "Add accounts for personalised experience": "Enter Personal Details"))
                                             .font(.custom("ComicNeue-Regular", size: 24))
                                     } else {
                                         if !newUser {
-                                            Text("Sign In as Parent")
+                                            Text(isAddingChild ? "Add Child" : (isSignedUp ? "Select Child" : "Sign In as Parent"))
                                                 .font(.custom("ComicNeue-Bold", size: 32))
                                         } else {
-                                            Text("Sign Up as Parent")
+                                            Text(isAddingChild ? "Add Child" : (isSignedUp ? "Select Child" : "Sign Up as Parent"))
                                                 .font(.custom("ComicNeue-Bold", size: 32))
                                         }
-                                            Text("Sign in or create a new parent account")
+                                        Text(isAddingChild ? "Enter personal details" : (isSignedUp ? "Add or select child to continue." :"Sign in or create a new parent account"))
                                                 .font(.custom("ComicNeue-Regular", size: 24))
                                         
                                         
@@ -325,9 +325,6 @@ struct SignInWithEmailView: View {
                                                 
                                             }
                                                 
-                                            
-                                            
-                                            
                                         }
                                         .padding(.top)
                                         .frame(width:  UIScreen.main.bounds.width * 0.7)
@@ -349,6 +346,7 @@ struct SignInWithEmailView: View {
                                                                     
                                                                     isSignedUp = true
                                                                     settingPassword = false
+                                                                    
                                                                     try await viewModel.createUserProfile(isParent: isParent)
                                                                     viewModel.getChildren()
                                                                 }
