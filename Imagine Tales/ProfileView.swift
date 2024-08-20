@@ -25,6 +25,9 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
     @Binding var selectedChild: UserChildren
+    
+    @AppStorage("childId") var childId: String = "Default Value"
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -33,6 +36,9 @@ struct ProfileView: View {
                 VStack {
                     List {
                         Text(viewModel.user?.email ?? "N/A")
+                            .listRowBackground(Color.white.opacity(0.5))
+                        
+                        Text(childId)
                             .listRowBackground(Color.white.opacity(0.5))
                         
                         Text(selectedChild.name)

@@ -96,7 +96,8 @@ struct SignInWithEmailView: View {
     @Binding var selectedChild: UserChildren
     @State private var selectedAgeRange: AgeRange? = nil
 @State private var addingChildDetails = false
-    
+    @AppStorage("childId") var childId: String = "Default Value"
+
     
         enum AgeRange: String, CaseIterable {
             case sixToEight = "6-8"
@@ -312,7 +313,8 @@ struct SignInWithEmailView: View {
                                                                 }
                                                                 .onTapGesture {
                                                                     selectedChild = child
-                                                                  
+                                                                    childId = child.id
+                                                                    showSignInView = false
                                                                 }
                                                             }
                                                         }
