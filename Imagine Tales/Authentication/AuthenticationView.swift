@@ -21,7 +21,13 @@ final class AuthenticationViewModel: ObservableObject {
     func signInGoogle() async throws -> AuthDataResultModel?{
         let helper = SignInGoogleHelper()
         let tokens = try await helper.signIn()
-        return try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
+        
+        let authDataResult = try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
+//        let user = UserModel(userId: authDataResult.uid, name: "", birthDate: Date(), email: authDataResult.email, gender: "", country: "", number: "", isParent: true)
+//        try await UserManager.shared.createNewUser(user: user) 
+            
+            return authDataResult
+        
       
     }
     
@@ -50,7 +56,7 @@ struct AuthenticationView: View {
     @StateObject var viewModel = AuthenticationViewModel()
     @State private var isParent = true
     @State private var newUser = true
-    @Binding var selectedChild: UserChildren
+    @State private var isSignedInWithGoogle = false
     var body: some View {
         NavigationStack {
             ZStack {
@@ -93,8 +99,22 @@ struct AuthenticationView: View {
                                         .font(.custom("ComicNeue-Regular", size: 24))
                                         .multilineTextAlignment(.center)
                                     Spacer()
+                                    
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: true, selectedChild: $selectedChild)
+                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: true, continueAsChild: false, signedInWithGoogle: false)
+                                            
+                                    } label: {
+                                        Text("Sign Up")
+                                            .font(.custom("ComicNeue-Regular", size: 24))
+                                            .frame(height: 55)
+                                            .frame(maxWidth: .infinity)
+                                            .background(Color(hex: "#DFFFDF"))
+                                            .cornerRadius(12)
+                                            .foregroundStyle(.black)
+                                    }
+                                    
+                                    NavigationLink {
+                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: false, continueAsChild: true, signedInWithGoogle: false)
                                             
                                     } label: {
                                         Text("Continue as Parent")
@@ -107,7 +127,7 @@ struct AuthenticationView: View {
                                     }
                                     
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: false, selectedChild: $selectedChild)
+                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: false, continueAsChild: true, signedInWithGoogle: false)
                                             
                                     } label: {
                                         Text("Setup for Child")
@@ -119,25 +139,13 @@ struct AuthenticationView: View {
                                             .foregroundStyle(.black)
                                     }
                                     
-//                                    GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {
-//                                        Task {
-//                                            do {
-//                                                if let _ = try await viewModel.signInGoogle() {
-//                                                    showSignInView = false
-//                                                }
-//                                            } catch {
-//                                                print(error.localizedDescription)
-//                                            }
-//                                        }
-//                                    }
-//                                    .cornerRadius(12)
-                                    
-                                    
+                      
                                     Button {
                                         Task {
                                             do {
                                                 if let _ = try await viewModel.signInGoogle() {
-                                                    showSignInView = false
+                                                    
+                                                    isSignedInWithGoogle = true
                                                 }
                                             } catch {
                                                 print(error.localizedDescription)
@@ -159,6 +167,10 @@ struct AuthenticationView: View {
                                         .background(Color.white)
                                         .cornerRadius(12)
                                     }
+                                    .navigationDestination(isPresented: $isSignedInWithGoogle) {
+                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: true, continueAsChild: false, signedInWithGoogle: true)
+                                    }
+                     
                                     
                                     Button {
                                         Task {
@@ -200,7 +212,7 @@ struct AuthenticationView: View {
 }
 
 #Preview {
-    AuthenticationView(showSignInView: .constant(false), selectedChild: .constant(UserChildren(id: "", parentId: "", name: "", age: "", dateCreated: Date.now)))
+    AuthenticationView(showSignInView: .constant(false))
 }
 
 

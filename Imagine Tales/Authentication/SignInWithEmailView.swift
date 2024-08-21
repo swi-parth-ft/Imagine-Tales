@@ -21,6 +21,7 @@ final class SignInWithEmailViewModel: ObservableObject {
     @Published var number = ""
     var userId = ""
     
+    
 //    @MainActor
 //    func getChildren() {
 //      
@@ -29,8 +30,13 @@ final class SignInWithEmailViewModel: ObservableObject {
 //        
 //    }
     
-    func getChildren() {
+    
+    
+    func getChildren() throws {
        
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        userId = authDataResult.uid
+        
         Firestore.firestore().collection("users").document(userId).collection("Children").getDocuments { (querySnapshot, error) in
             if let error = error {
                 print("Error getting documents: \(error)")
@@ -74,6 +80,14 @@ final class SignInWithEmailViewModel: ObservableObject {
         let _ = try await UserManager.shared.createNewUser(user: user)
     }
     
+    func createGoogleUserProfile(isParent: Bool) async throws {
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        userId = authDataResult.uid
+        let user = UserModel(userId: userId, name: name, birthDate: date, email: authDataResult.email, gender: gender, country: country, number: number, isParent: isParent)
+        print(user.userId)
+        let _ = try await UserManager.shared.createNewUser(user: user)
+    }
+    
     func addChild(age: String) async throws {
         let _ = try await UserManager.shared.addChild(userId: userId, name: name, age: age)
     }
@@ -93,11 +107,12 @@ struct SignInWithEmailView: View {
     @State var isParent: Bool
     let gridItems = Array(repeating: GridItem(.fixed(100)), count: 5)
     @State private var err = ""
-    @Binding var selectedChild: UserChildren
     @State private var selectedAgeRange: AgeRange? = nil
 @State private var addingChildDetails = false
     @AppStorage("childId") var childId: String = "Default Value"
-
+    let isNewGoogleUser = AuthenticationManager.shared.isNewUser
+    var continueAsChild: Bool
+    var signedInWithGoogle: Bool
     
         enum AgeRange: String, CaseIterable {
             case sixToEight = "6-8"
@@ -199,10 +214,17 @@ struct SignInWithEmailView: View {
                             RoundedRectangle(cornerRadius: 50)
                                 .fill(Color(hex: "#8AC640"))
                             
+                            
                             VStack {
                                 
                                 //title
                                 VStack(alignment: .leading) {
+                                    if signedInWithGoogle {
+                                        Text("Add Children")
+                                            .font(.custom("ComicNeue-Bold", size: 32))
+                                        Text("Add or select child to continue.")
+                                            .font(.custom("ComicNeue-Regular", size: 24))
+                                    } else {
                                     if isParent {
                                         Text(settingPassword ? "Create Password" : (isSignedUp ? "Add Children" : (isAddingChild ? "Add Child" : (newUser ? "Personal Details" : "Sign In"))))
                                             .font(.custom("ComicNeue-Bold", size: 32))
@@ -218,10 +240,11 @@ struct SignInWithEmailView: View {
                                                 .font(.custom("ComicNeue-Bold", size: 32))
                                         }
                                         Text(isAddingChild ? "Enter personal details" : (isSignedUp ? "Add or select child to continue." :"Sign in or create a new parent account"))
-                                                .font(.custom("ComicNeue-Regular", size: 24))
+                                            .font(.custom("ComicNeue-Regular", size: 24))
                                         
                                         
                                     }
+                                }
                                     
                                 }
                                 .padding([.top, .leading], 40)
@@ -234,7 +257,7 @@ struct SignInWithEmailView: View {
                                     if newUser {
                                         VStack {
                                             //User detail view
-                                            if !settingPassword && !isSignedUp {
+                                            if !settingPassword && !isSignedUp && !signedInWithGoogle {
                                                 TextField("Name", text: $viewModel.name)
                                                     .customTextFieldStyle()
                                                 
@@ -262,7 +285,7 @@ struct SignInWithEmailView: View {
                                             }
                                             
                                             //Setting Password View
-                                            else if settingPassword {
+                                            else if settingPassword && !signedInWithGoogle {
                                                 SecureField("Password", text: $viewModel.password)
                                                     .customTextFieldStyle()
                                                 
@@ -278,22 +301,22 @@ struct SignInWithEmailView: View {
                                                     ScrollView {
                                                         LazyVGrid(columns: gridItems, spacing: 40) {
                                                             VStack {
-                                                            ZStack {
-                                                                
-                                                                Circle()
-                                                                    .fill(Color(hex: "#DFFFDF"))
-                                                                    .frame(width: 100, height: 100)
-                                                                   
+                                                                ZStack {
                                                                     
+                                                                    Circle()
+                                                                        .fill(Color(hex: "#DFFFDF"))
+                                                                        .frame(width: 100, height: 100)
+                                                                    
+                                                                    
+                                                                    
+                                                                    Image(systemName: "plus")
+                                                                        .font(.system(size: 40))
+                                                                    
+                                                                    
+                                                                }
                                                                 
-                                                                Image(systemName: "plus")
-                                                                    .font(.system(size: 40))
-                                                                   
-                                                                
-                                                            }
-                                                            
                                                                 Text("Add")
-                                                        }
+                                                            }
                                                             .onTapGesture {
                                                                 if isSignedUp {
                                                                     withAnimation {
@@ -312,7 +335,7 @@ struct SignInWithEmailView: View {
                                                                     Text(child.name)
                                                                 }
                                                                 .onTapGesture {
-                                                                    selectedChild = child
+                                                                    
                                                                     childId = child.id
                                                                     showSignInView = false
                                                                 }
@@ -324,19 +347,82 @@ struct SignInWithEmailView: View {
                                                 }
                                                 .frame(width:  UIScreen.main.bounds.width * 0.7)
                                                 .onAppear {
-                                                    viewModel.getChildren()
+                                                    Task {
+                                                        do {
+                                                            try viewModel.getChildren()
+                                                        } catch {
+                                                            print(error.localizedDescription)
+                                                        }
+                                                    }
                                                 }
-                                              
-                                               
+                                                
+                                                
                                                 
                                             }
+                                            
+                                            if signedInWithGoogle && !isSignedUp && isNewGoogleUser {
+                                               
+                                                    TextField("Name", text: $viewModel.name)
+                                                        .customTextFieldStyle()
+                                                    
+                                                    TextField("Phone", text: $viewModel.number)
+                                                        .customTextFieldStyle()
+                                                    
+                                                    VStack {
+                                                        Picker("Gender", selection: $viewModel.gender) {
+                                                            Text("Male").tag("Male")
+                                                            Text("Female").tag("Female")
+                                                        }
+                                                        .pickerStyle(.segmented)
+                                                        
+                                                    }
+                                                    .customTextFieldStyle()
+                                                    
+                                                    
+                                                    TextField("country", text: $viewModel.country)
+                                                        .customTextFieldStyle()
+                                                    
+                                                    Spacer()
+                                                    Button("Continue") {
+                                                        Task {
+                                                            do {
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                try await viewModel.createGoogleUserProfile(isParent: isParent)
+                                                                isSignedUp = true
+                                                                settingPassword = false
+                                                                try viewModel.getChildren()
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                            } catch {
+                                                                print(error.localizedDescription)
+                                                            }
+                                                        }
+                                                        
+                                                        
+                                                        
+                                                    }
+                                                    .padding()
+                                                    .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                                    .background(Color(hex: "#FF6F61"))
+                                                    .foregroundStyle(.white)
+                                                    .cornerRadius(12)
                                                 
+                                            }
+                                            
                                         }
                                         .padding(.top)
                                         .frame(width:  UIScreen.main.bounds.width * 0.7)
                                         Spacer()
                                         
-                                        
+                                   
                                         //Buttons
                                         VStack {
                                             
@@ -354,7 +440,7 @@ struct SignInWithEmailView: View {
                                                                     settingPassword = false
                                                                     
                                                                     try await viewModel.createUserProfile(isParent: isParent)
-                                                                    viewModel.getChildren()
+                                                                    try viewModel.getChildren()
                                                                 }
                                                                 return
                                                             } catch {
@@ -395,6 +481,8 @@ struct SignInWithEmailView: View {
                                             }
                                         }
                                         .padding(.bottom, isSignedUp ? 40 : 0)
+                                        
+                                    
                                         
                                     }
                                     
@@ -459,7 +547,7 @@ struct SignInWithEmailView: View {
                                                         settingPassword = false
                                                         isSignedUp = true
                                                         isAddingChild = false
-                                                        viewModel.getChildren()
+                                                        try viewModel.getChildren()
                                                         
                                                     } catch {
                                                         print(error.localizedDescription)
@@ -511,6 +599,13 @@ struct SignInWithEmailView: View {
                 if !isParent {
                     newUser = false
                 }
+                
+                if !isNewGoogleUser {
+                    isSignedUp = true
+                    settingPassword = false
+                }
+                
+
             }
             .navigationBarBackButtonHidden(true)
         }
@@ -555,5 +650,5 @@ extension View {
 }
 
 #Preview {
-    SignInWithEmailView(showSignInView: .constant(false), isParent: true, selectedChild: .constant(UserChildren(id: "", parentId: "", name: "", age: "", dateCreated: Date.now)))
+    SignInWithEmailView(showSignInView: .constant(false), isParent: true, continueAsChild: false, signedInWithGoogle: false)
 }

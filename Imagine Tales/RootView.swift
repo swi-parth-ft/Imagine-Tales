@@ -10,10 +10,9 @@ import SwiftUI
 struct RootView: View {
     
     @State private var showSignInView = false
-    @State var selectedChild: UserChildren = UserChildren(id: "", parentId: "", name: "", age: "", dateCreated: Date.now)
     var body: some View {
         ZStack {
-            TabbarView(showSignInView: $showSignInView, selectedChild: $selectedChild)
+            TabbarView(showSignInView: $showSignInView)
         }
         .onAppear {
             let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
@@ -22,7 +21,7 @@ struct RootView: View {
 
         .fullScreenCover(isPresented: $showSignInView) {
             NavigationStack {
-                AuthenticationView(showSignInView: $showSignInView, selectedChild: $selectedChild)
+                AuthenticationView(showSignInView: $showSignInView)
             }
         }
         
@@ -32,5 +31,5 @@ struct RootView: View {
 }
 
 #Preview {
-    RootView(selectedChild: UserChildren(id: "", parentId: "", name: "", age: "", dateCreated: Date.now))
+    RootView()
 }

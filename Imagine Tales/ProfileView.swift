@@ -24,7 +24,7 @@ struct ProfileView: View {
     
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
-    @Binding var selectedChild: UserChildren
+    
     
     @AppStorage("childId") var childId: String = "Default Value"
     
@@ -41,15 +41,11 @@ struct ProfileView: View {
                         Text(childId)
                             .listRowBackground(Color.white.opacity(0.5))
                         
-                        Text(selectedChild.name)
-                            .listRowBackground(Color.white.opacity(0.5))
-                        
-                        Text(selectedChild.id)
-                            .listRowBackground(Color.white.opacity(0.5))
                         Button("Log out") {
                             Task {
                                 do {
                                     try viewModel.logOut()
+                                    childId = ""
                                     showSignInView = true
                                 } catch {
                                     print(error.localizedDescription)
@@ -76,6 +72,6 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(showSignInView: .constant(false), selectedChild: .constant(UserChildren(id: "", parentId: "", name: "", age: "", dateCreated: Date.now)))
+    ProfileView(showSignInView: .constant(false))
         .preferredColorScheme(.dark)
 }

@@ -138,7 +138,6 @@ final class UserManager {
             items = querySnapshot?.documents.compactMap { document in
                 try? document.data(as: UserChildren.self)
             } ?? []
-            print(items)
             
         }
         return items

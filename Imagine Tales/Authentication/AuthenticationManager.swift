@@ -22,6 +22,7 @@ struct AuthDataResultModel {
 final class AuthenticationManager {
     
     static let shared = AuthenticationManager()
+    var isNewUser = false
     
     private init () {}
     
@@ -66,11 +67,23 @@ final class AuthenticationManager {
     
     func signInWithGoogle(tokens: googleSignInResultModel) async throws -> AuthDataResultModel {
         let credential = GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
-        return try await signIn(credential: credential)
+        // Sign in with Google credential
+            let authResult = try await signIn(credential: credential)
+            
+           
+            
+            return authResult
     }
     
     func signIn(credential: AuthCredential) async throws -> AuthDataResultModel {
         let authDataResult = try await Auth.auth().signIn(with: credential)
+        if authDataResult.additionalUserInfo?.isNewUser != false {
+            print("This is a new user.")
+            isNewUser = true
+        } else {
+            print("This is an existing user.")
+            isNewUser = false
+        }
         return AuthDataResultModel(user: authDataResult.user)
     }
     
