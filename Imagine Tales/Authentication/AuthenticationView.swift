@@ -93,7 +93,7 @@ struct AuthenticationView: View {
                                     
                                     Text("Welcome to KidScribe")
                                         .font(.custom("ComicNeue-Bold", size: 32))
-                                      
+                                    
                                     
                                     Text("The Number One Best Ebook Store & Reader Application in this Century")
                                         .font(.custom("ComicNeue-Regular", size: 24))
@@ -102,20 +102,20 @@ struct AuthenticationView: View {
                                     
                                     NavigationLink {
                                         SignInWithEmailView(showSignInView: $showSignInView, isParent: true, continueAsChild: false, signedInWithGoogle: false)
-                                            
+                                        
                                     } label: {
                                         Text("Sign Up")
                                             .font(.custom("ComicNeue-Regular", size: 24))
                                             .frame(height: 55)
                                             .frame(maxWidth: .infinity)
-                                            .background(Color(hex: "#DFFFDF"))
+                                            .background(Color(hex: "#FF6F61"))
                                             .cornerRadius(12)
                                             .foregroundStyle(.black)
                                     }
                                     
                                     NavigationLink {
                                         SignInWithEmailView(showSignInView: $showSignInView, isParent: false, continueAsChild: true, signedInWithGoogle: false)
-                                            
+                                        
                                     } label: {
                                         Text("Continue as Parent")
                                             .font(.custom("ComicNeue-Regular", size: 24))
@@ -128,7 +128,7 @@ struct AuthenticationView: View {
                                     
                                     NavigationLink {
                                         SignInWithEmailView(showSignInView: $showSignInView, isParent: false, continueAsChild: true, signedInWithGoogle: false)
-                                            
+                                        
                                     } label: {
                                         Text("Setup for Child")
                                             .font(.custom("ComicNeue-Regular", size: 24))
@@ -139,56 +139,67 @@ struct AuthenticationView: View {
                                             .foregroundStyle(.black)
                                     }
                                     
-                      
-                                    Button {
-                                        Task {
-                                            do {
-                                                if let _ = try await viewModel.signInGoogle() {
-                                                    
-                                                    isSignedInWithGoogle = true
+                                    HStack {
+                                        Capsule()
+                                            .fill(Color(hex: "#E9E9E9"))
+                                            .frame(width: 200, height: 1)
+                                        
+                                        Text("or")
+                                        Capsule()
+                                            .fill(Color(hex: "#E9E9E9"))
+                                            .frame(width: 200, height: 1)
+                                    }
+                                    
+                                    HStack{
+                                        Button {
+                                            Task {
+                                                do {
+                                                    if let _ = try await viewModel.signInGoogle() {
+                                                        
+                                                        isSignedInWithGoogle = true
+                                                    }
+                                                } catch {
+                                                    print(error.localizedDescription)
                                                 }
-                                            } catch {
-                                                print(error.localizedDescription)
                                             }
+                                        } label: {
+                                            ZStack {
+                                                RoundedRectangle(cornerRadius: 22)
+                                                    .fill(.white)
+                                                    .frame(width: 55, height: 55)
+                                                Image("googleIcon")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 22, height: 22)
+                                            }
+                                            
                                         }
-                                    } label: {
-                                        HStack {
-                                            Image("googleIcon") // Make sure the image name matches the asset catalog
+                                        .navigationDestination(isPresented: $isSignedInWithGoogle) {
+                                            SignInWithEmailView(showSignInView: $showSignInView, isParent: true, continueAsChild: false, signedInWithGoogle: true)
+                                        }
+                                        
+                                        
+                                        Button {
+                                            Task {
+                                                do {
+                                                    try await viewModel.signInApple()
+                                                } catch {
+                                                    print(error.localizedDescription)
+                                                }
+                                            }
+                                        } label: {
+                                            Image("appleIcon")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 18, height: 18) // Adjust the size as needed
-                                            
-                                            Text("Sign in with Google")
-                                                .font(.system(size: 20))
-                                                .foregroundColor(.black)
+                                                .frame(width: 55, height: 55)
+                                                .cornerRadius(22)
+                                            //                                        signInWithAppleButtonViewRepresentable(type: .signIn, style: .white)
+                                            //                                            .allowsHitTesting(false)
                                         }
-                                        .frame(height: 55)
-                                        .frame(maxWidth: .infinity)
-                                        .background(Color.white)
-                                        .cornerRadius(12)
-                                    }
-                                    .navigationDestination(isPresented: $isSignedInWithGoogle) {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: true, continueAsChild: false, signedInWithGoogle: true)
-                                    }
-                     
-                                    
-                                    Button {
-                                        Task {
-                                            do {
-                                                try await viewModel.signInApple()
-                                            } catch {
-                                                print(error.localizedDescription)
+                                        .onChange(of: viewModel.didSignInWithApple) { oldValue, newValue in
+                                            if newValue {
+                                                showSignInView = false
                                             }
-                                        }
-                                    } label: {
-                                        signInWithAppleButtonViewRepresentable(type: .signIn, style: .white)
-                                            .allowsHitTesting(false)
-                                    }
-                                    .frame(height: 55)
-                                    .cornerRadius(12)
-                                    .onChange(of: viewModel.didSignInWithApple) { oldValue, newValue in
-                                        if newValue {
-                                            showSignInView = false
                                         }
                                     }
                                     

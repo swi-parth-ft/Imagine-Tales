@@ -360,6 +360,8 @@ struct SignInWithEmailView: View {
                                                 
                                             }
                                             
+                                            
+                                            //New user signed in with google View
                                             if signedInWithGoogle && !isSignedUp && isNewGoogleUser {
                                                
                                                     TextField("Name", text: $viewModel.name)
