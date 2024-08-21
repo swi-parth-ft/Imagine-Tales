@@ -23,7 +23,6 @@
 		0711F3782C6D7CDB006C86AA /* SignInAppleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3772C6D7CDA006C86AA /* SignInAppleHelper.swift */; };
 		0711F37A2C6D8BEB006C86AA /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3792C6D8BEB006C86AA /* OpenAIService.swift */; };
 		0711F37C2C6D96C5006C86AA /* imageLoading.json in Resources */ = {isa = PBXBuildFile; fileRef = 0711F37B2C6D96C5006C86AA /* imageLoading.json */; };
-		0711F37F2C6D96EC006C86AA /* DotLottie in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F37E2C6D96EC006C86AA /* DotLottie */; };
 		0711F3812C6DB62D006C86AA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3802C6DB62D006C86AA /* FirebaseAnalytics */; };
 		0711F3832C6DB62D006C86AA /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3822C6DB62D006C86AA /* FirebaseAnalyticsOnDeviceConversion */; };
 		0711F3852C6DB62D006C86AA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3842C6DB62D006C86AA /* FirebaseAuth */; };
@@ -89,7 +88,6 @@
 				0711F3662C6D6C6F006C86AA /* FirebaseAuth in Frameworks */,
 				0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */,
 				073F2CEA2C6EC85200BCF6F0 /* FirebaseVertexAI-Preview in Frameworks */,
-				0711F37F2C6D96EC006C86AA /* DotLottie in Frameworks */,
 				0711F3832C6DB62D006C86AA /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				0711F3872C6DB67D006C86AA /* DotLottie in Frameworks */,
 			);
@@ -551,11 +549,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0711F3692C6D6E2B006C86AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
-		};
-		0711F37E2C6D96EC006C86AA /* DotLottie */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0711F37D2C6D96EC006C86AA /* XCRemoteSwiftPackageReference "dotlottie-ios" */;
-			productName = DotLottie;
 		};
 		0711F3802C6DB62D006C86AA /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

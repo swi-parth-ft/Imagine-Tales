@@ -602,7 +602,7 @@ struct SignInWithEmailView: View {
                     newUser = false
                 }
                 
-                if !isNewGoogleUser {
+                if !isNewGoogleUser && signedInWithGoogle {
                     isSignedUp = true
                     settingPassword = false
                 }
