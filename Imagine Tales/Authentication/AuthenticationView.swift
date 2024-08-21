@@ -57,6 +57,9 @@ struct AuthenticationView: View {
     @State private var isParent = true
     @State private var newUser = true
     @State private var isSignedInWithGoogle = false
+    
+    @AppStorage("isOnboarding") var isOnboarding: Bool = true
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -99,7 +102,9 @@ struct AuthenticationView: View {
                                         .font(.custom("ComicNeue-Regular", size: 24))
                                         .multilineTextAlignment(.center)
                                     Spacer()
-                                    
+                                    Button("Show onBoarding") {
+                                        isOnboarding = true
+                                    }
                                     NavigationLink {
                                         SignInWithEmailView(showSignInView: $showSignInView, isParent: true, continueAsChild: false, signedInWithGoogle: false)
                                         

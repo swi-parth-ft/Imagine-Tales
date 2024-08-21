@@ -20,10 +20,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct Imagine_TalesApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @AppStorage("isOnboarding") var isOnboarding: Bool = true
     
     var body: some Scene {
         WindowGroup {
-            RootView()
+            if isOnboarding {
+                OnBoardingView()
+            } else {
+                RootView()
+            }
         }
     }
 }
