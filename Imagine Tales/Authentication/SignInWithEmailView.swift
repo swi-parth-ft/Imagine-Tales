@@ -220,9 +220,9 @@ struct SignInWithEmailView: View {
                                 //title
                                 VStack(alignment: .leading) {
                                     if signedInWithGoogle {
-                                        Text("Add Children")
+                                        Text(isAddingChild ? "Add Child" : "Add Children")
                                             .font(.custom("ComicNeue-Bold", size: 32))
-                                        Text("Add or select child to continue.")
+                                        Text(isAddingChild ? "Enter Personal Details" : "Add or select child to continue.")
                                             .font(.custom("ComicNeue-Regular", size: 24))
                                     } else {
                                     if isParent {
