@@ -30,6 +30,13 @@ final class SignInWithEmailViewModel: ObservableObject {
 //        
 //    }
     
+    func resetPassword() async throws {
+//        let user = try AuthenticationManager.shared.getAuthenticatedUser()
+//        guard let email = user.email else {
+//            throw URLError(.fileIsDirectory)
+//        }
+        try await AuthenticationManager.shared.resetPassword(email: email)
+    }
     
     
     func getChildren() throws {
@@ -497,7 +504,25 @@ struct SignInWithEmailView: View {
                                                 .customTextFieldStyle()
                                             SecureField("Password", text: $viewModel.password)
                                                 .customTextFieldStyle()
+                                            HStack {
+                                                Spacer()
+                                                Button("Forgot password?") {
+                                                    Task {
+                                                        do {
+                                                            try await viewModel.resetPassword()
+                                                            print("Pasword reset")
+                                                            
+                                                        } catch {
+                                                            print(error.localizedDescription)
+                                                        }
+                                                    }
+                                                }
+                                                    .foregroundStyle(.black)
+                                            }
+                                            .frame(width: UIScreen.main.bounds.width * 0.7)
+                                            .padding(.top)
                                             Spacer()
+                                            
                                             Button("Sign in") {
                                                 Task {
                                                     do {
