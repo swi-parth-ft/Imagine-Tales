@@ -30,16 +30,13 @@ struct ProfileView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                LinearGradient(colors: [.purple, .black, .black], startPoint: .bottom, endPoint: .top)
-                    .ignoresSafeArea()
+           
+               
                 VStack {
                     List {
                         Text(viewModel.user?.email ?? "N/A")
-                            .listRowBackground(Color.white.opacity(0.5))
                         
                         Text(childId)
-                            .listRowBackground(Color.white.opacity(0.5))
                         
                         Button("Log out") {
                             Task {
@@ -53,17 +50,16 @@ struct ProfileView: View {
                                 
                             }
                         }
-                        .listRowBackground(Color.white.opacity(0.5))
                     }
                     .onAppear {
                         try? viewModel.loadUser()
                     }
-                    .scrollContentBackground(.hidden)
+                   
                 }
                 .padding([.trailing, .leading])
                 .navigationTitle("Profile")
             }
-        }
+        
      
         
             
@@ -73,5 +69,5 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView(showSignInView: .constant(false))
-        .preferredColorScheme(.dark)
+
 }

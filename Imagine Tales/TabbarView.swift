@@ -8,50 +8,131 @@
 import SwiftUI
 import FloatingTabBar
 
-struct TabbarView: View {
-   
+enum TabItems: Int, CaseIterable {
+    case home = 0
+    case browse
+    case generate
+    case collection
+    case profile
+    
+    var title: String {
+        switch self {
+        case .home:
+            return "Home"
+        case .browse:
+            return "Browse"
+        case .generate:
+            return "Generate"
+        case .collection:
+            return "Collection"
+        case .profile:
+            return "Profile"
+        }
+    }
+    
+    var iconName: String {
+        switch self {
+        case .home:
+            return "house"
+        case .browse:
+            return "safari"
+        case .generate:
+            return "plus.app"
+        case .collection:
+            return "books.vertical"
+        case .profile:
+            return "person"
+        }
+    }
+}
 
+struct TabbarView: View {
+    
+    
     @Binding var showSignInView: Bool
+    @State private var selectedTab = 0
+    
     
     
     var body: some View {
-        
-        TabView {
-            ContentView()
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Home")
+        ZStack(alignment: .bottom) {
+            TabView(selection: $selectedTab) {
+                ContentView()
+                    .tag(0)
+                
+                ContentView()
+                    .tag(1)
+                
+                ContentView()
+                    .tag(2)
+                
+                ContentView()
+                    .tag(3)
+                
+                ProfileView(showSignInView: $showSignInView)
+                    .tag(4)
+            }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            .ignoresSafeArea()
+            ZStack{
+                HStack{
+                    ForEach((TabItems.allCases), id: \.self){ item in
+                        Button{
+                            selectedTab = item.rawValue
+                        } label: {
+                            CustomTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
+                        }
+                    }
                 }
-            
-            ContentView()
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Home")
-                }
-            
-            ContentView()
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Home")
-                }
-            
-            ContentView()
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Home")
-                }
-            
-            ProfileView(showSignInView: $showSignInView)
-                .tabItem {
-                    Image(systemName: "Person.fill")
-                    Text("Profile")
-                }
+                .padding(6)
+            }
+            .frame(height: 70)
+            .background(Color(hex: "#FFFFF1"))
+            .cornerRadius(20)
+            .padding(.horizontal, 26)
+            .shadow(radius: 10)
+        }
+        .onAppear {
+                hideSystemTabBar()
+            }
         }
         
-       
-    }
+        // Hide system tab bar
+        private func hideSystemTabBar() {
+            UITabBar.appearance().isHidden = true
+            // For iPad compatibility, force a redraw
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                UITabBar.appearance().isHidden = true
+            }
+        }
+        
+    
 }
 
 #Preview {
     TabbarView(showSignInView: .constant(false))
+}
+
+
+
+extension TabbarView{
+    func CustomTabItem(imageName: String, title: String, isActive: Bool) -> some View{
+        HStack(spacing: 10){
+            Spacer()
+            Image(systemName: isActive ? imageName + ".fill" : imageName)
+                .resizable()
+                .renderingMode(.template)
+                .foregroundColor(isActive ? .white : .black)
+                .frame(width: 20, height: 20)
+            if isActive{
+                Text(title)
+                    .font(.system(size: 14))
+                    .foregroundColor(isActive ? .white : .black)
+            }
+            Spacer()
+        }
+        .frame(width: isActive ? .infinity : 140, height: 60)
+        .background(isActive ? Color(hex: "#8AC640") : .clear)
+        .cornerRadius(12)
+    }
 }

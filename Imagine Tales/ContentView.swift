@@ -53,8 +53,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                LinearGradient(colors: [.purple, .black, .black], startPoint: .bottom, endPoint: .top)
-                    .ignoresSafeArea()
+                Color(hex: "#FFFFF1").ignoresSafeArea()
                 VStack {
                     if story == "" && !isLoading {
                         VStack {
