@@ -203,6 +203,7 @@ struct ContentView: View {
                                                             .fill(themes[index] == theme ? Color.orange.opacity(0.5) : Color.orange.opacity(0.2))
                                                             .frame(width: width, height: width)
                                                             .shadow(radius: 5)
+                                                            .scaleEffect(themes[index] == theme ? 1.1 : 1.0)
                                                         
                                                         Text(themes[index])
                                                             .font(.caption)
@@ -219,9 +220,10 @@ struct ContentView: View {
                                                     }
                                                 }
                                             }
+                                           
                                             
                                         }
-                                        .padding(.horizontal)
+                                        .padding()
                                     }
                                 }
                                 .frame(height: 600)
@@ -247,6 +249,7 @@ struct ContentView: View {
                                                             .fill(genres[index] == genre ? Color.green.opacity(0.5) : Color.green.opacity(0.2))
                                                             .frame(width: width, height: width)
                                                             .shadow(radius: 5)
+                                                            .scaleEffect(genres[index] == genre ? 1.1 : 1.0)
                                                         
                                                         Text(genres[index])
                                                             .font(.caption)
@@ -265,7 +268,7 @@ struct ContentView: View {
                                             }
                                             
                                         }
-                                        .padding(.horizontal)
+                                        .padding()
                                     }
                                 }
                                 .frame(height: 600)
@@ -274,12 +277,14 @@ struct ContentView: View {
                             
                             //Adding Charactors
                             else if isAddingNames {
-                                VStack {
+                                HStack(spacing: -20) {
                                     TextField("Name", text: $char)
-                                        .frame(width:  UIScreen.main.bounds.width * 0.2, height: 50)
-                                        .background(.white)
-                                        .cornerRadius(18)
-                                        .shadow(radius: 5)
+                                        .padding()
+                                        .frame(width:  UIScreen.main.bounds.width * 0.2, height: 55)
+                                        .background(.purple.opacity(0.1))
+                                        .cornerRadius(12)
+                                        .shadow(radius: 3)
+                                        .tint(.purple)
                                     
                                     Button("Add") {
                                         withAnimation {
@@ -301,8 +306,10 @@ struct ContentView: View {
                                         
                                     }
                                     .frame(width:  100, height: 55)
-                                    .background(.blue)
+                                    .background(.purple)
+                                    .foregroundStyle(.white)
                                     .cornerRadius(12)
+                                    .shadow(radius: 3)
                                 }
                             }
                             
@@ -356,7 +363,7 @@ struct ContentView: View {
                                     }
                                     .padding()
                                     .frame(width:  UIScreen.main.bounds.width * 0.7)
-                                    .background(Color(hex: "#DFFFDF"))
+                                    .background(isAddingNames ? Color.purple.opacity(0.2) : Color(hex: "#DFFFDF"))
                                     .foregroundStyle(.black)
                                     .cornerRadius(12)
                                 }
