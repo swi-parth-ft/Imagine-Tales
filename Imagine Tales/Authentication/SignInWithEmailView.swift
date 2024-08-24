@@ -39,12 +39,31 @@ final class SignInWithEmailViewModel: ObservableObject {
     }
     
     
+//    func getChildren() throws {
+//       
+//        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+//        userId = authDataResult.uid
+//        
+//        Firestore.firestore().collection("users").document(userId).collection("Children").getDocuments { (querySnapshot, error) in
+//            if let error = error {
+//                print("Error getting documents: \(error)")
+//                return
+//            }
+//            
+//            self.children = querySnapshot?.documents.compactMap { document in
+//                try? document.data(as: UserChildren.self)
+//            } ?? []
+//            print(self.children)
+//            
+//        }
+//    }
+    
     func getChildren() throws {
        
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
         userId = authDataResult.uid
         
-        Firestore.firestore().collection("users").document(userId).collection("Children").getDocuments { (querySnapshot, error) in
+        Firestore.firestore().collection("Children2").whereField("parentId", isEqualTo: userId).getDocuments() { (querySnapshot, error) in
             if let error = error {
                 print("Error getting documents: \(error)")
                 return
@@ -97,6 +116,7 @@ final class SignInWithEmailViewModel: ObservableObject {
     
     func addChild(age: String) async throws {
         let _ = try await UserManager.shared.addChild(userId: userId, name: name, age: age)
+        let _ = try await UserManager.shared.addChild2(userId: userId, name: name, age: age)
     }
     
     

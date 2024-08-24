@@ -131,8 +131,9 @@ extension TabbarView{
             }
             Spacer()
         }
-        .frame(width: isActive ? .infinity : 140, height: 60)
+        .frame(width: isActive ? .infinity : 130, height: 50)
         .background(isActive ? Color(hex: "#8AC640") : .clear)
         .cornerRadius(12)
+        .padding(.horizontal, 5)
     }
 }

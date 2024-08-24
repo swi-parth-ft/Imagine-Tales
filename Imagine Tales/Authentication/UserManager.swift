@@ -60,6 +60,11 @@ final class UserManager {
         userDocument(userId: userId).collection("Children")
     }
     
+    private let childCollection2 = Firestore.firestore().collection("Children2")
+    private func childDocument() -> DocumentReference {
+        childCollection2.document()
+    }
+    
     
 //    private func childDocument(userId: String, favoriteProductId: String) -> DocumentReference {
 //        childCollection(userId: userId).document(favoriteProductId)
@@ -123,9 +128,42 @@ final class UserManager {
         
         try await document.setData(data, merge: true)
     }
+    
+    func addChild2(userId: String, name: String, age: String) async throws {
+        let document = childDocument()
+        let documentId = document.documentID
+        
+        let data: [String:Any] = [
+            "id" : documentId,
+            "parentId" : userId,
+            "name" : name,
+            "age" : age,
+            "dateCreated" : Timestamp()
+        ]
+        
+        try await document.setData(data, merge: true)
+    }
+    
+    
    
     
    
+    
+//    func getAllUserChildren(userId: String) -> [UserChildren] {
+//        var items:[UserChildren] = []
+//        Firestore.firestore().collection("users").document(userId).collection("Children").getDocuments { (querySnapshot, error) in
+//            if let error = error {
+//                print("Error getting documents: \(error)")
+//                return
+//            }
+//            
+//            items = querySnapshot?.documents.compactMap { document in
+//                try? document.data(as: UserChildren.self)
+//            } ?? []
+//            
+//        }
+//        return items
+//    }
     
     func getAllUserChildren(userId: String) -> [UserChildren] {
         var items:[UserChildren] = []
@@ -142,6 +180,7 @@ final class UserManager {
         }
         return items
     }
+    
 }
 
 struct UserChildren: Codable, Identifiable {
