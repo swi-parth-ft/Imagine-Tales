@@ -11,6 +11,7 @@ import FirebaseVertexAI
 
 struct ContentView: View {
     @State private var characters = ""
+    @State private var char = ""
     @State private var genre = "Adventure"
     @State private var theme = "Forest"
     @State private var story = ""
@@ -42,7 +43,6 @@ struct ContentView: View {
         "Magical Realism",
         "Biography",
         "Coming-of-Age",
-        "Young Adult",
         "Action",
         "Paranormal",
         "Supernatural",
@@ -54,6 +54,9 @@ struct ContentView: View {
     @State private var isSelectingTheme = true
     @State private var isSelectingGenre = false
     @State private var isAddingNames = false
+    
+    @State private var formattedChars = ""
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -139,24 +142,45 @@ struct ContentView: View {
                                             .font(.system(size: 20, weight: .bold))
                                             .foregroundStyle(Color(hex: "#FF6F61"))
                                         
-                                        Text("theme with genre of")
+                                        Text("theme")
                                             .font(.system(size: 20))
                                         
-                                        Text(genre)
-                                            .font(.system(size: 20, weight: .bold))
-                                            .foregroundStyle(.purple)
+                                        if isSelectingGenre || isAddingNames {
+                                            Text("with genre of")
+                                                .font(.system(size: 20))
+                                            
+                                            Text(genre)
+                                                .font(.system(size: 20, weight: .bold))
+                                                .foregroundStyle(.green)
+                                        }
                                         
+                                        
+                                        
+                                    }
+                                    .padding(.leading, 30)
+                                    HStack {
+                                        if isAddingNames {
+                                            Text("with")
+                                                .font(.system(size: 20))
+                                            
+                                            Text(characters == "" ? "no" : formattedChars)
+                                                .font(.system(size: 20, weight: .bold))
+                                                .foregroundStyle(.purple)
+                                            
+                                            Text(characters == "" ? "characters" : "as characters")
+                                                .font(.system(size: 20))
+                                        }
                                     }
                                     .padding(.leading, 30)
                                     
                                     
                                 }
                             }
-                            .frame(height: 120)
+                            .frame(height: isAddingNames ? 150 : 120)
                             
                             
                             //Selection Title
-                            Text(isSelectingTheme ? "Select Theme" : "Select Genre")
+                            Text(isSelectingTheme ? "Select Theme" : isAddingNames ? "Add Characters" : "Select Genre")
                                 .font(.system(size: 24))
                                 .padding()
                             
@@ -176,8 +200,9 @@ struct ContentView: View {
                                                 VStack {
                                                     ZStack {
                                                         Circle()
-                                                            .fill(themes[index] == theme ? Color.blue.opacity(0.5) : Color.blue.opacity(0.2))
+                                                            .fill(themes[index] == theme ? Color.orange.opacity(0.5) : Color.orange.opacity(0.2))
                                                             .frame(width: width, height: width)
+                                                            .shadow(radius: 5)
                                                         
                                                         Text(themes[index])
                                                             .font(.caption)
@@ -189,7 +214,9 @@ struct ContentView: View {
                                                 .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
                                                 .frame(width: width, height: width)
                                                 .onTapGesture {
-                                                    theme = themes[index]
+                                                    withAnimation {
+                                                        theme = themes[index]
+                                                    }
                                                 }
                                             }
                                             
@@ -217,8 +244,9 @@ struct ContentView: View {
                                                 VStack {
                                                     ZStack {
                                                         Circle()
-                                                            .fill(genres[index] == genre ? Color.blue.opacity(0.5) : Color.blue.opacity(0.2))
+                                                            .fill(genres[index] == genre ? Color.green.opacity(0.5) : Color.green.opacity(0.2))
                                                             .frame(width: width, height: width)
+                                                            .shadow(radius: 5)
                                                         
                                                         Text(genres[index])
                                                             .font(.caption)
@@ -230,7 +258,9 @@ struct ContentView: View {
                                                 .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
                                                 .frame(width: width, height: width)
                                                 .onTapGesture {
-                                                    genre = genres[index]
+                                                    withAnimation {
+                                                        genre = genres[index]
+                                                    }
                                                 }
                                             }
                                             
@@ -244,7 +274,36 @@ struct ContentView: View {
                             
                             //Adding Charactors
                             else if isAddingNames {
-                                TextField("Characters: Tom, John, and Jenny", text: $characters)
+                                VStack {
+                                    TextField("Name", text: $char)
+                                        .frame(width:  UIScreen.main.bounds.width * 0.2, height: 50)
+                                        .background(.white)
+                                        .cornerRadius(18)
+                                        .shadow(radius: 5)
+                                    
+                                    Button("Add") {
+                                        withAnimation {
+                                            characters.append(characters == "" ? char : ", \(char)")
+                                            char = ""
+                                        }
+                                        
+                                        words = extractWords(from: characters)
+                                        if words.count > 1 {
+                                            let lastName = words.removeLast()
+                                            withAnimation {
+                                                formattedChars = words.joined(separator: ", ") + " and " + lastName
+                                            }
+                                        } else {
+                                            withAnimation {
+                                                formattedChars = words.first ?? ""
+                                            }
+                                        }
+                                        
+                                    }
+                                    .frame(width:  100, height: 55)
+                                    .background(.blue)
+                                    .cornerRadius(12)
+                                }
                             }
                             
                             Spacer()
@@ -280,12 +339,26 @@ struct ContentView: View {
                                 .foregroundStyle(.white)
                                 .cornerRadius(12)
                                 
-                                if isSelectingGenre {
-                                    Button("back") {
-                                        withAnimation {
-                                            isSelectingTheme = true
+                                if isSelectingGenre || isAddingNames {
+                                    Button("back", systemImage: "arrowtriangle.left.fill") {
+                                        if isAddingNames {
+                                            withAnimation {
+                                                isSelectingGenre = true
+                                                isAddingNames = false
+                                            }
+                                        } else {
+                                            withAnimation {
+                                                isSelectingTheme = true
+                                                isSelectingGenre = false
+                                            }
                                         }
+                                        
                                     }
+                                    .padding()
+                                    .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                    .background(Color(hex: "#DFFFDF"))
+                                    .foregroundStyle(.black)
+                                    .cornerRadius(12)
                                 }
                             }
                         }
