@@ -50,7 +50,7 @@ struct TabbarView: View {
     
     
     @Binding var showSignInView: Bool
-    @State private var selectedTab = 0
+    @State private var selectedTab = 2
     
     
     
@@ -58,17 +58,18 @@ struct TabbarView: View {
         ZStack(alignment: .bottom) {
             Color(hex: "#FFFFF1").ignoresSafeArea()
             TabView(selection: $selectedTab) {
-                ContentView()
+                Text("Home View")
                     .tag(0)
                     .padding()
                 
-                ContentView()
+                Text("Browse View")
                     .tag(1)
                 
                 ContentView()
                     .tag(2)
+                    .padding()
                 
-                ContentView()
+                Text("Collection View")
                     .tag(3)
                 
                 ProfileView(showSignInView: $showSignInView)

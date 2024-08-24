@@ -110,13 +110,29 @@ struct ContentView: View {
                             //prompt view
                             ZStack {
                                 RoundedRectangle(cornerRadius: 22)
-                                    .fill(.white)
+                                    .fill(
+                                        MeshGradient(
+                                            width: 4,
+                                            height: 3,
+                                            points: [
+                                                [0, 0], [0.33, 0], [0.66, 0], [1, 0],
+                                                [0, 0.5], [0.33, 0.5], [0.66, 0.5], [1, 0.5],
+                                                [0, 1], [0.33, 1], [0.66, 1], [1, 1]
+                                            ],
+                                            colors: [
+                                                .orange.opacity(0.5), .orange.opacity(0.1), .white, .white,
+                                                isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white,
+                                                isAddingNames ? .purple.opacity(0.5) : .white, .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.5) : .white
+                                            ]
+                                        )
+                                        
+                                    )
                                     .shadow(radius: 10)
                                 
                                 
                                 VStack(alignment: .leading) {
                                     HStack {
-                                        Text("Prompt")
+                                        Text("Wish")
                                             .foregroundStyle(Color(hex: "#DA70D6"))
                                             .font(.system(size: 24, weight: .bold))
                                         Spacer()
@@ -151,7 +167,7 @@ struct ContentView: View {
                                             
                                             Text(genre)
                                                 .font(.system(size: 20, weight: .bold))
-                                                .foregroundStyle(.green)
+                                                .foregroundStyle(.cyan)
                                         }
                                         
                                         
@@ -246,7 +262,7 @@ struct ContentView: View {
                                                 VStack {
                                                     ZStack {
                                                         Circle()
-                                                            .fill(genres[index] == genre ? Color.green.opacity(0.5) : Color.green.opacity(0.2))
+                                                            .fill(genres[index] == genre ? Color.cyan.opacity(0.5) : Color.cyan.opacity(0.2))
                                                             .frame(width: width, height: width)
                                                             .shadow(radius: 5)
                                                             .scaleEffect(genres[index] == genre ? 1.1 : 1.0)
@@ -363,7 +379,7 @@ struct ContentView: View {
                                     }
                                     .padding()
                                     .frame(width:  UIScreen.main.bounds.width * 0.7)
-                                    .background(isAddingNames ? Color.purple.opacity(0.2) : Color(hex: "#DFFFDF"))
+                                    .background(isAddingNames ? Color.purple.opacity(0.2) : .cyan.opacity(0.2))
                                     .foregroundStyle(.black)
                                     .cornerRadius(12)
                                 }
@@ -392,9 +408,10 @@ struct ContentView: View {
                     }
                 }
                 .padding()
-                .padding(.top, 50)
+                .padding(.top, 100)
                 .padding(.bottom, 70)
             }
+            .navigationTitle("Imagine a Story")
             .toolbar {
 //                if loaded {
 //                    Button("Clear") {
@@ -589,5 +606,7 @@ extension View {
 }
 
 #Preview {
-    ContentView()
+    NavigationStack {
+        ContentView()
+    }
 }
