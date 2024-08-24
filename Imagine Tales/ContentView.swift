@@ -22,7 +22,7 @@ struct ContentView: View {
     @State private var generatedImage: UIImage? = nil
     @State private var isImageLoading = true
     @State private var promptForImage = ""
- 
+    @State private var displayPrompt = "I want to generate a story book of"
     let vertex = VertexAI.vertexAI()
     
     let genres = [
@@ -50,28 +50,17 @@ struct ContentView: View {
     ]
     let themes = ["Forest", "Car", "Plane", "Dark", "Colorful", "Cartoon", "Space", "Underwater", "Desert", "Cityscape", "Fantasy", "Sci-Fi", "Nature", "Retro", "Abstract", "Minimalist", "Industrial", "Vintage", "Cyberpunk", "Steampunk"]
     
+    
+    @State private var isSelectingTheme = true
+    @State private var isSelectingGenre = false
+    @State private var isAddingNames = false
     var body: some View {
         NavigationStack {
             ZStack {
                 Color(hex: "#FFFFF1").ignoresSafeArea()
                 VStack {
                     if story == "" && !isLoading {
-                        VStack {
-                            ContentUnavailableView("Imagine Tales", systemImage: "moon.stars.fill", description: Text("Provide Characters, Genre and Theme to create your tale!"))
-                                .foregroundColor(.white)
-                            
-                            Button("🪄 Random") {
-                                isRandom = true
-                                characters = "Random 2-3 characters"
-                                genre = genres.randomElement()!
-                                theme = "random theme"
-                                generateStory()
-                            }
-                            .buttonStyle()
-                            .shadow(radius: 15)
-                        }
-                        .frame(height: 250)
-                        .padding()
+
                         
                     } else {
                         if isLoading {
@@ -101,7 +90,7 @@ struct ContentView: View {
                                         
                                         Text(story)
                                             .padding()
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.black)
                                     }
                                     .frame(width: 350, height: 470)
                                 }
@@ -112,24 +101,195 @@ struct ContentView: View {
                     Spacer()
                     
                     if !isLoading && !loaded{
-                        Form {
-                            Section {
-                                TextField("Characters: Tom, John, and Jenny", text: $characters)
-                                Picker("Genre", selection: $genre) {
-                                    ForEach(genres, id: \.self) { genre in
-                                        Text(genre).tag(genre)
+                        
+                        //Taking Input
+                        VStack {
+                            //prompt view
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 22)
+                                    .fill(.white)
+                                    .shadow(radius: 10)
+                                
+                                
+                                VStack(alignment: .leading) {
+                                    HStack {
+                                        Text("Prompt")
+                                            .foregroundStyle(Color(hex: "#DA70D6"))
+                                            .font(.system(size: 24, weight: .bold))
+                                        Spacer()
+                                        Image(systemName: "shuffle")
+                                            .font(.system(size: 24))
+                                            .frame(width: 20, height: 20)
+                                            .onTapGesture {
+                                                isRandom = true
+                                                characters = "Random 2-3 characters"
+                                                genre = genres.randomElement()!
+                                                theme = "random theme"
+                                                generateStory()
+                                            }
+                                    }
+                                    .padding(.horizontal, 30)
+                                    
+                                    
+                                    HStack {
+                                        Text(displayPrompt)
+                                            .font(.system(size: 20))
+                                        
+                                        Text(theme)
+                                            .font(.system(size: 20, weight: .bold))
+                                            .foregroundStyle(Color(hex: "#FF6F61"))
+                                        
+                                        Text("theme with genre of")
+                                            .font(.system(size: 20))
+                                        
+                                        Text(genre)
+                                            .font(.system(size: 20, weight: .bold))
+                                            .foregroundStyle(.purple)
+                                        
+                                    }
+                                    .padding(.leading, 30)
+                                    
+                                    
+                                }
+                            }
+                            .frame(height: 120)
+                            
+                            
+                            //Selection Title
+                            Text(isSelectingTheme ? "Select Theme" : "Select Genre")
+                                .font(.system(size: 24))
+                                .padding()
+                            
+                            //Selecting Theme
+                            if isSelectingTheme {
+                                GeometryReader { geometry in
+                                    // Calculate dynamic width based on available width and desired number of items per row
+                                    let width = (geometry.size.width - 40) / 7 // Subtract padding and divide by the number of items
+                                    
+                                    ScrollView {
+                                        LazyVGrid(
+                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
+                                            spacing: -10  // Adjust the spacing to bring the rows closer together
+                                        ) {
+                                            
+                                            ForEach(0..<themes.count, id: \.self) { index in
+                                                VStack {
+                                                    ZStack {
+                                                        Circle()
+                                                            .fill(themes[index] == theme ? Color.blue.opacity(0.5) : Color.blue.opacity(0.2))
+                                                            .frame(width: width, height: width)
+                                                        
+                                                        Text(themes[index])
+                                                            .font(.caption)
+                                                            .multilineTextAlignment(.center)
+                                                        
+                                                    }
+                                                }
+                                                // Apply offset for every other row to create hexagonal shape
+                                                .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
+                                                .frame(width: width, height: width)
+                                                .onTapGesture {
+                                                    theme = themes[index]
+                                                }
+                                            }
+                                            
+                                        }
+                                        .padding(.horizontal)
                                     }
                                 }
-                                Picker("Theme", selection: $theme) {
-                                    ForEach(themes, id: \.self) { theme in
-                                        Text(theme).tag(theme)
+                                .frame(height: 600)
+                                .padding()
+                            }
+                            
+                            //Selecting Genre
+                            else if isSelectingGenre {
+                                GeometryReader { geometry in
+                                    // Calculate dynamic width based on available width and desired number of items per row
+                                    let width = (geometry.size.width - 40) / 7 // Subtract padding and divide by the number of items
+                                    
+                                    ScrollView {
+                                        LazyVGrid(
+                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
+                                            spacing: -10  // Adjust the spacing to bring the rows closer together
+                                        ) {
+                                            
+                                            ForEach(0..<genres.count, id: \.self) { index in
+                                                VStack {
+                                                    ZStack {
+                                                        Circle()
+                                                            .fill(genres[index] == genre ? Color.blue.opacity(0.5) : Color.blue.opacity(0.2))
+                                                            .frame(width: width, height: width)
+                                                        
+                                                        Text(genres[index])
+                                                            .font(.caption)
+                                                            .multilineTextAlignment(.center)
+                                                        
+                                                    }
+                                                }
+                                                // Apply offset for every other row to create hexagonal shape
+                                                .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
+                                                .frame(width: width, height: width)
+                                                .onTapGesture {
+                                                    genre = genres[index]
+                                                }
+                                            }
+                                            
+                                        }
+                                        .padding(.horizontal)
+                                    }
+                                }
+                                .frame(height: 600)
+                                .padding()
+                            }
+                            
+                            //Adding Charactors
+                            else if isAddingNames {
+                                TextField("Characters: Tom, John, and Jenny", text: $characters)
+                            }
+                            
+                            Spacer()
+                            
+                            //Buttons
+                            VStack {
+                                Button("Next", systemImage: "arrowtriangle.right.fill") {
+                                    if isSelectingTheme {
+                                        withAnimation {
+                                            isSelectingTheme = false
+                                            isSelectingGenre = true
+                                        }
+                                    } else if isSelectingGenre {
+                                        withAnimation {
+                                            isSelectingGenre = false
+                                            isAddingNames = true
+                                        }
+                                    } else if isAddingNames {
+                                        generatedImage = nil
+                                        Task {
+                                            do {
+                                                try await generateStoryWithGemini()
+                                            } catch {
+                                                print(error.localizedDescription)
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+                                .padding()
+                                .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                .background(Color(hex: "#FF6F61"))
+                                .foregroundStyle(.white)
+                                .cornerRadius(12)
+                                
+                                if isSelectingGenre {
+                                    Button("back") {
+                                        withAnimation {
+                                            isSelectingTheme = true
+                                        }
                                     }
                                 }
                             }
-                            .listRowBackground(Color.white.opacity(0.5))
                         }
-                        .frame(height: 200)
-                        .scrollContentBackground(.hidden)
+
                     } else {
                         ForEach(chunkArray(array: words, chunkSize: 3), id: \.self) { row in
                             HStack {
@@ -144,21 +304,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    Button{
-                        generatedImage = nil
-                        Task {
-                            do {
-                                try await generateStoryWithGemini()
-                            } catch {
-                                print(error.localizedDescription)
-                            }
-                        }
-                    } label: {
-                        Text(!loaded ? "Generate Story ✨" : "Regenerate ✨")
-                            .foregroundStyle(.white)
-                    }
-                    .buttonStyle()
-                    .padding(.bottom, 70)
+                    
                 }
                 .onAppear {
                     withAnimation {
@@ -166,22 +312,43 @@ struct ContentView: View {
                     }
                 }
                 .padding()
+                .padding(.top, 50)
+                .padding(.bottom, 70)
             }
             .toolbar {
-                if loaded {
-                    Button("Clear") {
-                        isLoading = false
-                        words = []
-                        characters = ""
-                        genre = "Adventure"
-                        story = ""
-                        theme = "Forest"
-                        loaded = false
-                        isRandom = false
+//                if loaded {
+//                    Button("Clear") {
+//                        isLoading = false
+//                        words = []
+//                        characters = ""
+//                        genre = "Adventure"
+//                        story = ""
+//                        theme = "Forest"
+//                        loaded = false
+//                        isRandom = false
+//                    }
+//                }
+                
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    Image(systemName: "person.circle.fill") // Replace with your image name
+                        .resizable()
+                        .frame(width: 40, height: 40) // Adjust the size as needed
+                        .clipShape(Circle())
+                }
+                
+                
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button("search", systemImage: "sparkle.magnifyingglass") {
+                        
                     }
-                    .tint(.white)
+                    
+                    
+                    Button("Notifications", systemImage: "bell") {
+                        
+                    }
                 }
             }
+            .tint(.black)
         }
     }
     

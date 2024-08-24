@@ -56,9 +56,11 @@ struct TabbarView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
+            Color(hex: "#FFFFF1").ignoresSafeArea()
             TabView(selection: $selectedTab) {
                 ContentView()
                     .tag(0)
+                    .padding()
                 
                 ContentView()
                     .tag(1)
@@ -131,7 +133,7 @@ extension TabbarView{
             }
             Spacer()
         }
-        .frame(width: isActive ? .infinity : 130, height: 50)
+        .frame(width: isActive ? 150 : 130, height: 50)
         .background(isActive ? Color(hex: "#8AC640") : .clear)
         .cornerRadius(12)
         .padding(.horizontal, 5)
