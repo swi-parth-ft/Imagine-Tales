@@ -20,7 +20,7 @@ final class CharacterViewModel: ObservableObject {
     @Published var id = ""
     @Published var name = ""
     @Published var gender = ""
-    @Published var emotion = ""
+    @Published var emotion = "Happy"
     @Published var age = 23
     
     @AppStorage("childId") var childId: String = "Default Value"
@@ -47,55 +47,59 @@ struct CharacterView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "#FFFFF1").ignoresSafeArea()
+               Color(hex: "#FFFFF1").ignoresSafeArea()
+                
                 VStack {
-                    
+                    VStack {
                         TextField("Name", text: $viewModel.name)
+                            .customBackground()
+                        
+                        
+                        Picker("Gender", selection: $viewModel.gender) {
+                            Text("Male").tag("Male")
+                            Text("Female").tag("Female")
+                        }
+                        .pickerStyle(.segmented)
                         .customBackground()
-                    
-                    
-                    Picker("Gender", selection: $viewModel.gender) {
-                        Text("Male").tag("Male")
-                        Text("Female").tag("Female")
-                    }
-                    .pickerStyle(.segmented)
-                    .customBackground()
-                    
-                        TextField("Emotion", text: $viewModel.emotion)
-                        .customBackground()
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 16) {
-                                    ForEach(emotions, id: \.self) { emotion in
-                                        VStack {
-                                            Circle()
-                                                .fill(Color.blue.opacity(0.3))
-                                                .frame(width: 100, height: 100)
-                                                .overlay(
-                                                    Text(emotion)
-                                                        .font(.caption)
-                                                        .foregroundColor(.black)
-                                                        .multilineTextAlignment(.center)
-                                                        .padding(10)
-                                                )
-                                                .onTapGesture {
+                        
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                ForEach(emotions, id: \.self) { emotion in
+                                    VStack {
+                                        Circle()
+                                            .fill(Color.blue.opacity(emotion == viewModel.emotion ? 0.5 : 0.3))
+                                            .frame(width: 100, height: 100)
+                                            .overlay(
+                                                Text(emotion)
+                                                    .font(.caption)
+                                                    .foregroundColor(.black)
+                                                    .multilineTextAlignment(.center)
+                                                    .padding(10)
+                                            )
+                                            .onTapGesture {
+                                                withAnimation {
                                                     viewModel.emotion = emotion
                                                 }
-                                        }
-                                        
+                                            }
+                                            .scaleEffect(emotion == viewModel.emotion ? 1.1 : 1.0)
                                     }
+                                    
+                                    
                                 }
-                                .padding()
                             }
-                    .customBackground()
+                            .padding()
+                        }
+                        .customBackground()
                         Stepper("Age \(viewModel.age)", value: $viewModel.age, in: 3...150)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(12)
-                    
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(12)
                         
                         
                         
+                    }
+                    .background(.white)
                     
                     
                         Button("Create") {
@@ -118,6 +122,7 @@ struct CharacterView: View {
                     
                     
                 }
+                .cornerRadius(22)
                 .padding()
             }
             .navigationTitle("Add Character")

@@ -70,19 +70,19 @@ final class UserManager {
     }
     
     
-//    private func childDocument(userId: String, favoriteProductId: String) -> DocumentReference {
-//        childCollection(userId: userId).document(favoriteProductId)
-//    }
+    //    private func childDocument(userId: String, favoriteProductId: String) -> DocumentReference {
+    //        childCollection(userId: userId).document(favoriteProductId)
+    //    }
     
     private let encoder: Firestore.Encoder = {
         let encoder = Firestore.Encoder()
-//        encoder.keyEncodingStrategy = .convertToSnakeCase
+        //        encoder.keyEncodingStrategy = .convertToSnakeCase
         return encoder
     }()
-
+    
     private let decoder: Firestore.Decoder = {
         let decoder = Firestore.Decoder()
-//        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        //        decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }()
     
@@ -106,7 +106,7 @@ final class UserManager {
         let data: [String:Any] = [
             "preferences" : FieldValue.arrayUnion([preference])
         ]
-
+        
         try await userDocument(userId: userId).updateData(data)
     }
     
@@ -114,7 +114,7 @@ final class UserManager {
         let data: [String:Any] = [
             "preferences" : FieldValue.arrayRemove([preference])
         ]
-
+        
         try await userDocument(userId: userId).updateData(data)
     }
     
@@ -165,25 +165,25 @@ final class UserManager {
     }
     
     
-   
     
-   
     
-//    func getAllUserChildren(userId: String) -> [UserChildren] {
-//        var items:[UserChildren] = []
-//        Firestore.firestore().collection("users").document(userId).collection("Children").getDocuments { (querySnapshot, error) in
-//            if let error = error {
-//                print("Error getting documents: \(error)")
-//                return
-//            }
-//            
-//            items = querySnapshot?.documents.compactMap { document in
-//                try? document.data(as: UserChildren.self)
-//            } ?? []
-//            
-//        }
-//        return items
-//    }
+    
+    
+    //    func getAllUserChildren(userId: String) -> [UserChildren] {
+    //        var items:[UserChildren] = []
+    //        Firestore.firestore().collection("users").document(userId).collection("Children").getDocuments { (querySnapshot, error) in
+    //            if let error = error {
+    //                print("Error getting documents: \(error)")
+    //                return
+    //            }
+    //
+    //            items = querySnapshot?.documents.compactMap { document in
+    //                try? document.data(as: UserChildren.self)
+    //            } ?? []
+    //
+    //        }
+    //        return items
+    //    }
     
     func getAllUserChildren(userId: String) -> [UserChildren] {
         var items:[UserChildren] = []
@@ -200,6 +200,9 @@ final class UserManager {
         }
         return items
     }
+    
+    
+        
     
 }
 
