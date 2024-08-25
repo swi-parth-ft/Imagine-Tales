@@ -11,6 +11,8 @@ import FirebaseFirestore
 final class ParentViewModel: ObservableObject {
     
     @Published var children: [UserChildren] = []
+    @Published var name: String = ""
+    @Published var age: String = ""
     
     func logOut() throws {
         try AuthenticationManager.shared.SignOut()
@@ -35,20 +37,32 @@ final class ParentViewModel: ObservableObject {
         }
     }
     
+    func addChild() async throws {
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        
+        let _ = try await UserManager.shared.addChild(userId: authDataResult.uid, name: name, age: age)
+        let _ = try await UserManager.shared.addChild2(userId: authDataResult.uid, name: name, age: age)
+    }
+    
 }
 
 struct ParentView: View {
     @StateObject var viewModel = ParentViewModel()
     @Binding var showSigninView: Bool
+    @State private var isAddingNew = false
     var body: some View {
         NavigationStack {
             ZStack {
                 VStack {
                     List {
+                        
                         ForEach(viewModel.children) { child in
 //                            NavigationLink(destination: ChildView(child: child)) {
                                 Text(child.name)
                           //  }
+                        }
+                        Button("Add Child") {
+                            isAddingNew = true
                         }
                         
                         Button("Log out") {
@@ -62,6 +76,17 @@ struct ParentView: View {
                             }
                         }
                     }
+                }
+                .sheet(isPresented: $isAddingNew, onDismiss: {
+                    Task {
+                        do {
+                            try viewModel.getChildren()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                }) {
+                    AddChildForm()
                 }
                 
             }
@@ -83,4 +108,29 @@ struct ParentView: View {
 
 #Preview {
     ParentView(showSigninView: .constant(false))
+}
+
+
+struct AddChildForm: View {
+    @Environment(\.dismiss) var dismiss
+    @StateObject var viewModel = ParentViewModel()
+    
+     var body: some View {
+        VStack {
+            TextField("Name", text: $viewModel.name)
+            TextField("Age", text: $viewModel.age)
+            Button("Add Child") {
+                Task {
+                    do {
+                        try await viewModel.addChild()
+                        
+                        dismiss()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+               
+            }
+        }
+    }
 }
