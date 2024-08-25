@@ -59,7 +59,8 @@ struct AuthenticationView: View {
     @State private var isSignedInWithGoogle = false
     
     @AppStorage("isOnboarding") var isOnboarding: Bool = true
-    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @State private var isCompact = false
     var body: some View {
         NavigationStack {
             ZStack {
@@ -83,23 +84,29 @@ struct AuthenticationView: View {
                
                 VStack {
                     
-                        VStack(spacing: -10) {
-                            Image("OnBoardingImageLogo")
+                    VStack(spacing: isCompact ? -45 : -10) {
+                            if isCompact {
+                                Image("OnBoardingImageLogo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 300, height: 300)
+                            } else {
+                                Image("OnBoardingImageLogo")
+                            }
                                 
                             ZStack(alignment: .center) {
                                 
                                 RoundedRectangle(cornerRadius: 50)
                                     .fill(Color(hex: "#8AC640"))
-                                    .frame(width:  UIScreen.main.bounds.width * 0.7, height:  UIScreen.main.bounds.height * 0.5)
+                                    .frame(width:  UIScreen.main.bounds.width * (isCompact ? 0.9 : 0.7), height:  UIScreen.main.bounds.height * (isCompact ? 0.5 : 0.5))
                                 
                                 VStack(alignment: .center) {
                                     
-                                    Text("Welcome to KidScribe")
-                                        .font(.custom("ComicNeue-Bold", size: 32))
-                                    
+                                    Text("Welcome to Imagine Tales")
+                                        .font(.custom("ComicNeue-Bold", size: isCompact ? 20 : 32))
                                     
                                     Text("The Number One Best Ebook Store & Reader Application in this Century")
-                                        .font(.custom("ComicNeue-Regular", size: 24))
+                                        .font(.custom("ComicNeue-Regular", size: isCompact ? 12 : 24))
                                         .multilineTextAlignment(.center)
                                     Spacer()
                                     Button("Show onBoarding") {
@@ -110,11 +117,11 @@ struct AuthenticationView: View {
                                         
                                     } label: {
                                         Text("Sign Up")
-                                            .font(.custom("ComicNeue-Regular", size: 24))
-                                            .frame(height: 55)
+                                            .font(.custom("ComicNeue-Regular", size: isCompact ? 12 : 24))
+                                            .frame(height: isCompact ? 35 : 55)
                                             .frame(maxWidth: .infinity)
                                             .background(Color(hex: "#FF6F61"))
-                                            .cornerRadius(12)
+                                            .cornerRadius(isCompact ? 6 : 12)
                                             .foregroundStyle(.black)
                                     }
                                     
@@ -123,11 +130,11 @@ struct AuthenticationView: View {
                                         
                                     } label: {
                                         Text("Continue as Parent")
-                                            .font(.custom("ComicNeue-Regular", size: 24))
-                                            .frame(height: 55)
+                                            .font(.custom("ComicNeue-Regular", size: isCompact ? 12 : 24))
+                                            .frame(height: isCompact ? 35 : 55)
                                             .frame(maxWidth: .infinity)
                                             .background(Color(hex: "#DFFFDF"))
-                                            .cornerRadius(12)
+                                            .cornerRadius(isCompact ? 6 : 12)
                                             .foregroundStyle(.black)
                                     }
                                     
@@ -136,23 +143,23 @@ struct AuthenticationView: View {
                                         
                                     } label: {
                                         Text("Setup for Child")
-                                            .font(.custom("ComicNeue-Regular", size: 24))
-                                            .frame(height: 55)
+                                            .font(.custom("ComicNeue-Regular", size: isCompact ? 12 : 24))
+                                            .frame(height: isCompact ? 35 : 55)
                                             .frame(maxWidth: .infinity)
                                             .background(Color(hex: "#DFFFDF"))
-                                            .cornerRadius(12)
+                                            .cornerRadius(isCompact ? 6 : 12)
                                             .foregroundStyle(.black)
                                     }
                                     
                                     HStack {
                                         Capsule()
                                             .fill(Color(hex: "#E9E9E9"))
-                                            .frame(width: 200, height: 1)
+                                            .frame(width: isCompact ? 100 : 200, height: 1)
                                         
                                         Text("or")
                                         Capsule()
                                             .fill(Color(hex: "#E9E9E9"))
-                                            .frame(width: 200, height: 1)
+                                            .frame(width: isCompact ? 100 : 200, height: 1)
                                     }
                                     
                                     HStack{
@@ -210,7 +217,7 @@ struct AuthenticationView: View {
                                     
                                     
                                 }
-                                .frame(width:  UIScreen.main.bounds.width * 0.6, height:  UIScreen.main.bounds.height * 0.4)
+                                .frame(width:  UIScreen.main.bounds.width * (isCompact ? 0.8 : 0.6), height:  UIScreen.main.bounds.height * (isCompact ? 0.4 : 0.4))
                                 
                                 
                             }
@@ -222,6 +229,11 @@ struct AuthenticationView: View {
                 .frame(maxWidth: .infinity)
                 .navigationTitle("Welcome onboard")
                 .interactiveDismissDisabled()
+            }
+            .onAppear {
+                if horizontalSizeClass == .compact {
+                    isCompact = true
+                }
             }
         }
     }
