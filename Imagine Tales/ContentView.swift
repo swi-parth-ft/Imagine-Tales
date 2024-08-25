@@ -250,11 +250,43 @@ struct ContentView: View {
                             }
                             .frame(height: isAddingNames ? 150 : 120)
                             
+                            ZStack {
+                                if isSelectingGenre || isAddingNames {
+                                    HStack {
+                                        Button {
+                                            if isAddingNames {
+                                                withAnimation {
+                                                    isSelectingGenre = true
+                                                    isAddingNames = false
+                                                }
+                                            } else {
+                                                withAnimation {
+                                                    isSelectingTheme = true
+                                                    isSelectingGenre = false
+                                                }
+                                            }
+                                        } label: {
+                                            ZStack {
+                                                Circle()
+                                                    .foregroundStyle(.white)
+                                                    .frame(width: 75, height: 75)
+                                                    .shadow(radius: 10)
+                                                
+                                                Image("arrow1")
+                                                    .frame(width: 55, height: 55)
+                                            }
+                                        }
+                                        .padding()
+                                        Spacer()
+                                    }
+                                }
+                                //Selection Title
+                                Text(isSelectingTheme ? "Select Theme" : isAddingNames ? "Select Characters" : "Select Genre")
+                                    .font(.system(size: 24))
+                                    .frame(height: 75)
+                                    .padding()
+                            }
                             
-                            //Selection Title
-                            Text(isSelectingTheme ? "Select Theme" : isAddingNames ? "Select Characters" : "Select Genre")
-                                .font(.system(size: 24))
-                                .padding()
                             
                             //Selecting Theme
                             if isSelectingTheme {
@@ -527,29 +559,7 @@ struct ContentView: View {
                                 .background(Color(hex: "#FF6F61"))
                                 .foregroundStyle(.white)
                                 .cornerRadius(12)
-                                
-                                if isSelectingGenre || isAddingNames {
-                                    Button("back", systemImage: "arrowtriangle.left.fill") {
-                                        if isAddingNames {
-                                            withAnimation {
-                                                isSelectingGenre = true
-                                                isAddingNames = false
-                                            }
-                                        } else {
-                                            withAnimation {
-                                                isSelectingTheme = true
-                                                isSelectingGenre = false
-                                            }
-                                        }
-                                        
-                                    }
-                                    .padding()
-                                    .frame(width:  UIScreen.main.bounds.width * 0.7)
-                                    .background(isAddingNames ? Color.purple.opacity(0.2) : .cyan.opacity(0.2))
-                                    .foregroundStyle(.black)
-                                    .cornerRadius(12)
-                                }
-                            }
+                                                            }
                         }
 
                     } else {
