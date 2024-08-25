@@ -30,6 +30,17 @@ final class ContentViewModel: ObservableObject {
             
         }
     }
+    
+    func deleteChar(char: Charater) {
+        Firestore.firestore().collection("Children2").document(childId).collection("Characters").document(char.id).delete() { err in
+        if let err = err {
+          print("Error removing document: \(err)")
+        }
+        else {
+          print("Document successfully removed!")
+        }
+      }
+    }
 }
 
 
@@ -358,11 +369,28 @@ struct ContentView: View {
                                                             .frame(width: width, height: width)
                                                             .shadow(radius: 5)
                                                             .scaleEffect(characters.contains(viewModel.characters[index].name) ? 1.1 : 1.0)
+                                                            
                                                         
                                                         Text(viewModel.characters[index].name)
                                                             .font(.caption)
                                                             .multilineTextAlignment(.center)
                                                         
+                                                    }
+                                                }
+                                                .contextMenu {
+                                                    Button(action: {
+                                                        viewModel.deleteChar(char: viewModel.characters[index])
+                                                        
+                                                        Task {
+                                                            do {
+                                                                try viewModel.getCharacters()
+                                                            } catch {
+                                                                print(error.localizedDescription)
+                                                            }
+                                                        }
+                                                        
+                                                    }) {
+                                                        Label("Delete", systemImage: "trash")
                                                     }
                                                 }
                                                 // Apply offset for every other row to create hexagonal shape
@@ -389,10 +417,26 @@ struct ContentView: View {
                                                         }
                                                     } else {
                                                         withAnimation {
-                                                            characters = characters.replacingOccurrences(of: viewModel.characters[index].name, with: "")
+                                                            let temp = characters.replacingOccurrences(of: viewModel.characters[index].name, with: "")
+                                                            characters = temp
+                                                        }
+                                                        
+                                                        words = extractWords(from: characters)
+                                                        if words.count > 1 {
+                                                            let lastName = words.removeLast()
+                                                            withAnimation {
+                                                                formattedChars = words.joined(separator: ", ") + " and " + lastName
+                                                            }
+                                                        } else {
+                                                            withAnimation {
+                                                                formattedChars = words.first ?? ""
+                                                            }
                                                         }
                                                     }
                                                 }
+                                                
+                                                    
+                                                    
                                             }
                                             
                                         }
