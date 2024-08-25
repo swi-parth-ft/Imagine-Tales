@@ -268,12 +268,13 @@ struct ContentView: View {
                                         } label: {
                                             ZStack {
                                                 Circle()
-                                                    .foregroundStyle(.white)
+                                                    .foregroundStyle(isSelectingGenre ? .cyan.opacity(0.3) :  .purple.opacity(0.3))
                                                     .frame(width: 75, height: 75)
                                                     .shadow(radius: 10)
                                                 
                                                 Image("arrow1")
                                                     .frame(width: 55, height: 55)
+                                                    
                                             }
                                         }
                                         .padding()
