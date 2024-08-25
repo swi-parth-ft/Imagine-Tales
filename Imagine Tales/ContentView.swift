@@ -8,8 +8,35 @@
 import SwiftUI
 import DotLottie
 import FirebaseVertexAI
+import FirebaseFirestore
+
+final class ContentViewModel: ObservableObject {
+    @Published var characters: [Charater] = []
+    @AppStorage("childId") var childId: String = "Default Value"
+    
+    func getCharacters() throws {
+      
+        
+        Firestore.firestore().collection("Children2").document(childId).collection("Characters").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+                return
+            }
+            
+            self.characters = querySnapshot?.documents.compactMap { document in
+                try? document.data(as: Charater.self)
+            } ?? []
+            print(self.characters)
+            
+        }
+    }
+}
+
 
 struct ContentView: View {
+    
+    @StateObject private var viewModel = ContentViewModel()
+    
     @State private var characters = ""
     @State private var char = ""
     @State private var genre = "Adventure"
@@ -56,6 +83,10 @@ struct ContentView: View {
     @State private var isAddingNames = false
     
     @State private var formattedChars = ""
+    @State private var selectedChar: Charater?
+    
+    @State private var isAddingChar = false
+    
     
     var body: some View {
         NavigationStack {
@@ -196,7 +227,7 @@ struct ContentView: View {
                             
                             
                             //Selection Title
-                            Text(isSelectingTheme ? "Select Theme" : isAddingNames ? "Add Characters" : "Select Genre")
+                            Text(isSelectingTheme ? "Select Theme" : isAddingNames ? "Select Characters" : "Select Genre")
                                 .font(.system(size: 24))
                                 .padding()
                             
@@ -293,43 +324,95 @@ struct ContentView: View {
                             
                             //Adding Charactors
                             else if isAddingNames {
-                                HStack(spacing: -20) {
-                                    TextField("Name", text: $char)
-                                        .padding()
-                                        .frame(width:  UIScreen.main.bounds.width * 0.2, height: 55)
-                                        .background(.purple.opacity(0.1))
-                                        .cornerRadius(12)
-                                        .shadow(radius: 3)
-                                        .tint(.purple)
+                                
+                                GeometryReader { geometry in
+                                    // Calculate dynamic width based on available width and desired number of items per row
+                                    let width = (geometry.size.width - 40) / 7 // Subtract padding and divide by the number of items
                                     
-                                    Button("Add") {
-                                        withAnimation {
-                                            characters.append(characters == "" ? char : ", \(char)")
-                                            char = ""
-                                        }
-                                        
-                                        words = extractWords(from: characters)
-                                        if words.count > 1 {
-                                            let lastName = words.removeLast()
-                                            withAnimation {
-                                                formattedChars = words.joined(separator: ", ") + " and " + lastName
+                                    ScrollView {
+                                        Button {
+                                            isAddingChar = true
+                                            
+                                        } label: {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(Color.purple.opacity(0.2))
+                                                    .frame(width: width, height: width)
+                                                    .shadow(radius: 5)
+                                                    .scaleEffect(1.0)
+                                                
+                                                Image(systemName: "plus")
+                                                    .frame(width: width / 2, height: width / 2)
                                             }
-                                        } else {
-                                            withAnimation {
-                                                formattedChars = words.first ?? ""
-                                            }
                                         }
-                                        
+                                        LazyVGrid(
+                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
+                                            spacing: -10  // Adjust the spacing to bring the rows closer together
+                                        ) {
+                                            
+                                            ForEach(0..<viewModel.characters.count, id: \.self) { index in
+                                                VStack {
+                                                    ZStack {
+                                                        Circle()
+                                                            .fill(characters.contains(viewModel.characters[index].name) ? Color.purple.opacity(0.5) : Color.purple.opacity(0.2))
+                                                            .frame(width: width, height: width)
+                                                            .shadow(radius: 5)
+                                                            .scaleEffect(1.0)
+                                                        
+                                                        Text(viewModel.characters[index].name)
+                                                            .font(.caption)
+                                                            .multilineTextAlignment(.center)
+                                                        
+                                                    }
+                                                }
+                                                // Apply offset for every other row to create hexagonal shape
+                                                .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
+                                                .frame(width: width, height: width)
+                                                .onTapGesture {
+                                                    
+                                                    if !characters.contains(viewModel.characters[index].name) {
+                                                        withAnimation {
+                                                            characters.append(characters == "" ? viewModel.characters[index].name : ", \(viewModel.characters[index].name)")
+                                                            
+                                                        }
+                                                        
+                                                        words = extractWords(from: characters)
+                                                        if words.count > 1 {
+                                                            let lastName = words.removeLast()
+                                                            withAnimation {
+                                                                formattedChars = words.joined(separator: ", ") + " and " + lastName
+                                                            }
+                                                        } else {
+                                                            withAnimation {
+                                                                formattedChars = words.first ?? ""
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            
+                                        }
+                                        .padding()
                                     }
-                                    .frame(width:  100, height: 55)
-                                    .background(.purple)
-                                    .foregroundStyle(.white)
-                                    .cornerRadius(12)
-                                    .shadow(radius: 3)
+                                }
+                                .frame(height: 500)
+                                .padding()
+
+                               
+                                
+                                .onAppear {
+                                    Task {
+                                        do {
+                                            try viewModel.getCharacters()
+                                        } catch {
+                                            print(error.localizedDescription)
+                                        }
+                                    }
+                                    
                                 }
                             }
                             
-                            Spacer()
+                           
                             
                             //Buttons
                             VStack {
@@ -446,6 +529,9 @@ struct ContentView: View {
                 }
             }
             .tint(.black)
+            .sheet(isPresented: $isAddingChar) {
+                CharacterView()
+            }
         }
     }
     

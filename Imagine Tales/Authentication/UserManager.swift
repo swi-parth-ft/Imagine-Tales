@@ -65,6 +65,10 @@ final class UserManager {
         childCollection2.document()
     }
     
+    private func charCollection(childId: String) -> CollectionReference {
+        childCollection2.document(childId).collection("Characters")
+    }
+    
     
 //    private func childDocument(userId: String, favoriteProductId: String) -> DocumentReference {
 //        childCollection(userId: userId).document(favoriteProductId)
@@ -112,6 +116,22 @@ final class UserManager {
         ]
 
         try await userDocument(userId: userId).updateData(data)
+    }
+    
+    func addChar(childId: String, char: Charater) async throws {
+        let document = charCollection(childId: childId).document()
+        let documentId = document.documentID
+        
+        let data: [String:Any] = [
+            "id" : documentId,
+            "name" : char.name,
+            "age" : char.age,
+            "gender" : char.gender,
+            "emotion" : char.emotion,
+            "dateCreated" : Timestamp()
+        ]
+        
+        try await document.setData(data, merge: true)
     }
     
     func addChild(userId: String, name: String, age: String) async throws {
