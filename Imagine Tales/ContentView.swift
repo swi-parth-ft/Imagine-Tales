@@ -275,11 +275,14 @@ struct ContentView: View {
                                                             .fill(themes[index] == theme ? Color.orange.opacity(0.5) : Color.orange.opacity(0.2))
                                                             .frame(width: width, height: width)
                                                             .shadow(radius: 5)
-                                                            .scaleEffect(themes[index] == theme ? 1.1 : 1.0)
+                                                            .scaleEffect(isSelectingTheme ? (themes[index] == theme ? 1.1 : 1.0) : 0.0)
+                                                                                                .animation(.easeInOut(duration: themes[index] == theme ? 0.6 : 0.3), value: isSelectingTheme)
                                                         
                                                         Text(themes[index])
                                                             .font(.caption)
                                                             .multilineTextAlignment(.center)
+                                                            .opacity(isSelectingTheme ? 1.0 : 0.0)
+                                                                                                        .animation(.easeInOut(duration: themes[index] == theme ? 0.6 : 0.3), value: isSelectingTheme)
                                                         
                                                     }
                                                 }
@@ -297,9 +300,12 @@ struct ContentView: View {
                                         }
                                         .padding()
                                     }
+                                    
                                 }
                                 .frame(height: 600)
                                 .padding()
+                                .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
+                               // .animation(.easeInOut(duration: 1.0))
                             }
                             
                             //Selecting Genre
@@ -322,12 +328,17 @@ struct ContentView: View {
                                                             .frame(width: width, height: width)
                                                             .shadow(radius: 5)
                                                             .scaleEffect(genres[index] == genre ? 1.1 : 1.0)
+                                                            .scaleEffect(isSelectingGenre ? 1.0 : 0.0)  // Grow when appearing
+                                                                                                        .animation(.easeInOut(duration: genres[index] == genre ? 0.6 : 0.3), value: isSelectingGenre)
                                                         
                                                         Text(genres[index])
                                                             .font(.caption)
                                                             .multilineTextAlignment(.center)
+                                                            .scaleEffect(isSelectingGenre ? 1.0 : 0.0)  // Grow when appearing
+                                                                                                        .animation(.easeInOut(duration: genres[index] == genre ? 0.6 : 0.3), value: isSelectingGenre)
                                                         
                                                     }
+                                                    
                                                 }
                                                 // Apply offset for every other row to create hexagonal shape
                                                 .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
@@ -337,14 +348,20 @@ struct ContentView: View {
                                                         genre = genres[index]
                                                     }
                                                 }
+                                               
                                             }
                                             
                                         }
                                         .padding()
                                     }
+                                    
+                                    
+                                                
                                 }
                                 .frame(height: 600)
                                 .padding()
+                                .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
+                               
                             }
                             
                             //Adding Charactors
