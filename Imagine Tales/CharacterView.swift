@@ -34,30 +34,53 @@ final class CharacterViewModel: ObservableObject {
 
 struct CharacterView: View {
     @StateObject var viewModel = CharacterViewModel()
-    
+    @Environment(\.dismiss) var dismiss
+    @StateObject var PviewModel = ContentViewModel()
     var body: some View {
         NavigationStack {
-            VStack {
-                Form {
-                    TextField("name", text: $viewModel.name)
-                    TextField("gender", text: $viewModel.gender)
-                    TextField("emotion", text: $viewModel.emotion)
-                    Stepper("age", value: $viewModel.age, in: 3...150)
-                                    .padding()
-                    Text("\(viewModel.age)")
-                    Button("Create") {
-                        Task {
-                            do {
-                                try await viewModel.createChar()
-                            } catch {
-                                print(error.localizedDescription)
+            ZStack {
+                Color(hex: "#FFFFF1").ignoresSafeArea()
+                VStack {
+                    
+                        TextField("Name", text: $viewModel.name)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        TextField("Gender", text: $viewModel.gender)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        TextField("Emotion", text: $viewModel.emotion)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        Stepper("Age \(viewModel.age)", value: $viewModel.age, in: 3...150)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        Button("Create") {
+                            Task {
+                                do {
+                                    try await viewModel.createChar()
+                                    try PviewModel.getCharacters()
+                                    dismiss()
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
                             }
+                            
                         }
-                        
-                    }
+                        .padding()
+                        .frame(width:  UIScreen.main.bounds.width * 0.5)
+                        .background(Color(hex: "#FF6F61"))
+                        .foregroundStyle(.white)
+                        .cornerRadius(12)
+                    
+                    
                 }
-                
+                .padding()
             }
+            .navigationTitle("Add Character")
         }
     }
 }

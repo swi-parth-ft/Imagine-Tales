@@ -357,7 +357,7 @@ struct ContentView: View {
                                                             .fill(characters.contains(viewModel.characters[index].name) ? Color.purple.opacity(0.5) : Color.purple.opacity(0.2))
                                                             .frame(width: width, height: width)
                                                             .shadow(radius: 5)
-                                                            .scaleEffect(1.0)
+                                                            .scaleEffect(characters.contains(viewModel.characters[index].name) ? 1.1 : 1.0)
                                                         
                                                         Text(viewModel.characters[index].name)
                                                             .font(.caption)
@@ -386,6 +386,10 @@ struct ContentView: View {
                                                             withAnimation {
                                                                 formattedChars = words.first ?? ""
                                                             }
+                                                        }
+                                                    } else {
+                                                        withAnimation {
+                                                            characters = characters.replacingOccurrences(of: viewModel.characters[index].name, with: "")
                                                         }
                                                     }
                                                 }
@@ -529,7 +533,16 @@ struct ContentView: View {
                 }
             }
             .tint(.black)
-            .sheet(isPresented: $isAddingChar) {
+            .sheet(isPresented: $isAddingChar, onDismiss: {
+                // This code will run when the sheet is dismissed
+                Task {
+                    do {
+                        try viewModel.getCharacters()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+            }) {
                 CharacterView()
             }
         }
