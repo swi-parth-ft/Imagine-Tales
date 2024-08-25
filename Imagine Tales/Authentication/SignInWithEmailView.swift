@@ -519,10 +519,11 @@ struct SignInWithEmailView: View {
                                                         }
                                                     }
                                                 }
+                                                .font(.system(size: isCompact ?  14 : 24))
                                                     .foregroundStyle(.black)
                                             }
-                                            .frame(width: UIScreen.main.bounds.width * 0.7)
-                                            .padding(.top)
+                                            .frame(width: UIScreen.main.bounds.width * (isCompact ? 0.8 : 0.7))
+                                            .padding(.top, isCompact ? 2 : 5)
                                             Spacer()
                                             
                                             Button("Sign in") {
@@ -543,10 +544,11 @@ struct SignInWithEmailView: View {
                                                 }
                                             }
                                             .padding()
-                                            .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                            .frame(width:  UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
+                                            
                                             .background(Color(hex: "#FF6F61"))
                                             .foregroundStyle(.white)
-                                            .cornerRadius(12)
+                                            .cornerRadius(isCompact ? 6 : 12)
                                         }
                                     }
                                 }
@@ -616,7 +618,8 @@ struct SignInWithEmailView: View {
                                             newUser.toggle()
                                         }
                                     }
-                                    .padding(.bottom, keyboardHeight != 0 ? (isCompact ? 60 : 150) : 0)
+                                    .font(.system(size: isCompact ?  13 : 24))
+                                    .padding(.bottom, keyboardHeight != 0 ? (isCompact ? 60 : 150) : 5)
                                 }
                             }
                             
