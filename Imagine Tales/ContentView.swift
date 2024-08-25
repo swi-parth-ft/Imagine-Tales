@@ -94,11 +94,11 @@ struct ContentView: View {
     @State private var isAddingNames = false
     
     @State private var formattedChars = ""
-    @State private var selectedChar: Charater?
+   
     
     @State private var isAddingChar = false
     
-    
+    @State private var selectedChars: [Charater] = []
     var body: some View {
         NavigationStack {
             ZStack {
@@ -136,6 +136,19 @@ struct ContentView: View {
                                         Text(story)
                                             .padding()
                                             .foregroundColor(.black)
+                                        
+                                        if loaded {
+                                            Button("Clear") {
+                                                isLoading = false
+                                                words = []
+                                                characters = ""
+                                                genre = "Adventure"
+                                                story = ""
+                                                theme = "Forest"
+                                                loaded = false
+                                                isRandom = false
+                                            }
+                                        }
                                     }
                                     .frame(width: 350, height: 470)
                                 }
@@ -397,7 +410,7 @@ struct ContentView: View {
                                                 .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
                                                 .frame(width: width, height: width)
                                                 .onTapGesture {
-                                                    
+                                                    selectedChars.append(viewModel.characters[index])
                                                     if !characters.contains(viewModel.characters[index].name) {
                                                         withAnimation {
                                                             characters.append(characters == "" ? viewModel.characters[index].name : ", \(viewModel.characters[index].name)")
@@ -544,18 +557,7 @@ struct ContentView: View {
             }
             .navigationTitle("Imagine a Story")
             .toolbar {
-//                if loaded {
-//                    Button("Clear") {
-//                        isLoading = false
-//                        words = []
-//                        characters = ""
-//                        genre = "Adventure"
-//                        story = ""
-//                        theme = "Forest"
-//                        loaded = false
-//                        isRandom = false
-//                    }
-//                }
+                
                 
                 ToolbarItemGroup(placement: .navigationBarLeading) {
                     Image(systemName: "person.circle.fill") // Replace with your image name
@@ -643,7 +645,8 @@ Create an image that depicts a story with the following prompt: \(promptForImage
         words.append(theme)
         
         let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
-        let prompt = "Create a story with characters: \(characters), genre: \(genre), and theme: \(theme) and finish it in 150 words."
+//        let prompt = "Create a story with characters: \(characters), genre: \(genre), and theme: \(theme) and finish it in 150 words. Create a \(genre) story where [character name], who is [age] years old and feeling [emotion], goes on an exciting adventure in a \(theme) world."
+        let prompt = generatePrompt()
         let response = try await model.generateContent(prompt)
         if let text = response.text {
             DispatchQueue.main.async {
@@ -661,6 +664,31 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                 }
             }
         }
+    }
+    
+    func generatePrompt() -> String {
+        guard !selectedChars.isEmpty else {
+                return "Please select at least one character to generate a prompt."
+            }
+            
+            var prompt = ""
+            
+            if selectedChars.count == 1 {
+                let character = selectedChars[0]
+                prompt = "Create a \(genre) story where \(character.name), who is \(character.age) years old and feeling \(character.emotion), goes on an exciting adventure in a \(theme) world."
+            } else {
+                let characterDescriptions = selectedChars.map { character in
+                    "\(character.name), who is \(character.age) years old and feeling \(character.emotion)"
+                }
+                
+                let charactersText = characterDescriptions.joined(separator: ", ")
+                
+                // Use "and" for the last character if there are more than one
+                let lastSeparator = selectedChars.count > 1 ? " and " : ""
+                prompt = "Write a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
+            }
+            print(prompt)
+            return prompt
     }
     
     func generateImagePrompt() async throws {
