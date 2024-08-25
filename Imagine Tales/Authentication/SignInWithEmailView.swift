@@ -20,43 +20,14 @@ final class SignInWithEmailViewModel: ObservableObject {
     @Published var country = ""
     @Published var number = ""
     var userId = ""
-    
-    
-//    @MainActor
-//    func getChildren() {
-//      
-//            children =  UserManager.shared.getAllUserChildren(userId: userId)
-//            print("children: \(children)")
-//        
-//    }
+
     
     func resetPassword() async throws {
-//        let user = try AuthenticationManager.shared.getAuthenticatedUser()
-//        guard let email = user.email else {
-//            throw URLError(.fileIsDirectory)
-//        }
+
         try await AuthenticationManager.shared.resetPassword(email: email)
     }
     
-    
-//    func getChildren() throws {
-//       
-//        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
-//        userId = authDataResult.uid
-//        
-//        Firestore.firestore().collection("users").document(userId).collection("Children").getDocuments { (querySnapshot, error) in
-//            if let error = error {
-//                print("Error getting documents: \(error)")
-//                return
-//            }
-//            
-//            self.children = querySnapshot?.documents.compactMap { document in
-//                try? document.data(as: UserChildren.self)
-//            } ?? []
-//            print(self.children)
-//            
-//        }
-//    }
+
     
     func getChildren() throws {
        
@@ -129,6 +100,7 @@ struct SignInWithEmailView: View {
     @State private var settingPassword = false
     @State private var confirmPassword = ""
     @Binding var showSignInView: Bool
+    @Binding var isiPhone: Bool
     @State private var isSignedUp = false
     @State private var isAddingChild = false
     @State var isParent: Bool
@@ -162,7 +134,7 @@ struct SignInWithEmailView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                //Background
+                //MARK: Background
                 Color(hex: "#F5F5DC").ignoresSafeArea()
                 VStack {
                     Spacer()
@@ -221,7 +193,7 @@ struct SignInWithEmailView: View {
                             
                         }
                         .frame(width: UIScreen.main.bounds.width)
-                        //Stepper View
+                        //MARK: Stepper View
                         HStack {
                                 Capsule()
                                     .foregroundStyle(.orange)
@@ -241,7 +213,6 @@ struct SignInWithEmailView: View {
                         }
                         .padding([.leading, .trailing], 100)
                         .padding(.top, 40)
-                       // .padding(.bottom, isCompact ? 30 : 0)
                         .frame(width: UIScreen.main.bounds.width)
                  
                         //MARK: Form
@@ -249,10 +220,8 @@ struct SignInWithEmailView: View {
                             RoundedRectangle(cornerRadius: isCompact ?  25 : 50)
                                 .fill(Color(hex: "#8AC640"))
                             
-                            
                             VStack {
-                                
-                                //title
+                                //MARK: title
                                 VStack(alignment: .leading) {
                                     if signedInWithGoogle {
                                         Text(isAddingChild ? "Add Child" : "Add Children")
@@ -287,11 +256,10 @@ struct SignInWithEmailView: View {
                                 
                                 
                                 if !isAddingChild {
-                                    
-                                    //New User View
+                                    //MARK: New User View
                                     if newUser {
                                         VStack {
-                                            //User detail view
+                                            //MARK: User detail view
                                             if !settingPassword && !isSignedUp && !signedInWithGoogle {
                                                 TextField("Name", text: $viewModel.name)
                                                     .customTextFieldStyle(isCompact: isCompact)
@@ -319,7 +287,7 @@ struct SignInWithEmailView: View {
                                                 
                                             }
                                             
-                                            //Setting Password View
+                                            //MARK: Setting Password View
                                             else if settingPassword && !signedInWithGoogle {
                                                 SecureField("Password", text: $viewModel.password)
                                                     .customTextFieldStyle(isCompact: isCompact)
@@ -330,7 +298,7 @@ struct SignInWithEmailView: View {
                                                 Text(err)
                                             }
                                             
-                                            //Add Children View
+                                            //MARK: Add Children View
                                             if isSignedUp {
                                                 VStack(alignment: .leading) {
                                                     ScrollView {
@@ -396,7 +364,7 @@ struct SignInWithEmailView: View {
                                             }
                                             
                                             
-                                            //New user signed in with google View
+                                            //MARK: New user signed in with google View
                                             if signedInWithGoogle && !isSignedUp && isNewGoogleUser {
                                                
                                                     TextField("Name", text: $viewModel.name)
@@ -460,10 +428,10 @@ struct SignInWithEmailView: View {
                                         Spacer()
                                         
                                    
-                                        //Buttons
+                                        //MARK: Buttons
                                         VStack {
                                             
-                                            //Main Button
+                                            //MARK: Main Button
                                             Button(settingPassword ? "Sign up" : (isSignedUp ? "Continue" : "Next")) {
                                                 
                                                 if settingPassword {
@@ -476,8 +444,12 @@ struct SignInWithEmailView: View {
                                                                     isSignedUp = true
                                                                     settingPassword = false
                                                                     
+                                                                    
                                                                     try await viewModel.createUserProfile(isParent: isParent)
                                                                     try viewModel.getChildren()
+                                                                    if isiPhone {
+                                                                        showSignInView = false
+                                                                    }
                                                                 }
                                                                 return
                                                             } catch {
@@ -507,7 +479,7 @@ struct SignInWithEmailView: View {
                                             .cornerRadius(isCompact ? 6 : 12)
                                             
                                             
-                                            //Add Later Button
+                                            //MARK: Add Later Button
                                             if isSignedUp {
                                                 Button("Add Later") {
                                                     withAnimation {
@@ -522,10 +494,8 @@ struct SignInWithEmailView: View {
                                             }
                                         }
                                         .padding(.bottom, isSignedUp ? 40 : 0)
-                                        
                                     }
-                                    
-                                    //Sign In View
+                                    //MARK: Sign In View
                                     else {
                                         VStack {
                                             TextField("Email", text: $viewModel.email)
@@ -555,6 +525,9 @@ struct SignInWithEmailView: View {
                                                 Task {
                                                     do {
                                                         if let _ = try await viewModel.signInWithEmail() {
+                                                            if isiPhone {
+                                                                showSignInView = false
+                                                            }
                                                             isSignedUp = true
                                                             settingPassword = false
                                                             newUser = true
@@ -572,10 +545,8 @@ struct SignInWithEmailView: View {
                                             .cornerRadius(12)
                                         }
                                     }
-                                    
                                 }
-                                
-                                //adding child View
+                                //MARK: adding child View
                                 else {
                                     VStack(alignment: .leading) {
                                         TextField("Name", text: $viewModel.name)
@@ -634,6 +605,7 @@ struct SignInWithEmailView: View {
                                     .frame(width:  UIScreen.main.bounds.width * 0.7)
                                 }
                                 
+                                //MARK: toggle newUser
                                 if !isSignedUp && !isAddingChild {
                                     Button(newUser ? "Already have an account? Sign in" : "Create an Account.") {
                                         withAnimation {
@@ -653,6 +625,7 @@ struct SignInWithEmailView: View {
                 }.frame(width:  UIScreen.main.bounds.width * (isCompact ? 1 : 0.8), height:  UIScreen.main.bounds.height * (isCompact ? 1 : 0.7))
             }
             .onAppear {
+               
                 if !isParent {
                     newUser = false
                 }
@@ -664,7 +637,10 @@ struct SignInWithEmailView: View {
                 
                 if horizontalSizeClass == .compact {
                     isCompact = true
+                    isiPhone = true
                 }
+                
+                
                 
 
             }
@@ -728,5 +704,5 @@ extension View {
 }
 
 #Preview {
-    SignInWithEmailView(showSignInView: .constant(false), isParent: true, continueAsChild: false, signedInWithGoogle: false)
+    SignInWithEmailView(showSignInView: .constant(false), isiPhone: .constant(false), isParent: true, continueAsChild: false, signedInWithGoogle: false)
 }

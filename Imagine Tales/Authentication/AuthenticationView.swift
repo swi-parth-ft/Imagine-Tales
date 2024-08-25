@@ -53,6 +53,7 @@ final class AuthenticationViewModel: ObservableObject {
 
 struct AuthenticationView: View {
     @Binding var showSignInView: Bool
+    @Binding var isiPhone: Bool
     @StateObject var viewModel = AuthenticationViewModel()
     @State private var isParent = true
     @State private var newUser = true
@@ -113,7 +114,7 @@ struct AuthenticationView: View {
                                         isOnboarding = true
                                     }
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: true, continueAsChild: false, signedInWithGoogle: false)
+                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: true, continueAsChild: false, signedInWithGoogle: false)
                                         
                                     } label: {
                                         Text("Sign Up")
@@ -126,7 +127,7 @@ struct AuthenticationView: View {
                                     }
                                     
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: false, continueAsChild: true, signedInWithGoogle: false)
+                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: false, continueAsChild: true, signedInWithGoogle: false)
                                         
                                     } label: {
                                         Text("Continue as Parent")
@@ -139,7 +140,7 @@ struct AuthenticationView: View {
                                     }
                                     
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isParent: false, continueAsChild: true, signedInWithGoogle: false)
+                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: false, continueAsChild: true, signedInWithGoogle: false)
                                         
                                     } label: {
                                         Text("Setup for Child")
@@ -187,7 +188,7 @@ struct AuthenticationView: View {
                                             
                                         }
                                         .navigationDestination(isPresented: $isSignedInWithGoogle) {
-                                            SignInWithEmailView(showSignInView: $showSignInView, isParent: true, continueAsChild: false, signedInWithGoogle: true)
+                                            SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: true, continueAsChild: false, signedInWithGoogle: true)
                                         }
                                         
                                         
@@ -240,7 +241,7 @@ struct AuthenticationView: View {
 }
 
 #Preview {
-    AuthenticationView(showSignInView: .constant(false))
+    AuthenticationView(showSignInView: .constant(false), isiPhone: .constant(false))
 }
 
 
