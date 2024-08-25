@@ -130,6 +130,7 @@ struct SignInWithEmailView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @State private var isCompact = false
     
+    @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
         NavigationStack {
@@ -153,6 +154,9 @@ struct SignInWithEmailView: View {
                 .edgesIgnoringSafeArea(.all)
                 
                 VStack {
+                    if keyboardHeight != 0 {
+                                        Spacer()
+                        }
                     ZStack(alignment: .leading) {
                         HStack {
                             //Back Button
@@ -612,7 +616,7 @@ struct SignInWithEmailView: View {
                                             newUser.toggle()
                                         }
                                     }
-                                    .padding()
+                                    .padding(.bottom, keyboardHeight != 0 ? (isCompact ? 60 : 150) : 0)
                                 }
                             }
                             
@@ -620,10 +624,26 @@ struct SignInWithEmailView: View {
                         .frame(width:  UIScreen.main.bounds.width * (isCompact ? 0.9 : 0.8), height:  UIScreen.main.bounds.height * (isCompact ? 0.5 : 0.7))
                         .frame(maxWidth: .infinity)
                         .padding(.top, 40)
+                        .onAppear {
+                                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
+                                        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                                            keyboardHeight = keyboardFrame.height
+                                        }
+                                    }
+
+                                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                                        keyboardHeight = 0
+                                    }
+                                }
+                                .onDisappear {
+                                    NotificationCenter.default.removeObserver(self)
+                                }
 //                        .padding(.bottom, isCompact ? 190 : 0)
                    Spacer()
                 }.frame(width:  UIScreen.main.bounds.width * (isCompact ? 1 : 0.8), height:  UIScreen.main.bounds.height * (isCompact ? 1 : 0.7))
+                   
             }
+            .ignoresSafeArea(.keyboard)
             .onAppear {
                
                 if !isParent {
