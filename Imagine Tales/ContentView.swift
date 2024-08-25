@@ -54,7 +54,7 @@ struct ContentView: View {
     @State private var theme = "Forest"
     @State private var story = ""
     @State private var isLoading = false
-    @State private var words:[String] =  ["apple", "pinnaple", "orange", "tomato", "banana", "grape", "kiwi", "mango", "pear"]
+    @State private var words:[String] =  []
     @State private var loaded = false
     @State private var isRandom = false
     @State private var scale: CGFloat = 1.0
@@ -88,14 +88,10 @@ struct ContentView: View {
     ]
     let themes = ["Forest", "Car", "Plane", "Dark", "Colorful", "Cartoon", "Space", "Underwater", "Desert", "Cityscape", "Fantasy", "Sci-Fi", "Nature", "Retro", "Abstract", "Minimalist", "Industrial", "Vintage", "Cyberpunk", "Steampunk"]
     
-    
     @State private var isSelectingTheme = true
     @State private var isSelectingGenre = false
     @State private var isAddingNames = false
-    
     @State private var formattedChars = ""
-   
-    
     @State private var isAddingChar = false
     
     @State private var selectedChars: [Charater] = []
@@ -104,18 +100,17 @@ struct ContentView: View {
             ZStack {
                 Color(hex: "#FFFFF1").ignoresSafeArea()
                 VStack {
-                    if story == "" && !isLoading {
-
-                        
-                    } else {
+                        //MARK: Loading Animation
                         if isLoading {
                             DotLottieAnimation(fileName: "StoryLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
-                                .frame(width: 340, height: 150)
-                        } else {
+                                .frame(width: 340 * 2, height: 150 * 2)
+                        }
+                    
+                        //MARK: Story Loaded
+                        else if loaded {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 22)
                                     .fill(Color.white.opacity(0.5))
-                                    .frame(width: 360, height: 480)
                                 VStack {
                                     ScrollView {
                                         if let image = generatedImage {
@@ -123,7 +118,7 @@ struct ContentView: View {
                                                 .resizable()
                                                 .scaledToFill()
                                                 .padding([.bottom, .top])
-                                                .frame(width: 340, height: 250)
+                                             
                                                 .cornerRadius(22)
                                                 .shadow(radius: 10)
                                         }
@@ -151,19 +146,17 @@ struct ContentView: View {
                                             }
                                         }
                                     }
-                                    .frame(width: 350, height: 470)
                                 }
                             }
                         }
-                    }
+                
                     
-                    Spacer()
-                    
+                    //MARK: Taking Input
                     if !isLoading && !loaded{
                         
-                        //Taking Input
+                        
                         VStack {
-                            //prompt view
+                            //MARK: prompt view
                             ZStack {
                                 RoundedRectangle(cornerRadius: 22)
                                     .fill(
@@ -250,6 +243,7 @@ struct ContentView: View {
                             }
                             .frame(height: isAddingNames ? 150 : 120)
                             
+                            //MARK: Title Section
                             ZStack {
                                 if isSelectingGenre || isAddingNames {
                                     HStack {
@@ -289,7 +283,7 @@ struct ContentView: View {
                             }
                             
                             
-                            //Selecting Theme
+                            //MARK: Selecting Theme
                             if isSelectingTheme {
                                 GeometryReader { geometry in
                                     // Calculate dynamic width based on available width and desired number of items per row
@@ -341,7 +335,7 @@ struct ContentView: View {
                                // .animation(.easeInOut(duration: 1.0))
                             }
                             
-                            //Selecting Genre
+                            //MARK: Selecting Genre
                             else if isSelectingGenre {
                                 GeometryReader { geometry in
                                     // Calculate dynamic width based on available width and desired number of items per row
@@ -397,7 +391,7 @@ struct ContentView: View {
                                
                             }
                             
-                            //Adding Charactors
+                            //MARK: Adding Charactors
                             else if isAddingNames {
                                 
                                 GeometryReader { geometry in
@@ -528,9 +522,7 @@ struct ContentView: View {
                                 }
                             }
                             
-                           
-                            
-                            //Buttons
+                            //MARK: Buttons
                             VStack {
                                 Button("Next", systemImage: "arrowtriangle.right.fill") {
                                     if isSelectingTheme {
@@ -563,7 +555,10 @@ struct ContentView: View {
                                                             }
                         }
 
-                    } else {
+                    }
+                    
+                    //MARK: Chunk
+                    else {
                         ForEach(chunkArray(array: words, chunkSize: 3), id: \.self) { row in
                             HStack {
                                 if !isRandom {
@@ -678,7 +673,6 @@ Create an image that depicts a story with the following prompt: \(promptForImage
         words.append(theme)
         
         let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
-//        let prompt = "Create a story with characters: \(characters), genre: \(genre), and theme: \(theme) and finish it in 150 words. Create a \(genre) story where [character name], who is [age] years old and feeling [emotion], goes on an exciting adventure in a \(theme) world."
         let prompt = generatePrompt()
         let response = try await model.generateContent(prompt)
         if let text = response.text {
@@ -727,7 +721,7 @@ Create an image that depicts a story with the following prompt: \(promptForImage
     func generateImagePrompt() async throws {
         let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
         let prompt = "Generate me a prompt to create a story book Image using this story \(self.story). within 100 words"
-        print("PROMT FOR IMAGE IS : \(prompt)")
+        
         let response = try await model.generateContent(prompt)
         if let text = response.text {
             DispatchQueue.main.async {

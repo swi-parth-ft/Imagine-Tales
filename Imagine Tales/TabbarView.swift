@@ -74,6 +74,7 @@ struct TabbarView: View {
                 
                 ProfileView(showSignInView: $showSignInView)
                     .tag(4)
+                    .padding()
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .ignoresSafeArea()

@@ -47,17 +47,10 @@ struct ProfileView: View {
     
     var body: some View {
         NavigationStack {
-           
-               
+            
+            ZStack {
+                Color(hex: "#FFFFF1").ignoresSafeArea()
                 VStack {
-                    List {
-                        Text(viewModel.user?.email ?? "N/A")
-                        
-                        Text(childId)
-                        Text(viewModel.child?.name ?? "N/A")
-                        Text(viewModel.child?.age ?? "N/A")
-                        
-                        
                         Button("Log out") {
                             Task {
                                 do {
@@ -70,18 +63,26 @@ struct ProfileView: View {
                                 
                             }
                         }
-                    }
-                    .onAppear {
-                        try? viewModel.loadUser()
-                        viewModel.fetchChild(ChildId: childId)
-                    }
-                   
+                        .padding()
+                        .frame(width:  UIScreen.main.bounds.width * 0.7)
+                        .background(Color(hex: "#FF6F61"))
+                        .foregroundStyle(.white)
+                        .cornerRadius(12)
+                    
+                    
+                    
                 }
                 .padding([.trailing, .leading])
                 .padding(.top, 100)
-                .navigationTitle("Profile")
-            
+                
+                
             }
+            .navigationTitle("Hey, \(viewModel.child?.name ?? "N/A")")
+            .onAppear {
+                try? viewModel.loadUser()
+                viewModel.fetchChild(ChildId: childId)
+            }
+        }
         
      
         
