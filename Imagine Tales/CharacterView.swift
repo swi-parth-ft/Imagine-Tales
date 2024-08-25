@@ -36,6 +36,14 @@ struct CharacterView: View {
     @StateObject var viewModel = CharacterViewModel()
     @Environment(\.dismiss) var dismiss
     @StateObject var PviewModel = ContentViewModel()
+    
+    let emotions = [
+        "Happy", "Sad", "Angry", "Fearful", "Surprised", "Disgusted", "Excited",
+        "Anxious", "Content", "Bored", "Confused", "Frustrated", "Grateful",
+        "Jealous", "Proud", "Lonely", "Hopeful", "Amused", "Love", "Hate",
+        "Embarrassed", "Nervous", "Curious", "Relieved"
+    ]
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -43,21 +51,53 @@ struct CharacterView: View {
                 VStack {
                     
                         TextField("Name", text: $viewModel.name)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(12)
-                        TextField("Gender", text: $viewModel.gender)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(12)
+                        .customBackground()
+                    
+                    
+                    Picker("Gender", selection: $viewModel.gender) {
+                        Text("Male").tag("Male")
+                        Text("Female").tag("Female")
+                    }
+                    .pickerStyle(.segmented)
+                    .customBackground()
+                    
                         TextField("Emotion", text: $viewModel.emotion)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(12)
+                        .customBackground()
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 16) {
+                                    ForEach(emotions, id: \.self) { emotion in
+                                        VStack {
+                                            Circle()
+                                                .fill(Color.blue.opacity(0.3))
+                                                .frame(width: 100, height: 100)
+                                                .overlay(
+                                                    Text(emotion)
+                                                        .font(.caption)
+                                                        .foregroundColor(.black)
+                                                        .multilineTextAlignment(.center)
+                                                        .padding(10)
+                                                )
+                                                .onTapGesture {
+                                                    viewModel.emotion = emotion
+                                                }
+                                        }
+                                        
+                                    }
+                                }
+                                .padding()
+                            }
+                    .customBackground()
                         Stepper("Age \(viewModel.age)", value: $viewModel.age, in: 3...150)
                         .padding()
                         .background(Color.white)
                         .cornerRadius(12)
+                    
+                        
+                        
+                        
+                    
+                    
                         Button("Create") {
                             Task {
                                 do {
@@ -87,4 +127,19 @@ struct CharacterView: View {
 
 #Preview {
     CharacterView()
+}
+
+struct CustomBackgroundModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding()
+            .background(Color.white)
+            .cornerRadius(12)
+    }
+}
+
+extension View {
+    func customBackground() -> some View {
+        self.modifier(CustomBackgroundModifier())
+    }
 }
