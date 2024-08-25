@@ -155,6 +155,9 @@ struct SignInWithEmailView: View {
     ]
 
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @State private var isCompact = false
+    
     
     var body: some View {
         NavigationStack {
@@ -202,43 +205,48 @@ struct SignInWithEmailView: View {
                                     ZStack {
                                         Circle()
                                             .foregroundStyle(.white)
-                                            .frame(width: 75, height: 75)
+                                            .frame(width: isCompact ? 50 : 75, height: isCompact ? 50 : 75)
                                             .shadow(radius: 10)
                                         
                                         Image("arrow1")
-                                            .frame(width: 55, height: 55)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: isCompact ? 25 : 55, height: isCompact ? 25 : 55)
                                     }
                                 }
+                                .padding(.leading, isCompact ? 20 : 40)
                             }
+                                
                             Spacer()
                             
                         }
+                        .frame(width: UIScreen.main.bounds.width)
                         //Stepper View
                         HStack {
                                 Capsule()
                                     .foregroundStyle(.orange)
-                                    .frame(width: 100, height: 7)
+                                    .frame(width: isCompact ? 55 : 100, height: 7)
                                     .shadow(radius: 10)
                                 
                                 Capsule()
                                 .foregroundStyle(settingPassword || isSignedUp || isAddingChild ? .orange : .white)
-                                    .frame(width: 100, height: 7)
+                                    .frame(width: isCompact ? 55 : 100, height: 7)
                                     .shadow(radius: 10)
                                 
                                 Capsule()
                                 .foregroundStyle(isSignedUp || isAddingChild ? .orange : .white)
-                                    .frame(width: 100, height: 7)
+                                    .frame(width: isCompact ? 55 : 100, height: 7)
                                     .shadow(radius: 10)
                             }.frame(maxWidth: .infinity)
                         }
                         .padding([.leading, .trailing], 100)
                         .padding(.top, 40)
+                       // .padding(.bottom, isCompact ? 30 : 0)
                         .frame(width: UIScreen.main.bounds.width)
-                            
-                  
+                 
                         //MARK: Form
                         ZStack {
-                            RoundedRectangle(cornerRadius: 50)
+                            RoundedRectangle(cornerRadius: isCompact ?  25 : 50)
                                 .fill(Color(hex: "#8AC640"))
                             
                             
@@ -248,33 +256,33 @@ struct SignInWithEmailView: View {
                                 VStack(alignment: .leading) {
                                     if signedInWithGoogle {
                                         Text(isAddingChild ? "Add Child" : "Add Children")
-                                            .font(.custom("ComicNeue-Bold", size: 32))
+                                            .font(.custom("ComicNeue-Bold", size: isCompact ?  25 : 32))
                                         Text(isAddingChild ? "Enter Personal Details" : "Add or select child to continue.")
-                                            .font(.custom("ComicNeue-Regular", size: 24))
+                                            .font(.custom("ComicNeue-Regular", size: isCompact ?  16 : 24))
                                     } else {
                                     if isParent {
                                         Text(settingPassword ? "Create Password" : (isSignedUp ? "Add Children" : (isAddingChild ? "Add Child" : (newUser ? "Personal Details" : "Sign In"))))
-                                            .font(.custom("ComicNeue-Bold", size: 32))
+                                            .font(.custom("ComicNeue-Bold", size: isCompact ?  25 : 32))
                                         
                                         Text(settingPassword ? "Enter Password" : (isSignedUp ? "Add accounts for personalised experience": "Enter Personal Details"))
-                                            .font(.custom("ComicNeue-Regular", size: 24))
+                                            .font(.custom("ComicNeue-Regular", size: isCompact ?  16 : 24))
                                     } else {
                                         if !newUser {
                                             Text(isAddingChild ? "Add Child" : (isSignedUp ? "Select Child" : "Sign In as Parent"))
-                                                .font(.custom("ComicNeue-Bold", size: 32))
+                                                .font(.custom("ComicNeue-Bold", size: isCompact ?  25 : 32))
                                         } else {
                                             Text(isAddingChild ? "Add Child" : (isSignedUp ? "Select Child" : "Sign Up as Parent"))
-                                                .font(.custom("ComicNeue-Bold", size: 32))
+                                                .font(.custom("ComicNeue-Bold", size: isCompact ?  25 : 32))
                                         }
                                         Text(isAddingChild ? "Enter personal details" : (isSignedUp ? "Add or select child to continue." :"Sign in or create a new parent account"))
-                                            .font(.custom("ComicNeue-Regular", size: 24))
+                                            .font(.custom("ComicNeue-Regular", size: isCompact ?  16 : 24))
                                         
                                         
                                     }
                                 }
                                     
                                 }
-                                .padding([.top, .leading], 40)
+                                .padding([.top, .leading], isCompact ? 20 : 40)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 
@@ -286,13 +294,13 @@ struct SignInWithEmailView: View {
                                             //User detail view
                                             if !settingPassword && !isSignedUp && !signedInWithGoogle {
                                                 TextField("Name", text: $viewModel.name)
-                                                    .customTextFieldStyle()
+                                                    .customTextFieldStyle(isCompact: isCompact)
                                                 
                                                 TextField("Email", text: $viewModel.email)
-                                                    .customTextFieldStyle()
+                                                    .customTextFieldStyle(isCompact: isCompact)
                                                 
                                                 TextField("Phone", text: $viewModel.number)
-                                                    .customTextFieldStyle()
+                                                    .customTextFieldStyle(isCompact: isCompact)
                                                 
                                                 VStack {
                                                     Picker("Gender", selection: $viewModel.gender) {
@@ -300,13 +308,13 @@ struct SignInWithEmailView: View {
                                                         Text("Female").tag("Female")
                                                     }
                                                     .pickerStyle(.segmented)
+                                                    .frame(height: isCompact ? 35 : 55)
                                                     
                                                 }
-                                                .customTextFieldStyle()
                                                 
                                                 
                                                 TextField("country", text: $viewModel.country)
-                                                    .customTextFieldStyle()
+                                                    .customTextFieldStyle(isCompact: isCompact)
                                                 
                                                 
                                             }
@@ -314,10 +322,10 @@ struct SignInWithEmailView: View {
                                             //Setting Password View
                                             else if settingPassword && !signedInWithGoogle {
                                                 SecureField("Password", text: $viewModel.password)
-                                                    .customTextFieldStyle()
+                                                    .customTextFieldStyle(isCompact: isCompact)
                                                 
                                                 SecureField("Confirm Password", text: $confirmPassword)
-                                                    .customTextFieldStyle()
+                                                    .customTextFieldStyle(isCompact: isCompact)
                                                 
                                                 Text(err)
                                             }
@@ -392,10 +400,10 @@ struct SignInWithEmailView: View {
                                             if signedInWithGoogle && !isSignedUp && isNewGoogleUser {
                                                
                                                     TextField("Name", text: $viewModel.name)
-                                                        .customTextFieldStyle()
+                                                    .customTextFieldStyle(isCompact: isCompact)
                                                     
                                                     TextField("Phone", text: $viewModel.number)
-                                                        .customTextFieldStyle()
+                                                    .customTextFieldStyle(isCompact: isCompact)
                                                     
                                                     VStack {
                                                         Picker("Gender", selection: $viewModel.gender) {
@@ -405,11 +413,11 @@ struct SignInWithEmailView: View {
                                                         .pickerStyle(.segmented)
                                                         
                                                     }
-                                                    .customTextFieldStyle()
+                                                    .customTextFieldStyle(isCompact: isCompact)
                                                     
                                                     
                                                     TextField("country", text: $viewModel.country)
-                                                        .customTextFieldStyle()
+                                                    .customTextFieldStyle(isCompact: isCompact)
                                                     
                                                     Spacer()
                                                     Button("Continue") {
@@ -492,38 +500,38 @@ struct SignInWithEmailView: View {
                                                 }
                                             }
                                             .padding()
-                                            .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                            .frame(width:  UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
+                                            
                                             .background(Color(hex: "#FF6F61"))
                                             .foregroundStyle(.white)
-                                            .cornerRadius(12)
+                                            .cornerRadius(isCompact ? 6 : 12)
+                                            
                                             
                                             //Add Later Button
                                             if isSignedUp {
                                                 Button("Add Later") {
-                                                    showSignInView = false
+                                                    withAnimation {
+                                                        showSignInView = false
+                                                    }
                                                 }
                                                 .padding()
-                                                .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                                .frame(width:  UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
                                                 .background(Color(hex: "#DFFFDF"))
                                                 .foregroundStyle(.black)
-                                                .cornerRadius(12)
+                                                .cornerRadius(isCompact ? 6 : 12)
                                             }
                                         }
                                         .padding(.bottom, isSignedUp ? 40 : 0)
                                         
-                                    
-                                        
                                     }
-                                    
-                                    
                                     
                                     //Sign In View
                                     else {
                                         VStack {
                                             TextField("Email", text: $viewModel.email)
-                                                .customTextFieldStyle()
+                                                .customTextFieldStyle(isCompact: isCompact)
                                             SecureField("Password", text: $viewModel.password)
-                                                .customTextFieldStyle()
+                                                .customTextFieldStyle(isCompact: isCompact)
                                             HStack {
                                                 Spacer()
                                                 Button("Forgot password?") {
@@ -571,7 +579,7 @@ struct SignInWithEmailView: View {
                                 else {
                                     VStack(alignment: .leading) {
                                         TextField("Name", text: $viewModel.name)
-                                            .customTextFieldStyle()
+                                            .customTextFieldStyle(isCompact: isCompact)
                                         
                                         Text("Select age range for better content.")
                                             .font(.custom("ComicNeue-Regular", size: 24))
@@ -626,21 +634,23 @@ struct SignInWithEmailView: View {
                                     .frame(width:  UIScreen.main.bounds.width * 0.7)
                                 }
                                 
-                                
                                 if !isSignedUp && !isAddingChild {
                                     Button(newUser ? "Already have an account? Sign in" : "Create an Account.") {
-                                        newUser.toggle()
+                                        withAnimation {
+                                            newUser.toggle()
+                                        }
                                     }
                                     .padding()
                                 }
                             }
                             
                         }
-                        .frame(width:  UIScreen.main.bounds.width * 0.8, height:  UIScreen.main.bounds.height * 0.7)
+                        .frame(width:  UIScreen.main.bounds.width * (isCompact ? 0.9 : 0.8), height:  UIScreen.main.bounds.height * (isCompact ? 0.5 : 0.7))
                         .frame(maxWidth: .infinity)
                         .padding(.top, 40)
-                   
-                }
+//                        .padding(.bottom, isCompact ? 190 : 0)
+                   Spacer()
+                }.frame(width:  UIScreen.main.bounds.width * (isCompact ? 1 : 0.8), height:  UIScreen.main.bounds.height * (isCompact ? 1 : 0.7))
             }
             .onAppear {
                 if !isParent {
@@ -650,6 +660,10 @@ struct SignInWithEmailView: View {
                 if !isNewGoogleUser && signedInWithGoogle {
                     isSignedUp = true
                     settingPassword = false
+                }
+                
+                if horizontalSizeClass == .compact {
+                    isCompact = true
                 }
                 
 
@@ -666,6 +680,17 @@ struct CustomTextFieldModifier: ViewModifier {
             .background(Color.white)
             .frame(width: UIScreen.main.bounds.width * 0.7)
             .cornerRadius(12)
+    }
+}
+
+struct CustomTextFieldModifierCompact: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding()
+            .background(Color.white)
+            .frame(width: UIScreen.main.bounds.width * 0.8, height: 30)
+            .cornerRadius(6)
+            .font(.system(size: 12))
     }
 }
 struct AgeRangeButton: View {
@@ -691,8 +716,14 @@ struct AgeRangeButton: View {
     }
 }
 extension View {
-    func customTextFieldStyle() -> some View {
-        self.modifier(CustomTextFieldModifier())
+    
+    func customTextFieldStyle(isCompact: Bool) -> some View {
+
+        if isCompact {
+                return AnyView(self.modifier(CustomTextFieldModifierCompact()))
+            } else {
+                return AnyView(self.modifier(CustomTextFieldModifier()))
+            }
     }
 }
 
