@@ -147,6 +147,7 @@ struct ContentView: View {
                                                 theme = "Forest"
                                                 loaded = false
                                                 isRandom = false
+                                                selectedChars = []
                                             }
                                         }
                                     }
@@ -410,8 +411,9 @@ struct ContentView: View {
                                                 .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
                                                 .frame(width: width, height: width)
                                                 .onTapGesture {
-                                                    selectedChars.append(viewModel.characters[index])
+                                                    
                                                     if !characters.contains(viewModel.characters[index].name) {
+                                                        selectedChars.append(viewModel.characters[index])
                                                         withAnimation {
                                                             characters.append(characters == "" ? viewModel.characters[index].name : ", \(viewModel.characters[index].name)")
                                                             
@@ -429,6 +431,9 @@ struct ContentView: View {
                                                             }
                                                         }
                                                     } else {
+                                                        
+                                                        selectedChars = selectedChars.filter { $0.id != viewModel.characters[index].id }
+                                                        
                                                         withAnimation {
                                                             let temp = characters.replacingOccurrences(of: viewModel.characters[index].name, with: "")
                                                             characters = temp
@@ -672,7 +677,7 @@ Create an image that depicts a story with the following prompt: \(promptForImage
             }
             
             var prompt = ""
-            
+        print(selectedChars)
             if selectedChars.count == 1 {
                 let character = selectedChars[0]
                 prompt = "Create a \(genre) story where \(character.name), who is \(character.age) years old and feeling \(character.emotion), goes on an exciting adventure in a \(theme) world."
