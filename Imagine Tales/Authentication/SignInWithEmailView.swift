@@ -141,7 +141,7 @@ struct SignInWithEmailView: View {
     @Binding var isChildFlow: Bool
     
     
-    @State private var isSettingPin = true
+    @State private var isSettingPin = false
     @State private var pin = ""
     var body: some View {
         NavigationStack {
@@ -322,6 +322,10 @@ struct SignInWithEmailView: View {
                                                             do {
                                                                 try viewModel.setPin(pin: pin)
                                                                 isSettingPin = false
+                                                                if isiPhone {
+                                                                    showSignInView = false
+                                                                }
+
                                                             } catch {
                                                                 print(error.localizedDescription )
                                                             }
@@ -470,15 +474,13 @@ struct SignInWithEmailView: View {
                                                             do {
                                                                 if let _ = try await viewModel.createAccount() {
                                                                    
+                                                                    isSettingPin = true
                                                                     isSignedUp = true
                                                                     settingPassword = false
                                                                     
                                                                     
                                                                     try await viewModel.createUserProfile(isParent: isParent)
                                                                     try viewModel.getChildren()
-                                                                    if isiPhone {
-                                                                        showSignInView = false
-                                                                    }
                                                                 }
                                                                 return
                                                             } catch {
