@@ -325,115 +325,122 @@ struct SignInWithEmailView: View {
                                             }
                                             
                                             //MARK: Add Children View
-                                            if isSignedUp {
-                                                if isSettingPin {
-                                                    VStack {
-                                                        HStack(spacing: 10) {
-                                                            ForEach(0..<4, id: \.self) { index in
-                                                                TextField("", text: $otp[index])
-                                                                    .frame(width: 50, height: 50)
-                                                                    .background(Color(hex: "#D0FFD0"))
-                                                                    .cornerRadius(10)
-                                                                    .shadow(radius: 2)
-                                                                    .multilineTextAlignment(.center)
-                                                                    .font(.title)
-                                                                    .keyboardType(.numberPad)
-                                                                    .focused($focusedIndex, equals: index)
-                                                                    .onChange(of: otp[index]) { newValue in
-                                                                        if newValue.count > 1 {
-                                                                            otp[index] = String(newValue.prefix(1))
+                                            if !isiPhone {
+                                                if isSignedUp {
+                                                    if isSettingPin {
+                                                        VStack {
+                                                            HStack(spacing: 10) {
+                                                                ForEach(0..<4, id: \.self) { index in
+                                                                    TextField("", text: $otp[index])
+                                                                        .frame(width: 50, height: 50)
+                                                                        .background(Color(hex: "#D0FFD0"))
+                                                                        .cornerRadius(10)
+                                                                        .shadow(radius: 2)
+                                                                        .multilineTextAlignment(.center)
+                                                                        .font(.title)
+                                                                        .keyboardType(.numberPad)
+                                                                        .focused($focusedIndex, equals: index)
+                                                                        .onChange(of: otp[index]) { newValue in
+                                                                            if newValue.count > 1 {
+                                                                                otp[index] = String(newValue.prefix(1))
+                                                                            }
+                                                                            if !newValue.isEmpty && index < 3 {
+                                                                                focusedIndex = index + 1
+                                                                            }
+                                                                            
+                                                                            if newValue.isEmpty && index > 0 {
+                                                                                focusedIndex = index - 1
+                                                                            }
                                                                         }
-                                                                        if !newValue.isEmpty && index < 3 {
-                                                                            focusedIndex = index + 1
-                                                                        }
-                                                                        
-                                                                        if newValue.isEmpty && index > 0 {
-                                                                            focusedIndex = index - 1
-                                                                        }
-                                                                    }
-                                                            }
-                                                        }
-                                                        .padding()
-                                                        Button("set") {
-                                                            do {
-                                                                try viewModel.setPin(pin: otp.joined())
-                                                                isSettingPin = false
-                                                                if isiPhone {
-                                                                    showSignInView = false
                                                                 }
-
-                                                            } catch {
-                                                                print(error.localizedDescription )
                                                             }
-                                                           
-                                                        }
-                                                        .frame(width:  UIScreen.main.bounds.width * 0.4, height: isCompact ? 35 : 55)
-                                                        .background(Color(hex: "#DFFFDF"))
-                                                        .foregroundStyle(.black)
-                                                        .cornerRadius(isCompact ? 6 : 12)
-                                                    }
-                                                } else {
-                                                VStack(alignment: .leading) {
-                                                    ScrollView {
-                                                        LazyVGrid(columns: gridItems, spacing: 40) {
-                                                            VStack {
-                                                                ZStack {
+                                                            .padding()
+                                                            Button("set") {
+                                                                do {
+                                                                    try viewModel.setPin(pin: otp.joined())
+                                                                    isSettingPin = false
+                                                                    if isiPhone {
+                                                                        showSignInView = false
+                                                                    }
                                                                     
-                                                                    Circle()
-                                                                        .fill(Color(hex: "#DFFFDF"))
-                                                                        .frame(width: 100, height: 100)
-                                                                    
-                                                                    
-                                                                    
-                                                                    Image(systemName: "plus")
-                                                                        .font(.system(size: 40))
-                                                                    
-                                                                    
+                                                                } catch {
+                                                                    print(error.localizedDescription )
                                                                 }
                                                                 
-                                                                Text("Add")
                                                             }
-                                                            .onTapGesture {
-                                                                if isSignedUp {
-                                                                    withAnimation {
-                                                                        settingPassword = false
-                                                                        isSignedUp = false
-                                                                        isAddingChild = true
+                                                            .frame(width:  UIScreen.main.bounds.width * 0.4, height: isCompact ? 35 : 55)
+                                                            .background(Color(hex: "#DFFFDF"))
+                                                            .foregroundStyle(.black)
+                                                            .cornerRadius(isCompact ? 6 : 12)
+                                                        }
+                                                    } else  if !isiPhone {
+                                                        VStack(alignment: .leading) {
+                                                            ScrollView {
+                                                                LazyVGrid(columns: gridItems, spacing: 40) {
+                                                                    VStack {
+                                                                        ZStack {
+                                                                            
+                                                                            Circle()
+                                                                                .fill(Color(hex: "#DFFFDF"))
+                                                                                .frame(width: 100, height: 100)
+                                                                            
+                                                                            
+                                                                            
+                                                                            Image(systemName: "plus")
+                                                                                .font(.system(size: 40))
+                                                                            
+                                                                            
+                                                                        }
+                                                                        
+                                                                        Text("Add")
+                                                                    }
+                                                                    .onTapGesture {
+                                                                        if isSignedUp {
+                                                                            withAnimation {
+                                                                                settingPassword = false
+                                                                                isSignedUp = false
+                                                                                isAddingChild = true
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    ForEach(viewModel.children) { child in
+                                                                        VStack {
+                                                                            Circle()
+                                                                                .fill(Color.blue)
+                                                                                .frame(width: 100, height: 100)
+                                                                            
+                                                                            Text(child.name)
+                                                                        }
+                                                                        .onTapGesture {
+                                                                            
+                                                                            childId = child.id
+                                                                            showSignInView = false
+                                                                            
+                                                                            if !isiPhone {
+                                                                                ipf = false
+                                                                            }
+                                                                            
+                                                                        }
                                                                     }
                                                                 }
+                                                                .padding()
+                                                                
                                                             }
-                                                            ForEach(viewModel.children) { child in
-                                                                VStack {
-                                                                    Circle()
-                                                                        .fill(Color.blue)
-                                                                        .frame(width: 100, height: 100)
-                                                                    
-                                                                    Text(child.name)
-                                                                }
-                                                                .onTapGesture {
-                                                                    
-                                                                    childId = child.id
-                                                                    showSignInView = false
+                                                        }
+                                                        .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                                        .onAppear {
+                                                            Task {
+                                                                do {
+                                                                    try viewModel.getChildren()
+                                                                } catch {
+                                                                    print(error.localizedDescription)
                                                                 }
                                                             }
                                                         }
-                                                        .padding()
-                                                        
                                                     }
+                                                    
+                                                    
                                                 }
-                                                .frame(width:  UIScreen.main.bounds.width * 0.7)
-                                                .onAppear {
-                                                    Task {
-                                                        do {
-                                                            try viewModel.getChildren()
-                                                        } catch {
-                                                            print(error.localizedDescription)
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                                
-                                                
                                             }
                                             
                                             
@@ -464,21 +471,11 @@ struct SignInWithEmailView: View {
                                                     Button("Continue") {
                                                         Task {
                                                             do {
-                                                                
-                                                                
-                                                                
-                                                                
                                                                 try await viewModel.createGoogleUserProfile(isParent: isParent)
                                                                 isSignedUp = true
                                                                 settingPassword = false
+                                                                isSettingPin = true
                                                                 try viewModel.getChildren()
-                                                                
-                                                                
-                                                                
-                                                                
-                                                                
-                                                                
-                                                                
                                                             } catch {
                                                                 print(error.localizedDescription)
                                                             }
@@ -720,8 +717,18 @@ struct SignInWithEmailView: View {
             .ignoresSafeArea(.keyboard)
             .onAppear {
                
+                
+                
                 isChildFlow = isParentFlow
                 ipf = isParentFlow
+                
+                if !isNewGoogleUser && signedInWithGoogle {
+                   // showSignInView = false
+                    if isiPhone {
+                        showSignInView = false
+                    }
+                    isSignedUp = true
+                }
                 if !isParent {
                     newUser = false
                 }

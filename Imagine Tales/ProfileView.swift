@@ -8,11 +8,52 @@
 import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
+import GoogleSignIn
+import FirebaseCore
 
 final class ReAuthentication: ObservableObject {
     @Published var reAuthenticated: Bool = false
     @Published var email = ""
     @Published var password = ""
+    @Published var signedInWithGoogle = false
+    
+    func checkIfGoogle() {
+        if let user = Auth.auth().currentUser {
+            // Loop through the user's provider data
+            for userInfo in user.providerData {
+                // Check if the provider ID is Google
+                if userInfo.providerID == "google.com" {
+                    signedInWithGoogle = true
+                    // Perform actions specific to Google-signed-in users here
+                    break
+                }
+            }
+        } else {
+            print("No user is signed in.")
+        }
+    }
+    
+    func reAuthWithGoogle() async throws {
+        let helper = SignInGoogleHelper()
+        let tokens = try await helper.signIn()
+        let user = Auth.auth().currentUser
+        let authDataResult = try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
+         
+        
+        let credential = GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
+        
+        user!.reauthenticate(with: credential) { authResult, error in
+            if let error = error {
+                // Handle reauthentication error
+                print("Reauthentication failed: \(error.localizedDescription)")
+            } else {
+                // Reauthentication was successful
+                print("Reauthentication successful.")
+                self.reAuthenticated = true
+            }
+        }
+    }
+    
     
     func reAuthWithEmail() {
         if let user = Auth.auth().currentUser {
@@ -236,16 +277,28 @@ struct PinView: View {
             
             Text(error).foregroundStyle(.red)
             if isResetting && !reAuthModel.reAuthenticated {
-                TextField("email", text: $reAuthModel.email)
-                    .padding()
-                    .frame(width:  UIScreen.main.bounds.width * 0.5)
-                    .background(Color(hex: "#D0FFD0"))
-                    .cornerRadius(12)
-                TextField("Password", text: $reAuthModel.password)
-                    .padding()
-                    .frame(width:  UIScreen.main.bounds.width * 0.5)
-                    .background(Color(hex: "#D0FFD0"))
-                    .cornerRadius(12)
+                if reAuthModel.signedInWithGoogle {
+                    Button("reAuth") {
+                        Task {
+                            do {
+                                try await reAuthModel.reAuthWithGoogle()
+                            } catch {
+                                print(error.localizedDescription)
+                            }
+                        }
+                    }
+                } else {
+                    TextField("email", text: $reAuthModel.email)
+                        .padding()
+                        .frame(width:  UIScreen.main.bounds.width * 0.5)
+                        .background(Color(hex: "#D0FFD0"))
+                        .cornerRadius(12)
+                    TextField("Password", text: $reAuthModel.password)
+                        .padding()
+                        .frame(width:  UIScreen.main.bounds.width * 0.5)
+                        .background(Color(hex: "#D0FFD0"))
+                        .cornerRadius(12)
+                }
             }
             
             if !reAuthModel.reAuthenticated  && isPinWrong {
@@ -269,6 +322,8 @@ struct PinView: View {
         .onAppear {
             try? viewModel.getPin()
             focusedIndex = 0
+            
+            reAuthModel.checkIfGoogle()
           
         }
     }
