@@ -160,21 +160,21 @@ struct ContentView: View {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 22)
                                     .fill(
-                                        MeshGradient(
-                                            width: 4,
-                                            height: 3,
-                                            points: [
-                                                [0, 0], [0.33, 0], [0.66, 0], [1, 0],
-                                                [0, 0.5], [0.33, 0.5], [0.66, 0.5], [1, 0.5],
-                                                [0, 1], [0.33, 1], [0.66, 1], [1, 1]
-                                            ],
-                                            colors: [
-                                                .orange.opacity(0.5), .orange.opacity(0.1), .white, .white,
-                                                isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white,
-                                                isAddingNames ? .purple.opacity(0.5) : .white, .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.5) : .white
-                                            ]
-                                        )
-                                        
+//                                        MeshGradient(
+//                                            width: 4,
+//                                            height: 3,
+//                                            points: [
+//                                                [0, 0], [0.33, 0], [0.66, 0], [1, 0],
+//                                                [0, 0.5], [0.33, 0.5], [0.66, 0.5], [1, 0.5],
+//                                                [0, 1], [0.33, 1], [0.66, 1], [1, 1]
+//                                            ],
+//                                            colors: [
+//                                                .orange.opacity(0.5), .orange.opacity(0.1), .white, .white,
+//                                                isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white,
+//                                                isAddingNames ? .purple.opacity(0.5) : .white, .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.5) : .white
+//                                            ]
+//                                        )
+                                        .white
                                     )
                                     .shadow(radius: 10)
                                 
@@ -287,7 +287,7 @@ struct ContentView: View {
                             if isSelectingTheme {
                                 GeometryReader { geometry in
                                     // Calculate dynamic width based on available width and desired number of items per row
-                                    let width = (geometry.size.width - 40) / 7 // Subtract padding and divide by the number of items
+                                    let width = (geometry.size.width - 40) / 8 // Subtract padding and divide by the number of items
                                     
                                     ScrollView {
                                         LazyVGrid(
@@ -329,7 +329,7 @@ struct ContentView: View {
                                     }
                                     
                                 }
-                                .frame(height: 600)
+                                .frame(height: 500)
                                 .padding()
                                 .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
                                // .animation(.easeInOut(duration: 1.0))
@@ -339,7 +339,7 @@ struct ContentView: View {
                             else if isSelectingGenre {
                                 GeometryReader { geometry in
                                     // Calculate dynamic width based on available width and desired number of items per row
-                                    let width = (geometry.size.width - 40) / 7 // Subtract padding and divide by the number of items
+                                    let width = (geometry.size.width - 40) / 8 // Subtract padding and divide by the number of items
                                     
                                     ScrollView {
                                         LazyVGrid(
@@ -385,7 +385,7 @@ struct ContentView: View {
                                     
                                                 
                                 }
-                                .frame(height: 600)
+                                .frame(height: 500)
                                 .padding()
                                 .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
                                
@@ -396,7 +396,7 @@ struct ContentView: View {
                                 
                                 GeometryReader { geometry in
                                     // Calculate dynamic width based on available width and desired number of items per row
-                                    let width = (geometry.size.width - 40) / 7 // Subtract padding and divide by the number of items
+                                    let width = (geometry.size.width - 40) / 8 // Subtract padding and divide by the number of items
                                     
                                     ScrollView {
                                         Button {
@@ -415,7 +415,7 @@ struct ContentView: View {
                                             }
                                         }
                                         LazyVGrid(
-                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
+                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 5),
                                             spacing: -10  // Adjust the spacing to bring the rows closer together
                                         ) {
                                             

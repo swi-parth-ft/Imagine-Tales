@@ -90,7 +90,7 @@ struct TabbarView: View {
                 }
                 .padding(6)
             }
-            .frame(height: 70)
+            .frame(width: UIScreen.main.bounds.width * 0.95, height: 70)
             .background(Color(hex: "#FFFFF1"))
             .cornerRadius(20)
             .padding(.horizontal, 26)
@@ -135,7 +135,7 @@ extension TabbarView{
             }
             Spacer()
         }
-        .frame(width: isActive ? 150 : 130, height: 50)
+        .frame(width: isActive ? 140 : 120, height: 50)
         .background(isActive ? Color(hex: "#8AC640") : .clear)
         .cornerRadius(12)
         .padding(.horizontal, 5)
