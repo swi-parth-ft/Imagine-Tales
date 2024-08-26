@@ -7,7 +7,39 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseAuth
 
+final class ReAuthentication: ObservableObject {
+    @Published var reAuthenticated: Bool = false
+    @Published var email = ""
+    @Published var password = ""
+    
+    func reAuthWithEmail() {
+        if let user = Auth.auth().currentUser {
+            let email = email  // Obtain these from the user input
+            let password = password    // Obtain these from the user input
+
+            let credential = EmailAuthProvider.credential(withEmail: email, password: password)
+
+            user.reauthenticate(with: credential) { authResult, error in
+                if let error = error {
+                    // An error occurred while trying to reauthenticate
+                    print("Reauthentication failed: \(error.localizedDescription)")
+                    self.reAuthenticated = false
+                } else {
+                    // Reauthentication was successful
+                    print("Reauthentication successful.")
+                    self.reAuthenticated = true
+                }
+            }
+        }
+    }
+    
+    func setPin(pin: String) throws {
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        Firestore.firestore().collection("users").document(authDataResult.uid).updateData(["pin": pin])
+    }
+}
 final class ProfileViewModel: ObservableObject {
     
     @Published private(set) var user: AuthDataResultModel? = nil
@@ -47,6 +79,8 @@ final class ProfileViewModel: ObservableObject {
         
        // Firestore.firestore().collection("users").document(userId).updateData(["pin": pin])
     }
+    
+    
     
 }
 
@@ -127,54 +161,106 @@ struct PinView: View {
     
     @AppStorage("ipf") private var ipf: Bool = true
     @StateObject private var viewModel = ProfileViewModel()
+    @StateObject private var reAuthModel = ReAuthentication()
     
     @State private var otp: [String] = Array(repeating: "", count: 4)
        @FocusState private var focusedIndex: Int?
+    @State private var error = ""
+    @State private var isResetting = false
+    @State private var isPinWrong = false
     
     var body: some View {
         ZStack {
-            Color(hex: "#FFFFF1").ignoresSafeArea()
+            Color(hex: "#8AC640").ignoresSafeArea()
         VStack {
             
-            Text("Enter Parent PIN")
+            Text(reAuthModel.reAuthenticated ? "Enter New PIN" : "Enter Parent PIN")
                 .font(.title)
-                .fontWeight(.bold)
                 .padding(.bottom, 2)
-            
-            HStack(spacing: 10) {
-                ForEach(0..<4, id: \.self) { index in
-                    TextField("", text: $otp[index])
-                        .frame(width: 50, height: 50)
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .shadow(radius: 2)
-                        .multilineTextAlignment(.center)
-                        .font(.title)
-                        .keyboardType(.numberPad)
-                        .focused($focusedIndex, equals: index)
-                        .onChange(of: otp[index]) { newValue in
-                            if newValue.count > 1 {
-                                otp[index] = String(newValue.prefix(1))
+            if !isResetting || reAuthModel.reAuthenticated {
+                HStack(spacing: 10) {
+                    ForEach(0..<4, id: \.self) { index in
+                        TextField("", text: $otp[index])
+                            .frame(width: 50, height: 50)
+                            .background(Color(hex: "#D0FFD0"))
+                            .cornerRadius(10)
+                            .shadow(radius: 2)
+                            .multilineTextAlignment(.center)
+                            .font(.title)
+                            .keyboardType(.numberPad)
+                            .focused($focusedIndex, equals: index)
+                            .onChange(of: otp[index]) { newValue in
+                                if newValue.count > 1 {
+                                    otp[index] = String(newValue.prefix(1))
+                                }
+                                if !newValue.isEmpty && index < 3 {
+                                    focusedIndex = index + 1
+                                }
+                                
+                                if newValue.isEmpty && index > 0 {
+                                    focusedIndex = index - 1
+                                }
                             }
-                            if !newValue.isEmpty && index < 3 {
-                                focusedIndex = index + 1
-                            }
+                    }
+                }
+                .padding()
+                
+                
+                
+                Button(reAuthModel.reAuthenticated ? "Reset PIN" : "Enter to the boring side") {
+                    print(viewModel.pin)
+                    if reAuthModel.reAuthenticated {
+                        do {
+                            try reAuthModel.setPin(pin: otp.joined())
+                            isResetting = false
+                            reAuthModel.reAuthenticated = false
+                            error = ""
+                            isPinWrong = false
+                            otp = Array(repeating: "", count: 4)
+                            try? viewModel.getPin()
                             
-                            if newValue.isEmpty && index > 0 {
-                                focusedIndex = index - 1
-                            }
+                        } catch {
+                            print(error.localizedDescription)
                         }
+                    } else {
+                        if otp.joined() == viewModel.pin {
+                            ipf = true
+                        } else {
+                            isPinWrong = true
+                            error = "Incorrect PIN, Try again!"
+                            otp = Array(repeating: "", count: 4)
+                        }
+                    }
                 }
             }
-            .padding()
             
+            Text(error).foregroundStyle(.red)
+            if isResetting && !reAuthModel.reAuthenticated {
+                TextField("email", text: $reAuthModel.email)
+                    .padding()
+                    .frame(width:  UIScreen.main.bounds.width * 0.5)
+                    .background(Color(hex: "#D0FFD0"))
+                    .cornerRadius(12)
+                TextField("Password", text: $reAuthModel.password)
+                    .padding()
+                    .frame(width:  UIScreen.main.bounds.width * 0.5)
+                    .background(Color(hex: "#D0FFD0"))
+                    .cornerRadius(12)
+            }
             
-            Button("Enter to the boring side") {
-                print(viewModel.pin)
-                if otp.joined() == viewModel.pin {
-                    ipf = true
+            if !reAuthModel.reAuthenticated  && isPinWrong {
+                Button(isResetting ? "Authenticate" : "forgot PIN?") {
+                    
+                    if isResetting {
+                        reAuthModel.reAuthWithEmail()
+                    }
+                    
+                    isResetting = true
+                    error = ""
                 }
             }
+            
+            
         }
         
     }

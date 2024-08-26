@@ -332,7 +332,7 @@ struct SignInWithEmailView: View {
                                                             ForEach(0..<4, id: \.self) { index in
                                                                 TextField("", text: $otp[index])
                                                                     .frame(width: 50, height: 50)
-                                                                    .background(Color.white)
+                                                                    .background(Color(hex: "#D0FFD0"))
                                                                     .cornerRadius(10)
                                                                     .shadow(radius: 2)
                                                                     .multilineTextAlignment(.center)
