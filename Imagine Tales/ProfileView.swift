@@ -101,6 +101,7 @@ struct ProfileView: View {
                 }
                 .sheet(isPresented: $isAddingPin) {
                     PinView()
+               
                 }
                 
                 
@@ -122,26 +123,61 @@ struct ProfileView: View {
 
 struct PinView: View {
     @State private var pin = ""
+    private let otpLength: Int = 4
+    
     @AppStorage("ipf") private var ipf: Bool = true
     @StateObject private var viewModel = ProfileViewModel()
     
+    @State private var otp: [String] = Array(repeating: "", count: 4)
+       @FocusState private var focusedIndex: Int?
+    
     var body: some View {
         VStack {
-            TextField("Enter PIN", text : $pin)
+            HStack(spacing: 10) {
+                ForEach(0..<4, id: \.self) { index in
+                    TextField("", text: $otp[index])
+                        .frame(width: 50, height: 50)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .shadow(radius: 2)
+                        .multilineTextAlignment(.center)
+                        .font(.title)
+                        .keyboardType(.numberPad)
+                        .focused($focusedIndex, equals: index)
+                        .onChange(of: otp[index]) { newValue in
+                            if newValue.count > 1 {
+                                otp[index] = String(newValue.prefix(1))
+                            }
+                            if !newValue.isEmpty && index < 3 {
+                                focusedIndex = index + 1
+                            }
+                        }
+                }
+            }
+            .padding()
+            
+           
             Button("Enter") {
                 print(viewModel.pin)
-                if pin == viewModel.pin {
+                if otp.joined() == viewModel.pin {
                     ipf = true
                 }
             }
         }
+                    
+                
         .onAppear {
             try? viewModel.getPin()
+            focusedIndex = 0
+          
         }
     }
+   
 }
 
 #Preview {
     ProfileView(showSignInView: .constant(false), reload: .constant(false))
 
 }
+
+
