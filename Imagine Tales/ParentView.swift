@@ -54,6 +54,7 @@ struct ParentView: View {
     @Binding var reload: Bool
     @Binding var isiPhone: Bool
     @AppStorage("ipf") private var ipf: Bool = true
+    @AppStorage("childId") var childId: String = "Default Value"
     
     var body: some View {
         NavigationStack {
@@ -62,9 +63,9 @@ struct ParentView: View {
                     List {
                         
                         ForEach(viewModel.children) { child in
-//                            NavigationLink(destination: ChildView(child: child)) {
+                            NavigationLink(destination: ChildView(isiPhone: $isiPhone, child: child)) {
                                 Text(child.name)
-                          //  }
+                          }
                         }
                         Button("Add Child") {
                             isAddingNew = true
@@ -130,7 +131,23 @@ struct ParentView: View {
     ParentView(showSigninView: .constant(false), reload: .constant(false), isiPhone: .constant(false))
 }
 
-
+struct ChildView: View {
+    @AppStorage("childId") var childId: String = "Default Value"
+    @AppStorage("ipf") private var ipf: Bool = true
+    @Binding var isiPhone: Bool
+    
+    var child: UserChildren
+    var body: some View {
+        VStack {
+            if !isiPhone {
+                Button("back to \(child.name)'s playground") {
+                    childId = child.id
+                    ipf = false
+                }
+            }
+        }
+    }
+}
 struct AddChildForm: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var viewModel = ParentViewModel()
