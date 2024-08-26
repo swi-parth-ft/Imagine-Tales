@@ -67,14 +67,14 @@ struct ParentView: View {
                             isAddingNew = true
                         }
                         
-                        Button("Log out") {
-                            Task {
-                                do {
-                                    try viewModel.logOut()
-                                    showSigninView = true
-                                } catch {
-                                    print(error.localizedDescription)
-                                }
+                        
+                    }
+                    .onAppear {
+                        Task {
+                            do {
+                                try viewModel.getChildren()
+                            } catch {
+                                print(error.localizedDescription)
                             }
                         }
                     }
@@ -91,7 +91,7 @@ struct ParentView: View {
                     AddChildForm()
                 }
                 .sheet(isPresented: $isShowingSetting) {
-                    parentSettings()
+                    parentSettings(showSigninView: $showSigninView)
                 }
                 
             }
@@ -101,15 +101,7 @@ struct ParentView: View {
                     isShowingSetting = true
                 }
             }
-            .onAppear {
-                Task {
-                    do {
-                        try viewModel.getChildren()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                }
-            }
+            
         }
         
         
@@ -146,9 +138,26 @@ struct AddChildForm: View {
 }
 
 struct parentSettings: View {
+    
+    @Environment(\.dismiss) var dismiss
+    @StateObject var viewModel = ParentViewModel()
+    @Binding var showSigninView: Bool
+    
     var body: some View {
         VStack {
-            Text("Settings")
+            List {
+                Button("Log out") {
+                    Task {
+                        do {
+                            try viewModel.logOut()
+                            showSigninView = true
+                            dismiss()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                }
+            }
         }
     }
 }
