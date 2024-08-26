@@ -12,6 +12,8 @@ final class ProfileViewModel: ObservableObject {
     
     @Published private(set) var user: AuthDataResultModel? = nil
     @Published var child: UserChildren?
+    @Published var pin: String = ""
+    
     func loadUser() throws {
         user = try AuthenticationManager.shared.getAuthenticatedUser()
     }
@@ -34,6 +36,17 @@ final class ProfileViewModel: ObservableObject {
             }
         
         }
+    func getPin() throws {
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        Firestore.firestore().collection("users").document(authDataResult.uid).getDocument { doc, error in
+            if let doc = doc, doc.exists {
+                self.pin = doc.get("pin") as? String ?? "0"
+                print(self.pin)
+            }
+        }
+        
+       // Firestore.firestore().collection("users").document(userId).updateData(["pin": pin])
+    }
     
 }
 
@@ -44,6 +57,8 @@ struct ProfileView: View {
     @Binding var reload: Bool
     
     @AppStorage("childId") var childId: String = "Default Value"
+    @AppStorage("ipf") private var ipf: Bool = true
+    @State private var isAddingPin = false
     
     var body: some View {
         NavigationStack {
@@ -69,6 +84,11 @@ struct ProfileView: View {
                         .foregroundStyle(.white)
                         .cornerRadius(12)
                     
+                    Button("Parent Dashboard") {
+                        
+                        isAddingPin = true
+                    }
+                    
                     
                     
                 }
@@ -77,7 +97,11 @@ struct ProfileView: View {
                 .onChange(of: reload) { 
                     try? viewModel.loadUser()
                     viewModel.fetchChild(ChildId: childId)
-                                }
+                    try? viewModel.getPin()
+                }
+                .sheet(isPresented: $isAddingPin) {
+                    PinView()
+                }
                 
                 
             }
@@ -85,6 +109,7 @@ struct ProfileView: View {
             .onAppear {
                 try? viewModel.loadUser()
                 viewModel.fetchChild(ChildId: childId)
+                try? viewModel.getPin()
             }
         }
         
@@ -92,6 +117,27 @@ struct ProfileView: View {
         
             
         
+    }
+}
+
+struct PinView: View {
+    @State private var pin = ""
+    @AppStorage("ipf") private var ipf: Bool = true
+    @StateObject private var viewModel = ProfileViewModel()
+    
+    var body: some View {
+        VStack {
+            TextField("Enter PIN", text : $pin)
+            Button("Enter") {
+                print(viewModel.pin)
+                if pin == viewModel.pin {
+                    ipf = true
+                }
+            }
+        }
+        .onAppear {
+            try? viewModel.getPin()
+        }
     }
 }
 

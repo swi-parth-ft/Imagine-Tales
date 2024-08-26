@@ -90,6 +90,11 @@ final class SignInWithEmailViewModel: ObservableObject {
         let _ = try await UserManager.shared.addChild2(userId: userId, name: name, age: age)
     }
     
+    func setPin(pin: String) throws {
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        userId = authDataResult.uid
+        Firestore.firestore().collection("users").document(userId).updateData(["pin": pin])
+    }
     
 }
 
@@ -134,6 +139,10 @@ struct SignInWithEmailView: View {
     @State private var keyboardHeight: CGFloat = 0
     var isParentFlow: Bool
     @Binding var isChildFlow: Bool
+    
+    
+    @State private var isSettingPin = true
+    @State private var pin = ""
     var body: some View {
         NavigationStack {
             ZStack {
@@ -306,6 +315,20 @@ struct SignInWithEmailView: View {
                                             
                                             //MARK: Add Children View
                                             if isSignedUp {
+                                                if isSettingPin {
+                                                    VStack {
+                                                        TextField("PIN", text: $pin)
+                                                        Button("set") {
+                                                            do {
+                                                                try viewModel.setPin(pin: pin)
+                                                                isSettingPin = false
+                                                            } catch {
+                                                                print(error.localizedDescription )
+                                                            }
+                                                           
+                                                        }
+                                                    }
+                                                } else {
                                                 VStack(alignment: .leading) {
                                                     ScrollView {
                                                         LazyVGrid(columns: gridItems, spacing: 40) {
@@ -364,7 +387,7 @@ struct SignInWithEmailView: View {
                                                         }
                                                     }
                                                 }
-                                                
+                                            }
                                                 
                                                 
                                             }
