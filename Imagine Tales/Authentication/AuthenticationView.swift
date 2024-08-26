@@ -61,7 +61,10 @@ struct AuthenticationView: View {
     
     @AppStorage("isOnboarding") var isOnboarding: Bool = true
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @State private var isCompact = false
+
+    
+    @Binding var isParentFlow: Bool
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -85,8 +88,8 @@ struct AuthenticationView: View {
                
                 VStack {
                     
-                    VStack(spacing: isCompact ? -45 : -10) {
-                            if isCompact {
+                    VStack(spacing: isiPhone ? -45 : -10) {
+                            if isiPhone {
                                 Image("OnBoardingImageLogo")
                                     .resizable()
                                     .scaledToFit()
@@ -99,68 +102,68 @@ struct AuthenticationView: View {
                                 
                                 RoundedRectangle(cornerRadius: 50)
                                     .fill(Color(hex: "#8AC640"))
-                                    .frame(width:  UIScreen.main.bounds.width * (isCompact ? 0.9 : 0.7), height:  UIScreen.main.bounds.height * (isCompact ? 0.5 : 0.5))
+                                    .frame(width:  UIScreen.main.bounds.width * (isiPhone ? 0.9 : 0.7), height:  UIScreen.main.bounds.height * (isiPhone ? 0.5 : 0.5))
                                 
                                 VStack(alignment: .center) {
                                     
                                     Text("Welcome to Imagine Tales")
-                                        .font(.custom("ComicNeue-Bold", size: isCompact ? 20 : 32))
+                                        .font(.custom("ComicNeue-Bold", size: isiPhone ? 20 : 32))
                                     
                                     Text("The Number One Best Ebook Store & Reader Application in this Century")
-                                        .font(.custom("ComicNeue-Regular", size: isCompact ? 12 : 24))
+                                        .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
                                         .multilineTextAlignment(.center)
                                     Spacer()
                                     Button("Show onBoarding") {
                                         isOnboarding = true
                                     }
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: true, continueAsChild: false, signedInWithGoogle: false)
+                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: true, continueAsChild: false, signedInWithGoogle: false, isParentFlow: false, isChildFlow: $isParentFlow)
                                         
                                     } label: {
                                         Text("Sign Up")
-                                            .font(.custom("ComicNeue-Regular", size: isCompact ? 12 : 24))
-                                            .frame(height: isCompact ? 35 : 55)
+                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
+                                            .frame(height: isiPhone ? 35 : 55)
                                             .frame(maxWidth: .infinity)
                                             .background(Color(hex: "#FF6F61"))
-                                            .cornerRadius(isCompact ? 6 : 12)
+                                            .cornerRadius(isiPhone ? 6 : 12)
                                             .foregroundStyle(.black)
                                     }
                                     
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: false, continueAsChild: true, signedInWithGoogle: false)
+                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: false, continueAsChild: true, signedInWithGoogle: false, isParentFlow: true, isChildFlow: $isParentFlow)
                                         
                                     } label: {
                                         Text("Continue as Parent")
-                                            .font(.custom("ComicNeue-Regular", size: isCompact ? 12 : 24))
-                                            .frame(height: isCompact ? 35 : 55)
+                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
+                                            .frame(height: isiPhone ? 35 : 55)
                                             .frame(maxWidth: .infinity)
                                             .background(Color(hex: "#DFFFDF"))
-                                            .cornerRadius(isCompact ? 6 : 12)
+                                            .cornerRadius(isiPhone ? 6 : 12)
                                             .foregroundStyle(.black)
                                     }
                                     
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: false, continueAsChild: true, signedInWithGoogle: false)
+                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: false, continueAsChild: true, signedInWithGoogle: false, isParentFlow: false, isChildFlow: $isParentFlow)
                                         
                                     } label: {
                                         Text("Setup for Child")
-                                            .font(.custom("ComicNeue-Regular", size: isCompact ? 12 : 24))
-                                            .frame(height: isCompact ? 35 : 55)
+                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
+                                            .frame(height: isiPhone ? 35 : 55)
                                             .frame(maxWidth: .infinity)
                                             .background(Color(hex: "#DFFFDF"))
-                                            .cornerRadius(isCompact ? 6 : 12)
+                                            .cornerRadius(isiPhone ? 6 : 12)
                                             .foregroundStyle(.black)
                                     }
                                     
                                     HStack {
                                         Capsule()
                                             .fill(Color(hex: "#E9E9E9"))
-                                            .frame(width: isCompact ? 100 : 200, height: 1)
+                                            .frame(width: isiPhone ? 100 : 200, height: 1)
                                         
                                         Text("or")
                                         Capsule()
                                             .fill(Color(hex: "#E9E9E9"))
-                                            .frame(width: isCompact ? 100 : 200, height: 1)
+                                            .frame(width: isiPhone ? 100 : 200, height: 1)
                                     }
                                     
                                     HStack{
@@ -188,7 +191,7 @@ struct AuthenticationView: View {
                                             
                                         }
                                         .navigationDestination(isPresented: $isSignedInWithGoogle) {
-                                            SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: true, continueAsChild: false, signedInWithGoogle: true)
+                                            SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: true, continueAsChild: false, signedInWithGoogle: true, isParentFlow: true, isChildFlow: $isParentFlow)
                                         }
                                         
                                         
@@ -218,7 +221,7 @@ struct AuthenticationView: View {
                                     
                                     
                                 }
-                                .frame(width:  UIScreen.main.bounds.width * (isCompact ? 0.8 : 0.6), height:  UIScreen.main.bounds.height * (isCompact ? 0.4 : 0.4))
+                                .frame(width:  UIScreen.main.bounds.width * (isiPhone ? 0.8 : 0.6), height:  UIScreen.main.bounds.height * (isiPhone ? 0.4 : 0.4))
                                 
                                 
                             }
@@ -232,16 +235,16 @@ struct AuthenticationView: View {
                 .interactiveDismissDisabled()
             }
             .onAppear {
-                if horizontalSizeClass == .compact {
-                    isCompact = true
-                }
+//                if horizontalSizeClass == .compact {
+//                    isiPhone = true
+//                }
             }
         }
     }
 }
 
 #Preview {
-    AuthenticationView(showSignInView: .constant(false), isiPhone: .constant(false))
+    AuthenticationView(showSignInView: .constant(false), isiPhone: .constant(false), isParentFlow: .constant(false))
 }
 
 

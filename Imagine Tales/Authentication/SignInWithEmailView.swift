@@ -131,7 +131,8 @@ struct SignInWithEmailView: View {
     @State private var isCompact = false
     
     @State private var keyboardHeight: CGFloat = 0
-    
+    var isParentFlow: Bool
+    @Binding var isChildFlow: Bool
     var body: some View {
         NavigationStack {
             ZStack {
@@ -530,7 +531,7 @@ struct SignInWithEmailView: View {
                                                 Task {
                                                     do {
                                                         if let _ = try await viewModel.signInWithEmail() {
-                                                            if isiPhone {
+                                                            if isiPhone || isParentFlow {
                                                                 showSignInView = false
                                                             }
                                                             isSignedUp = true
@@ -649,6 +650,8 @@ struct SignInWithEmailView: View {
             .ignoresSafeArea(.keyboard)
             .onAppear {
                
+                isChildFlow = isParentFlow
+                
                 if !isParent {
                     newUser = false
                 }
@@ -727,5 +730,5 @@ extension View {
 }
 
 #Preview {
-    SignInWithEmailView(showSignInView: .constant(false), isiPhone: .constant(false), isParent: true, continueAsChild: false, signedInWithGoogle: false)
+    SignInWithEmailView(showSignInView: .constant(false), isiPhone: .constant(false), isParent: true, continueAsChild: false, signedInWithGoogle: false, isParentFlow: false, isChildFlow: .constant(false))
 }

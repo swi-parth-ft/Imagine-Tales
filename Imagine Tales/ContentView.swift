@@ -160,21 +160,22 @@ struct ContentView: View {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 22)
                                     .fill(
-//                                        MeshGradient(
-//                                            width: 4,
-//                                            height: 3,
-//                                            points: [
-//                                                [0, 0], [0.33, 0], [0.66, 0], [1, 0],
-//                                                [0, 0.5], [0.33, 0.5], [0.66, 0.5], [1, 0.5],
-//                                                [0, 1], [0.33, 1], [0.66, 1], [1, 1]
-//                                            ],
-//                                            colors: [
-//                                                .orange.opacity(0.5), .orange.opacity(0.1), .white, .white,
-//                                                isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white,
-//                                                isAddingNames ? .purple.opacity(0.5) : .white, .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.5) : .white
-//                                            ]
-//                                        )
-                                        .white
+                                        
+                                        MeshGradient(
+                                            width: 4,
+                                            height: 3,
+                                            points: [
+                                                [0, 0], [0.33, 0], [0.66, 0], [1, 0],
+                                                [0, 0.5], [0.33, 0.5], [0.66, 0.5], [1, 0.5],
+                                                [0, 1], [0.33, 1], [0.66, 1], [1, 1]
+                                            ],
+                                            colors: [
+                                                .orange.opacity(0.5), .orange.opacity(0.1), .white, .white,
+                                                isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white,
+                                                isAddingNames ? .purple.opacity(0.5) : .white, .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.5) : .white
+                                            ]
+                                        )
+                                       
                                     )
                                     .shadow(radius: 10)
                                 
