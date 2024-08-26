@@ -19,7 +19,7 @@ struct RootView: View {
     var body: some View {
         ZStack {
             if isiPhone || ipf {
-                ParentView(showSigninView: $showSignInView, reload: $reload)
+                ParentView(showSigninView: $showSignInView, reload: $reload, isiPhone: $isiPhone)
             } else {
                 TabbarView(showSignInView: $showSignInView, reload: $reload)
             }

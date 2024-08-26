@@ -52,6 +52,8 @@ struct ParentView: View {
     @State private var isAddingNew = false
     @State private var isShowingSetting = false
     @Binding var reload: Bool
+    @Binding var isiPhone: Bool
+    @AppStorage("ipf") private var ipf: Bool = true
     
     var body: some View {
         NavigationStack {
@@ -66,6 +68,12 @@ struct ParentView: View {
                         }
                         Button("Add Child") {
                             isAddingNew = true
+                        }
+                        
+                        if !isiPhone {
+                            Button("Go back") {
+                                ipf = false
+                            }
                         }
                         
                         
@@ -119,7 +127,7 @@ struct ParentView: View {
 }
 
 #Preview {
-    ParentView(showSigninView: .constant(false), reload: .constant(false))
+    ParentView(showSigninView: .constant(false), reload: .constant(false), isiPhone: .constant(false))
 }
 
 
