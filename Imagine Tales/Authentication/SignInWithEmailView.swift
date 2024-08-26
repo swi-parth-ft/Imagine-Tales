@@ -555,7 +555,9 @@ struct SignInWithEmailView: View {
                                                 if isSignedUp {
                                                     Button("Add Later") {
                                                         withAnimation {
+                                                            ipf = true
                                                             showSignInView = false
+                                                            
                                                         }
                                                     }
                                                     .padding()
