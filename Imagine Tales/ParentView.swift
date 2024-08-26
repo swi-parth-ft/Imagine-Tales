@@ -51,6 +51,7 @@ struct ParentView: View {
     @Binding var showSigninView: Bool
     @State private var isAddingNew = false
     @State private var isShowingSetting = false
+    @Binding var reload: Bool
     
     var body: some View {
         NavigationStack {
@@ -78,6 +79,15 @@ struct ParentView: View {
                             }
                         }
                     }
+                    .onChange(of: reload) {
+                        Task {
+                            do {
+                                try viewModel.getChildren()
+                            } catch {
+                                print(error.localizedDescription)
+                            }
+                        }
+                                    }
                 }
                 .sheet(isPresented: $isAddingNew, onDismiss: {
                     Task {
@@ -109,7 +119,7 @@ struct ParentView: View {
 }
 
 #Preview {
-    ParentView(showSigninView: .constant(false))
+    ParentView(showSigninView: .constant(false), reload: .constant(false))
 }
 
 

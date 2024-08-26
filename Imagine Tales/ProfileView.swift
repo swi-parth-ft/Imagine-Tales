@@ -41,7 +41,7 @@ struct ProfileView: View {
     
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
-    
+    @Binding var reload: Bool
     
     @AppStorage("childId") var childId: String = "Default Value"
     
@@ -74,6 +74,10 @@ struct ProfileView: View {
                 }
                 .padding([.trailing, .leading])
                 .padding(.top, 100)
+                .onChange(of: reload) { 
+                    try? viewModel.loadUser()
+                    viewModel.fetchChild(ChildId: childId)
+                                }
                 
                 
             }
@@ -92,6 +96,6 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(showSignInView: .constant(false))
+    ProfileView(showSignInView: .constant(false), reload: .constant(false))
 
 }

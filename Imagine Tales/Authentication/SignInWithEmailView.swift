@@ -109,6 +109,7 @@ struct SignInWithEmailView: View {
     @State private var selectedAgeRange: AgeRange? = nil
 @State private var addingChildDetails = false
     @AppStorage("childId") var childId: String = "Default Value"
+    @AppStorage("ipf") private var ipf: Bool = false
     let isNewGoogleUser = AuthenticationManager.shared.isNewUser
     var continueAsChild: Bool
     var signedInWithGoogle: Bool
@@ -445,7 +446,7 @@ struct SignInWithEmailView: View {
                                                         Task {
                                                             do {
                                                                 if let _ = try await viewModel.createAccount() {
-                                                                    
+                                                                   
                                                                     isSignedUp = true
                                                                     settingPassword = false
                                                                     
@@ -651,7 +652,7 @@ struct SignInWithEmailView: View {
             .onAppear {
                
                 isChildFlow = isParentFlow
-                
+                ipf = isParentFlow
                 if !isParent {
                     newUser = false
                 }

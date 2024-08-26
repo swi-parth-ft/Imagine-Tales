@@ -51,7 +51,7 @@ struct TabbarView: View {
     
     @Binding var showSignInView: Bool
     @State private var selectedTab = 2
-    
+    @Binding var reload: Bool
     
     
     var body: some View {
@@ -72,7 +72,7 @@ struct TabbarView: View {
                 Text("Collection View")
                     .tag(3)
                 
-                ProfileView(showSignInView: $showSignInView)
+                ProfileView(showSignInView: $showSignInView, reload: $reload)
                     .tag(4)
                     .padding()
             }
@@ -114,7 +114,7 @@ struct TabbarView: View {
 }
 
 #Preview {
-    TabbarView(showSignInView: .constant(false))
+    TabbarView(showSignInView: .constant(false), reload: .constant(false))
 }
 
 

@@ -141,18 +141,19 @@ struct AuthenticationView: View {
                                             .cornerRadius(isiPhone ? 6 : 12)
                                             .foregroundStyle(.black)
                                     }
-                                    
-                                    NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: false, continueAsChild: true, signedInWithGoogle: false, isParentFlow: false, isChildFlow: $isParentFlow)
-                                        
-                                    } label: {
-                                        Text("Setup for Child")
-                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
-                                            .frame(height: isiPhone ? 35 : 55)
-                                            .frame(maxWidth: .infinity)
-                                            .background(Color(hex: "#DFFFDF"))
-                                            .cornerRadius(isiPhone ? 6 : 12)
-                                            .foregroundStyle(.black)
+                                    if !isiPhone {
+                                        NavigationLink {
+                                            SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: false, continueAsChild: true, signedInWithGoogle: false, isParentFlow: false, isChildFlow: $isParentFlow)
+                                            
+                                        } label: {
+                                            Text("Setup for Child")
+                                                .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
+                                                .frame(height: isiPhone ? 35 : 55)
+                                                .frame(maxWidth: .infinity)
+                                                .background(Color(hex: "#DFFFDF"))
+                                                .cornerRadius(isiPhone ? 6 : 12)
+                                                .foregroundStyle(.black)
+                                        }
                                     }
                                     
                                     HStack {

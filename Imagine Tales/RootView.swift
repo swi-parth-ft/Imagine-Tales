@@ -13,13 +13,15 @@ struct RootView: View {
     @State private var isiPhone = false
     @State private var isParentFlow = false
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @AppStorage("ipf") private var ipf: Bool = true
+    @State private var reload = false
     
     var body: some View {
         ZStack {
-            if isiPhone || isParentFlow {
-                ParentView(showSigninView: $showSignInView)
+            if isiPhone || ipf {
+                ParentView(showSigninView: $showSignInView, reload: $reload)
             } else {
-                TabbarView(showSignInView: $showSignInView)
+                TabbarView(showSignInView: $showSignInView, reload: $reload)
             }
         }
         .onAppear {
@@ -31,7 +33,7 @@ struct RootView: View {
             }
         }
 
-        .fullScreenCover(isPresented: $showSignInView) {
+        .fullScreenCover(isPresented: $showSignInView, onDismiss: { reload.toggle() } ) {
             NavigationStack {
                 AuthenticationView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParentFlow: $isParentFlow)
             }
