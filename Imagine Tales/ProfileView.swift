@@ -132,7 +132,15 @@ struct PinView: View {
        @FocusState private var focusedIndex: Int?
     
     var body: some View {
+        ZStack {
+            Color(hex: "#FFFFF1").ignoresSafeArea()
         VStack {
+            
+            Text("Enter Parent PIN")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding(.bottom, 2)
+            
             HStack(spacing: 10) {
                 ForEach(0..<4, id: \.self) { index in
                     TextField("", text: $otp[index])
@@ -151,19 +159,25 @@ struct PinView: View {
                             if !newValue.isEmpty && index < 3 {
                                 focusedIndex = index + 1
                             }
+                            
+                            if newValue.isEmpty && index > 0 {
+                                focusedIndex = index - 1
+                            }
                         }
                 }
             }
             .padding()
             
-           
-            Button("Enter") {
+            
+            Button("Enter to the boring side") {
                 print(viewModel.pin)
                 if otp.joined() == viewModel.pin {
                     ipf = true
                 }
             }
         }
+        
+    }
                     
                 
         .onAppear {
