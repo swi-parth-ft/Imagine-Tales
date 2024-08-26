@@ -50,6 +50,8 @@ struct ParentView: View {
     @StateObject var viewModel = ParentViewModel()
     @Binding var showSigninView: Bool
     @State private var isAddingNew = false
+    @State private var isShowingSetting = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -88,9 +90,17 @@ struct ParentView: View {
                 }) {
                     AddChildForm()
                 }
+                .sheet(isPresented: $isShowingSetting) {
+                    parentSettings()
+                }
                 
             }
             .navigationTitle("Children")
+            .toolbar {
+                Button("Profile", systemImage: "person.fill") {
+                    isShowingSetting = true
+                }
+            }
             .onAppear {
                 Task {
                     do {
@@ -131,6 +141,14 @@ struct AddChildForm: View {
                 }
                
             }
+        }
+    }
+}
+
+struct parentSettings: View {
+    var body: some View {
+        VStack {
+            Text("Settings")
         }
     }
 }
