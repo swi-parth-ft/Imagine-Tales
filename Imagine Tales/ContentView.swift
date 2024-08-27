@@ -95,6 +95,14 @@ struct ContentView: View {
     @State private var isAddingChar = false
     
     @State private var selectedChars: [Charater] = []
+    
+    
+    @State private var storyChunk: [(String, UIImage)] = []
+    @State private var chunkOfText = ""
+    @State private var nextKey = false
+    @State private var finishKey = false
+    @State private var continueStory = ""
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -113,24 +121,38 @@ struct ContentView: View {
                                     .fill(Color.white.opacity(0.5))
                                 VStack {
                                     ScrollView {
-                                        if let image = generatedImage {
-                                            Image(uiImage: image)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .padding([.bottom, .top])
-                                             
-                                                .cornerRadius(22)
-                                                .shadow(radius: 10)
-                                        }
+//                                        if let image = generatedImage {
+//                                            Image(uiImage: image)
+//                                                .resizable()
+//                                                .scaledToFill()
+//                                                .padding([.bottom, .top])
+//                                             
+//                                                .cornerRadius(22)
+//                                                .shadow(radius: 10)
+//                                        }
+//                                        
+//                                        if isImageLoading {
+//                                            DotLottieAnimation(fileName: "imageLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
+//                                                .frame(width: 340, height: 150)
+//                                        }
+//                                        
+//                                        Text(story)
+//                                            .padding()
+//                                            .foregroundColor(.black)
                                         
-                                        if isImageLoading {
-                                            DotLottieAnimation(fileName: "imageLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
-                                                .frame(width: 340, height: 150)
-                                        }
-                                        
-                                        Text(story)
+                                        ForEach(0..<storyChunk.count, id: \.self) { index in
+                                            VStack {
+                                                Image(uiImage: storyChunk[index].1)
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .padding()
+                                                
+                                                Text(storyChunk[index].0)
+                                                    .padding()
+                                                
+                                            }
                                             .padding()
-                                            .foregroundColor(.black)
+                                        }
                                         
                                         if loaded {
                                             Button("Clear") {
@@ -143,6 +165,34 @@ struct ContentView: View {
                                                 loaded = false
                                                 isRandom = false
                                                 selectedChars = []
+                                                storyChunk = []
+                                                nextKey = false
+                                                finishKey = false
+                                                continueStory = ""
+                                                chunkOfText = ""
+                                            }
+                                            
+                                            Button("Next") {
+                                                nextKey = true
+                                                Task {
+                                                    do {
+                                                        try await generateStoryWithGemini()
+                                                    } catch {
+                                                        print(error.localizedDescription)
+                                                    }
+                                                }
+                                            }
+                                            
+                                            Button("Finish") {
+                                                nextKey = false
+                                                finishKey = true
+                                                Task {
+                                                    do {
+                                                        try await generateStoryWithGemini()
+                                                    } catch {
+                                                        print(error.localizedDescription)
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -659,6 +709,10 @@ Create an image that depicts a story with the following prompt: \(promptForImage
             switch result {
             case .success(let image):
                 self.generatedImage = image
+                
+                self.storyChunk.append((chunkOfText, image))
+               
+                
             case .failure(let error):
                 print("Error generating image: \(error.localizedDescription)")
             }
@@ -679,6 +733,9 @@ Create an image that depicts a story with the following prompt: \(promptForImage
         if let text = response.text {
             DispatchQueue.main.async {
                 self.story = text
+                self.chunkOfText = text
+                self.continueStory.append(text)
+                
                 withAnimation {
                     self.isLoading = false
                     self.loaded = true
@@ -713,7 +770,15 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                 
                 // Use "and" for the last character if there are more than one
                 let lastSeparator = selectedChars.count > 1 ? " and " : ""
-                prompt = "Write a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
+                
+                if nextKey {
+                    prompt = "Write a next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
+                    
+                } else if finishKey {
+                    prompt = "finish this story: \(continueStory) details: of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
+                } else {
+                    prompt = "Write a first paragraph of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
+                }
             }
             print(prompt)
             return prompt
