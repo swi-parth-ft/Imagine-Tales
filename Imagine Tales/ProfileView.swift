@@ -27,6 +27,8 @@ final class ReAuthentication: ObservableObject {
                     // Perform actions specific to Google-signed-in users here
                     break
                 }
+                
+                self.email = user.email!
             }
         } else {
             print("No user is signed in.")
@@ -57,9 +59,10 @@ final class ReAuthentication: ObservableObject {
     
     func reAuthWithEmail() {
         if let user = Auth.auth().currentUser {
+            
             let email = email  // Obtain these from the user input
             let password = password    // Obtain these from the user input
-
+            
             let credential = EmailAuthProvider.credential(withEmail: email, password: password)
 
             user.reauthenticate(with: credential) { authResult, error in
@@ -218,6 +221,11 @@ struct PinView: View {
             Text(reAuthModel.reAuthenticated ? "Enter New PIN" : (isResetting ? "Sign in to reset PIN" : "Enter Parent PIN"))
                 .font(.title)
                 .padding(.bottom, 2)
+            
+            if isResetting && reAuthModel.signedInWithGoogle {
+                Text("\(reAuthModel.email)")
+            }
+            
             if !isResetting || reAuthModel.reAuthenticated {
                 HStack(spacing: 10) {
                     ForEach(0..<4, id: \.self) { index in
@@ -308,7 +316,7 @@ struct PinView: View {
                         .frame(width:  UIScreen.main.bounds.width * 0.5)
                         .background(Color(hex: "#D0FFD0"))
                         .cornerRadius(12)
-                    TextField("Password", text: $reAuthModel.password)
+                    SecureField("Password", text: $reAuthModel.password)
                         .padding()
                         .frame(width:  UIScreen.main.bounds.width * 0.5)
                         .background(Color(hex: "#D0FFD0"))
@@ -317,7 +325,7 @@ struct PinView: View {
             }
             
             if !reAuthModel.reAuthenticated  && isPinWrong {
-                Button(isResetting ? (reAuthModel.signedInWithGoogle ? "" : "Authenticate") : "forgot PIN?") {
+                Button(isResetting ? (reAuthModel.signedInWithGoogle ? "" : "Sign in") : "forgot PIN?") {
                     
                     if isResetting {
                         reAuthModel.reAuthWithEmail()
@@ -326,6 +334,7 @@ struct PinView: View {
                     isResetting = true
                     error = ""
                 }
+                .padding()
             }
             
             
