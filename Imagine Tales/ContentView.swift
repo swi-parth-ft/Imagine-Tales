@@ -102,20 +102,21 @@ struct ContentView: View {
     @State private var nextKey = false
     @State private var finishKey = false
     @State private var continueStory = ""
+    @State private var isLoadingChunk = true
     
     var body: some View {
         NavigationStack {
             ZStack {
                 Color(hex: "#FFFFF1").ignoresSafeArea()
                 VStack {
-                        //MARK: Loading Animation
-                        if isLoading {
-                            DotLottieAnimation(fileName: "StoryLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
-                                .frame(width: 340 * 2, height: 150 * 2)
-                        }
+//                        //MARK: Loading Animation
+//                        if isLoading {
+//                            DotLottieAnimation(fileName: "StoryLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
+//                                .frame(width: 340 * 2, height: 150 * 2)
+//                        }
                     
                         //MARK: Story Loaded
-                        else if loaded {
+                    if loaded || isLoading {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 22)
                                     .fill(Color.white.opacity(0.5))
@@ -154,7 +155,12 @@ struct ContentView: View {
                                             .padding()
                                         }
                                         
-                                        if loaded {
+                                        if isLoadingChunk {
+                                            DotLottieAnimation(fileName: "StoryLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
+                                                .frame(width: 340 * 2, height: 150 * 2)
+                                        }
+                                        
+                                        if loaded && !isLoadingChunk {
                                             Button("Clear") {
                                                 isLoading = false
                                                 words = []
@@ -170,22 +176,26 @@ struct ContentView: View {
                                                 finishKey = false
                                                 continueStory = ""
                                                 chunkOfText = ""
+                                                isLoadingChunk = false
                                             }
-                                            
-                                            Button("Next") {
-                                                nextKey = true
-                                                Task {
-                                                    do {
-                                                        try await generateStoryWithGemini()
-                                                    } catch {
-                                                        print(error.localizedDescription)
+                                            if !finishKey {
+                                                Button("Next") {
+                                                    nextKey = true
+                                                    isLoadingChunk = true
+                                                    Task {
+                                                        do {
+                                                            try await generateStoryWithGemini()
+                                                        } catch {
+                                                            print(error.localizedDescription)
+                                                        }
                                                     }
                                                 }
-                                            }
+                                            
                                             
                                             Button("Finish") {
                                                 nextKey = false
                                                 finishKey = true
+                                                isLoadingChunk = true
                                                 Task {
                                                     do {
                                                         try await generateStoryWithGemini()
@@ -194,6 +204,7 @@ struct ContentView: View {
                                                     }
                                                 }
                                             }
+                                        }
                                         }
                                     }
                                 }
@@ -588,6 +599,9 @@ struct ContentView: View {
                                         }
                                     } else if isAddingNames {
                                         generatedImage = nil
+                                        isLoading = true
+                                        isLoadingChunk = true
+                                        
                                         Task {
                                             do {
                                                 try await generateStoryWithGemini()
@@ -711,7 +725,9 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                 self.generatedImage = image
                 
                 self.storyChunk.append((chunkOfText, image))
-               
+                
+                self.loaded = true
+                self.isLoadingChunk = false
                 
             case .failure(let error):
                 print("Error generating image: \(error.localizedDescription)")
@@ -720,9 +736,9 @@ Create an image that depicts a story with the following prompt: \(promptForImage
     }
     
     func generateStoryWithGemini() async throws {
-        withAnimation {
-            isLoading = true
-        }
+//        withAnimation {
+//            isLoading = true
+//        }
         words = extractWords(from: characters)
         words.append(genre)
         words.append(theme)
@@ -736,10 +752,10 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                 self.chunkOfText = text
                 self.continueStory.append(text)
                 
-                withAnimation {
-                    self.isLoading = false
-                    self.loaded = true
-                }
+//                withAnimation {
+//                    self.isLoading = false
+//                    
+//                }
             }
             Task {
                 do {
@@ -777,7 +793,7 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                 } else if finishKey {
                     prompt = "finish this story: \(continueStory) details: of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
                 } else {
-                    prompt = "Write a first paragraph of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
+                    prompt = "Write a first begining paragraph/pilot of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
                 }
             }
             print(prompt)
