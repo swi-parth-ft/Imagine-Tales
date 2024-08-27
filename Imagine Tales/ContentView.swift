@@ -19,7 +19,6 @@ struct StoryTextItem: Codable {
 
 // Struct for the story document
 struct Story: Codable {
-    var id: String
     var parentId: String
     var childId: String
     var storyText: [StoryTextItem]
@@ -30,29 +29,7 @@ final class StoryViewModel: ObservableObject {
     @Published var storyText: [StoryTextItem] = []
     @Published var imageURL = ""
     
-    func upLoadImg() {
-        // Points to the root reference
-        let storageRef = Storage.storage().reference()
-
-        // Points to "images"
-        let imagesRef = storageRef.child("images")
-
-        // Points to "images/space.jpg"
-        // Note that you can use variables to create child values
-        let fileName = "space.jpg"
-        let spaceRef = imagesRef.child(fileName)
-
-        // File path is "images/space.jpg"
-        let path = spaceRef.fullPath
-
-        // File name is "space.jpg"
-        let name = spaceRef.name
-
-        // Points to "images"
-        let images = spaceRef.parent()
-    }
-    
-    func uploadImage(image: UIImage, completion: @escaping (_ url: String?) -> Void) {
+    func uploadImage(image: UIImage, completion: @escaping (_ url: String?) -> Void)  {
         guard let imageData = image.jpegData(compressionQuality: 0.8) else {
             print("Error: Could not convert image to data.")
             completion(nil)
@@ -109,6 +86,32 @@ final class StoryViewModel: ObservableObject {
         }
     }
     
+    func uploadStoryToFirestore(stroTextItem: [StoryTextItem], childId: String) async throws {
+        
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        
+        let story = Story(parentId: authDataResult.uid, childId: childId, storyText: stroTextItem, title: "Test title")
+        
+        let document = Firestore.firestore().collection("Story").document()
+        let documentId = document.documentID
+        
+        let data: [String:Any] = [
+            "id" : documentId,
+            "parentId" : story.parentId,
+            "childId" : childId,
+            "storyText": story.storyText.map { item in
+                        [
+                            "image": item.image,
+                            "text": item.text
+                        ]
+                    },
+            "title" : story.title,
+            "dateCreated" : Timestamp()
+        ]
+        
+        try await document.setData(data, merge: true)
+        
+    }
 }
 
 final class ContentViewModel: ObservableObject {
@@ -205,6 +208,8 @@ struct ContentView: View {
     @State private var finishKey = false
     @State private var continueStory = ""
     @State private var isLoadingChunk = true
+    @State private var storyTextItem: [StoryTextItem] = []
+    @AppStorage("childId") var childId: String = "Default Value"
     
     var body: some View {
         NavigationStack {
@@ -240,50 +245,65 @@ struct ContentView: View {
                                         }
                                         
                                         if loaded && !isLoadingChunk {
-                                            Button("Clear") {
-                                                isLoading = false
-                                                words = []
-                                                characters = ""
-                                                genre = "Adventure"
-                                                story = ""
-                                                theme = "Forest"
-                                                loaded = false
-                                                isRandom = false
-                                                selectedChars = []
-                                                storyChunk = []
-                                                nextKey = false
-                                                finishKey = false
-                                                continueStory = ""
-                                                chunkOfText = ""
-                                                isLoadingChunk = false
-                                            }
-                                            if !finishKey {
-                                                Button("Next") {
-                                                    nextKey = true
-                                                    isLoadingChunk = true
-                                                    Task {
-                                                        do {
-                                                            try await generateStoryWithGemini()
-                                                        } catch {
-                                                            print(error.localizedDescription)
+                                            HStack {
+                                                Button("Clear") {
+                                                    isLoading = false
+                                                    words = []
+                                                    characters = ""
+                                                    genre = "Adventure"
+                                                    story = ""
+                                                    theme = "Forest"
+                                                    loaded = false
+                                                    isRandom = false
+                                                    selectedChars = []
+                                                    storyChunk = []
+                                                    nextKey = false
+                                                    finishKey = false
+                                                    continueStory = ""
+                                                    chunkOfText = ""
+                                                    isLoadingChunk = false
+                                                }
+                                                if !finishKey {
+                                                    Button("Next") {
+                                                        nextKey = true
+                                                        isLoadingChunk = true
+                                                        Task {
+                                                            do {
+                                                                try await generateStoryWithGemini()
+                                                            } catch {
+                                                                print(error.localizedDescription)
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                    
+                                                    Button("Finish") {
+                                                        nextKey = false
+                                                        finishKey = true
+                                                        isLoadingChunk = true
+                                                        Task {
+                                                            do {
+                                                                try await generateStoryWithGemini()
+                                                                
+                                                            } catch {
+                                                                print(error.localizedDescription)
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                    
+                                                } else {
+                                                    Button("Share") {
+                                                        Task {
+                                                            do {
+                                                                try await storyViewModel.uploadStoryToFirestore(stroTextItem: storyTextItem, childId: childId)
+                                                            } catch {
+                                                                print(error.localizedDescription)
+                                                            }
                                                         }
                                                     }
                                                 }
-                                            
-                                            
-                                            Button("Finish") {
-                                                nextKey = false
-                                                finishKey = true
-                                                isLoadingChunk = true
-                                                Task {
-                                                    do {
-                                                        try await generateStoryWithGemini()
-                                                    } catch {
-                                                        print(error.localizedDescription)
-                                                    }
-                                                }
                                             }
-                                        }
                                         }
                                     }
                                 }
@@ -807,7 +827,11 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                 self.storyViewModel.uploadImage(image: image) { url in
                     iURL = url ?? "URL error"
                     print(iURL)
+                    self.storyTextItem.append(StoryTextItem(image: iURL, text: chunkOfText))
                 }
+                
+                
+                
                 
                 
                 self.loaded = true
