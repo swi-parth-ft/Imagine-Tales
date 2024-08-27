@@ -36,6 +36,7 @@
 		073F2CF22C6F9C1F00BCF6F0 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073F2CF12C6F9C1F00BCF6F0 /* UserManager.swift */; };
 		073F2CF42C6FA0A800BCF6F0 /* SignInWithEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */; };
 		073F2CF62C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */; };
+		076C22982C7E66B6001DAB3F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 076C22972C7E66B6001DAB3F /* FirebaseStorage */; };
 		0792C1D62C76A20D000C42A7 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */; };
 		0792C1D82C7AA2FB000C42A7 /* CharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D72C7AA2FB000C42A7 /* CharacterView.swift */; };
 		0792C1DA2C7BD95E000C42A7 /* ParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D92C7BD95E000C42A7 /* ParentView.swift */; };
@@ -90,6 +91,7 @@
 				0711F3642C6D6C6F006C86AA /* FirebaseAnalytics in Frameworks */,
 				0711F36B2C6D6E2B006C86AA /* GoogleSignIn in Frameworks */,
 				0711F3852C6DB62D006C86AA /* FirebaseAuth in Frameworks */,
+				076C22982C7E66B6001DAB3F /* FirebaseStorage in Frameworks */,
 				073F2CF02C6F9B4600BCF6F0 /* FirebaseFirestore in Frameworks */,
 				0711F3662C6D6C6F006C86AA /* FirebaseAuth in Frameworks */,
 				0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */,
@@ -605,6 +607,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		076C22972C7E66B6001DAB3F /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

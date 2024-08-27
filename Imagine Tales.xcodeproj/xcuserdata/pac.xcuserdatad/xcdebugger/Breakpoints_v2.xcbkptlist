@@ -14,26 +14,10 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "717"
-            endingLineNumber = "717"
+            startingLineNumber = "796"
+            endingLineNumber = "796"
             landmarkName = "generateImageUsingOpenAI()"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "0B4C2526-0011-43F9-8B28-78C8AE56033E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Imagine Tales/ContentView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "body"
-            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -318,10 +302,10 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "getCharacters()"
-            landmarkType = "7">
+            startingLineNumber = "130"
+            endingLineNumber = "130"
+            landmarkName = "ContentView"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -350,10 +334,10 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "26"
-            endingLineNumber = "26"
-            landmarkName = "getCharacters()"
-            landmarkType = "7">
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "ContentViewModel"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -366,8 +350,8 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "543"
-            endingLineNumber = "543"
+            startingLineNumber = "622"
+            endingLineNumber = "622"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -382,8 +366,8 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "545"
-            endingLineNumber = "545"
+            startingLineNumber = "624"
+            endingLineNumber = "624"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -398,8 +382,8 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "520"
-            endingLineNumber = "520"
+            startingLineNumber = "599"
+            endingLineNumber = "599"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -414,9 +398,9 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "799"
-            endingLineNumber = "799"
-            landmarkName = "generatePrompt()"
+            startingLineNumber = "883"
+            endingLineNumber = "883"
+            landmarkName = "generateImagePrompt()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -430,8 +414,8 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "541"
-            endingLineNumber = "541"
+            startingLineNumber = "620"
+            endingLineNumber = "620"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -446,8 +430,8 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "776"
-            endingLineNumber = "776"
+            startingLineNumber = "860"
+            endingLineNumber = "860"
             landmarkName = "generatePrompt()"
             landmarkType = "7">
          </BreakpointContent>
@@ -462,9 +446,9 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "806"
-            endingLineNumber = "806"
-            landmarkName = "generateImagePrompt()"
+            startingLineNumber = "890"
+            endingLineNumber = "890"
+            landmarkName = "generateStory()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -478,9 +462,9 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "812"
-            endingLineNumber = "812"
-            landmarkName = "generateImagePrompt()"
+            startingLineNumber = "896"
+            endingLineNumber = "896"
+            landmarkName = "generateStory()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -814,9 +798,9 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "790"
-            endingLineNumber = "790"
-            landmarkName = "generatePrompt()"
+            startingLineNumber = "874"
+            endingLineNumber = "874"
+            landmarkName = "generateImagePrompt()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -830,9 +814,9 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "793"
-            endingLineNumber = "793"
-            landmarkName = "generatePrompt()"
+            startingLineNumber = "877"
+            endingLineNumber = "877"
+            landmarkName = "generateImagePrompt()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -846,9 +830,9 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "795"
-            endingLineNumber = "795"
-            landmarkName = "generatePrompt()"
+            startingLineNumber = "879"
+            endingLineNumber = "879"
+            landmarkName = "generateImagePrompt()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -862,9 +846,9 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "796"
-            endingLineNumber = "796"
-            landmarkName = "generatePrompt()"
+            startingLineNumber = "880"
+            endingLineNumber = "880"
+            landmarkName = "generateImagePrompt()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -878,9 +862,25 @@
             filePath = "Imagine Tales/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "779"
-            endingLineNumber = "779"
+            startingLineNumber = "863"
+            endingLineNumber = "863"
             landmarkName = "generatePrompt()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7CDE0C4F-6D03-4772-B278-B6B5FFCE0D78"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/ContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "809"
+            endingLineNumber = "809"
+            landmarkName = "generateStoryWithGemini()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

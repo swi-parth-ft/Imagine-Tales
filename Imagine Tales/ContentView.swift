@@ -9,6 +9,107 @@ import SwiftUI
 import DotLottie
 import FirebaseVertexAI
 import FirebaseFirestore
+import FirebaseStorage
+
+// Struct for each story text item
+struct StoryTextItem: Codable {
+    var image: String
+    var text: String
+}
+
+// Struct for the story document
+struct Story: Codable {
+    var id: String
+    var parentId: String
+    var childId: String
+    var storyText: [StoryTextItem]
+    var title: String
+}
+
+final class StoryViewModel: ObservableObject {
+    @Published var storyText: [StoryTextItem] = []
+    @Published var imageURL = ""
+    
+    func upLoadImg() {
+        // Points to the root reference
+        let storageRef = Storage.storage().reference()
+
+        // Points to "images"
+        let imagesRef = storageRef.child("images")
+
+        // Points to "images/space.jpg"
+        // Note that you can use variables to create child values
+        let fileName = "space.jpg"
+        let spaceRef = imagesRef.child(fileName)
+
+        // File path is "images/space.jpg"
+        let path = spaceRef.fullPath
+
+        // File name is "space.jpg"
+        let name = spaceRef.name
+
+        // Points to "images"
+        let images = spaceRef.parent()
+    }
+    
+    func uploadImage(image: UIImage, completion: @escaping (_ url: String?) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+            print("Error: Could not convert image to data.")
+            completion(nil)
+            return
+        }
+
+        // Create a reference to Firebase Storage
+        let storageRef = Storage.storage().reference()
+        let imageName = UUID().uuidString // Unique name for the image
+        let imageRef = storageRef.child("images/\(imageName).jpg")
+
+        // Upload the image data
+        let uploadTask = imageRef.putData(imageData, metadata: nil) { metadata, error in
+            if let error = error {
+                print("Error uploading image: \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+
+            // Fetch the download URL
+            imageRef.downloadURL { url, error in
+                if let error = error {
+                    print("Error fetching download URL: \(error.localizedDescription)")
+                    completion(nil)
+                    return
+                }
+
+                guard let downloadURL = url else {
+                    print("Error: Download URL is nil.")
+                    completion(nil)
+                    return
+                }
+
+                completion(downloadURL.absoluteString)
+            }
+        }
+
+        // Handle upload progress and completion (optional)
+        uploadTask.observe(.progress) { snapshot in
+            // Observe upload progress
+            let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+            print("Upload is \(percentComplete)% complete")
+        }
+
+        uploadTask.observe(.success) { snapshot in
+            // Upload completed successfully
+            print("Upload completed successfully")
+        }
+
+        uploadTask.observe(.failure) { snapshot in
+            if let error = snapshot.error {
+                print("Upload failed with error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+}
 
 final class ContentViewModel: ObservableObject {
     @Published var characters: [Charater] = []
@@ -47,6 +148,7 @@ final class ContentViewModel: ObservableObject {
 struct ContentView: View {
     
     @StateObject private var viewModel = ContentViewModel()
+    @StateObject private var storyViewModel = StoryViewModel()
     
     @State private var characters = ""
     @State private var char = ""
@@ -109,12 +211,7 @@ struct ContentView: View {
             ZStack {
                 Color(hex: "#FFFFF1").ignoresSafeArea()
                 VStack {
-//                        //MARK: Loading Animation
-//                        if isLoading {
-//                            DotLottieAnimation(fileName: "StoryLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
-//                                .frame(width: 340 * 2, height: 150 * 2)
-//                        }
-                    
+
                         //MARK: Story Loaded
                     if loaded || isLoading {
                             ZStack {
@@ -122,24 +219,6 @@ struct ContentView: View {
                                     .fill(Color.white.opacity(0.5))
                                 VStack {
                                     ScrollView {
-//                                        if let image = generatedImage {
-//                                            Image(uiImage: image)
-//                                                .resizable()
-//                                                .scaledToFill()
-//                                                .padding([.bottom, .top])
-//                                             
-//                                                .cornerRadius(22)
-//                                                .shadow(radius: 10)
-//                                        }
-//                                        
-//                                        if isImageLoading {
-//                                            DotLottieAnimation(fileName: "imageLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
-//                                                .frame(width: 340, height: 150)
-//                                        }
-//                                        
-//                                        Text(story)
-//                                            .padding()
-//                                            .foregroundColor(.black)
                                         
                                         ForEach(0..<storyChunk.count, id: \.self) { index in
                                             VStack {
@@ -723,8 +802,13 @@ Create an image that depicts a story with the following prompt: \(promptForImage
             switch result {
             case .success(let image):
                 self.generatedImage = image
-                
+                var iURL = ""
                 self.storyChunk.append((chunkOfText, image))
+                self.storyViewModel.uploadImage(image: image) { url in
+                    iURL = url ?? "URL error"
+                    print(iURL)
+                }
+                
                 
                 self.loaded = true
                 self.isLoadingChunk = false
