@@ -78,6 +78,11 @@ final class ParentViewModel: ObservableObject {
         let _ = try await UserManager.shared.addChild2(userId: authDataResult.uid, name: name, age: age)
     }
     
+    func reviewStory(status: String, id: String) throws {
+      
+        Firestore.firestore().collection("Story").document(id).updateData(["status": status])
+    }
+    
 }
 
 struct ParentView: View {
@@ -181,7 +186,9 @@ struct ChildView: View {
             
             List {
                 ForEach(viewModel.story, id: \.self) { story in
-                    Text(story.title)
+                    NavigationLink(destination: StoryView(story: story)) {
+                        Text(story.title)
+                  }
                 }
             }
         }
@@ -193,6 +200,74 @@ struct ChildView: View {
             }
         }
     }
+}
+
+struct StoryView: View {
+    var story: Story
+    @StateObject var viewModel = ParentViewModel()
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                ForEach(0..<story.storyText.count, id: \.self) { index in
+                    VStack {
+                        // Load image from URL using AsyncImage
+                        AsyncImage(url: URL(string: story.storyText[index].image)) { phase in
+                            switch phase {
+                            case .empty:
+                                // Placeholder while loading
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                            case .success(let image):
+                                // Successfully loaded image
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .padding()
+                            case .failure(_):
+                                // Failure to load image
+                                Image(systemName: "photo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .padding()
+                            @unknown default:
+                                // Fallback for unknown cases
+                                EmptyView()
+                            }
+                        } // Adjust frame size as needed
+                        
+                        Text(story.storyText[index].text)
+                            .padding()
+                        
+                        
+                    }
+                    .padding()
+                }
+            }
+            .padding()
+            .navigationTitle(story.title)
+            .toolbar {
+                            ToolbarItemGroup(placement: .bottomBar) {
+                                Button("Approve") {
+                                    do {
+                                        try viewModel.reviewStory(status: "Approve", id: story.id)
+                                    } catch {
+                                        print(error.localizedDescription)
+                                    }
+                                }
+                                Spacer()
+                                Button("Reject") {
+                                    do {
+                                        try viewModel.reviewStory(status: "Reject", id: story.id)
+                                    } catch {
+                                        print(error.localizedDescription)
+                                    }
+                                }
+                            }
+                        }
+            
+        }
+    }
+    
 }
 struct AddChildForm: View {
     @Environment(\.dismiss) var dismiss

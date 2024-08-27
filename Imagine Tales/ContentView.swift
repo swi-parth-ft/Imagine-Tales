@@ -24,6 +24,7 @@ struct Story: Codable, Hashable {
     var childId: String
     var storyText: [StoryTextItem]
     var title: String
+    var status: String
 }
 
 final class StoryViewModel: ObservableObject {
@@ -107,6 +108,7 @@ final class StoryViewModel: ObservableObject {
                         ]
                     },
             "title" : title,
+            "status" : "pending",
             "dateCreated" : Timestamp()
         ]
         

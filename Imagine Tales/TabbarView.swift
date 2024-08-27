@@ -58,7 +58,7 @@ struct TabbarView: View {
         ZStack(alignment: .bottom) {
             Color(hex: "#FFFFF1").ignoresSafeArea()
             TabView(selection: $selectedTab) {
-                Text("Home View")
+                HomeView()
                     .tag(0)
                     .padding()
                 
