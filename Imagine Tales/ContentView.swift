@@ -12,13 +12,14 @@ import FirebaseFirestore
 import FirebaseStorage
 
 // Struct for each story text item
-struct StoryTextItem: Codable {
+struct StoryTextItem: Codable, Hashable {
     var image: String
     var text: String
 }
 
 // Struct for the story document
-struct Story: Codable {
+struct Story: Codable, Hashable {
+    let id: String
     var parentId: String
     var childId: String
     var storyText: [StoryTextItem]
@@ -90,22 +91,22 @@ final class StoryViewModel: ObservableObject {
         
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
         
-        let story = Story(parentId: authDataResult.uid, childId: childId, storyText: stroTextItem, title: title)
+        
         
         let document = Firestore.firestore().collection("Story").document()
         let documentId = document.documentID
         
         let data: [String:Any] = [
             "id" : documentId,
-            "parentId" : story.parentId,
+            "parentId" : authDataResult.uid,
             "childId" : childId,
-            "storyText": story.storyText.map { item in
+            "storyText": stroTextItem.map { item in
                         [
                             "image": item.image,
                             "text": item.text
                         ]
                     },
-            "title" : story.title,
+            "title" : title,
             "dateCreated" : Timestamp()
         ]
         

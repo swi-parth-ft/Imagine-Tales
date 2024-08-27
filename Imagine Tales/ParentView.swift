@@ -11,6 +11,7 @@ import FirebaseFirestore
 final class ParentViewModel: ObservableObject {
     
     @Published var children: [UserChildren] = []
+    @Published var story: [Story] = []
     @Published var name: String = ""
     @Published var age: String = ""
     @Published var parent: UserModel?
@@ -34,6 +35,22 @@ final class ParentViewModel: ObservableObject {
                 try? document.data(as: UserChildren.self)
             } ?? []
             print(self.children)
+            
+        }
+    }
+    
+    func getStory(childId: String) throws {
+       
+        Firestore.firestore().collection("Story").whereField("childId", isEqualTo: childId).getDocuments() { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+                return
+            }
+            
+            self.story = querySnapshot?.documents.compactMap { document in
+                try? document.data(as: Story.self)
+            } ?? []
+            print(self.story)
             
         }
     }
@@ -152,6 +169,7 @@ struct ChildView: View {
     @Binding var isiPhone: Bool
     
     var child: UserChildren
+    @StateObject var viewModel = ParentViewModel()
     var body: some View {
         VStack {
             if !isiPhone {
@@ -159,6 +177,19 @@ struct ChildView: View {
                     childId = child.id
                     ipf = false
                 }
+            }
+            
+            List {
+                ForEach(viewModel.story, id: \.self) { story in
+                    Text(story.title)
+                }
+            }
+        }
+        .onAppear {
+            do {
+                try viewModel.getStory(childId: child.id)
+            } catch {
+                print(error.localizedDescription)
             }
         }
     }
