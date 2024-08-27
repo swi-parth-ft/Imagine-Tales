@@ -146,6 +146,7 @@ struct SignInWithEmailView: View {
     
     @State private var otp: [String] = Array(repeating: "", count: 4)
     @FocusState private var focusedIndex: Int?
+    @State private var isShowingButtons = true
     
     var body: some View {
         NavigationStack {
@@ -244,10 +245,17 @@ struct SignInWithEmailView: View {
                                 VStack(alignment: .leading) {
                                     if !isSettingPin {
                                         if signedInWithGoogle {
-                                            Text(isAddingChild ? "Add Child" : "Add Children")
-                                                .font(.custom("ComicNeue-Bold", size: isCompact ?  25 : 32))
-                                            Text(isAddingChild ? "Enter Personal Details" : "Add or select child to continue.")
-                                                .font(.custom("ComicNeue-Regular", size: isCompact ?  16 : 24))
+                                            if isNewGoogleUser && !isSignedUp {
+                                                Text("Personal Details")
+                                                    .font(.custom("ComicNeue-Bold", size: isCompact ?  25 : 32))
+                                                Text("Enter your personal details for better experience.")
+                                                    .font(.custom("ComicNeue-Regular", size: isCompact ?  16 : 24))
+                                            } else {
+                                                Text(isAddingChild ? "Add Child" : "Add Children")
+                                                    .font(.custom("ComicNeue-Bold", size: isCompact ?  25 : 32))
+                                                Text(isAddingChild ? "Enter Personal Details" : "Add or select child to continue.")
+                                                    .font(.custom("ComicNeue-Regular", size: isCompact ?  16 : 24))
+                                            }
                                         } else {
                                             if isParent {
                                                 Text(settingPassword ? "Create Password" : (isSignedUp ? "Add Children" : (isAddingChild ? "Add Child" : (newUser ? "Personal Details" : "Sign In"))))
@@ -325,7 +333,7 @@ struct SignInWithEmailView: View {
                                             }
                                             
                                             //MARK: Add Children View
-                                            if !isiPhone {
+                                          //  if !isiPhone {
                                                 if isSignedUp {
                                                     if isSettingPin {
                                                         VStack {
@@ -441,7 +449,7 @@ struct SignInWithEmailView: View {
                                                     
                                                     
                                                 }
-                                            }
+                                         //   }
                                             
                                             
                                             //MARK: New user signed in with google View
@@ -475,6 +483,7 @@ struct SignInWithEmailView: View {
                                                                 isSignedUp = true
                                                                 settingPassword = false
                                                                 isSettingPin = true
+                                                                isShowingButtons = true
                                                                 try viewModel.getChildren()
                                                             } catch {
                                                                 print(error.localizedDescription)
@@ -499,73 +508,75 @@ struct SignInWithEmailView: View {
                                         
                                    
                                         //MARK: Buttons
-                                        if !isSettingPin {
-                                            VStack {
-                                                
-                                                //MARK: Main Button
-                                                Button(settingPassword ? "Sign up" : (isSignedUp ? "Continue" : "Next")) {
+                                        
+                                        if !isSettingPin && isShowingButtons {
+                                                VStack {
                                                     
-                                                    if settingPassword {
-                                                        if viewModel.password == confirmPassword {
-                                                            
-                                                            Task {
-                                                                do {
-                                                                    if let _ = try await viewModel.createAccount() {
-                                                                        
-                                                                        isSettingPin = true
-                                                                        isSignedUp = true
-                                                                        settingPassword = false
-                                                                        
-                                                                        
-                                                                        try await viewModel.createUserProfile(isParent: isParent)
-                                                                        try viewModel.getChildren()
+                                                    //MARK: Main Button
+                                                    Button(settingPassword ? "Sign up" : (isSignedUp ? "Continue" : "Next")) {
+                                                        
+                                                        if settingPassword {
+                                                            if viewModel.password == confirmPassword {
+                                                                
+                                                                Task {
+                                                                    do {
+                                                                        if let _ = try await viewModel.createAccount() {
+                                                                            
+                                                                            isSettingPin = true
+                                                                            isSignedUp = true
+                                                                            settingPassword = false
+                                                                            
+                                                                            
+                                                                            try await viewModel.createUserProfile(isParent: isParent)
+                                                                            try viewModel.getChildren()
+                                                                        }
+                                                                        return
+                                                                    } catch {
+                                                                        print(error.localizedDescription)
                                                                     }
-                                                                    return
-                                                                } catch {
-                                                                    print(error.localizedDescription)
                                                                 }
+                                                            } else {
+                                                                err = "passwords don't match, Try again."
+                                                            }
+                                                        } else if isSignedUp {
+                                                            withAnimation {
+                                                                settingPassword = false
+                                                                isSignedUp = false
+                                                                isAddingChild = true
                                                             }
                                                         } else {
-                                                            err = "passwords don't match, Try again."
-                                                        }
-                                                    } else if isSignedUp {
-                                                        withAnimation {
-                                                            settingPassword = false
-                                                            isSignedUp = false
-                                                            isAddingChild = true
-                                                        }
-                                                    } else {
-                                                        withAnimation {
-                                                            settingPassword = true
-                                                        }
-                                                    }
-                                                }
-                                                .padding()
-                                                .frame(width:  UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
-                                                
-                                                .background(Color(hex: "#FF6F61"))
-                                                .foregroundStyle(.white)
-                                                .cornerRadius(isCompact ? 6 : 12)
-                                                
-                                                
-                                                //MARK: Add Later Button
-                                                if isSignedUp {
-                                                    Button("Add Later") {
-                                                        withAnimation {
-                                                            ipf = true
-                                                            showSignInView = false
-                                                            
+                                                            withAnimation {
+                                                                settingPassword = true
+                                                            }
                                                         }
                                                     }
                                                     .padding()
                                                     .frame(width:  UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
-                                                    .background(Color(hex: "#DFFFDF"))
-                                                    .foregroundStyle(.black)
+                                                    
+                                                    .background(Color(hex: "#FF6F61"))
+                                                    .foregroundStyle(.white)
                                                     .cornerRadius(isCompact ? 6 : 12)
+                                                    
+                                                    
+                                                    //MARK: Add Later Button
+                                                    if isSignedUp {
+                                                        Button("Add Later") {
+                                                            withAnimation {
+                                                                ipf = true
+                                                                showSignInView = false
+                                                                
+                                                            }
+                                                        }
+                                                        .padding()
+                                                        .frame(width:  UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
+                                                        .background(Color(hex: "#DFFFDF"))
+                                                        .foregroundStyle(.black)
+                                                        .cornerRadius(isCompact ? 6 : 12)
+                                                    }
                                                 }
+                                                .padding(.bottom, isSignedUp ? 40 : 0)
                                             }
-                                            .padding(.bottom, isSignedUp ? 40 : 0)
-                                        }
+                                        
                                     }
                                     //MARK: Sign In View
                                     else {
@@ -680,7 +691,7 @@ struct SignInWithEmailView: View {
                                 }
                                 
                                 //MARK: toggle newUser
-                                if !isSignedUp && !isAddingChild {
+                                if !isSignedUp && !isAddingChild && isShowingButtons {
                                     Button(newUser ? "Already have an account? Sign in" : "Create an Account.") {
                                         withAnimation {
                                             newUser.toggle()
@@ -728,15 +739,22 @@ struct SignInWithEmailView: View {
                         showSignInView = false
                     }
                     isSignedUp = true
+                    settingPassword = false
                 }
-                if !isParent {
+                
+                if isNewGoogleUser && signedInWithGoogle {
+                    isSignedUp = false
+                    isShowingButtons = false
+                }
+                
+                if !isParent  && !signedInWithGoogle {
                     newUser = false
                 }
                 
-                if !isNewGoogleUser && signedInWithGoogle {
-                    isSignedUp = true
-                    settingPassword = false
-                }
+//                if !isNewGoogleUser && signedInWithGoogle {
+//                    isSignedUp = true
+//                    
+//                }
                 
                 if horizontalSizeClass == .compact {
                     isCompact = true
