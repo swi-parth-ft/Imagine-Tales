@@ -13,6 +13,7 @@ final class ParentViewModel: ObservableObject {
     @Published var children: [UserChildren] = []
     @Published var name: String = ""
     @Published var age: String = ""
+    @Published var parent: UserModel?
     
     func logOut() throws {
         try AuthenticationManager.shared.SignOut()
@@ -37,6 +38,22 @@ final class ParentViewModel: ObservableObject {
         }
     }
     
+    func fetchParent() throws {
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        let docRef = Firestore.firestore().collection("users").document(authDataResult.uid)
+        
+        
+        docRef.getDocument(as: UserModel.self) { result in
+                switch result {
+                case .success(let document):
+                    self.parent = document
+                    
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        
+        }
     func addChild() async throws {
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
         
@@ -71,11 +88,7 @@ struct ParentView: View {
                             isAddingNew = true
                         }
                         
-                        if !isiPhone {
-                            Button("Go back") {
-                                ipf = false
-                            }
-                        }
+                    
                         
                         
                     }
@@ -83,6 +96,7 @@ struct ParentView: View {
                         Task {
                             do {
                                 try viewModel.getChildren()
+                                try viewModel.fetchParent()
                             } catch {
                                 print(error.localizedDescription)
                             }
@@ -92,6 +106,7 @@ struct ParentView: View {
                         Task {
                             do {
                                 try viewModel.getChildren()
+                                try viewModel.fetchParent()
                             } catch {
                                 print(error.localizedDescription)
                             }
@@ -114,7 +129,7 @@ struct ParentView: View {
                 }
                 
             }
-            .navigationTitle("Children")
+            .navigationTitle("Hey, \(viewModel.parent?.name ?? "Children")")
             .toolbar {
                 Button("Profile", systemImage: "person.fill") {
                     isShowingSetting = true

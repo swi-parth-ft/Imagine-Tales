@@ -215,7 +215,7 @@ struct PinView: View {
             Color(hex: "#8AC640").ignoresSafeArea()
         VStack {
             
-            Text(reAuthModel.reAuthenticated ? "Enter New PIN" : "Enter Parent PIN")
+            Text(reAuthModel.reAuthenticated ? "Enter New PIN" : (isResetting ? "Sign in to reset PIN" : "Enter Parent PIN"))
                 .font(.title)
                 .padding(.bottom, 2)
             if !isResetting || reAuthModel.reAuthenticated {
@@ -278,12 +278,27 @@ struct PinView: View {
             Text(error).foregroundStyle(.red)
             if isResetting && !reAuthModel.reAuthenticated {
                 if reAuthModel.signedInWithGoogle {
-                    Button("reAuth") {
+                    Button {
                         Task {
                             do {
                                 try await reAuthModel.reAuthWithGoogle()
                             } catch {
                                 print(error.localizedDescription)
+                            }
+                        }
+                    } label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 22)
+                                .fill(.white)
+                                .frame(width: 250, height: 55)
+                            HStack {
+                                Image("googleIcon")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 22, height: 22)
+                                
+                                Text("Continue with Google")
+                                    .foregroundStyle(.black)
                             }
                         }
                     }
@@ -302,7 +317,7 @@ struct PinView: View {
             }
             
             if !reAuthModel.reAuthenticated  && isPinWrong {
-                Button(isResetting ? "Authenticate" : "forgot PIN?") {
+                Button(isResetting ? (reAuthModel.signedInWithGoogle ? "" : "Authenticate") : "forgot PIN?") {
                     
                     if isResetting {
                         reAuthModel.reAuthWithEmail()
