@@ -86,11 +86,11 @@ final class StoryViewModel: ObservableObject {
         }
     }
     
-    func uploadStoryToFirestore(stroTextItem: [StoryTextItem], childId: String) async throws {
+    func uploadStoryToFirestore(stroTextItem: [StoryTextItem], childId: String, title: String) async throws {
         
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
         
-        let story = Story(parentId: authDataResult.uid, childId: childId, storyText: stroTextItem, title: "Test title")
+        let story = Story(parentId: authDataResult.uid, childId: childId, storyText: stroTextItem, title: title)
         
         let document = Firestore.firestore().collection("Story").document()
         let documentId = document.documentID
@@ -210,6 +210,8 @@ struct ContentView: View {
     @State private var isLoadingChunk = true
     @State private var storyTextItem: [StoryTextItem] = []
     @AppStorage("childId") var childId: String = "Default Value"
+    @State private var title = ""
+    @State private var isGeneratingTitle = false
     
     var body: some View {
         NavigationStack {
@@ -262,6 +264,8 @@ struct ContentView: View {
                                                     continueStory = ""
                                                     chunkOfText = ""
                                                     isLoadingChunk = false
+                                                    isGeneratingTitle = false
+                                                    title = ""
                                                 }
                                                 if !finishKey {
                                                     Button("Next") {
@@ -296,7 +300,19 @@ struct ContentView: View {
                                                     Button("Share") {
                                                         Task {
                                                             do {
-                                                                try await storyViewModel.uploadStoryToFirestore(stroTextItem: storyTextItem, childId: childId)
+                                                                try await storyViewModel.uploadStoryToFirestore(stroTextItem: storyTextItem, childId: childId, title: title)
+                                                            } catch {
+                                                                print(error.localizedDescription)
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                    Button("Generate Title") {
+                                                        isGeneratingTitle = true
+                                                        Task {
+                                                            do {
+                                                                try await generateStoryWithGemini()
+                                                                
                                                             } catch {
                                                                 print(error.localizedDescription)
                                                             }
@@ -747,7 +763,7 @@ struct ContentView: View {
                 .padding(.top, 100)
                 .padding(.bottom, 70)
             }
-            .navigationTitle("Imagine a Story")
+            .navigationTitle(isGeneratingTitle ? "\(title)" : "Imagine a Story")
             .toolbar {
                 
                 
@@ -856,20 +872,27 @@ Create an image that depicts a story with the following prompt: \(promptForImage
         let response = try await model.generateContent(prompt)
         if let text = response.text {
             DispatchQueue.main.async {
-                self.story = text
-                self.chunkOfText = text
-                self.continueStory.append(text)
-                
+                if isGeneratingTitle {
+                    self.title = text
+                } else {
+                    self.story = text
+                    self.chunkOfText = text
+                    self.continueStory.append(text)
+                }
 //                withAnimation {
 //                    self.isLoading = false
 //                    
 //                }
             }
             Task {
-                do {
-                    try await generateImagePrompt()
-                } catch {
-                    print(error.localizedDescription)
+                if !isGeneratingTitle {
+                    
+                    
+                    do {
+                        try await generateImagePrompt()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                 }
             }
         }
@@ -898,8 +921,10 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                 if nextKey {
                     prompt = "Write a next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
                     
-                } else if finishKey {
+                } else if finishKey && !isGeneratingTitle {
                     prompt = "finish this story: \(continueStory) details: of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
+                } else if isGeneratingTitle {
+                    prompt = "Give me a story title for this story \(continueStory) in 3 words only."
                 } else {
                     prompt = "Write a first begining paragraph/pilot of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
                 }
