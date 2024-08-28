@@ -25,6 +25,7 @@ struct Story: Codable, Hashable {
     var storyText: [StoryTextItem]
     var title: String
     var status: String
+    var genre: String
 }
 
 final class StoryViewModel: ObservableObject {
@@ -88,7 +89,7 @@ final class StoryViewModel: ObservableObject {
         }
     }
     
-    func uploadStoryToFirestore(stroTextItem: [StoryTextItem], childId: String, title: String) async throws {
+    func uploadStoryToFirestore(stroTextItem: [StoryTextItem], childId: String, title: String, genre: String) async throws {
         
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
         
@@ -109,6 +110,7 @@ final class StoryViewModel: ObservableObject {
                     },
             "title" : title,
             "status" : "pending",
+            "genre" : genre,
             "dateCreated" : Timestamp()
         ]
         
@@ -303,7 +305,7 @@ struct ContentView: View {
                                                     Button("Share") {
                                                         Task {
                                                             do {
-                                                                try await storyViewModel.uploadStoryToFirestore(stroTextItem: storyTextItem, childId: childId, title: title)
+                                                                try await storyViewModel.uploadStoryToFirestore(stroTextItem: storyTextItem, childId: childId, title: title, genre: genre)
                                                             } catch {
                                                                 print(error.localizedDescription)
                                                             }
