@@ -40,7 +40,7 @@ final class ReAuthentication: ObservableObject {
         let tokens = try await helper.signIn()
         let user = Auth.auth().currentUser
         let authDataResult = try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
-         
+        
         
         let credential = GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
         
@@ -64,7 +64,7 @@ final class ReAuthentication: ObservableObject {
             let password = password    // Obtain these from the user input
             
             let credential = EmailAuthProvider.credential(withEmail: email, password: password)
-
+            
             user.reauthenticate(with: credential) { authResult, error in
                 if let error = error {
                     // An error occurred while trying to reauthenticate
@@ -102,16 +102,16 @@ final class ProfileViewModel: ObservableObject {
         
         
         docRef.getDocument(as: UserChildren.self) { result in
-                switch result {
-                case .success(let document):
-                    self.child = document
-                    
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
+            switch result {
+            case .success(let document):
+                self.child = document
+                
+            case .failure(let error):
+                print(error.localizedDescription)
             }
-        
         }
+        
+    }
     func getPin() throws {
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
         Firestore.firestore().collection("users").document(authDataResult.uid).getDocument { doc, error in
@@ -121,7 +121,7 @@ final class ProfileViewModel: ObservableObject {
             }
         }
         
-       // Firestore.firestore().collection("users").document(userId).updateData(["pin": pin])
+        // Firestore.firestore().collection("users").document(userId).updateData(["pin": pin])
     }
     
     
@@ -149,13 +149,27 @@ struct ProfileView: View {
                     List {
                         ForEach(parentViewModel.story, id: \.self) { story in
                             NavigationLink(destination: StoryView(story: story)) {
-                                Text(story.title)
-                          }
+                                ZStack {
+                                    
+                                    HStack {
+                                        VStack {
+                                            Spacer()
+                                            Text("\(story.title)")
+                                        }
+                                        Spacer()
+                                        Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
+                                            .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
+                                    }
+                                    
+                                }
+                                
+                            }
                         }
                     }
+                    .scrollContentBackground(.hidden)
                     .onAppear {
                         do {
-                            try parentViewModel.getStory(childId: childId)
+                            try parentViewModel.getStory(childId: "4nDnQ7V097d9jZCUGHah")
                         } catch {
                             print(error.localizedDescription)
                         }
@@ -164,43 +178,27 @@ struct ProfileView: View {
                     
                     
                     
-                    
-                        Button("Log out") {
-                            Task {
-                                do {
-                                    try viewModel.logOut()
-                                    childId = ""
-                                    showSignInView = true
-                                } catch {
-                                    print(error.localizedDescription)
-                                }
-                                
-                            }
-                        }
-                        .padding()
-                        .frame(width:  UIScreen.main.bounds.width * 0.7)
-                        .background(Color(hex: "#FF6F61"))
-                        .foregroundStyle(.white)
-                        .cornerRadius(12)
-                    
-                    Button("Parent Dashboard") {
-                        
-                        isAddingPin = true
-                    }
+                  
                     
                     
                     
                 }
                 .padding([.trailing, .leading])
                 .padding(.top, 100)
-                .onChange(of: reload) { 
+                .onChange(of: reload) {
                     try? viewModel.loadUser()
                     viewModel.fetchChild(ChildId: childId)
                     try? viewModel.getPin()
+                    
+                    do {
+                        try parentViewModel.getStory(childId: "4nDnQ7V097d9jZCUGHah")
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                 }
                 .sheet(isPresented: $isAddingPin) {
                     PinView()
-               
+                    
                 }
                 
                 
@@ -211,11 +209,34 @@ struct ProfileView: View {
                 viewModel.fetchChild(ChildId: childId)
                 try? viewModel.getPin()
             }
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button("Log out", systemImage: "rectangle.portrait.and.arrow.right") {
+                        Task {
+                            do {
+                                try viewModel.logOut()
+                                childId = ""
+                                showSignInView = true
+                            } catch {
+                                print(error.localizedDescription)
+                            }
+                            
+                        }
+                    }
+                }
+                
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    Button("Parent Dashboard") {
+                        
+                        isAddingPin = true
+                    }
+                }
+            }
         }
         
-     
         
-            
+        
+        
         
     }
 }
@@ -229,7 +250,7 @@ struct PinView: View {
     @StateObject private var reAuthModel = ReAuthentication()
     
     @State private var otp: [String] = Array(repeating: "", count: 4)
-       @FocusState private var focusedIndex: Int?
+    @FocusState private var focusedIndex: Int?
     @State private var error = ""
     @State private var isResetting = false
     @State private var isPinWrong = false
@@ -237,147 +258,147 @@ struct PinView: View {
     var body: some View {
         ZStack {
             Color(hex: "#8AC640").ignoresSafeArea()
-        VStack {
-            
-            Text(reAuthModel.reAuthenticated ? "Enter New PIN" : (isResetting ? "Sign in to reset PIN" : "Enter Parent PIN"))
-                .font(.title)
-                .padding(.bottom, 2)
-            
-            if isResetting && reAuthModel.signedInWithGoogle {
-                Text("\(reAuthModel.email)")
-            }
-            
-            if !isResetting || reAuthModel.reAuthenticated {
-                HStack(spacing: 10) {
-                    ForEach(0..<4, id: \.self) { index in
-                        TextField("", text: $otp[index])
-                            .frame(width: 50, height: 50)
-                            .background(Color(hex: "#D0FFD0"))
-                            .cornerRadius(10)
-                            .shadow(radius: 2)
-                            .multilineTextAlignment(.center)
-                            .font(.title)
-                            .keyboardType(.numberPad)
-                            .focused($focusedIndex, equals: index)
-                            .onChange(of: otp[index]) { newValue in
-                                if newValue.count > 1 {
-                                    otp[index] = String(newValue.prefix(1))
-                                }
-                                if !newValue.isEmpty && index < 3 {
-                                    focusedIndex = index + 1
-                                }
-                                
-                                if newValue.isEmpty && index > 0 {
-                                    focusedIndex = index - 1
-                                }
-                            }
-                    }
+            VStack {
+                
+                Text(reAuthModel.reAuthenticated ? "Enter New PIN" : (isResetting ? "Sign in to reset PIN" : "Enter Parent PIN"))
+                    .font(.title)
+                    .padding(.bottom, 2)
+                
+                if isResetting && reAuthModel.signedInWithGoogle {
+                    Text("\(reAuthModel.email)")
                 }
-                .padding()
                 
-                
-                
-                Button(reAuthModel.reAuthenticated ? "Reset PIN" : "Enter to the boring side") {
-                    print(viewModel.pin)
-                    if reAuthModel.reAuthenticated {
-                        do {
-                            try reAuthModel.setPin(pin: otp.joined())
-                            isResetting = false
-                            reAuthModel.reAuthenticated = false
-                            error = ""
-                            isPinWrong = false
-                            otp = Array(repeating: "", count: 4)
-                            try? viewModel.getPin()
-                            
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                    } else {
-                        if otp.joined() == viewModel.pin {
-                            ipf = true
-                        } else {
-                            isPinWrong = true
-                            error = "Incorrect PIN, Try again!"
-                            otp = Array(repeating: "", count: 4)
+                if !isResetting || reAuthModel.reAuthenticated {
+                    HStack(spacing: 10) {
+                        ForEach(0..<4, id: \.self) { index in
+                            TextField("", text: $otp[index])
+                                .frame(width: 50, height: 50)
+                                .background(Color(hex: "#D0FFD0"))
+                                .cornerRadius(10)
+                                .shadow(radius: 2)
+                                .multilineTextAlignment(.center)
+                                .font(.title)
+                                .keyboardType(.numberPad)
+                                .focused($focusedIndex, equals: index)
+                                .onChange(of: otp[index]) { newValue in
+                                    if newValue.count > 1 {
+                                        otp[index] = String(newValue.prefix(1))
+                                    }
+                                    if !newValue.isEmpty && index < 3 {
+                                        focusedIndex = index + 1
+                                    }
+                                    
+                                    if newValue.isEmpty && index > 0 {
+                                        focusedIndex = index - 1
+                                    }
+                                }
                         }
                     }
-                }
-            }
-            
-            Text(error).foregroundStyle(.red)
-            if isResetting && !reAuthModel.reAuthenticated {
-                if reAuthModel.signedInWithGoogle {
-                    Button {
-                        Task {
+                    .padding()
+                    
+                    
+                    
+                    Button(reAuthModel.reAuthenticated ? "Reset PIN" : "Enter to the boring side") {
+                        print(viewModel.pin)
+                        if reAuthModel.reAuthenticated {
                             do {
-                                try await reAuthModel.reAuthWithGoogle()
+                                try reAuthModel.setPin(pin: otp.joined())
+                                isResetting = false
+                                reAuthModel.reAuthenticated = false
+                                error = ""
+                                isPinWrong = false
+                                otp = Array(repeating: "", count: 4)
+                                try? viewModel.getPin()
+                                
                             } catch {
                                 print(error.localizedDescription)
                             }
-                        }
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 22)
-                                .fill(.white)
-                                .frame(width: 250, height: 55)
-                            HStack {
-                                Image("googleIcon")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 22, height: 22)
-                                
-                                Text("Continue with Google")
-                                    .foregroundStyle(.black)
+                        } else {
+                            if otp.joined() == viewModel.pin {
+                                ipf = true
+                            } else {
+                                isPinWrong = true
+                                error = "Incorrect PIN, Try again!"
+                                otp = Array(repeating: "", count: 4)
                             }
                         }
                     }
-                } else {
-                    TextField("email", text: $reAuthModel.email)
-                        .padding()
-                        .frame(width:  UIScreen.main.bounds.width * 0.5)
-                        .background(Color(hex: "#D0FFD0"))
-                        .cornerRadius(12)
-                    SecureField("Password", text: $reAuthModel.password)
-                        .padding()
-                        .frame(width:  UIScreen.main.bounds.width * 0.5)
-                        .background(Color(hex: "#D0FFD0"))
-                        .cornerRadius(12)
                 }
-            }
-            
-            if !reAuthModel.reAuthenticated  && isPinWrong {
-                Button(isResetting ? (reAuthModel.signedInWithGoogle ? "" : "Sign in") : "forgot PIN?") {
-                    
-                    if isResetting {
-                        reAuthModel.reAuthWithEmail()
+                
+                Text(error).foregroundStyle(.red)
+                if isResetting && !reAuthModel.reAuthenticated {
+                    if reAuthModel.signedInWithGoogle {
+                        Button {
+                            Task {
+                                do {
+                                    try await reAuthModel.reAuthWithGoogle()
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 22)
+                                    .fill(.white)
+                                    .frame(width: 250, height: 55)
+                                HStack {
+                                    Image("googleIcon")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 22, height: 22)
+                                    
+                                    Text("Continue with Google")
+                                        .foregroundStyle(.black)
+                                }
+                            }
+                        }
+                    } else {
+                        TextField("email", text: $reAuthModel.email)
+                            .padding()
+                            .frame(width:  UIScreen.main.bounds.width * 0.5)
+                            .background(Color(hex: "#D0FFD0"))
+                            .cornerRadius(12)
+                        SecureField("Password", text: $reAuthModel.password)
+                            .padding()
+                            .frame(width:  UIScreen.main.bounds.width * 0.5)
+                            .background(Color(hex: "#D0FFD0"))
+                            .cornerRadius(12)
                     }
-                    
-                    isResetting = true
-                    error = ""
                 }
-                .padding()
+                
+                if !reAuthModel.reAuthenticated  && isPinWrong {
+                    Button(isResetting ? (reAuthModel.signedInWithGoogle ? "" : "Sign in") : "forgot PIN?") {
+                        
+                        if isResetting {
+                            reAuthModel.reAuthWithEmail()
+                        }
+                        
+                        isResetting = true
+                        error = ""
+                    }
+                    .padding()
+                }
+                
+                
             }
-            
             
         }
         
-    }
-                    
-                
+        
         .onAppear {
             try? viewModel.getPin()
             focusedIndex = 0
             
             reAuthModel.checkIfGoogle()
-          
+            
         }
     }
-   
+    
 }
 
 #Preview {
     ProfileView(showSignInView: .constant(false), reload: .constant(false))
-
+    
 }
 
 

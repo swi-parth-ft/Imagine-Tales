@@ -934,7 +934,7 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                 } else if finishKey && !isGeneratingTitle {
                     prompt = "finish this story: \(continueStory) details: of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
                 } else if isGeneratingTitle {
-                    prompt = "Give me a story title for this story \(continueStory) in 3 words only."
+                    prompt = "Give me a story title for this story \(continueStory) in 3 words only. output should be only 3 words nothing extra"
                 } else {
                     prompt = "Write a first begining paragraph/pilot of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
                 }

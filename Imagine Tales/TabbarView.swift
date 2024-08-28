@@ -83,6 +83,7 @@ struct TabbarView: View {
                     ForEach((TabItems.allCases), id: \.self){ item in
                         Button{
                             selectedTab = item.rawValue
+                            reload.toggle()
                         } label: {
                             CustomTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
                         }
