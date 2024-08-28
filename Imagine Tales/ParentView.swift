@@ -17,6 +17,18 @@ final class ParentViewModel: ObservableObject {
     @Published var parent: UserModel?
     @Published var username: String = ""
     
+    
+    func deleteStory(storyId: String) {
+        Firestore.firestore().collection("Story").document(storyId).delete() { err in
+        if let err = err {
+          print("Error removing document: \(err)")
+        }
+        else {
+          print("Document successfully removed!")
+        }
+      }
+    }
+    
     func logOut() throws {
         try AuthenticationManager.shared.SignOut()
     }
@@ -186,11 +198,23 @@ struct ChildView: View {
             }
             
             List {
-                ForEach(viewModel.story, id: \.self) { story in
+                ForEach(viewModel.story, id: \.id) { story in
                     NavigationLink(destination: StoryView(story: story)) {
                         Text(story.title)
                   }
                 }
+                .onDelete { indexSet in
+                                if let index = indexSet.first {
+                                    let storyID = viewModel.story[index].id
+                                    viewModel.deleteStory(storyId: storyID)
+                                    
+                                    do {
+                                        try viewModel.getStory(childId: child.id)
+                                    } catch {
+                                        print(error.localizedDescription)
+                                    }
+                                }
+                            }
             }
         }
         .onAppear {
