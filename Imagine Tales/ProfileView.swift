@@ -137,6 +137,7 @@ struct ProfileView: View {
     @AppStorage("childId") var childId: String = "Default Value"
     @AppStorage("ipf") private var ipf: Bool = true
     @State private var isAddingPin = false
+    @StateObject var parentViewModel = ParentViewModel()
     
     var body: some View {
         NavigationStack {
@@ -144,6 +145,26 @@ struct ProfileView: View {
             ZStack {
                 Color(hex: "#FFFFF1").ignoresSafeArea()
                 VStack {
+                    
+                    List {
+                        ForEach(parentViewModel.story, id: \.self) { story in
+                            NavigationLink(destination: StoryView(story: story)) {
+                                Text(story.title)
+                          }
+                        }
+                    }
+                    .onAppear {
+                        do {
+                            try parentViewModel.getStory(childId: childId)
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                    
+                    
+                    
+                    
+                    
                         Button("Log out") {
                             Task {
                                 do {

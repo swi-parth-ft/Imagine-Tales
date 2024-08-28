@@ -19,6 +19,7 @@ final class SignInWithEmailViewModel: ObservableObject {
     @Published var gender = "Male"
     @Published var country = ""
     @Published var number = ""
+    @Published var username = ""
     var userId = ""
 
     
@@ -87,7 +88,7 @@ final class SignInWithEmailViewModel: ObservableObject {
     
     func addChild(age: String) async throws {
         let _ = try await UserManager.shared.addChild(userId: userId, name: name, age: age)
-        let _ = try await UserManager.shared.addChild2(userId: userId, name: name, age: age)
+        let _ = try await UserManager.shared.addChild2(userId: userId, name: name, age: age, username: username)
     }
     
     func setPin(pin: String) throws {
@@ -635,6 +636,9 @@ struct SignInWithEmailView: View {
                                 else {
                                     VStack(alignment: .leading) {
                                         TextField("Name", text: $viewModel.name)
+                                            .customTextFieldStyle(isCompact: isCompact)
+                                        
+                                        TextField("username", text: $viewModel.username)
                                             .customTextFieldStyle(isCompact: isCompact)
                                         
                                         Text("Select age range for better content.")

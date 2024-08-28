@@ -15,6 +15,7 @@ final class ParentViewModel: ObservableObject {
     @Published var name: String = ""
     @Published var age: String = ""
     @Published var parent: UserModel?
+    @Published var username: String = ""
     
     func logOut() throws {
         try AuthenticationManager.shared.SignOut()
@@ -75,7 +76,7 @@ final class ParentViewModel: ObservableObject {
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
         
         let _ = try await UserManager.shared.addChild(userId: authDataResult.uid, name: name, age: age)
-        let _ = try await UserManager.shared.addChild2(userId: authDataResult.uid, name: name, age: age)
+        let _ = try await UserManager.shared.addChild2(userId: authDataResult.uid, name: name, age: age, username: username)
     }
     
     func reviewStory(status: String, id: String) throws {
@@ -277,6 +278,7 @@ struct AddChildForm: View {
         VStack {
             TextField("Name", text: $viewModel.name)
             TextField("Age", text: $viewModel.age)
+            TextField("username", text: $viewModel.username)
             Button("Add Child") {
                 Task {
                     do {

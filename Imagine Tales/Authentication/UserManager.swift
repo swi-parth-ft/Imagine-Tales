@@ -149,7 +149,7 @@ final class UserManager {
         try await document.setData(data, merge: true)
     }
     
-    func addChild2(userId: String, name: String, age: String) async throws {
+    func addChild2(userId: String, name: String, age: String, username: String) async throws {
         let document = childDocument()
         let documentId = document.documentID
         
@@ -158,6 +158,7 @@ final class UserManager {
             "parentId" : userId,
             "name" : name,
             "age" : age,
+            "username" : username,
             "dateCreated" : Timestamp()
         ]
         
@@ -213,6 +214,7 @@ struct UserChildren: Codable, Identifiable {
     let name: String
     let age: String
     let dateCreated: Date
+    let username: String
 }
 
 extension Query {

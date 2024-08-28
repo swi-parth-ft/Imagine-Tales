@@ -8,9 +8,27 @@
 import SwiftUI
 import FirebaseFirestore
 
+// Struct for each story text item
+struct StoryTextItem: Codable, Hashable {
+    var image: String
+    var text: String
+}
+
+// Struct for the story document
+struct Story: Codable, Hashable {
+    let id: String
+    var parentId: String
+    var childId: String
+    var storyText: [StoryTextItem]
+    var title: String
+    var status: String
+    var genre: String
+    var childUsername: String
+}
+
 final class HomeViewModel: ObservableObject {
     @Published var stories: [Story] = []
-    @Published var genre: String = ""
+    @Published var genre: String = "Adventure"
     
     func getStories() throws {
        
@@ -54,12 +72,10 @@ struct HomeView: View {
         "Supernatural",
         "Western"
     ]
-    
+    @AppStorage("childId") var childId: String = "Default Value"
     
     var body: some View {
         VStack {
-            
-            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
                     ForEach(genres, id: \.self) { category in
@@ -88,50 +104,141 @@ struct HomeView: View {
                 .padding(.horizontal)
             }
             .padding()
-            ScrollView {
-                LazyVStack {
-                    ForEach(viewModel.stories, id: \.id) { story in
-                        VStack {
-                            Text(story.title)
-                            AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
-                                switch phase {
-                                case .empty:
-                                    // Placeholder while loading
-                                    ProgressView()
-                                        .progressViewStyle(CircularProgressViewStyle())
-                                case .success(let image):
-                                    // Successfully loaded image
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .padding()
-                                case .failure(_):
-                                    // Failure to load image
-                                    Image(systemName: "photo")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .padding()
-                                @unknown default:
-                                    // Fallback for unknown cases
-                                    EmptyView()
-                                }
-                            }
-                            .frame(width: 400, height: 200)
-                        }
-                        .padding(.vertical)
-                    }
-                }
-                .onAppear {
-                    do {
-                        try viewModel.getStories()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
+            StoryListView(stories: viewModel.stories, childId: childId)
+            
+            .onAppear {
+                do {
+                    try viewModel.getStories()
+                } catch {
+                    print(error.localizedDescription)
                 }
             }
-            
-        
         }
+    }
+}
+
+struct StoryListView: View {
+    var stories: [Story]
+    var childId: String
+    var body: some View {
+        ScrollView {
+            LazyVStack {
+                ForEach(stories, id: \.id) { story in
+                    StoryRowView(story: story, childId: childId)
+                }
+            }
+        }
+        .padding(.bottom, 50)
+    }
+}
+
+import SwiftUI
+
+struct StoryRowView: View {
+    var story: Story
+    var childId: String
+    var body: some View {
+        VStack(alignment: .center) {
+            VStack(spacing: -20) {
+                // Title
+                HStack(alignment: .top) {
+                    
+                    Text(story.title)
+                        .font(.system(size: 24))
+                    // Adjust font weight if needed
+                        .padding(.leading, 16) // Add padding to align the text properly
+                    
+                    Spacer() // Spacer to push icons to the right
+                    
+                    
+                    HStack(spacing: 20) {
+                        Image(systemName: "book")
+                            .font(.system(size: 20))
+                        Image(systemName: "bookmark")
+                            .font(.system(size: 20))
+                    }
+                }
+                .padding(.horizontal)
+                
+                // Image with overlay
+                ZStack(alignment: .topTrailing) {
+                    AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle())
+                                .frame(height: 500)
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(height: 500)
+                                .clipped()
+                                .cornerRadius(30)
+                                .overlay(
+                                    // User profile overlay
+                                    HStack {
+                                        Image(systemName: "person.crop.circle")
+                                        Text(story.childUsername)
+                                            .font(.subheadline)
+                                        Spacer()
+                                        Image(systemName: "person.crop.circle.badge.exclamationmark")
+                                    }
+                                        .padding(5)
+                                        .frame(width: 200)
+                                        .background(Color.black.opacity(0.7))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(15)
+                                        .padding()
+                                    , alignment: .topTrailing
+                                )
+                                .padding()
+                        case .failure(_):
+                            Image(systemName: "photo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 500)
+                                .cornerRadius(10)
+                                .padding()
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                    .frame(width: UIScreen.main.bounds.width, height: 500)
+                    .cornerRadius(10)
+                }
+                
+            }
+            HStack {
+                // Story description
+                Text("The Minions hatch a clever plan to steal the world’s biggest banana, but things go hilariously wrong when they encounter a banana-loving monkey!")
+                    .font(.body)
+                    .padding(.horizontal)
+                    .frame(width: UIScreen.main.bounds.width * 0.7)
+                
+                // Action buttons
+                HStack {
+                    Spacer()
+                    
+                    // Like button with count
+                    HStack(spacing: 5) {
+                        Image(systemName: "hand.thumbsup")
+                        Text("48")
+                    }
+                    .padding(.trailing)
+                    .font(.system(size: 20))
+                    
+                    // Share button
+                    Image(systemName: "paperplane")
+                        .font(.system(size: 20))
+                    
+                    
+                }
+                .padding()
+            }
+            .padding()
+        }
+        .padding(.vertical)
     }
 }
 

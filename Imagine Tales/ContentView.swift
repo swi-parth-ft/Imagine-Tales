@@ -11,26 +11,12 @@ import FirebaseVertexAI
 import FirebaseFirestore
 import FirebaseStorage
 
-// Struct for each story text item
-struct StoryTextItem: Codable, Hashable {
-    var image: String
-    var text: String
-}
 
-// Struct for the story document
-struct Story: Codable, Hashable {
-    let id: String
-    var parentId: String
-    var childId: String
-    var storyText: [StoryTextItem]
-    var title: String
-    var status: String
-    var genre: String
-}
 
 final class StoryViewModel: ObservableObject {
     @Published var storyText: [StoryTextItem] = []
     @Published var imageURL = ""
+    @Published var child: UserChildren?
     
     func uploadImage(image: UIImage, completion: @escaping (_ url: String?) -> Void)  {
         guard let imageData = image.jpegData(compressionQuality: 0.8) else {
@@ -111,12 +97,29 @@ final class StoryViewModel: ObservableObject {
             "title" : title,
             "status" : "pending",
             "genre" : genre,
+            "childUsername" : child?.username,
             "dateCreated" : Timestamp()
         ]
         
         try await document.setData(data, merge: true)
         
     }
+    
+    func fetchChild(ChildId: String) {
+        let docRef = Firestore.firestore().collection("Children2").document(ChildId)
+        
+        
+        docRef.getDocument(as: UserChildren.self) { result in
+                switch result {
+                case .success(let document):
+                    self.child = document
+                    
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        
+        }
 }
 
 final class ContentViewModel: ObservableObject {
@@ -763,6 +766,8 @@ struct ContentView: View {
                     withAnimation {
                         scale = 1.1
                     }
+                    
+                    storyViewModel.fetchChild(ChildId: childId)
                 }
                 .padding()
                 .padding(.top, 100)
