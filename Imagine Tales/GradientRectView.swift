@@ -14,22 +14,24 @@ struct GradientRectView: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 22)
-                .fill(
-                    MeshGradient(
-                        width: 3,
-                        height: 3,
-                        points: [
-                            [0, 0], [0.5, 0], [1, 0],
-                            [0, 0.5], [0.5, 0.5], [1, 0.5],
-                                    [0, 1], [0.5, 1], [1, 1]
-                        ],
-                        colors: gradientColors
+            if #available(iOS 18, *) {
+                RoundedRectangle(cornerRadius: 22)
+                    .fill(
+                        
+                        MeshGradient(
+                            width: 3,
+                            height: 3,
+                            points: [
+                                [0, 0], [0.5, 0], [1, 0],
+                                [0, 0.5], [0.5, 0.5], [1, 0.5],
+                                [0, 1], [0.5, 1], [1, 1]
+                            ],
+                            colors: gradientColors
+                        )
+                        
                     )
-
-                )
-                .padding()
-            
+                    .padding()
+            }
             Color.white.opacity(0.3)
         }
         .frame(height: 500)

@@ -177,7 +177,7 @@ struct ProfileView: View {
                     
                 }
                 .padding([.trailing, .leading])
-                .padding(.top, 100)
+           
                 .onChange(of: reload) {
                     try? viewModel.loadUser()
                     viewModel.fetchChild(ChildId: childId)

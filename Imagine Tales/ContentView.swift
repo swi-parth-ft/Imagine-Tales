@@ -361,27 +361,28 @@ struct ContentView: View {
                         VStack {
                             //MARK: prompt view
                             ZStack {
-                                RoundedRectangle(cornerRadius: 22)
-                                    .fill(
-                                        
-                                        MeshGradient(
-                                            width: 4,
-                                            height: 3,
-                                            points: [
-                                                [0, 0], [0.33, 0], [0.66, 0], [1, 0],
-                                                [0, 0.5], [0.33, 0.5], [0.66, 0.5], [1, 0.5],
-                                                [0, 1], [0.33, 1], [0.66, 1], [1, 1]
-                                            ],
-                                            colors: [
+                                if #available(iOS 18, *) {
+                                    RoundedRectangle(cornerRadius: 22)
+                                        .fill(
+                                            
+                                            MeshGradient(
+                                                width: 4,
+                                                height: 3,
+                                                points: [
+                                                    [0, 0], [0.33, 0], [0.66, 0], [1, 0],
+                                                    [0, 0.5], [0.33, 0.5], [0.66, 0.5], [1, 0.5],
+                                                    [0, 1], [0.33, 1], [0.66, 1], [1, 1]
+                                                ],
+                                                colors: [
                                                     .blue.opacity(0.6), .purple.opacity(0.4), .cyan.opacity(0.3), .indigo.opacity(0.2),
                                                     isAddingNames ? .pink.opacity(0.3) : .teal.opacity(0.2), isAddingNames ? .purple.opacity(0.2) : .blue.opacity(0.1), isAddingNames ? .indigo.opacity(0.2) : .cyan.opacity(0.1), isSelectingGenre || isAddingNames ? .teal.opacity(0.2) : .purple.opacity(0.1),
                                                     isAddingNames ? .pink.opacity(0.5) : .blue.opacity(0.3), .purple.opacity(0.2), isSelectingGenre || isAddingNames ? .cyan.opacity(0.3) : .indigo.opacity(0.2), isSelectingGenre || isAddingNames ? .teal.opacity(0.4) : .blue.opacity(0.3)
                                                 ]
+                                            )
+                                            
                                         )
-                                       
-                                    )
-                                    .shadow(radius: 10)
-                                
+                                        .shadow(radius: 10)
+                                }
                                 
                                 VStack(alignment: .leading) {
                                     HStack {
@@ -789,7 +790,6 @@ struct ContentView: View {
                     storyViewModel.fetchChild(ChildId: childId)
                 }
                 .padding()
-                .padding(.top, 100)
                 .padding(.bottom, 70)
             }
             .navigationTitle(isGeneratingTitle ? "\(title)" : "Imagine a Story")

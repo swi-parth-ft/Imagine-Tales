@@ -166,64 +166,65 @@ struct StoryRowView: View {
                     .padding(.horizontal)
                     
                     // Image with overlay
-                    
-                    ZStack(alignment: .topTrailing) {
-                        
-                        AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
-                            switch phase {
-                            case .empty:
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle())
-                                    .frame(height: 500)
-                            case .success(let image):
-                                
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(height: 500)
-                                    .clipped()
-                                    .cornerRadius(30)
-                                    .overlay(
-                                        // User profile overlay
-                                        HStack {
-                                            Image(systemName: "person.crop.circle")
-                                            Text(story.childUsername)
-                                                .font(.subheadline)
-                                            Spacer()
-                                            Image(systemName: "person.crop.circle.badge.exclamationmark")
-                                        }
-                                            .padding(5)
-                                            .frame(width: 200)
-                                            .background(Color.black.opacity(0.7))
-                                            .foregroundColor(.white)
-                                            .cornerRadius(15)
-                                            .padding()
-                                        , alignment: .topTrailing
-                                    )
-                                    .padding()
-                                
-                                
-                            case .failure(_):
-                                Image(systemName: "photo")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 500)
-                                    .cornerRadius(10)
-                                    .padding()
-                                
-                            @unknown default:
-                                EmptyView()
+                    NavigationLink(destination: StoryFromProfileView(story: story)) {
+                        ZStack(alignment: .topTrailing) {
+                            
+                            AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle())
+                                        .frame(height: 500)
+                                case .success(let image):
+                                    
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(height: 500)
+                                        .clipped()
+                                        .cornerRadius(30)
+                                        .overlay(
+                                            // User profile overlay
+                                            HStack {
+                                                Image(systemName: "person.crop.circle")
+                                                Text(story.childUsername)
+                                                    .font(.subheadline)
+                                                Spacer()
+                                                Image(systemName: "person.crop.circle.badge.exclamationmark")
+                                            }
+                                                .padding(5)
+                                                .frame(width: 200)
+                                                .background(Color.black.opacity(0.7))
+                                                .foregroundColor(.white)
+                                                .cornerRadius(15)
+                                                .padding()
+                                            , alignment: .topTrailing
+                                        )
+                                        .padding()
+                                    
+                                    
+                                case .failure(_):
+                                    Image(systemName: "photo")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 500)
+                                        .cornerRadius(10)
+                                        .padding()
+                                    
+                                @unknown default:
+                                    EmptyView()
+                                }
                             }
+                            .frame(width: UIScreen.main.bounds.width, height: 500)
+                            .cornerRadius(10)
+                            
                         }
-                        .frame(width: UIScreen.main.bounds.width, height: 500)
-                        .cornerRadius(10)
                         
                     }
-                    
                 }
                 HStack {
                     // Story description
-                   // NavigationLink(destination: StoryView(story: story)) {
+                
                         VStack(alignment: .leading) {
                         Text("The Minions hatch a clever plan to steal the world’s biggest banana, but things go hilariously wrong when they encounter a banana-loving monkey!")
                             .font(.body)

@@ -17,25 +17,27 @@ struct RootView: View {
     @State private var reload = false
     
     var body: some View {
-        ZStack {
-            if isiPhone || ipf {
-                ParentView(showSigninView: $showSignInView, reload: $reload, isiPhone: $isiPhone)
-            } else {
-                TabbarView(showSignInView: $showSignInView, reload: $reload)
+        NavigationStack {
+            ZStack {
+                if isiPhone || ipf {
+                    ParentView(showSigninView: $showSignInView, reload: $reload, isiPhone: $isiPhone)
+                } else {
+                    TabbarView(showSignInView: $showSignInView, reload: $reload)
+                }
             }
-        }
-        .onAppear {
-            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-            self.showSignInView = authUser == nil
+            .onAppear {
+                let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+                self.showSignInView = authUser == nil
+                
+                if horizontalSizeClass == .compact {
+                    isiPhone = true
+                }
+            }
             
-            if horizontalSizeClass == .compact {
-                isiPhone = true
-            }
-        }
-
-        .fullScreenCover(isPresented: $showSignInView, onDismiss: { reload.toggle() } ) {
-            NavigationStack {
-                AuthenticationView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParentFlow: $isParentFlow)
+            .fullScreenCover(isPresented: $showSignInView, onDismiss: { reload.toggle() } ) {
+                NavigationStack {
+                    AuthenticationView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParentFlow: $isParentFlow)
+                }
             }
         }
         
