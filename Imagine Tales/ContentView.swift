@@ -316,8 +316,10 @@ struct ContentView: View {
                                         
                                         if isLoadingTextPart {
                                             
-                                            DotLottieAnimation(fileName: "StoryLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
-                                                .frame(width: 340 * 2, height: 150 * 2)
+                                            TextPlaceholderView()
+                                                .frame(height: 55)
+//                                            DotLottieAnimation(fileName: "StoryLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
+//                                                .frame(width: 340 * 2, height: 150 * 2)
                                         }
                                         
                                         if loaded && !isLoadingChunk {

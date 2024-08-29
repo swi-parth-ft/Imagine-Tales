@@ -40,6 +40,7 @@
 		076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C22992C7E8C3E001DAB3F /* HomeView.swift */; };
 		077BE2762C800A4A00760D5A /* GradientRectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077BE2752C800A4A00760D5A /* GradientRectView.swift */; };
 		077BE2872C810FF800760D5A /* SavedStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077BE2862C810FF800760D5A /* SavedStoryView.swift */; };
+		077BE2892C81263F00760D5A /* TextPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077BE2882C81263F00760D5A /* TextPlaceholderView.swift */; };
 		0792C1D62C76A20D000C42A7 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */; };
 		0792C1D82C7AA2FB000C42A7 /* CharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D72C7AA2FB000C42A7 /* CharacterView.swift */; };
 		0792C1DA2C7BD95E000C42A7 /* ParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D92C7BD95E000C42A7 /* ParentView.swift */; };
@@ -70,6 +71,7 @@
 		076C22992C7E8C3E001DAB3F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		077BE2752C800A4A00760D5A /* GradientRectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientRectView.swift; sourceTree = "<group>"; };
 		077BE2862C810FF800760D5A /* SavedStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedStoryView.swift; sourceTree = "<group>"; };
+		077BE2882C81263F00760D5A /* TextPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextPlaceholderView.swift; sourceTree = "<group>"; };
 		0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
 		0792C1D72C7AA2FB000C42A7 /* CharacterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterView.swift; sourceTree = "<group>"; };
 		0792C1D92C7BD95E000C42A7 /* ParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentView.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				0711F3502C6D5DCA006C86AA /* TabbarView.swift */,
 				0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */,
 				07FB384A2C62BEAB0070EEFA /* ContentView.swift */,
+				077BE2882C81263F00760D5A /* TextPlaceholderView.swift */,
 				077BE2862C810FF800760D5A /* SavedStoryView.swift */,
 				0792C1D92C7BD95E000C42A7 /* ParentView.swift */,
 				077BE2752C800A4A00760D5A /* GradientRectView.swift */,
@@ -301,6 +304,7 @@
 				0711F3782C6D7CDB006C86AA /* SignInAppleHelper.swift in Sources */,
 				0711F3742C6D725C006C86AA /* Utilities.swift in Sources */,
 				0711F3762C6D7433006C86AA /* ProfileView.swift in Sources */,
+				077BE2892C81263F00760D5A /* TextPlaceholderView.swift in Sources */,
 				0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */,
 				0792C1DA2C7BD95E000C42A7 /* ParentView.swift in Sources */,
 			);
