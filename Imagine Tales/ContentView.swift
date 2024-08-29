@@ -241,7 +241,9 @@ struct ContentView: View {
                                             VStack {
                                                     Image(uiImage: storyChunk[index].1)
                                                         .resizable()
-                                                        .scaledToFit()
+                                                        .scaledToFill()
+                                                        .frame(height: 500)
+                                                        .clipped()
                                                         .padding()
                                                 
                                                 
@@ -371,10 +373,10 @@ struct ContentView: View {
                                                 [0, 1], [0.33, 1], [0.66, 1], [1, 1]
                                             ],
                                             colors: [
-                                                .orange.opacity(0.5), .orange.opacity(0.1), .white, .white,
-                                                isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isAddingNames ? .purple.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white,
-                                                isAddingNames ? .purple.opacity(0.5) : .white, .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.1) : .white, isSelectingGenre || isAddingNames ? .cyan.opacity(0.5) : .white
-                                            ]
+                                                    .blue.opacity(0.6), .purple.opacity(0.4), .cyan.opacity(0.3), .indigo.opacity(0.2),
+                                                    isAddingNames ? .pink.opacity(0.3) : .teal.opacity(0.2), isAddingNames ? .purple.opacity(0.2) : .blue.opacity(0.1), isAddingNames ? .indigo.opacity(0.2) : .cyan.opacity(0.1), isSelectingGenre || isAddingNames ? .teal.opacity(0.2) : .purple.opacity(0.1),
+                                                    isAddingNames ? .pink.opacity(0.5) : .blue.opacity(0.3), .purple.opacity(0.2), isSelectingGenre || isAddingNames ? .cyan.opacity(0.3) : .indigo.opacity(0.2), isSelectingGenre || isAddingNames ? .teal.opacity(0.4) : .blue.opacity(0.3)
+                                                ]
                                         )
                                        
                                     )
@@ -860,12 +862,13 @@ struct ContentView: View {
         isLoadingImage = true
         
         let prompt = """
-Create an image that depicts a story with the following prompt: \(promptForImage)
+Create an kids story book image that depicts a story with the following prompt: \(promptForImage)
 """
         OpenAIService.shared.generateImage(from: prompt) { result in
             isImageLoading = false
             switch result {
             case .success(let image):
+                
                 self.generatedImage = image
                 var iURL = ""
                 self.storyChunk.append((chunkOfText, image))
@@ -874,9 +877,6 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                     print(iURL)
                     self.storyTextItem.append(StoryTextItem(image: iURL, text: chunkOfText))
                 }
-                
-                
-                
                 
                 self.isLoadingImage = false
                 self.loaded = true
@@ -889,11 +889,12 @@ Create an image that depicts a story with the following prompt: \(promptForImage
     }
     
     func generateStoryWithGemini() async throws {
-//        withAnimation {
-//            isLoading = true
-//        }
+        
         
         isLoadingTextPart = true
+        if !isGeneratingTitle {
+            isLoadingImage = true
+        }
         words = extractWords(from: characters)
         words.append(genre)
         words.append(theme)
@@ -910,10 +911,6 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                     self.chunkOfText = text
                     self.continueStory.append(text)
                 }
-//                withAnimation {
-//                    self.isLoading = false
-//                    
-//                }
             }
             Task {
                 if !isGeneratingTitle {
@@ -1030,6 +1027,7 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                 }
             }
         }.resume()
+        
     }
 }
 

@@ -32,7 +32,7 @@ struct GradientRectView: View {
             
             Color.white.opacity(0.3)
         }
-        .frame(height: 300)
+        .frame(height: 500)
         .onAppear {
                     startColorChange()
                 }
