@@ -169,7 +169,7 @@ struct ProfileView: View {
                     .scrollContentBackground(.hidden)
                     .onAppear {
                         do {
-                            try parentViewModel.getStory(childId: "4nDnQ7V097d9jZCUGHah")
+                            try parentViewModel.getStory(childId: childId)
                         } catch {
                             print(error.localizedDescription)
                         }

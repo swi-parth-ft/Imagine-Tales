@@ -200,7 +200,18 @@ struct ChildView: View {
             List {
                 ForEach(viewModel.story, id: \.id) { story in
                     NavigationLink(destination: StoryView(story: story)) {
-                        Text(story.title)
+                        ZStack {
+                            HStack {
+                                VStack {
+                                    Spacer()
+                                    Text("\(story.title)")
+                                }
+                                Spacer()
+                                Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
+                                    .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
+                            }
+                            
+                        }
                   }
                 }
                 .onDelete { indexSet in
@@ -230,6 +241,8 @@ struct ChildView: View {
 struct StoryView: View {
     var story: Story
     @StateObject var viewModel = ParentViewModel()
+    @State private var status = ""
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -276,23 +289,36 @@ struct StoryView: View {
             .navigationTitle(story.title)
             .toolbar {
                             ToolbarItemGroup(placement: .bottomBar) {
-                                Button("Approve") {
-                                    do {
-                                        try viewModel.reviewStory(status: "Approve", id: story.id)
-                                    } catch {
-                                        print(error.localizedDescription)
+                              
+                                    Button("Approve") {
+                                        do {
+                                            try viewModel.reviewStory(status: "Approve", id: story.id)
+                                            status = "Approve"
+                                        } catch {
+                                            print(error.localizedDescription)
+                                        }
                                     }
-                                }
+                                    .foregroundStyle(status == "Approve" ? .gray : .green)
+                                
                                 Spacer()
+                                Text(status == "Approve" ? "Approved" : (status == "Reject" ? "Rejected" : "Pending"))
+                                    .foregroundStyle(status == "Approve" ? .green : (status == "Reject" ? .red : .blue ))
+                                Spacer()
+                                
                                 Button("Reject") {
                                     do {
                                         try viewModel.reviewStory(status: "Reject", id: story.id)
+                                        status = "Reject"
                                     } catch {
                                         print(error.localizedDescription)
                                     }
                                 }
+                                .foregroundStyle(status == "Reject" ? .gray : .red)
                             }
                         }
+            .onAppear {
+                status = story.status
+            }
             
         }
     }
