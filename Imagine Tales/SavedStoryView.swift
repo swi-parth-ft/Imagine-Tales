@@ -57,12 +57,19 @@ struct SavedStoryView: View {
     @Binding var reload: Bool
     
     var body: some View {
-        
+        NavigationStack {
             List(viewModel.savedStories, id: \.id) { story in
+                NavigationLink(destination: StoryFromProfileView(story: story)) {
+                    
+                    VStack {
+                        Spacer()
+                        Text(story.title)
+                    }
+                }
                 
-                    Text(story.title)
                 
             }
+            .scrollContentBackground(.hidden)
             .navigationTitle("Saved Stories")
             .onAppear {
                 viewModel.getSavedStories(forChild: childId)
@@ -71,6 +78,7 @@ struct SavedStoryView: View {
                 viewModel.getSavedStories(forChild: childId)
             }
         }
+    }
     
 }
 

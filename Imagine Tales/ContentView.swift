@@ -256,6 +256,28 @@ struct ContentView: View {
                                 RoundedRectangle(cornerRadius: 22)
                                     .fill(Color.white.opacity(0.5))
                                 VStack {
+                                    
+                                    Button("reset") {
+                                        isLoading = false
+                                        words = []
+                                        characters = ""
+                                        genre = "Adventure"
+                                        story = ""
+                                        theme = "Forest"
+                                        loaded = false
+                                        isRandom = false
+                                        selectedChars = []
+                                        storyChunk = []
+                                        nextKey = false
+                                        finishKey = false
+                                        continueStory = ""
+                                        chunkOfText = ""
+                                        isLoadingChunk = false
+                                        isGeneratingTitle = false
+                                        title = ""
+                                        displayedText = ""
+                                        storyTextItem = []
+                                    }
                                     ScrollView {
                                         
                                         ForEach(0..<storyChunk.count, id: \.self) { index in
@@ -319,6 +341,7 @@ struct ContentView: View {
                                                     isGeneratingTitle = false
                                                     title = ""
                                                     displayedText = ""
+                                                    storyTextItem = []
                                                 }
                                                 if !finishKey {
                                                     Button("Next") {
