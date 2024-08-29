@@ -138,6 +138,7 @@ struct ProfileView: View {
     @AppStorage("ipf") private var ipf: Bool = true
     @State private var isAddingPin = false
     @StateObject var parentViewModel = ParentViewModel()
+    @State private var selectedStory: Story?
     
     var body: some View {
         NavigationStack {
@@ -147,10 +148,9 @@ struct ProfileView: View {
                 VStack {
                     
                     List {
-                        ForEach(parentViewModel.story, id: \.self) { story in
-                            NavigationLink(destination: StoryView(story: story)) {
+                        ForEach(parentViewModel.story, id: \.id) { story in
+                            NavigationLink(destination: StoryFromProfileView(story: story)) {
                                 ZStack {
-                                    
                                     HStack {
                                         VStack {
                                             Spacer()
@@ -175,13 +175,6 @@ struct ProfileView: View {
                         }
                     }
                     
-                    
-                    
-                    
-                  
-                    
-                    
-                    
                 }
                 .padding([.trailing, .leading])
                 .padding(.top, 100)
@@ -191,7 +184,7 @@ struct ProfileView: View {
                     try? viewModel.getPin()
                     
                     do {
-                        try parentViewModel.getStory(childId: "4nDnQ7V097d9jZCUGHah")
+                        try parentViewModel.getStory(childId: childId)
                     } catch {
                         print(error.localizedDescription)
                     }
@@ -396,6 +389,109 @@ struct PinView: View {
     
 }
 
+struct StoryFromProfileView: View {
+    var story: Story
+    @State private var count = 0
+    @State private var currentPage = 0
+    @StateObject var viewModel = ParentViewModel()
+    var body: some View {
+        NavigationStack {
+            VStack {
+                ScrollView {
+                    
+                        VStack {
+                            ZStack(alignment: .topTrailing) {
+                                AsyncImage(url: URL(string: story.storyText[count].image)) { phase in
+                                    switch phase {
+                                    case .empty:
+                                        ProgressView()
+                                            .progressViewStyle(CircularProgressViewStyle())
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(height: 500)
+                                            .clipped()
+                                            .cornerRadius(30)
+                                            .padding()
+                                    case .failure(_):
+                                        Image(systemName: "photo")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .padding()
+                                    @unknown default:
+                                        EmptyView()
+                                    }
+                                }
+                                .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                                .cornerRadius(10)
+                            }
+                            
+                            Text(story.storyText[count].text)
+                                .frame(width: UIScreen.main.bounds.width * 0.8)
+                                .padding()
+                            
+                            
+                            
+                        }
+                        .padding()
+                    
+                }
+                HStack {
+                    Spacer()
+                    ZStack {
+                        HStack {
+                            if count != 0 {
+                                ZStack {
+                                    Circle()
+                                        .fill(.orange)
+                                        .frame(width: 100, height: 100)
+                                        .onTapGesture {
+                                            print(count)
+                                            print(story.storyText.count)
+                                            withAnimation {
+                                                count -= 1
+                                            }
+                                            
+                                        }
+                                    
+                                    Image(systemName: "arrowshape.backward.fill")
+                                }
+                            }
+                            Spacer()
+                            if count < story.storyText.count - 1{
+                                ZStack {
+                                    Circle()
+                                        .fill(.orange)
+                                        .frame(width: 100, height: 100)
+                                        .onTapGesture {
+                                            print(count)
+                                            print(story.storyText.count)
+                                            withAnimation {
+                                                count += 1
+                                            }
+                                            
+                                        }
+                                    
+                                    Image(systemName: "arrowshape.bounce.right.fill")
+                                }
+                            }
+                        }
+                        
+                        
+                    }
+                    .padding()
+                    .padding(.bottom, 40)
+                }
+            }
+            .padding()
+            .navigationTitle(story.title)
+          
+            
+        }
+    }
+    
+}
 #Preview {
     ProfileView(showSignInView: .constant(false), reload: .constant(false))
     

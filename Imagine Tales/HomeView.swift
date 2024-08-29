@@ -193,6 +193,7 @@ struct StoryRowView: View {
                                     , alignment: .topTrailing
                                 )
                                 .padding()
+                            
                         case .failure(_):
                             Image(systemName: "photo")
                                 .resizable()
@@ -200,6 +201,7 @@ struct StoryRowView: View {
                                 .frame(height: 500)
                                 .cornerRadius(10)
                                 .padding()
+                            
                         @unknown default:
                             EmptyView()
                         }

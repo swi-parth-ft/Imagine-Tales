@@ -235,33 +235,37 @@ struct StoryView: View {
             ScrollView {
                 ForEach(0..<story.storyText.count, id: \.self) { index in
                     VStack {
-                        // Load image from URL using AsyncImage
-                        AsyncImage(url: URL(string: story.storyText[index].image)) { phase in
-                            switch phase {
-                            case .empty:
-                                // Placeholder while loading
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle())
-                            case .success(let image):
-                                // Successfully loaded image
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .padding()
-                            case .failure(_):
-                                // Failure to load image
-                                Image(systemName: "photo")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .padding()
-                            @unknown default:
-                                // Fallback for unknown cases
-                                EmptyView()
+                        ZStack(alignment: .topTrailing) {
+                            AsyncImage(url: URL(string: story.storyText[index].image)) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle())
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(height: 500)
+                                        .clipped()
+                                        .cornerRadius(30)
+                                        .padding()
+                                case .failure(_):
+                                    Image(systemName: "photo")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .padding()
+                                @unknown default:
+                                    EmptyView()
+                                }
                             }
-                        } // Adjust frame size as needed
+                            .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                            .cornerRadius(10)
+                        }
                         
                         Text(story.storyText[index].text)
+                            .frame(width: UIScreen.main.bounds.width * 0.8)
                             .padding()
+                        
                         
                         
                     }
