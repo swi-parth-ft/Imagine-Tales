@@ -146,8 +146,10 @@ struct ProfileView: View {
             ZStack {
                 Color(hex: "#FFFFF1").ignoresSafeArea()
                 VStack {
-                    
                     List {
+                        Text("Your Stories")
+                            .font(.title)
+                            .fontWeight(.bold)
                         ForEach(parentViewModel.story, id: \.id) { story in
                             NavigationLink(destination: StoryFromProfileView(story: story)) {
                                 ZStack {

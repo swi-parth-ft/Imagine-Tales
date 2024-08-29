@@ -98,6 +98,7 @@ final class StoryViewModel: ObservableObject {
             "status" : "pending",
             "genre" : genre,
             "childUsername" : child?.username,
+            "likes" : 0,
             "dateCreated" : Timestamp()
         ]
         
@@ -223,6 +224,26 @@ struct ContentView: View {
     @State private var isLoadingImage = false
     @State private var isLoadingTextPart = false
     
+    
+    @State private var displayedText: String = ""
+        @State private var charIndex: Int = 0
+        let typingSpeed = 0.03
+    
+    func startTyping(chunk: String) {
+            displayedText = ""
+            charIndex = 0
+            
+            Timer.scheduledTimer(withTimeInterval: typingSpeed, repeats: true) { timer in
+                if charIndex < chunk.count {
+                    let index = chunk.index(chunk.startIndex, offsetBy: charIndex)
+                    displayedText.append(chunk[index])
+                    charIndex += 1
+                } else {
+                    timer.invalidate()
+                }
+            }
+        }
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -263,6 +284,10 @@ struct ContentView: View {
                                                 Text(chunkOfText)
                                                     .padding()
                                                 
+//                                                Text(displayedText)
+//                                                    .padding()
+                                                
+                                                
                                             }
                                             .padding()
                                         }
@@ -293,11 +318,13 @@ struct ContentView: View {
                                                     isLoadingChunk = false
                                                     isGeneratingTitle = false
                                                     title = ""
+                                                    displayedText = ""
                                                 }
                                                 if !finishKey {
                                                     Button("Next") {
                                                         nextKey = true
                                                         isLoadingChunk = true
+                                                        displayedText = ""
                                                         Task {
                                                             do {
                                                                 try await generateStoryWithGemini()
@@ -910,8 +937,14 @@ Create an kids story book image that depicts a story with the following prompt: 
                     self.story = text
                     self.chunkOfText = text
                     self.continueStory.append(text)
+                    startTyping(chunk: text)
+                    
+                    
                 }
             }
+            
+            
+            
             Task {
                 if !isGeneratingTitle {
                     
@@ -924,6 +957,7 @@ Create an kids story book image that depicts a story with the following prompt: 
                 }
             }
             isLoadingTextPart = false
+            
         }
     }
     

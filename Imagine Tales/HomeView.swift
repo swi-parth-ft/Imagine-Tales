@@ -24,6 +24,7 @@ struct Story: Codable, Hashable {
     var status: String
     var genre: String
     var childUsername: String
+    var likes: Int
 }
 
 final class HomeViewModel: ObservableObject {
@@ -31,7 +32,7 @@ final class HomeViewModel: ObservableObject {
     @Published var genre: String = "Adventure"
     
     func getStories() throws {
-       
+        
         Firestore.firestore().collection("Story").whereField("status", isEqualTo: "Approve").whereField("genre", isEqualTo: genre).getDocuments() { (querySnapshot, error) in
             if let error = error {
                 print("Error getting documents: \(error)")
@@ -43,6 +44,82 @@ final class HomeViewModel: ObservableObject {
             } ?? []
             print(self.stories)
             
+        }
+    }
+//    func like(story: Story) {
+//        Firestore.firestore().collection("Story").document(story.id).updateData(["likes" : FieldValue.increment(Int64(1))])
+//    }
+//    
+//    func dislike(story: Story) {
+//        Firestore.firestore().collection("Story").document(story.id).updateData(["likes" : FieldValue.increment(Int64(-1))])
+//    }
+    
+    func likeStory(childId: String, storyId: String) {
+        let db = Firestore.firestore()
+        let storyRef = db.collection("Story").document(storyId)
+        let likesRef = storyRef.collection("likes")
+        let query = likesRef.whereField("childId", isEqualTo: childId)
+        
+        query.getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error checking likes: \(error)")
+                return
+            }
+            
+            if let snapshot = snapshot, snapshot.isEmpty {
+                // Child has not liked this story, proceed to like it
+                let likeData: [String: Any] = ["childId": childId, "timestamp": Timestamp()]
+                likesRef.addDocument(data: likeData) { error in
+                    if let error = error {
+                        print("Error liking story: \(error)")
+                    } else {
+                        storyRef.updateData(["likes": FieldValue.increment(Int64(1))]) { error in
+                            if let error = error {
+                                print("Error updating like count: \(error)")
+                            } else {
+                                print("Story liked successfully!")
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Child has already liked this story, proceed to dislike it
+                if let document = snapshot?.documents.first {
+                    document.reference.delete() { error in
+                        if let error = error {
+                            print("Error disliking story: \(error)")
+                        } else {
+                            storyRef.updateData(["likes": FieldValue.increment(Int64(-1))]) { error in
+                                if let error = error {
+                                    print("Error updating like count: \(error)")
+                                } else {
+                                    print("Story disliked successfully!")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func checkIfChildLikedStory(childId: String, storyId: String, completion: @escaping (Bool) -> Void) {
+        let db = Firestore.firestore()
+        let storyRef = db.collection("Story").document(storyId)
+        let likesRef = storyRef.collection("likes")
+        
+        likesRef.whereField("childId", isEqualTo: childId).getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error checking if child liked the story: \(error)")
+                completion(false)
+                return
+            }
+            
+            if let snapshot = snapshot, !snapshot.isEmpty {
+                completion(true)
+            } else {
+                completion(false)
+            }
         }
     }
 }
@@ -116,7 +193,7 @@ struct HomeView: View {
                     }
             }
         }
-        }
+    }
 }
 
 struct StoryListView: View {
@@ -141,6 +218,11 @@ import SwiftUI
 struct StoryRowView: View {
     var story: Story
     var childId: String
+    @StateObject var viewModel = HomeViewModel()
+    @State private var isLiked = false
+    @State private var likeCount = 0
+    
+    
     var body: some View {
         NavigationStack {
             VStack(alignment: .center) {
@@ -172,9 +254,7 @@ struct StoryRowView: View {
                             AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
                                 switch phase {
                                 case .empty:
-                                    ProgressView()
-                                        .progressViewStyle(CircularProgressViewStyle())
-                                        .frame(height: 500)
+                                    GradientRectView()
                                 case .success(let image):
                                     
                                     image
@@ -224,24 +304,30 @@ struct StoryRowView: View {
                 }
                 HStack {
                     // Story description
-                
-                        VStack(alignment: .leading) {
+                    
+                    VStack(alignment: .leading) {
                         Text("The Minions hatch a clever plan to steal the world’s biggest banana, but things go hilariously wrong when they encounter a banana-loving monkey!")
                             .font(.body)
                             .padding(.horizontal)
                             .frame(width: UIScreen.main.bounds.width * 0.7)
-                        }
-                        
+                    }
                     
                     
-                    // Action buttons
+                    
                     HStack {
                         Spacer()
                         
                         // Like button with count
                         HStack(spacing: 5) {
-                            Image(systemName: "hand.thumbsup")
-                            Text("48")
+                            Button(action: {
+                                viewModel.likeStory(childId: childId, storyId: story.id)
+                                isLiked.toggle()
+                            }) {
+                                Image(systemName: isLiked ? "heart.fill" : "heart")
+                                    .tint(.red)
+                            }
+                            
+                            Text("\(isLiked ? story.likes + 1 : story.likes)")
                         }
                         .padding(.trailing)
                         .font(.system(size: 20))
@@ -249,14 +335,17 @@ struct StoryRowView: View {
                         // Share button
                         Image(systemName: "paperplane")
                             .font(.system(size: 20))
-                        
-                        
                     }
                     .padding()
                 }
                 .padding()
             }
             .padding(.vertical)
+            .onAppear {
+                viewModel.checkIfChildLikedStory(childId: childId, storyId: story.id) { hasLiked in
+                    isLiked = hasLiked
+                }
+            }
         }
     }
 }
