@@ -58,7 +58,7 @@ struct TabbarView: View {
         ZStack(alignment: .bottom) {
             Color(hex: "#FFFFF1").ignoresSafeArea()
             TabView(selection: $selectedTab) {
-                HomeView()
+                HomeView(reload: $reload)
                     .tag(0)
                     .padding()
                 
@@ -69,8 +69,9 @@ struct TabbarView: View {
                     .tag(2)
                     .padding()
                 
-                Text("Collection View")
+                SavedStoryView(reload: $reload)
                     .tag(3)
+                    .padding()
                 
                 ProfileView(showSignInView: $showSignInView, reload: $reload)
                     .tag(4)

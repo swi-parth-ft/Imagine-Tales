@@ -46,13 +46,6 @@ final class HomeViewModel: ObservableObject {
             
         }
     }
-//    func like(story: Story) {
-//        Firestore.firestore().collection("Story").document(story.id).updateData(["likes" : FieldValue.increment(Int64(1))])
-//    }
-//    
-//    func dislike(story: Story) {
-//        Firestore.firestore().collection("Story").document(story.id).updateData(["likes" : FieldValue.increment(Int64(-1))])
-//    }
     
     func likeStory(childId: String, storyId: String) {
         let db = Firestore.firestore()
@@ -122,11 +115,71 @@ final class HomeViewModel: ObservableObject {
             }
         }
     }
+    
+    
+    func toggleSaveStory(childId: String, storyId: String) {
+        let db = Firestore.firestore()
+        let childRef = db.collection("Children2").document(childId)
+        let savedStoriesRef = childRef.collection("savedStories")
+        let query = savedStoriesRef.whereField("storyId", isEqualTo: storyId)
+        
+        query.getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error checking saved stories: \(error)")
+                return
+            }
+            
+            if let snapshot = snapshot, snapshot.isEmpty {
+                // Story is not saved, proceed to save it
+                let saveData: [String: Any] = ["storyId": storyId, "timestamp": Timestamp()]
+                savedStoriesRef.addDocument(data: saveData) { error in
+                    if let error = error {
+                        print("Error saving story: \(error)")
+                    } else {
+                        print("Story saved successfully!")
+                    }
+                }
+            } else {
+                // Story is already saved, proceed to unsave it
+                if let document = snapshot?.documents.first {
+                    document.reference.delete() { error in
+                        if let error = error {
+                            print("Error unsaving story: \(error)")
+                        } else {
+                            print("Story unsaved successfully!")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func checkIfChildSavedStory(childId: String, storyId: String, completion: @escaping (Bool) -> Void) {
+        let db = Firestore.firestore()
+        let childRef = db.collection("Children2").document(childId)
+        let savedStoriesRef = childRef.collection("savedStories")
+        
+        savedStoriesRef.whereField("storyId", isEqualTo: storyId).getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error checking if child saved the story: \(error)")
+                completion(false)
+                return
+            }
+            
+            if let snapshot = snapshot, !snapshot.isEmpty {
+                completion(true)
+            } else {
+                completion(false)
+            }
+        }
+    }
 }
 
 struct HomeView: View {
     
     @StateObject var viewModel = HomeViewModel()
+    @Binding var reload: Bool
+    
     let genres = [
         "Adventure",
         "Fantasy",
@@ -162,6 +215,7 @@ struct HomeView: View {
                                     viewModel.genre = category
                                     do {
                                         try viewModel.getStories()
+                                        reload.toggle()
                                     } catch {
                                         print(error.localizedDescription)
                                     }
@@ -182,7 +236,7 @@ struct HomeView: View {
                     .padding(.horizontal)
                 }
                 .padding()
-                StoryListView(stories: viewModel.stories, childId: childId)
+                StoryListView(stories: viewModel.stories, reload: $reload, childId: childId)
                 
                     .onAppear {
                         do {
@@ -191,6 +245,14 @@ struct HomeView: View {
                             print(error.localizedDescription)
                         }
                     }
+                    
+            }
+            .onChange(of: reload) {
+                do {
+                    try viewModel.getStories()
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
         }
     }
@@ -198,13 +260,14 @@ struct HomeView: View {
 
 struct StoryListView: View {
     var stories: [Story]
+    @Binding var reload: Bool
     var childId: String
     var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVStack {
                     ForEach(stories, id: \.id) { story in
-                        StoryRowView(story: story, childId: childId)
+                        StoryRowView(story: story, childId: childId, reload: $reload)
                     }
                 }
             }
@@ -221,7 +284,9 @@ struct StoryRowView: View {
     @StateObject var viewModel = HomeViewModel()
     @State private var isLiked = false
     @State private var likeCount = 0
-    
+    @State private var isSaved = false
+    @Binding var reload: Bool
+    @State private var likeObserver = false
     
     var body: some View {
         NavigationStack {
@@ -239,15 +304,17 @@ struct StoryRowView: View {
                         
                         
                         HStack(spacing: 20) {
-                            Image(systemName: "book")
-                                .font(.system(size: 20))
-                            Image(systemName: "bookmark")
-                                .font(.system(size: 20))
+                            Button(action: {
+                                viewModel.toggleSaveStory(childId: childId, storyId: story.id)
+                                isSaved.toggle()
+                                reload.toggle()
+                            }) {
+                                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                                    .font(.system(size: 20))
+                            }
                         }
                     }
                     .padding(.horizontal)
-                    
-                    // Image with overlay
                     NavigationLink(destination: StoryFromProfileView(story: story)) {
                         ZStack(alignment: .topTrailing) {
                             
@@ -303,17 +370,12 @@ struct StoryRowView: View {
                     }
                 }
                 HStack {
-                    // Story description
-                    
                     VStack(alignment: .leading) {
                         Text("The Minions hatch a clever plan to steal the world’s biggest banana, but things go hilariously wrong when they encounter a banana-loving monkey!")
                             .font(.body)
                             .padding(.horizontal)
                             .frame(width: UIScreen.main.bounds.width * 0.7)
                     }
-                    
-                    
-                    
                     HStack {
                         Spacer()
                         
@@ -321,7 +383,10 @@ struct StoryRowView: View {
                         HStack(spacing: 5) {
                             Button(action: {
                                 viewModel.likeStory(childId: childId, storyId: story.id)
+                                
                                 isLiked.toggle()
+                               // reload.toggle()
+                                
                             }) {
                                 Image(systemName: isLiked ? "heart.fill" : "heart")
                                     .tint(.red)
@@ -344,6 +409,14 @@ struct StoryRowView: View {
             .onAppear {
                 viewModel.checkIfChildLikedStory(childId: childId, storyId: story.id) { hasLiked in
                     isLiked = hasLiked
+                    if isLiked {
+                        likeObserver = true
+                    }
+                }
+                
+                viewModel.checkIfChildSavedStory(childId: childId, storyId: story.id) { hasSaved in
+                    isSaved = hasSaved
+                    print(isSaved)
                 }
             }
         }
@@ -351,5 +424,5 @@ struct StoryRowView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(reload: .constant(false))
 }
