@@ -220,6 +220,8 @@ struct ContentView: View {
     @AppStorage("childId") var childId: String = "Default Value"
     @State private var title = ""
     @State private var isGeneratingTitle = false
+    @State private var isLoadingImage = false
+    @State private var isLoadingTextPart = false
     
     var body: some View {
         NavigationStack {
@@ -237,10 +239,11 @@ struct ContentView: View {
                                         
                                         ForEach(0..<storyChunk.count, id: \.self) { index in
                                             VStack {
-                                                Image(uiImage: storyChunk[index].1)
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .padding()
+                                                    Image(uiImage: storyChunk[index].1)
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .padding()
+                                                
                                                 
                                                 Text(storyChunk[index].0)
                                                     .padding()
@@ -249,7 +252,21 @@ struct ContentView: View {
                                             .padding()
                                         }
                                         
-                                        if isLoadingChunk {
+                                        if isLoadingImage {
+                                            VStack {
+                                               
+                                                    GradientRectView()
+                                                
+                                                
+                                                Text(chunkOfText)
+                                                    .padding()
+                                                
+                                            }
+                                            .padding()
+                                        }
+                                        
+                                        if isLoadingTextPart {
+                                            
                                             DotLottieAnimation(fileName: "StoryLoading", config: AnimationConfig(autoplay: true, loop: true)).view()
                                                 .frame(width: 340 * 2, height: 150 * 2)
                                         }
@@ -840,6 +857,8 @@ struct ContentView: View {
     }
     
     func generateImageUsingOpenAI() {
+        isLoadingImage = true
+        
         let prompt = """
 Create an image that depicts a story with the following prompt: \(promptForImage)
 """
@@ -859,7 +878,7 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                 
                 
                 
-                
+                self.isLoadingImage = false
                 self.loaded = true
                 self.isLoadingChunk = false
                 
@@ -873,10 +892,12 @@ Create an image that depicts a story with the following prompt: \(promptForImage
 //        withAnimation {
 //            isLoading = true
 //        }
+        
+        isLoadingTextPart = true
         words = extractWords(from: characters)
         words.append(genre)
         words.append(theme)
-        
+        chunkOfText = ""
         let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
         let prompt = generatePrompt()
         let response = try await model.generateContent(prompt)
@@ -905,6 +926,7 @@ Create an image that depicts a story with the following prompt: \(promptForImage
                     }
                 }
             }
+            isLoadingTextPart = false
         }
     }
     
