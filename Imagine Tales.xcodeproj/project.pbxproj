@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0701FB8D2C822816004BEE9F /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB8C2C822816004BEE9F /* FriendsView.swift */; };
 		0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F34E2C6D5D79006C86AA /* RootView.swift */; };
 		0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3502C6D5DCA006C86AA /* TabbarView.swift */; };
 		0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3532C6D5F3F006C86AA /* FloatingTabBar */; };
@@ -53,6 +54,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0701FB8C2C822816004BEE9F /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		0711F34E2C6D5D79006C86AA /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		0711F3502C6D5DCA006C86AA /* TabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
 		0711F3572C6D63F1006C86AA /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */,
 				07FB384A2C62BEAB0070EEFA /* ContentView.swift */,
 				077BE2882C81263F00760D5A /* TextPlaceholderView.swift */,
+				0701FB8C2C822816004BEE9F /* FriendsView.swift */,
 				077BE2862C810FF800760D5A /* SavedStoryView.swift */,
 				0792C1D92C7BD95E000C42A7 /* ParentView.swift */,
 				077BE2752C800A4A00760D5A /* GradientRectView.swift */,
@@ -294,6 +297,7 @@
 				073F2CF22C6F9C1F00BCF6F0 /* UserManager.swift in Sources */,
 				07FB38642C63B3720070EEFA /* Environment.swift in Sources */,
 				0792C1D82C7AA2FB000C42A7 /* CharacterView.swift in Sources */,
+				0701FB8D2C822816004BEE9F /* FriendsView.swift in Sources */,
 				0711F3722C6D7244006C86AA /* SignInGoogleHelper.swift in Sources */,
 				073F2CF42C6FA0A800BCF6F0 /* SignInWithEmailView.swift in Sources */,
 				076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */,

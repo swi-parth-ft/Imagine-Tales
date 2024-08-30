@@ -62,8 +62,9 @@ struct TabbarView: View {
                     .tag(0)
                     .padding()
                 
-                Text("Browse View")
+                FriendsView()
                     .tag(1)
+                    .padding()
                 
                 ContentView()
                     .tag(2)

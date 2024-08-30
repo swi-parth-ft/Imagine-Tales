@@ -173,6 +173,23 @@ final class HomeViewModel: ObservableObject {
             }
         }
     }
+    
+    
+    func sendFriendRequest(toChildId: String, fromChildId: String) {
+            let db = Firestore.firestore()
+            let friendRequestData: [String: Any] = [
+                "fromUserId": fromChildId,
+                "status": "pending"
+            ]
+            
+            db.collection("Children2").document(toChildId).collection("friendRequests").addDocument(data: friendRequestData) { error in
+                if let error = error {
+                    print("Error sending friend request: \(error.localizedDescription)")
+                } else {
+                    print("Friend request sent successfully!")
+                }
+            }
+        }
 }
 
 struct HomeView: View {
@@ -345,6 +362,9 @@ struct StoryRowView: View {
                                                 .foregroundColor(.white)
                                                 .cornerRadius(15)
                                                 .padding()
+                                                .onTapGesture {
+                                                    viewModel.sendFriendRequest(toChildId: story.childId, fromChildId: childId)
+                                                }
                                             , alignment: .topTrailing
                                         )
                                         .padding()
