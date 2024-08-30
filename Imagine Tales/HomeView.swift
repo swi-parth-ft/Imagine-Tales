@@ -31,20 +31,48 @@ final class HomeViewModel: ObservableObject {
     @Published var stories: [Story] = []
     @Published var genre: String = "Adventure"
     @Published var status = ""
+    var tempStories: [Story] = []
     
-    func getStories() throws {
-        
-        Firestore.firestore().collection("Story").whereField("status", isEqualTo: "Approve").whereField("genre", isEqualTo: genre).getDocuments() { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error)")
-                return
+    @MainActor
+    func getStories(childId: String) async throws {
+        if genre == "Following" {
+            stories = []
+            do {
+                    let friendDocuments = try await Firestore.firestore().collection("Children2").document(childId).collection("friends").getDocuments().documents
+                    let friendIds = friendDocuments.map { $0.documentID }
+
+                for friendId in friendIds {
+                    let storyDocuments = try await Firestore.firestore().collection("Story").whereField("childId", isEqualTo: friendId).getDocuments() { (querySnapshot, error) in
+                        if let error = error {
+                            print("Error getting documents: \(error)")
+                            return
+                        }
+                        
+                        self.tempStories = querySnapshot?.documents.compactMap { document in
+                            try? document.data(as: Story.self)
+                        } ?? []
+                        
+                        self.stories.append(contentsOf: self.tempStories)
+                        print(self.stories)
+                    }
+                }
+                    
+                } catch {
+                    print("Error fetching data: \(error.localizedDescription)")
+                }
+        } else {
+            Firestore.firestore().collection("Story").whereField("status", isEqualTo: "Approve").whereField("genre", isEqualTo: genre).getDocuments() { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting documents: \(error)")
+                    return
+                }
+                
+                self.stories = querySnapshot?.documents.compactMap { document in
+                    try? document.data(as: Story.self)
+                } ?? []
+                print(self.stories)
+                
             }
-            
-            self.stories = querySnapshot?.documents.compactMap { document in
-                try? document.data(as: Story.self)
-            } ?? []
-            print(self.stories)
-            
         }
     }
     
@@ -226,6 +254,7 @@ struct HomeView: View {
     @Binding var reload: Bool
     
     let genres = [
+        "Following",
         "Adventure",
         "Fantasy",
         "Mystery",
@@ -258,11 +287,13 @@ struct HomeView: View {
                             Button(action: {
                                 withAnimation {
                                     viewModel.genre = category
-                                    do {
-                                        try viewModel.getStories()
-                                        reload.toggle()
-                                    } catch {
-                                        print(error.localizedDescription)
+                                    Task {
+                                        do {
+                                            try await viewModel.getStories(childId: childId)
+                                            reload.toggle()
+                                        } catch {
+                                            print(error.localizedDescription)
+                                        }
                                     }
                                 }
                             }) {
@@ -284,19 +315,23 @@ struct HomeView: View {
                 StoryListView(stories: viewModel.stories, reload: $reload, childId: childId)
                 
                     .onAppear {
-                        do {
-                            try viewModel.getStories()
-                        } catch {
-                            print(error.localizedDescription)
+                        Task {
+                            do {
+                                try await viewModel.getStories(childId: childId)
+                            } catch {
+                                print(error.localizedDescription)
+                            }
                         }
                     }
                     
             }
             .onChange(of: reload) {
-                do {
-                    try viewModel.getStories()
-                } catch {
-                    print(error.localizedDescription)
+                Task {
+                    do {
+                        try await viewModel.getStories(childId: childId)
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                 }
             }
         }

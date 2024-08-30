@@ -13,6 +13,8 @@ final class FriendsViewModel: ObservableObject {
     @Published var friends = [String]()
     @Published var friendRequests = [(requestId: String, fromUserId: String)]()
     @Published var child: UserChildren?
+    @Published var children: [UserChildren] = []
+    
     
     func fetchFriends(childId: String) {
         let db = Firestore.firestore()
@@ -22,6 +24,7 @@ final class FriendsViewModel: ObservableObject {
             } else {
                 if let snapshot = snapshot {
                     self.friends = snapshot.documents.compactMap { $0["friendUserId"] as? String }
+                    self.fetchChildren()
                 }
             }
         }
@@ -97,6 +100,26 @@ final class FriendsViewModel: ObservableObject {
         }
         
     }
+    
+    func fetchChildren() {
+            let db = Firestore.firestore()
+            
+            // Clear the existing array
+            self.children.removeAll()
+            
+            for childId in friends {
+                let docRef = db.collection("Children2").document(childId)
+                
+                docRef.getDocument(as: UserChildren.self) { result in
+                    switch result {
+                    case .success(let document):
+                        self.children.append(document)
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+        }
     
     func deleteRequest(childId: String, docID: String) {
         
@@ -188,22 +211,15 @@ struct FriendsView: View {
                     .font(.largeTitle)
                     .padding()
                 
-                List(viewModel.friends, id: \.self) { friend in
+                List(viewModel.children) { friend in
                     VStack {
-                        if let username = viewModel.child?.username {
-                            Text("\(username)")
-                        } else {
-                            Text("")
-                        }
+                        Text(friend.username)
                         
                         Button("Remove") {
-                            viewModel.removeFriend(childId: childId, docID: friend)
-                            viewModel.removeFriend(childId: friend, docID: childId)
+                            viewModel.removeFriend(childId: childId, docID: friend.id)
+                            viewModel.removeFriend(childId: friend.id, docID: childId)
                         }
                     }
-                        .onAppear {
-                            viewModel.fetchChild(ChildId: friend)
-                        }
                 }
                 .onAppear {
                     viewModel.fetchFriends(childId: childId)
