@@ -30,6 +30,7 @@ struct Story: Codable, Hashable {
 final class HomeViewModel: ObservableObject {
     @Published var stories: [Story] = []
     @Published var genre: String = "Adventure"
+    @Published var status = ""
     
     func getStories() throws {
         
@@ -182,7 +183,11 @@ final class HomeViewModel: ObservableObject {
                 "status": "pending"
             ]
             
-            db.collection("Children2").document(toChildId).collection("friendRequests").addDocument(data: friendRequestData) { error in
+        // Use toChildId as the document ID for the friend request
+        let requestRef = db.collection("Children2").document(toChildId).collection("friendRequests").document(fromChildId)
+            
+            // Set the data for the friend request document
+            requestRef.setData(friendRequestData) { error in
                 if let error = error {
                     print("Error sending friend request: \(error.localizedDescription)")
                 } else {
@@ -190,6 +195,29 @@ final class HomeViewModel: ObservableObject {
                 }
             }
         }
+    
+    func checkFriendshipStatus(childId: String, friendChildId: String) {
+        let db = Firestore.firestore()
+        let userRef = db.collection("Children2").document(childId)
+        let friendRequestRef = db.collection("Children2").document(friendChildId).collection("friendRequests").document(childId)
+          
+          // Check if already friends
+          userRef.collection("friends").document(friendChildId).getDocument { [weak self] (document, error) in
+              if let document = document, document.exists {
+                  self?.status = "Friends"
+                  return
+              }
+              
+              // Check for pending requests
+              friendRequestRef.getDocument { [weak self] (document, error) in
+                  if let document = document, document.exists  {
+                      self?.status = "Pending"
+                  } else {
+                      self?.status = "Send Request"
+                  }
+              }
+          }
+      }
 }
 
 struct HomeView: View {
@@ -354,7 +382,7 @@ struct StoryRowView: View {
                                                 Text(story.childUsername)
                                                     .font(.subheadline)
                                                 Spacer()
-                                                Image(systemName: "person.crop.circle.badge.exclamationmark")
+                                                Image(systemName: viewModel.status == "Friends" ? "person.crop.circle.badge.checkmark" : (viewModel.status == "Pending" ? "clock" : "plus"))
                                             }
                                                 .padding(5)
                                                 .frame(width: 200)
@@ -363,7 +391,10 @@ struct StoryRowView: View {
                                                 .cornerRadius(15)
                                                 .padding()
                                                 .onTapGesture {
-                                                    viewModel.sendFriendRequest(toChildId: story.childId, fromChildId: childId)
+                                                    if viewModel.status != "Friends" && viewModel.status != "Pending" {
+                                                        viewModel.sendFriendRequest(toChildId: story.childId, fromChildId: childId)
+                                                    }
+                                                    
                                                 }
                                             , alignment: .topTrailing
                                         )
@@ -395,6 +426,11 @@ struct StoryRowView: View {
                             .font(.body)
                             .padding(.horizontal)
                             .frame(width: UIScreen.main.bounds.width * 0.7)
+                        
+                        Text(viewModel.status)
+                            .onAppear {
+                                viewModel.checkFriendshipStatus(childId: childId, friendChildId: story.childId)
+                            }
                     }
                     HStack {
                         Spacer()

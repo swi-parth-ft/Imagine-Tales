@@ -72,13 +72,13 @@ final class FriendsViewModel: ObservableObject {
             "addedDate": Date()
         ]
         
-        db.collection("Children2").document(userId).collection("friends").addDocument(data: userFriendData) { error in
-            if let error = error {
-                print("Error adding friend: \(error.localizedDescription)")
-            } else {
-                print("Friend added successfully!")
+        db.collection("Children2").document(userId).collection("friends").document(friendUserId).setData(userFriendData) { error in
+                if let error = error {
+                    print("Error adding friend: \(error.localizedDescription)")
+                } else {
+                    print("Friend added successfully!")
+                }
             }
-        }
     }
     
     
