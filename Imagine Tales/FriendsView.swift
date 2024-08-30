@@ -12,6 +12,7 @@ final class FriendsViewModel: ObservableObject {
     
     @Published var friends = [String]()
     @Published var friendRequests = [(requestId: String, fromUserId: String)]()
+    @Published var child: UserChildren?
     
     func fetchFriends(childId: String) {
         let db = Firestore.firestore()
@@ -81,6 +82,46 @@ final class FriendsViewModel: ObservableObject {
             }
     }
     
+    func fetchChild(ChildId: String) {
+        let docRef = Firestore.firestore().collection("Children2").document(ChildId)
+        
+        
+        docRef.getDocument(as: UserChildren.self) { result in
+            switch result {
+            case .success(let document):
+                self.child = document
+                
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
+    
+    func deleteRequest(childId: String, docID: String) {
+        
+        let db = Firestore.firestore()
+        db.collection("Children2").document(childId).collection("friendRequests").document(docID).delete { error in
+            if let error = error {
+                print("Error removing document: \(error.localizedDescription)")
+            } else {
+                print("Document successfully removed!")
+            }
+        }
+    }
+    
+    func removeFriend(childId: String, docID: String) {
+        
+        let db = Firestore.firestore()
+        db.collection("Children2").document(childId).collection("friends").document(docID).delete { error in
+            if let error = error {
+                print("Error removing document: \(error.localizedDescription)")
+            } else {
+                print("Document successfully removed!")
+            }
+        }
+    }
+    
     
 }
 struct FriendsView: View {
@@ -95,13 +136,18 @@ struct FriendsView: View {
             
             List(viewModel.friendRequests, id: \.requestId) { request in
                 HStack {
-                    Text("From: \(request.fromUserId)")
+                    if let username = viewModel.child?.username {
+                        Text("From: \(username)")
+                    } else {
+                        Text("From: ")
+                    }
                     Spacer()
                     
                     // Encapsulate each button in a ZStack and give fixed width
                     ZStack {
                         Button(action: {
                             viewModel.respondToFriendRequest(childId: childId, requestId: request.requestId, response: "accepted", friendUserId: request.fromUserId)
+                            viewModel.deleteRequest(childId: childId, docID: request.fromUserId)
                         }) {
                             Text("Accept")
                                 .foregroundColor(.red)
@@ -127,6 +173,9 @@ struct FriendsView: View {
                     }
                     .padding(.vertical, 10)
                 }
+                .onAppear {
+                    viewModel.fetchChild(ChildId: request.fromUserId)
+                }
                 .padding(.vertical, 10) // Add vertical padding for better button spacing
             }
             .onAppear {
@@ -139,7 +188,21 @@ struct FriendsView: View {
                     .padding()
                 
                 List(viewModel.friends, id: \.self) { friend in
-                    Text(friend)
+                    VStack {
+                        if let username = viewModel.child?.username {
+                            Text("\(username)")
+                        } else {
+                            Text("")
+                        }
+                        
+                        Button("Remove") {
+                            viewModel.removeFriend(childId: childId, docID: friend)
+                            viewModel.removeFriend(childId: friend, docID: childId)
+                        }
+                    }
+                        .onAppear {
+                            viewModel.fetchChild(ChildId: friend)
+                        }
                 }
                 .onAppear {
                     viewModel.fetchFriends(childId: childId)

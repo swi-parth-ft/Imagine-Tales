@@ -396,6 +396,9 @@ struct StoryRowView: View {
                                                     }
                                                     
                                                 }
+                                                .onAppear {
+                                                    viewModel.checkFriendshipStatus(childId: childId, friendChildId: story.childId)
+                                                }
                                             , alignment: .topTrailing
                                         )
                                         .padding()
@@ -427,10 +430,8 @@ struct StoryRowView: View {
                             .padding(.horizontal)
                             .frame(width: UIScreen.main.bounds.width * 0.7)
                         
-                        Text(viewModel.status)
-                            .onAppear {
-                                viewModel.checkFriendshipStatus(childId: childId, friendChildId: story.childId)
-                            }
+                       // Text(viewModel.status)
+                            
                     }
                     HStack {
                         Spacer()
