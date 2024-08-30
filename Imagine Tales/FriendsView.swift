@@ -162,6 +162,7 @@ struct FriendsView: View {
                     ZStack {
                         Button(action: {
                             viewModel.respondToFriendRequest(childId: childId, requestId: request.requestId, response: "denied", friendUserId: request.fromUserId)
+                            viewModel.deleteRequest(childId: childId, docID: request.fromUserId)
                         }) {
                             Text("Deny")
                                 .foregroundColor(.red)

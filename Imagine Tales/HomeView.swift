@@ -382,7 +382,9 @@ struct StoryRowView: View {
                                                 Text(story.childUsername)
                                                     .font(.subheadline)
                                                 Spacer()
-                                                Image(systemName: viewModel.status == "Friends" ? "person.crop.circle.badge.checkmark" : (viewModel.status == "Pending" ? "clock" : "plus"))
+                                                if childId != story.childId {
+                                                    Image(systemName: viewModel.status == "Friends" ? "person.crop.circle.badge.checkmark" : (viewModel.status == "Pending" ? "clock" : "plus"))
+                                                }
                                             }
                                                 .padding(5)
                                                 .frame(width: 200)
@@ -391,14 +393,17 @@ struct StoryRowView: View {
                                                 .cornerRadius(15)
                                                 .padding()
                                                 .onTapGesture {
-                                                    if viewModel.status != "Friends" && viewModel.status != "Pending" {
-                                                        viewModel.sendFriendRequest(toChildId: story.childId, fromChildId: childId)
+                                                    if childId != story.childId {
+                                                        if viewModel.status != "Friends" && viewModel.status != "Pending" {
+                                                            viewModel.sendFriendRequest(toChildId: story.childId, fromChildId: childId)
+                                                        }
                                                     }
                                                     
                                                 }
                                                 .onAppear {
                                                     viewModel.checkFriendshipStatus(childId: childId, friendChildId: story.childId)
                                                 }
+                                            
                                             , alignment: .topTrailing
                                         )
                                         .padding()
