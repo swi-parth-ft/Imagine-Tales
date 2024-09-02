@@ -277,63 +277,71 @@ struct HomeView: View {
         "Western"
     ]
     @AppStorage("childId") var childId: String = "Default Value"
+    @State private var isSearching = false
     
     var body: some View {
         NavigationStack {
-            VStack {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(genres, id: \.self) { category in
-                            Button(action: {
-                                withAnimation {
-                                    viewModel.genre = category
-                                    Task {
-                                        do {
-                                            try await viewModel.getStories(childId: childId)
-                                            reload.toggle()
-                                        } catch {
-                                            print(error.localizedDescription)
+            ZStack {
+                VStack {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(genres, id: \.self) { category in
+                                Button(action: {
+                                    withAnimation {
+                                        viewModel.genre = category
+                                        Task {
+                                            do {
+                                                try await viewModel.getStories(childId: childId)
+                                                reload.toggle()
+                                            } catch {
+                                                print(error.localizedDescription)
+                                            }
                                         }
                                     }
+                                }) {
+                                    Text(category)
+                                        .padding()
+                                        .background(category == viewModel.genre ? Color.green : Color.clear)
+                                        .foregroundColor(category == viewModel.genre ? .white : .black)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.green, lineWidth: category == viewModel.genre ? 0 : 1)
+                                        )
+                                        .cornerRadius(10)
                                 }
-                            }) {
-                                Text(category)
-                                    .padding()
-                                    .background(category == viewModel.genre ? Color.green : Color.clear)
-                                    .foregroundColor(category == viewModel.genre ? .white : .black)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.green, lineWidth: category == viewModel.genre ? 0 : 1)
-                                    )
-                                    .cornerRadius(10)
                             }
                         }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
-                }
-                .padding()
-                StoryListView(stories: viewModel.stories, reload: $reload, childId: childId)
-                
-                    .onAppear {
-                        Task {
-                            do {
-                                try await viewModel.getStories(childId: childId)
-                            } catch {
-                                print(error.localizedDescription)
-                            }
-                        }
-                    }
+                    .padding()
+                    StoryListView(stories: viewModel.stories, reload: $reload, childId: childId)
                     
-            }
-            .onChange(of: reload) {
-                Task {
-                    do {
-                        try await viewModel.getStories(childId: childId)
-                    } catch {
-                        print(error.localizedDescription)
+                        .onAppear {
+                            Task {
+                                do {
+                                    try await viewModel.getStories(childId: childId)
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
+                        }
+                    
+                }
+                .navigationTitle("Imagine Tales")
+                
+                .onChange(of: reload) {
+                    Task {
+                        do {
+                            try await viewModel.getStories(childId: childId)
+                        } catch {
+                            print(error.localizedDescription)
+                        }
                     }
                 }
             }
+        
+            
+            
         }
     }
 }

@@ -20,6 +20,7 @@
 		0701FBA42C83E49E004BEE9F /* Radial.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB972C83E49E004BEE9F /* Radial.metal */; };
 		0701FBAA2C83F126004BEE9F /* TransitionShader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBA92C83F126004BEE9F /* TransitionShader.swift */; };
 		0701FBAC2C83F194004BEE9F /* TransitionPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBAB2C83F194004BEE9F /* TransitionPreview.swift */; };
+		0701FBAE2C861739004BEE9F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBAD2C861739004BEE9F /* SearchView.swift */; };
 		0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F34E2C6D5D79006C86AA /* RootView.swift */; };
 		0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3502C6D5DCA006C86AA /* TabbarView.swift */; };
 		0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3532C6D5F3F006C86AA /* FloatingTabBar */; };
@@ -79,6 +80,7 @@
 		0701FB992C83E49E004BEE9F /* Wind.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Wind.metal; sourceTree = "<group>"; };
 		0701FBA92C83F126004BEE9F /* TransitionShader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionShader.swift; sourceTree = "<group>"; };
 		0701FBAB2C83F194004BEE9F /* TransitionPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionPreview.swift; sourceTree = "<group>"; };
+		0701FBAD2C861739004BEE9F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		0711F34E2C6D5D79006C86AA /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		0711F3502C6D5DCA006C86AA /* TabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
 		0711F3572C6D63F1006C86AA /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				0701FBA92C83F126004BEE9F /* TransitionShader.swift */,
 				076C22992C7E8C3E001DAB3F /* HomeView.swift */,
 				0792C1D72C7AA2FB000C42A7 /* CharacterView.swift */,
+				0701FBAD2C861739004BEE9F /* SearchView.swift */,
 				0711F3752C6D7433006C86AA /* ProfileView.swift */,
 				07FB38632C63B3720070EEFA /* Environment.swift */,
 				0701FB9A2C83E49E004BEE9F /* Transition */,
@@ -343,6 +346,7 @@
 				0792C1D82C7AA2FB000C42A7 /* CharacterView.swift in Sources */,
 				0701FB8D2C822816004BEE9F /* FriendsView.swift in Sources */,
 				0711F3722C6D7244006C86AA /* SignInGoogleHelper.swift in Sources */,
+				0701FBAE2C861739004BEE9F /* SearchView.swift in Sources */,
 				073F2CF42C6FA0A800BCF6F0 /* SignInWithEmailView.swift in Sources */,
 				076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */,
 				0701FB9B2C83E49E004BEE9F /* Pixellate.metal in Sources */,

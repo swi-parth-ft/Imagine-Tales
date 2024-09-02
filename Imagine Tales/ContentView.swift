@@ -861,29 +861,6 @@ struct ContentView: View {
                 .padding(.bottom, 70)
             }
             .navigationTitle(isGeneratingTitle ? "\(title)" : "Imagine a Story")
-            .toolbar {
-                
-                
-                ToolbarItemGroup(placement: .navigationBarLeading) {
-                    Image(systemName: "person.circle.fill") // Replace with your image name
-                        .resizable()
-                        .frame(width: 40, height: 40) // Adjust the size as needed
-                        .clipShape(Circle())
-                }
-                
-                
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button("search", systemImage: "sparkle.magnifyingglass") {
-                        
-                    }
-                    
-                    
-                    Button("Notifications", systemImage: "bell") {
-                        
-                    }
-                }
-            }
-            .tint(.black)
             .sheet(isPresented: $isAddingChar, onDismiss: {
                 // This code will run when the sheet is dismissed
                 Task {
@@ -1031,14 +1008,14 @@ Create an kids story book image that depicts a story with the following prompt: 
                 let lastSeparator = selectedChars.count > 1 ? " and " : ""
                 
                 if nextKey {
-                    prompt = "Write a next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
+                    prompt = "Write a next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. In 100 words"
                     
                 } else if finishKey && !isGeneratingTitle {
-                    prompt = "finish this story: \(continueStory) details: of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
+                    prompt = "finish this story: \(continueStory) details: of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. in 100 words"
                 } else if isGeneratingTitle {
                     prompt = "Give me a story title for this story \(continueStory) in 3 words only. output should be only 3 words nothing extra"
                 } else {
-                    prompt = "Write a first begining paragraph/pilot of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together."
+                    prompt = "Write a first begining paragraph/pilot of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. In 100 words"
                 }
             }
             print(prompt)

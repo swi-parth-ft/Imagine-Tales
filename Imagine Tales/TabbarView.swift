@@ -63,68 +63,96 @@ struct TabbarView: View {
         Color(red: 255/255, green: 250/255, blue: 215/255),  // More vivid Old Lace
         Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
     ]
-    
+    @State private var isSearching = false
     var body: some View {
-        ZStack(alignment: .bottom) {
-            MeshGradient(
-                width: 3,
-                height: 3,
-                points: [
-                    [0, 0], [0.5, 0], [1, 0],
-                    [0, 0.5], [0.5, 0.5], [1, 0.5],
-                    [0, 1], [0.5, 1], [1, 1]
-                ],
-                colors: bookBackgroundColors
-            ).ignoresSafeArea()
-            TabView(selection: $selectedTab) {
-                HomeView(reload: $reload)
-                    .tag(0)
-                    .padding()
-                
-                FriendsView()
-                    .tag(1)
-                    .padding()
-                
-                ContentView()
-                    .tag(2)
-                    .padding()
-                
-                SavedStoryView(reload: $reload)
-                    .tag(3)
-                    .padding()
-                
-                ProfileView(showSignInView: $showSignInView, reload: $reload)
-                    .tag(4)
-                    .padding()
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            .ignoresSafeArea()
-            .safeAreaInset(edge: .bottom) {
-                ZStack{
-                    HStack{
-                        ForEach((TabItems.allCases), id: \.self){ item in
-                            Button{
-                                selectedTab = item.rawValue
-                                reload.toggle()
-                            } label: {
-                                CustomTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
+        NavigationStack {
+            ZStack(alignment: .bottom) {
+                MeshGradient(
+                    width: 3,
+                    height: 3,
+                    points: [
+                        [0, 0], [0.5, 0], [1, 0],
+                        [0, 0.5], [0.5, 0.5], [1, 0.5],
+                        [0, 1], [0.5, 1], [1, 1]
+                    ],
+                    colors: bookBackgroundColors
+                ).ignoresSafeArea()
+                TabView(selection: $selectedTab) {
+                    HomeView(reload: $reload)
+                        .tag(0)
+                        .padding()
+                    
+                    FriendsView()
+                        .tag(1)
+                        .padding()
+                    
+                    ContentView()
+                        .tag(2)
+                        .padding()
+                    
+                    SavedStoryView(reload: $reload)
+                        .tag(3)
+                        .padding()
+                    
+                    ProfileView(showSignInView: $showSignInView, reload: $reload)
+                        .tag(4)
+                        .padding()
+                }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                .ignoresSafeArea()
+                .safeAreaInset(edge: .bottom) {
+                    ZStack{
+                        HStack{
+                            ForEach((TabItems.allCases), id: \.self){ item in
+                                Button{
+                                    selectedTab = item.rawValue
+                                    reload.toggle()
+                                } label: {
+                                    CustomTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
+                                }
                             }
                         }
+                        .padding(6)
                     }
-                    .padding(6)
+                    .frame(width: UIScreen.main.bounds.width * 0.95, height: 70)
+                    .background(Color(hex: "#FFFFF1"))
+                    .cornerRadius(20)
+                    .padding(.horizontal, 26)
+                    .shadow(radius: 10)
                 }
-                .frame(width: UIScreen.main.bounds.width * 0.95, height: 70)
-                .background(Color(hex: "#FFFFF1"))
-                .cornerRadius(20)
-                .padding(.horizontal, 26)
-                .shadow(radius: 10)
+                
             }
-            
-        }
-        .onAppear {
+            .onAppear {
                 hideSystemTabBar()
             }
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarLeading) {
+                Image(systemName: "person.circle.fill") // Replace with your image name
+                    .resizable()
+                    .frame(width: 40, height: 40) // Adjust the size as needed
+                    .clipShape(Circle())
+            }
+            
+            
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Button("search", systemImage: "sparkle.magnifyingglass") {
+                    isSearching = true
+                }
+                
+                
+                Button("Notifications", systemImage: "bell") {
+                    
+                }
+            }
+        }
+        .tint(.black)
+        .sheet(isPresented: $isSearching, onDismiss: {
+        
+        }) {
+            SearchView()
+        }
+    }
         
         // Hide system tab bar
         private func hideSystemTabBar() {

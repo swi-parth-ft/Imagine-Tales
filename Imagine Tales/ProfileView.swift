@@ -147,13 +147,10 @@ struct ProfileView: View {
                 
                 VStack {
                     List {
-                        Text("Your Stories")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .listRowBackground(Color.white.opacity(0.5))
-                        ForEach(parentViewModel.story, id: \.id) { story in
-                            NavigationLink(destination: StoryFromProfileView(story: story)) {
-                                
+                        Section("Your Stories") {
+                            ForEach(parentViewModel.story, id: \.id) { story in
+                                NavigationLink(destination: StoryFromProfileView(story: story)) {
+                                    
                                     HStack {
                                         VStack {
                                             Spacer()
@@ -163,9 +160,10 @@ struct ProfileView: View {
                                         Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
                                             .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
                                     }
-                                
+                                    
+                                }
+                                .listRowBackground(Color.white.opacity(0.5))
                             }
-                            .listRowBackground(Color.white.opacity(0.5))
                         }
                     }
                     .scrollContentBackground(.hidden)
@@ -480,89 +478,70 @@ struct StoryFromProfileView: View {
                             
                         }
                         .padding()
-                        
-                        HStack {
-                            Spacer()
-                            ZStack {
-                                HStack {
-                                    if count != 0 {
-                                        ZStack {
-                                            
-                                            VisualEffectBlur(blurStyle: .systemThinMaterial)
-                                                .frame(width: 100, height: 100)
-                                                .cornerRadius(20)
-                                                .overlay(
-                                                    Circle() // Circular stroke
-                                                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                                                )
-                                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                                .onTapGesture {
-                                                    print(count)
-                                                    print(story.storyText.count)
-                                                    withAnimation(.easeIn(duration: 0.7)) {
-                                                        count -= 1
+                        .safeAreaInset(edge: .bottom) {
+                            HStack {
+                                Spacer()
+                                ZStack {
+                                    HStack {
+                                        if count != 0 {
+                                            ZStack {
+                                                
+                                                VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                                    .frame(width: 100, height: 100)
+                                                    .cornerRadius(20)
+                                                    .overlay(
+                                                        Circle() // Circular stroke
+                                                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                                    )
+                                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                    .onTapGesture {
+                                                        print(count)
+                                                        print(story.storyText.count)
+                                                        withAnimation(.easeIn(duration: 0.7)) {
+                                                            count -= 1
+                                                        }
+                                                        
                                                     }
-                                                    
-                                                }
-                                            
-//                                            Circle()
-//                                                .fill(.orange)
-//                                                .frame(width: 100, height: 100)
-//                                                .onTapGesture {
-//                                                    print(count)
-//                                                    print(story.storyText.count)
-//                                                    withAnimation(.easeIn(duration: 1.5)) {
-//                                                        count -= 1
-//                                                    }
-//                                                    
-//                                                }
-                                            
-                                            Image(systemName: "arrowshape.backward.fill")
+                                                
+                                                
+                                                Image(systemName: "arrowshape.backward.fill")
+                                            }
+                                        }
+                                        Spacer()
+                                        if count < story.storyText.count - 1{
+                                            ZStack {
+                                                
+                                                VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                                    .frame(width: 100, height: 100)
+                                                    .cornerRadius(20)
+                                                    .overlay(
+                                                        Circle() // Circular stroke
+                                                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                                    )
+                                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                    .onTapGesture {
+                                                        print(count)
+                                                        print(story.storyText.count)
+                                                        withAnimation(.easeIn(duration: 0.7)) {
+                                                            count += 1
+                                                        }
+                                                        
+                                                    }
+                                                
+                                                
+                                                Image(systemName: "arrowshape.bounce.right.fill")
+                                            }
                                         }
                                     }
-                                    Spacer()
-                                    if count < story.storyText.count - 1{
-                                        ZStack {
-                                            
-                                            VisualEffectBlur(blurStyle: .systemThinMaterial)
-                                                .frame(width: 100, height: 100)
-                                                .cornerRadius(20)
-                                                .overlay(
-                                                    Circle() // Circular stroke
-                                                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                                                )
-                                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                                .onTapGesture {
-                                                    print(count)
-                                                    print(story.storyText.count)
-                                                    withAnimation(.easeIn(duration: 0.7)) {
-                                                        count += 1
-                                                    }
-                                                    
-                                                }
-                                            
-//                                            Circle()
-//                                                .fill(.orange)
-//                                                .frame(width: 100, height: 100)
-//                                                .onTapGesture {
-//                                                    print(count)
-//                                                    print(story.storyText.count)
-//                                                    withAnimation(.easeIn(duration: 1.5)) {
-//                                                        count += 1
-//                                                    }
-//                                                    
-//                                                }
-                                            
-                                            Image(systemName: "arrowshape.bounce.right.fill")
-                                        }
-                                    }
+                                    
+                                    
                                 }
-                                
-                                
+                                .padding()
+                                .padding(.bottom, 40)
                             }
-                            .padding()
-                            .padding(.bottom, 40)
                         }
+                        
+                        
                     }
                     .padding()
                     .navigationTitle(story.title)
