@@ -396,6 +396,7 @@ struct StoryFromProfileView: View {
     @State private var count = 0
     @State private var currentPage = 0
     @StateObject var viewModel = ParentViewModel()
+    var shader = TransitionShader(name: "Crosswarp (→)", transition: .crosswarpLTR)
     var body: some View {
         NavigationStack {
             VStack {
@@ -403,6 +404,7 @@ struct StoryFromProfileView: View {
                     
                         VStack {
                             ZStack(alignment: .topTrailing) {
+                                VStack {
                                 AsyncImage(url: URL(string: story.storyText[count].image)) { phase in
                                     switch phase {
                                     case .empty:
@@ -416,6 +418,7 @@ struct StoryFromProfileView: View {
                                             .clipped()
                                             .cornerRadius(30)
                                             .padding()
+                                        
                                     case .failure(_):
                                         Image(systemName: "photo")
                                             .resizable()
@@ -427,16 +430,26 @@ struct StoryFromProfileView: View {
                                 }
                                 .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
                                 .cornerRadius(10)
+                                    Text(story.storyText[count].text)
+                                        .frame(width: UIScreen.main.bounds.width * 0.8)
+                                        .padding()
+                                }
+                                .id(count)
+                                .transition(shader.transition)
+                                // Force re-render when count changes
+                                
+                                
+                                
+                                
                             }
                             
-                            Text(story.storyText[count].text)
-                                .frame(width: UIScreen.main.bounds.width * 0.8)
-                                .padding()
                             
                             
                             
                         }
                         .padding()
+                        
+                        
                     
                 }
                 HStack {
@@ -451,7 +464,7 @@ struct StoryFromProfileView: View {
                                         .onTapGesture {
                                             print(count)
                                             print(story.storyText.count)
-                                            withAnimation {
+                                            withAnimation(.easeIn(duration: 1.5)) {
                                                 count -= 1
                                             }
                                             
@@ -469,7 +482,7 @@ struct StoryFromProfileView: View {
                                         .onTapGesture {
                                             print(count)
                                             print(story.storyText.count)
-                                            withAnimation {
+                                            withAnimation(.easeIn(duration: 1.5)) {
                                                 count += 1
                                             }
                                             
