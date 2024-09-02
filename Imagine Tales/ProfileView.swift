@@ -397,116 +397,197 @@ struct StoryFromProfileView: View {
     @State private var currentPage = 0
     @StateObject var viewModel = ParentViewModel()
     var shader = TransitionShader(name: "Crosswarp (→)", transition: .crosswarpLTR)
+    
+    @State private var offset = CGSize.zero
+    
+    let bookBackgroundColors: [Color] = [
+        Color(red: 255/255, green: 235/255, blue: 190/255),  // More vivid Beige
+        Color(red: 220/255, green: 220/255, blue: 220/255),  // More vivid Light Gray
+        Color(red: 255/255, green: 230/255, blue: 240/255),  // More vivid Lavender Blush
+        Color(red: 255/255, green: 255/255, blue: 245/255),  // More vivid Mint Cream
+        Color(red: 230/255, green: 255/255, blue: 230/255),  // More vivid Honeydew
+        Color(red: 230/255, green: 248/255, blue: 255/255),  // More vivid Alice Blue
+        Color(red: 255/255, green: 250/255, blue: 230/255),  // More vivid Seashell
+        Color(red: 255/255, green: 250/255, blue: 215/255),  // More vivid Old Lace
+        Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
+    ]
+    
     var body: some View {
         NavigationStack {
-            VStack {
+            ZStack {
+                MeshGradient(
+                    width: 3,
+                    height: 3,
+                    points: [
+                        [0, 0], [0.5, 0], [1, 0],
+                        [0, 0.5], [0.5, 0.5], [1, 0.5],
+                        [0, 1], [0.5, 1], [1, 1]
+                    ],
+                    colors: bookBackgroundColors
+                ).ignoresSafeArea()
                 ScrollView {
-                    
+                    VStack {
                         VStack {
                             ZStack(alignment: .topTrailing) {
+                                VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9)
+                                    .cornerRadius(20)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                    )
+                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                
                                 VStack {
-                                AsyncImage(url: URL(string: story.storyText[count].image)) { phase in
-                                    switch phase {
-                                    case .empty:
-                                        ProgressView()
-                                            .progressViewStyle(CircularProgressViewStyle())
-                                    case .success(let image):
-                                        image
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(height: 500)
-                                            .clipped()
-                                            .cornerRadius(30)
-                                            .padding()
-                                        
-                                    case .failure(_):
-                                        Image(systemName: "photo")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .padding()
-                                    @unknown default:
-                                        EmptyView()
+                                    AsyncImage(url: URL(string: story.storyText[count].image)) { phase in
+                                        switch phase {
+                                        case .empty:
+                                            GradientRectView()
+                                        case .success(let image):
+                                            image
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(height: 500)
+                                                .clipped()
+                                                .cornerRadius(30)
+                                            
+                                                .padding()
+                                            
+                                            
+                                        case .failure(_):
+                                            Image(systemName: "photo")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .padding()
+                                        @unknown default:
+                                            EmptyView()
+                                        }
                                     }
-                                }
-                                .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
-                                .cornerRadius(10)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 10)
+                                    
                                     Text(story.storyText[count].text)
                                         .frame(width: UIScreen.main.bounds.width * 0.8)
                                         .padding()
+                                    
                                 }
+                                .padding(.top)
                                 .id(count)
                                 .transition(shader.transition)
-                                // Force re-render when count changes
-                                
-                                
-                                
-                                
                             }
-                            
-                            
-                            
                             
                         }
                         .padding()
                         
-                        
-                    
-                }
-                HStack {
-                    Spacer()
-                    ZStack {
                         HStack {
-                            if count != 0 {
-                                ZStack {
-                                    Circle()
-                                        .fill(.orange)
-                                        .frame(width: 100, height: 100)
-                                        .onTapGesture {
-                                            print(count)
-                                            print(story.storyText.count)
-                                            withAnimation(.easeIn(duration: 1.5)) {
-                                                count -= 1
-                                            }
-                                            
-                                        }
-                                    
-                                    Image(systemName: "arrowshape.backward.fill")
-                                }
-                            }
                             Spacer()
-                            if count < story.storyText.count - 1{
-                                ZStack {
-                                    Circle()
-                                        .fill(.orange)
-                                        .frame(width: 100, height: 100)
-                                        .onTapGesture {
-                                            print(count)
-                                            print(story.storyText.count)
-                                            withAnimation(.easeIn(duration: 1.5)) {
-                                                count += 1
-                                            }
+                            ZStack {
+                                HStack {
+                                    if count != 0 {
+                                        ZStack {
                                             
+                                            VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                                .frame(width: 100, height: 100)
+                                                .cornerRadius(20)
+                                                .overlay(
+                                                    Circle() // Circular stroke
+                                                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                                )
+                                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                .onTapGesture {
+                                                    print(count)
+                                                    print(story.storyText.count)
+                                                    withAnimation(.easeIn(duration: 0.7)) {
+                                                        count -= 1
+                                                    }
+                                                    
+                                                }
+                                            
+//                                            Circle()
+//                                                .fill(.orange)
+//                                                .frame(width: 100, height: 100)
+//                                                .onTapGesture {
+//                                                    print(count)
+//                                                    print(story.storyText.count)
+//                                                    withAnimation(.easeIn(duration: 1.5)) {
+//                                                        count -= 1
+//                                                    }
+//                                                    
+//                                                }
+                                            
+                                            Image(systemName: "arrowshape.backward.fill")
                                         }
-                                    
-                                    Image(systemName: "arrowshape.bounce.right.fill")
+                                    }
+                                    Spacer()
+                                    if count < story.storyText.count - 1{
+                                        ZStack {
+                                            
+                                            VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                                .frame(width: 100, height: 100)
+                                                .cornerRadius(20)
+                                                .overlay(
+                                                    Circle() // Circular stroke
+                                                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                                )
+                                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                .onTapGesture {
+                                                    print(count)
+                                                    print(story.storyText.count)
+                                                    withAnimation(.easeIn(duration: 0.7)) {
+                                                        count += 1
+                                                    }
+                                                    
+                                                }
+                                            
+//                                            Circle()
+//                                                .fill(.orange)
+//                                                .frame(width: 100, height: 100)
+//                                                .onTapGesture {
+//                                                    print(count)
+//                                                    print(story.storyText.count)
+//                                                    withAnimation(.easeIn(duration: 1.5)) {
+//                                                        count += 1
+//                                                    }
+//                                                    
+//                                                }
+                                            
+                                            Image(systemName: "arrowshape.bounce.right.fill")
+                                        }
+                                    }
                                 }
+                                
+                                
                             }
+                            .padding()
+                            .padding(.bottom, 40)
                         }
-                        
-                        
                     }
                     .padding()
-                    .padding(.bottom, 40)
+                    .navigationTitle(story.title)
                 }
             }
-            .padding()
-            .navigationTitle(story.title)
-          
-            
         }
     }
     
 }
+
+// Helper view to add a blur effect
+struct VisualEffectBlur: UIViewRepresentable {
+    var blurStyle: UIBlurEffect.Style
+    var intensity: CGFloat? = nil
+
+    func makeUIView(context: Context) -> UIVisualEffectView {
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: blurStyle))
+        return view
+    }
+
+    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
+        uiView.effect = UIBlurEffect(style: blurStyle)
+    }
+}
+
+
 #Preview {
     ProfileView(showSignInView: .constant(false), reload: .constant(false))
     
