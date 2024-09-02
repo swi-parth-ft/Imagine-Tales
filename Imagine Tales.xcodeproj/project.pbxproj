@@ -8,6 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		0701FB8D2C822816004BEE9F /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB8C2C822816004BEE9F /* FriendsView.swift */; };
+		0701FB9B2C83E49E004BEE9F /* Pixellate.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB962C83E49E004BEE9F /* Pixellate.metal */; };
+		0701FB9C2C83E49E004BEE9F /* Wind.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB992C83E49E004BEE9F /* Wind.metal */; };
+		0701FB9D2C83E49E004BEE9F /* Genie.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB952C83E49E004BEE9F /* Genie.metal */; };
+		0701FB9E2C83E49E004BEE9F /* CircleWave.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB912C83E49E004BEE9F /* CircleWave.metal */; };
+		0701FB9F2C83E49E004BEE9F /* DiamondWave.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB942C83E49E004BEE9F /* DiamondWave.metal */; };
+		0701FBA02C83E49E004BEE9F /* Crosswarp.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB922C83E49E004BEE9F /* Crosswarp.metal */; };
+		0701FBA12C83E49E004BEE9F /* Swirl.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB982C83E49E004BEE9F /* Swirl.metal */; };
+		0701FBA22C83E49E004BEE9F /* Diamond.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB932C83E49E004BEE9F /* Diamond.metal */; };
+		0701FBA32C83E49E004BEE9F /* Circle.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB902C83E49E004BEE9F /* Circle.metal */; };
+		0701FBA42C83E49E004BEE9F /* Radial.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FB972C83E49E004BEE9F /* Radial.metal */; };
+		0701FBAA2C83F126004BEE9F /* TransitionShader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBA92C83F126004BEE9F /* TransitionShader.swift */; };
+		0701FBAC2C83F194004BEE9F /* TransitionPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBAB2C83F194004BEE9F /* TransitionPreview.swift */; };
 		0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F34E2C6D5D79006C86AA /* RootView.swift */; };
 		0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3502C6D5DCA006C86AA /* TabbarView.swift */; };
 		0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3532C6D5F3F006C86AA /* FloatingTabBar */; };
@@ -55,6 +67,18 @@
 
 /* Begin PBXFileReference section */
 		0701FB8C2C822816004BEE9F /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
+		0701FB902C83E49E004BEE9F /* Circle.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Circle.metal; sourceTree = "<group>"; };
+		0701FB912C83E49E004BEE9F /* CircleWave.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CircleWave.metal; sourceTree = "<group>"; };
+		0701FB922C83E49E004BEE9F /* Crosswarp.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Crosswarp.metal; sourceTree = "<group>"; };
+		0701FB932C83E49E004BEE9F /* Diamond.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Diamond.metal; sourceTree = "<group>"; };
+		0701FB942C83E49E004BEE9F /* DiamondWave.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = DiamondWave.metal; sourceTree = "<group>"; };
+		0701FB952C83E49E004BEE9F /* Genie.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Genie.metal; sourceTree = "<group>"; };
+		0701FB962C83E49E004BEE9F /* Pixellate.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Pixellate.metal; sourceTree = "<group>"; };
+		0701FB972C83E49E004BEE9F /* Radial.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Radial.metal; sourceTree = "<group>"; };
+		0701FB982C83E49E004BEE9F /* Swirl.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Swirl.metal; sourceTree = "<group>"; };
+		0701FB992C83E49E004BEE9F /* Wind.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Wind.metal; sourceTree = "<group>"; };
+		0701FBA92C83F126004BEE9F /* TransitionShader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionShader.swift; sourceTree = "<group>"; };
+		0701FBAB2C83F194004BEE9F /* TransitionPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionPreview.swift; sourceTree = "<group>"; };
 		0711F34E2C6D5D79006C86AA /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		0711F3502C6D5DCA006C86AA /* TabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
 		0711F3572C6D63F1006C86AA /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
@@ -114,6 +138,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0701FB9A2C83E49E004BEE9F /* Transition */ = {
+			isa = PBXGroup;
+			children = (
+				0701FB902C83E49E004BEE9F /* Circle.metal */,
+				0701FB912C83E49E004BEE9F /* CircleWave.metal */,
+				0701FB922C83E49E004BEE9F /* Crosswarp.metal */,
+				0701FB932C83E49E004BEE9F /* Diamond.metal */,
+				0701FB942C83E49E004BEE9F /* DiamondWave.metal */,
+				0701FB952C83E49E004BEE9F /* Genie.metal */,
+				0701FB962C83E49E004BEE9F /* Pixellate.metal */,
+				0701FB972C83E49E004BEE9F /* Radial.metal */,
+				0701FB982C83E49E004BEE9F /* Swirl.metal */,
+				0701FB992C83E49E004BEE9F /* Wind.metal */,
+			);
+			path = Transition;
+			sourceTree = "<group>";
+		};
 		0711F36E2C6D7046006C86AA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,10 +223,13 @@
 				077BE2862C810FF800760D5A /* SavedStoryView.swift */,
 				0792C1D92C7BD95E000C42A7 /* ParentView.swift */,
 				077BE2752C800A4A00760D5A /* GradientRectView.swift */,
+				0701FBAB2C83F194004BEE9F /* TransitionPreview.swift */,
+				0701FBA92C83F126004BEE9F /* TransitionShader.swift */,
 				076C22992C7E8C3E001DAB3F /* HomeView.swift */,
 				0792C1D72C7AA2FB000C42A7 /* CharacterView.swift */,
 				0711F3752C6D7433006C86AA /* ProfileView.swift */,
 				07FB38632C63B3720070EEFA /* Environment.swift */,
+				0701FB9A2C83E49E004BEE9F /* Transition */,
 				073F2CEB2C6F981300BCF6F0 /* AIService */,
 				0711F36E2C6D7046006C86AA /* Authentication */,
 				073F2CEE2C6F9A3300BCF6F0 /* LoadingAnimations */,
@@ -301,6 +345,17 @@
 				0711F3722C6D7244006C86AA /* SignInGoogleHelper.swift in Sources */,
 				073F2CF42C6FA0A800BCF6F0 /* SignInWithEmailView.swift in Sources */,
 				076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */,
+				0701FB9B2C83E49E004BEE9F /* Pixellate.metal in Sources */,
+				0701FB9C2C83E49E004BEE9F /* Wind.metal in Sources */,
+				0701FB9D2C83E49E004BEE9F /* Genie.metal in Sources */,
+				0701FB9E2C83E49E004BEE9F /* CircleWave.metal in Sources */,
+				0701FB9F2C83E49E004BEE9F /* DiamondWave.metal in Sources */,
+				0701FBA02C83E49E004BEE9F /* Crosswarp.metal in Sources */,
+				0701FBA12C83E49E004BEE9F /* Swirl.metal in Sources */,
+				0701FBAC2C83F194004BEE9F /* TransitionPreview.swift in Sources */,
+				0701FBA22C83E49E004BEE9F /* Diamond.metal in Sources */,
+				0701FBA32C83E49E004BEE9F /* Circle.metal in Sources */,
+				0701FBA42C83E49E004BEE9F /* Radial.metal in Sources */,
 				0711F3582C6D63F1006C86AA /* AuthenticationView.swift in Sources */,
 				07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */,
 				07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */,
@@ -310,6 +365,7 @@
 				0711F3762C6D7433006C86AA /* ProfileView.swift in Sources */,
 				077BE2892C81263F00760D5A /* TextPlaceholderView.swift in Sources */,
 				0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */,
+				0701FBAA2C83F126004BEE9F /* TransitionShader.swift in Sources */,
 				0792C1DA2C7BD95E000C42A7 /* ParentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -455,7 +511,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -486,7 +542,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -243,7 +243,7 @@ struct ContentView: View {
                 }
             }
         }
-    
+    var shader = TransitionShader(name: "Crosswarp (→)", transition: .crosswarpLTR)
     var body: some View {
         NavigationStack {
             ZStack {
@@ -288,6 +288,7 @@ struct ContentView: View {
                                                         .frame(height: 500)
                                                         .clipped()
                                                         .padding()
+                                                        .transition(shader.transition)
                                                 
                                                 
                                                 Text(storyChunk[index].0)
@@ -301,6 +302,7 @@ struct ContentView: View {
                                             VStack {
                                                
                                                     GradientRectView()
+                                                    .transition(shader.transition)
                                                 
                                                 
                                                 Text(chunkOfText)
@@ -434,6 +436,7 @@ struct ContentView: View {
                                             
                                         )
                                         .shadow(radius: 10)
+                                       
                                 }
                                 
                                 VStack(alignment: .leading) {
@@ -911,13 +914,18 @@ struct ContentView: View {
     }
     
     func generateImageUsingOpenAI() {
-        isLoadingImage = true
+        withAnimation(.easeIn(duration: 1.5)) {
+            isLoadingImage = true
+        }
+        
         
         let prompt = """
 Create an kids story book image that depicts a story with the following prompt: \(promptForImage)
 """
         OpenAIService.shared.generateImage(from: prompt) { result in
-            isImageLoading = false
+            withAnimation(.easeIn(duration: 1.5)) {
+                isImageLoading = false
+            }
             switch result {
             case .success(let image):
                 
@@ -929,9 +937,10 @@ Create an kids story book image that depicts a story with the following prompt: 
                     print(iURL)
                     self.storyTextItem.append(StoryTextItem(image: iURL, text: chunkOfText))
                 }
-                
-                self.isLoadingImage = false
-                self.loaded = true
+                withAnimation(.easeIn(duration: 1.5)) {
+                    self.isLoadingImage = false
+                    self.loaded = true
+                }
                 self.isLoadingChunk = false
                 
             case .failure(let error):
@@ -945,7 +954,9 @@ Create an kids story book image that depicts a story with the following prompt: 
         
         isLoadingTextPart = true
         if !isGeneratingTitle {
-            isLoadingImage = true
+            withAnimation(.easeIn(duration: 1.5)) {
+                isLoadingImage = true
+            }
         }
         words = extractWords(from: characters)
         words.append(genre)
@@ -1108,7 +1119,7 @@ extension View {
 }
 
 #Preview {
-    NavigationStack {
-        ContentView()
-    }
+   // NavigationStack {
+        ContentView(shader: .example)
+  //  }
 }

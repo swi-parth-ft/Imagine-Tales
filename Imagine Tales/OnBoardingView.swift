@@ -12,13 +12,52 @@ struct OnBoardingView: View {
     @AppStorage("isOnboarding") var isOnboarding: Bool = true
     @State private var page: Int = 1
     
+    /// Whether we're showing the first view or the second view.
+    @State private var showingFirstView = true
+
+    /// The opacity of our preview view, so users can check how fading works.
+    @State private var opacity = 1.0
+
+    /// The shader we're rendering.
+    var shader = TransitionShader(name: "Crosswarp (→)", transition: .crosswarpLTR)
+    
+
+    @State private var showDetail = false
+    @State private var backButtonPressed = false
+    
     var body: some View {
         ZStack {
-            Image(page == 1 ? "Onboarding-1" : (page == 2 ? "Onboarding-2" : "Onboarding-3"))
-                .resizable()
-                .scaledToFit()
-                .frame(width: UIScreen.main.bounds.width + 10, height: UIScreen.main.bounds.height + 10)
-                .ignoresSafeArea()
+            VStack {
+                if page == 1 {
+                    Image("Onboarding-1")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: UIScreen.main.bounds.height + 10)
+                        .ignoresSafeArea()
+                        .opacity(opacity)
+                        .drawingGroup()
+                        .transition(shader.transition)
+                } else if page == 2 {
+                    Image("Onboarding-2")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: UIScreen.main.bounds.height + 10)
+                        .ignoresSafeArea()
+                        .opacity(opacity)
+                        .drawingGroup()
+                        .transition(shader.transition)
+                } else {
+                    Image("Onboarding-3")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: UIScreen.main.bounds.height + 10)
+                        .ignoresSafeArea()
+                        .opacity(opacity)
+                        .drawingGroup()
+                        .transition(shader.transition)
+                }
+                
+            }
             
             VStack {
                 ZStack {
@@ -27,9 +66,10 @@ struct OnBoardingView: View {
                         HStack {
                             
                             Button {
-                                
-                                page -= 1
-                                
+                                withAnimation(.easeIn(duration: 1.5)) {
+                                    page -= 1
+                                }
+                                backButtonPressed.toggle()
                             } label: {
                                 ZStack {
                                     Circle()
@@ -69,8 +109,9 @@ struct OnBoardingView: View {
                         HStack {
                             Spacer()
                             Button {
-                                
-                                page += 1
+                                withAnimation(.easeIn(duration: 1.5)) {
+                                    page += 1
+                                }
                                 
                             } label: {
                                 ZStack {
