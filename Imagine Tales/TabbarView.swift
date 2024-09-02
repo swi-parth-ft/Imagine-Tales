@@ -99,24 +99,27 @@ struct TabbarView: View {
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .ignoresSafeArea()
-            ZStack{
-                HStack{
-                    ForEach((TabItems.allCases), id: \.self){ item in
-                        Button{
-                            selectedTab = item.rawValue
-                            reload.toggle()
-                        } label: {
-                            CustomTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
+            .safeAreaInset(edge: .bottom) {
+                ZStack{
+                    HStack{
+                        ForEach((TabItems.allCases), id: \.self){ item in
+                            Button{
+                                selectedTab = item.rawValue
+                                reload.toggle()
+                            } label: {
+                                CustomTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
+                            }
                         }
                     }
+                    .padding(6)
                 }
-                .padding(6)
+                .frame(width: UIScreen.main.bounds.width * 0.95, height: 70)
+                .background(Color(hex: "#FFFFF1"))
+                .cornerRadius(20)
+                .padding(.horizontal, 26)
+                .shadow(radius: 10)
             }
-            .frame(width: UIScreen.main.bounds.width * 0.95, height: 70)
-            .background(Color(hex: "#FFFFF1"))
-            .cornerRadius(20)
-            .padding(.horizontal, 26)
-            .shadow(radius: 10)
+            
         }
         .onAppear {
                 hideSystemTabBar()

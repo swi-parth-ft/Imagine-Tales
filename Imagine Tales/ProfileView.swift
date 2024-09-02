@@ -144,15 +144,16 @@ struct ProfileView: View {
         NavigationStack {
             
             ZStack {
-                Color(hex: "#FFFFF1").ignoresSafeArea()
+                
                 VStack {
                     List {
                         Text("Your Stories")
                             .font(.title)
                             .fontWeight(.bold)
+                            .listRowBackground(Color.white.opacity(0.5))
                         ForEach(parentViewModel.story, id: \.id) { story in
                             NavigationLink(destination: StoryFromProfileView(story: story)) {
-                                ZStack {
+                                
                                     HStack {
                                         VStack {
                                             Spacer()
@@ -162,10 +163,9 @@ struct ProfileView: View {
                                         Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
                                             .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
                                     }
-                                    
-                                }
                                 
                             }
+                            .listRowBackground(Color.white.opacity(0.5))
                         }
                     }
                     .scrollContentBackground(.hidden)
@@ -179,6 +179,7 @@ struct ProfileView: View {
                     
                 }
                 .padding([.trailing, .leading])
+                .padding(.bottom, 50)
            
                 .onChange(of: reload) {
                     try? viewModel.loadUser()

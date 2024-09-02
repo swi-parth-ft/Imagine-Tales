@@ -66,6 +66,7 @@ struct SavedStoryView: View {
                         Text(story.title)
                     }
                 }
+                .listRowBackground(Color.white.opacity(0.5))
                 
                 
             }
