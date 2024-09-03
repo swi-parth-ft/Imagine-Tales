@@ -141,6 +141,28 @@ final class ProfileViewModel: ObservableObject {
         }
     }
     
+    func updateUsername(childId: String, username: String) {
+        // Get a reference to the Firestore database
+        let db = Firestore.firestore()
+        
+        // Specify the path to the document you want to update
+        let documentReference = db.collection("Children2").document(childId)
+        
+        // Data to update
+        let updatedData: [String: Any] = [
+            "username": username  // Replace with the field name and its new value
+        ]
+        
+        // Perform the update
+        documentReference.updateData(updatedData) { error in
+            if let error = error {
+                print("Error updating document: \(error.localizedDescription)")
+            } else {
+                print("Document successfully updated!")
+            }
+        }
+    }
+    
     
 }
 
@@ -157,7 +179,12 @@ struct ProfileView: View {
     @State private var selectedStory: Story?
     @State private var isSelectingImage = false
     @State private var profileURL = ""
-   
+    @State private var tiltAngle: Double = 0
+    @State private var isEditingUsername = false
+    @State private var newUsername = ""
+    @FocusState private var isTextFieldFocused: Bool
+    @State var counter: Int = 0
+    @State var origin: CGPoint = .zero
     var body: some View {
         NavigationStack {
             
@@ -165,32 +192,78 @@ struct ProfileView: View {
                 
                 VStack {
                     
-                    Button("add Profile Picture") {
-                        isSelectingImage = true
-                    }
                     HStack {
-                        AsyncImage(url: URL(string: viewModel.profileURL)) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 200)
-                                    .clipShape(Circle()) // Clip to circle shape
-                                    .frame(width: 200, height: 200) // Ensure the frame is square
-                                    .padding()
-                            case .empty, .failure:
-                                Circle()
-                                    .fill(Color.gray.opacity(0.3))
-                                    .frame(width: 200)
-                                
-                            @unknown default:
-                                EmptyView()
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 250, height: 250)
+                                .shadow(radius: 5)
+                            AsyncCircularImageView(urlString: viewModel.profileURL, size: 200)
+                                .onTapGesture {
+                                    isSelectingImage = true
+                                }
+                        }
+                        .onPressingChanged { point in
+                            if let point {
+                                self.origin = point
+                                self.counter += 1
                             }
                         }
+                        .modifier(RippleEffect(at: self.origin, trigger: self.counter))
+                        .shadow(radius: 3, y: 2)
+                        .rotation3DEffect(
+                                    .degrees(tiltAngle),
+                                    axis: (x: 0, y: 1, z: 0)
+                                )
+                                .onAppear {
+                                    withAnimation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                                        tiltAngle = 10 // Adjust this value to control the tilt range
+                                    }
+                                }
                         VStack(alignment: .leading) {
-                            Text("@\(viewModel.child?.username ?? "N/A")")
-                                .font(.title)
+                               HStack {
+                                if isEditingUsername {
+                                    TextField("\(viewModel.child?.username ?? "N/A")", text: $newUsername)
+                                        .font(.title)
+                                        .frame(width: 200)
+                                        .focused($isTextFieldFocused)
+                                        .onAppear {
+                                            isTextFieldFocused = true
+                                        }
+                                } else {
+                                    Text("@\(viewModel.child?.username ?? "N/A")")
+                                        .font(.title)
+                                }
+                                HStack {
+                                    Image(systemName: isEditingUsername ? "checkmark.circle.fill" : "pencil")
+                                        .font(.title)
+                                        .onTapGesture {
+                                            if isEditingUsername {
+                                                viewModel.updateUsername(childId: childId, username: newUsername)
+                                                reload.toggle()
+                                                withAnimation {
+                                                    isEditingUsername = false
+                                                }
+                                            } else {
+                                                withAnimation {
+                                                    isEditingUsername = true
+                                                }
+                                            }
+                                            
+                                        }
+                                    
+                                    if isEditingUsername {
+                                        Image(systemName: "x.circle.fill")
+                                            .font(.title)
+                                            .onTapGesture {
+                                                withAnimation {
+                                                    isEditingUsername = false
+                                                }
+                                                
+                                            }
+                                    }
+                                }
+                            }
                             NavigationLink(destination: FriendsView()) {
                                 Text("\(viewModel.numberOfFriends) Friends")
                                     .font(.title2)
@@ -257,6 +330,18 @@ struct ProfileView: View {
                     PinView()
                     
                 }
+//                .sheet(isPresented: $isEditingUsername) {
+//                    VStack {
+//                        TextField(text: $newUsername) {
+//                            Text("New Username")
+//                        }
+//                        Button("Update") {
+//                            viewModel.updateUsername(childId: childId, username: newUsername)
+//                            reload.toggle()
+//                        }
+//                    }
+//                    
+//                }
                 
                 
             }
@@ -461,7 +546,8 @@ struct StoryFromProfileView: View {
     @State private var currentPage = 0
     @StateObject var viewModel = ParentViewModel()
     var shader = TransitionShader(name: "Crosswarp (→)", transition: .crosswarpLTR)
-    
+    @State var counter: Int = 0
+    @State var origin: CGPoint = .zero
     @State private var offset = CGSize.zero
     
     let bookBackgroundColors: [Color] = [
@@ -516,6 +602,14 @@ struct StoryFromProfileView: View {
                                                 .cornerRadius(30)
                                             
                                                 .padding()
+                                                .onPressingChanged { point in
+                                                    if let point {
+                                                        self.origin = point
+                                                        self.counter += 1
+                                                    }
+                                                }
+                                                .modifier(RippleEffect(at: self.origin, trigger: self.counter))
+                                                .shadow(radius: 3, y: 2)
                                             
                                             
                                         case .failure(_):

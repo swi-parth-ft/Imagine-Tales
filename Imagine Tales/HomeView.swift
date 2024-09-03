@@ -279,6 +279,8 @@ struct HomeView: View {
     @AppStorage("childId") var childId: String = "Default Value"
     @State private var isSearching = false
     
+    
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -450,6 +452,7 @@ struct StoryRowView: View {
                                             , alignment: .topTrailing
                                         )
                                         .padding()
+                                        
                                     
                                     
                                 case .failure(_):

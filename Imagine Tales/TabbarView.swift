@@ -66,6 +66,7 @@ struct TabbarView: View {
     @State private var isSearching = false
     @State private var isShowingFriendReq = false
     @AppStorage("dpurl") private var dpUrl = ""
+  
     
     var body: some View {
         NavigationStack {
@@ -80,6 +81,7 @@ struct TabbarView: View {
                     ],
                     colors: bookBackgroundColors
                 ).ignoresSafeArea()
+                    
                 TabView(selection: $selectedTab) {
                     HomeView(reload: $reload)
                         .tag(0)
@@ -133,25 +135,7 @@ struct TabbarView: View {
             ToolbarItemGroup(placement: .navigationBarLeading) {
                 
                 AsyncCircularImageView(urlString: dpUrl, size: 40)
-//                AsyncImage(url: URL(string: dpUrl)) { phase in
-//                    switch phase {
-//                    case .success(let image):
-//                        image
-//                            .resizable()
-//                            .scaledToFill()
-//                            .frame(width: 40)
-//                            .clipShape(Circle()) // Clip to circle shape
-//                            .frame(width: 40, height: 40) // Ensure the frame is square
-//                       
-//                    case .empty, .failure:
-//                        Circle()
-//                            .fill(Color.gray.opacity(0.3))
-//                            .frame(width: 40)
-//                        
-//                    @unknown default:
-//                        EmptyView()
-//                    }
-//                }
+
              
             }
             

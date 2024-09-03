@@ -12,7 +12,7 @@ import FirebaseFirestore
 final class DpSelectionViewModel: ObservableObject {
     @Published var imageURL = ""
     func uploadImage(image: UIImage, completion: @escaping (_ url: String?) -> Void)  {
-        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+        guard let imageData = image.jpegData(compressionQuality: 0.4) else {
             print("Error: Could not convert image to data.")
             completion(nil)
             return
@@ -95,27 +95,30 @@ struct DpSelectionView: View {
     @StateObject var viewModel = DpSelectionViewModel()
     @AppStorage("childId") var childId: String = "Default Value"
     
-    let images: [String] = ["dp1", "dp2"] // Use image names as an array of strings
+    let images: [String] = ["dp1", "dp2", "dp3"] // Use image names as an array of strings
     @State private var selectedImage = Image("dp1")
-    
+    @AppStorage("dpurl") private var dpUrl = ""
     var body: some View {
-        List {
-            ForEach(images, id: \.self) { imageName in
-                HStack {
-                    Image(imageName) // Create Image from the string name
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 200)
-                    Spacer()
-                    Button("Set") {
-                        viewModel.uploadImage(image: UIImage(named: imageName)!) { url in
-                            if let url = url {
-                                viewModel.updateFieldInCollection(childId: childId, url: url)
+        NavigationStack {
+            List {
+                ForEach(images, id: \.self) { imageName in
+                    HStack {
+                        Image(imageName) // Create Image from the string name
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 200)
+                        Spacer()
+                        Button("Set") {
+                            viewModel.uploadImage(image: UIImage(named: imageName)!) { url in
+                                if let url = url {
+                                    viewModel.updateFieldInCollection(childId: childId, url: url)
+                                    dpUrl = url
+                                }
                             }
                         }
                     }
+                    
                 }
-                   
             }
         }
     }

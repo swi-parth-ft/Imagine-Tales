@@ -24,6 +24,8 @@
 		0701FBB02C862845004BEE9F /* DpSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBAF2C862845004BEE9F /* DpSelectionView.swift */; };
 		0701FBB22C864840004BEE9F /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBB12C864840004BEE9F /* SwiftUIView.swift */; };
 		0701FBB42C8695D0004BEE9F /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBB32C8695D0004BEE9F /* AsyncImage.swift */; };
+		0701FBB62C8755C5004BEE9F /* RippleEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBB52C8755C5004BEE9F /* RippleEffectView.swift */; };
+		0701FBB82C8755D1004BEE9F /* Ripple.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBB72C8755D1004BEE9F /* Ripple.metal */; };
 		0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F34E2C6D5D79006C86AA /* RootView.swift */; };
 		0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3502C6D5DCA006C86AA /* TabbarView.swift */; };
 		0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3532C6D5F3F006C86AA /* FloatingTabBar */; };
@@ -87,6 +89,8 @@
 		0701FBAF2C862845004BEE9F /* DpSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DpSelectionView.swift; sourceTree = "<group>"; };
 		0701FBB12C864840004BEE9F /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		0701FBB32C8695D0004BEE9F /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
+		0701FBB52C8755C5004BEE9F /* RippleEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RippleEffectView.swift; sourceTree = "<group>"; };
+		0701FBB72C8755D1004BEE9F /* Ripple.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Ripple.metal; sourceTree = "<group>"; };
 		0711F34E2C6D5D79006C86AA /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		0711F3502C6D5DCA006C86AA /* TabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
 		0711F3572C6D63F1006C86AA /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
@@ -239,6 +243,8 @@
 				0792C1D72C7AA2FB000C42A7 /* CharacterView.swift */,
 				0701FBAD2C861739004BEE9F /* SearchView.swift */,
 				0711F3752C6D7433006C86AA /* ProfileView.swift */,
+				0701FBB52C8755C5004BEE9F /* RippleEffectView.swift */,
+				0701FBB72C8755D1004BEE9F /* Ripple.metal */,
 				0701FBAF2C862845004BEE9F /* DpSelectionView.swift */,
 				07FB38632C63B3720070EEFA /* Environment.swift */,
 				0701FB9A2C83E49E004BEE9F /* Transition */,
@@ -346,6 +352,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				077BE2762C800A4A00760D5A /* GradientRectView.swift in Sources */,
+				0701FBB82C8755D1004BEE9F /* Ripple.metal in Sources */,
 				0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */,
 				0711F3702C6D71EC006C86AA /* AuthenticationManager.swift in Sources */,
 				0711F37A2C6D8BEB006C86AA /* OpenAIService.swift in Sources */,
@@ -377,6 +384,7 @@
 				0711F3782C6D7CDB006C86AA /* SignInAppleHelper.swift in Sources */,
 				0711F3742C6D725C006C86AA /* Utilities.swift in Sources */,
 				0711F3762C6D7433006C86AA /* ProfileView.swift in Sources */,
+				0701FBB62C8755C5004BEE9F /* RippleEffectView.swift in Sources */,
 				077BE2892C81263F00760D5A /* TextPlaceholderView.swift in Sources */,
 				0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */,
 				0701FBB42C8695D0004BEE9F /* AsyncImage.swift in Sources */,
