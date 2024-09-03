@@ -168,6 +168,7 @@ struct FriendsView: View {
             GridItem(.flexible())
         ]
     
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -185,7 +186,7 @@ struct FriendsView: View {
                 VStack {
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 16) {
-                            VStack {
+                            
                                 ForEach(viewModel.children) { friend in
                                     NavigationLink(destination: FriendProfileView(friendId: friend.id,dp: friend.profileImage)) {
                                         ZStack {
@@ -201,16 +202,18 @@ struct FriendsView: View {
                                                     AsyncDp(urlString: friend.profileImage, size: 150)
                                                 }
                                                 .padding()
+                                              
                                                 Text(friend.username)
                                                     .foregroundStyle(.black)
                                             }
                                             .padding()
                                         }
-                                        .padding()
+                                  
+                                        
                                     }
                                     
                                 }
-                            }
+                            
                         }
                     }
                     .padding()

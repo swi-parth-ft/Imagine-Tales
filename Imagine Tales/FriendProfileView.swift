@@ -226,7 +226,18 @@ struct FriendProfileView: View {
                             }
                             Spacer()
                             VStack {
-                                Button("Close") {
+                                ZStack {
+                                    Circle()
+                                        .foregroundStyle(.white)
+                                        .frame(width: 75, height: 75)
+                                        .shadow(radius: 10)
+                                    
+                                    Image("arrow1")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 55, height: 55)
+                                }
+                                .onTapGesture {
                                     dismiss()
                                 }
                                 Spacer()
@@ -278,6 +289,7 @@ struct FriendProfileView: View {
                 
                 
             }
+            .navigationBarBackButtonHidden(true)
             .navigationTitle("\(viewModel.child?.name ?? "N/A")")
             .onAppear {
                
