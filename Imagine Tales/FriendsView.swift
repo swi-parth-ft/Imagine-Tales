@@ -161,6 +161,13 @@ struct FriendsView: View {
         Color(red: 255/255, green: 250/255, blue: 215/255),  // More vivid Old Lace
         Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
     ]
+    
+    let columns = [
+            GridItem(.flexible()),
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ]
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -176,22 +183,41 @@ struct FriendsView: View {
                 ).ignoresSafeArea()
                 
                 VStack {
-                    List(viewModel.children) { friend in
-                        NavigationLink(destination: FriendProfileView(friendId: friend.id,dp: friend.profileImage)) {
-                            HStack {
-                                AsyncDp(urlString: friend.profileImage, size: 50)
-                                Text(friend.username)
-                                
-                                
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 16) {
+                            VStack {
+                                ForEach(viewModel.children) { friend in
+                                    NavigationLink(destination: FriendProfileView(friendId: friend.id,dp: friend.profileImage)) {
+                                        ZStack {
+                                            VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                                .cornerRadius(20)
+                                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                            VStack {
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(Color.white)
+                                                        .frame(width: 170)
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                    AsyncDp(urlString: friend.profileImage, size: 150)
+                                                }
+                                                .padding()
+                                                Text(friend.username)
+                                                    .foregroundStyle(.black)
+                                            }
+                                            .padding()
+                                        }
+                                        .padding()
+                                    }
+                                    
+                                }
                             }
-                            
                         }
-                        .listRowBackground(Color.white.opacity(0.5))
                     }
-                    .scrollContentBackground(.hidden)
+                    .padding()
                     .onAppear {
                         viewModel.fetchFriends(childId: childId)
                     }
+
                 }
             }
             .navigationTitle("Friends")

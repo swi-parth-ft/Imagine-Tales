@@ -271,6 +271,8 @@ struct ProfileView: View {
                                                 
                                             }
                                     }
+                                    
+                                    
                                 }
                             }
                             NavigationLink(destination: FriendsView()) {

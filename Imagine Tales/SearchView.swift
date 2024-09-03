@@ -13,29 +13,42 @@ import FirebaseFirestore
 struct SearchView: View {
     @State private var searchText = ""
     @State private var children: [UserChildren] = []
-
+    @State private var selectedFriend: UserChildren? = nil
+    
     var body: some View {
-        ZStack {
-            VisualEffectBlur(blurStyle: .systemThinMaterial)
-                .cornerRadius(20)
-                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+        NavigationStack {
+            ZStack {
+                VisualEffectBlur(blurStyle: .systemThinMaterial)
+                    .cornerRadius(20)
+                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                 
-            VStack {
-                TextField("Search...", text: $searchText)
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(22)
-                
-                List(children, id: \.id) { result in
-                    Text(result.username)
-                        .listRowBackground(Color.gray.opacity(0.1))
+                VStack {
+                    TextField("Search...", text: $searchText)
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(22)
+                    
+                    List(children, id: \.id) { result in
+                        
+                        Button(action: {
+                            selectedFriend = result
+                        }) {
+                            Text(result.username)
+                                .listRowBackground(Color.gray.opacity(0.1))
+                        }
+                        
+                        
+                    }
+                    .fullScreenCover(item: $selectedFriend) { friend in
+                                      FriendProfileView(friendId: friend.id, dp: friend.profileImage)
+                                  }
+                    .scrollContentBackground(.hidden)
+                    .onChange(of: searchText) {
+                        performSearch(query: searchText)
+                    }
                 }
-                .scrollContentBackground(.hidden)
-                .onChange(of: searchText) {
-                    performSearch(query: searchText)
-                }
+                .padding()
             }
-            .padding()
         }
     }
 

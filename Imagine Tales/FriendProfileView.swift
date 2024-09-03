@@ -13,6 +13,8 @@ final class FriendProfileViewModel: ObservableObject {
     @Published var numberOfFriends = 0
     @Published var story: [Story] = []
     @Published var profileImage = ""
+    
+    @Published var status = ""
     func getStory(childId: String) throws {
        
         Firestore.firestore().collection("Story").whereField("childId", isEqualTo: childId).whereField("status", isEqualTo: "Approve").getDocuments() { (querySnapshot, error) in
@@ -71,6 +73,49 @@ final class FriendProfileViewModel: ObservableObject {
             }
         }
     }
+    
+    func sendFriendRequest(toChildId: String, fromChildId: String) {
+            let db = Firestore.firestore()
+            let friendRequestData: [String: Any] = [
+                "fromUserId": fromChildId,
+                "status": "pending"
+            ]
+            
+        // Use toChildId as the document ID for the friend request
+        let requestRef = db.collection("Children2").document(toChildId).collection("friendRequests").document(fromChildId)
+            
+            // Set the data for the friend request document
+            requestRef.setData(friendRequestData) { error in
+                if let error = error {
+                    print("Error sending friend request: \(error.localizedDescription)")
+                } else {
+                    print("Friend request sent successfully!")
+                }
+            }
+        }
+    
+    func checkFriendshipStatus(childId: String, friendChildId: String) {
+        let db = Firestore.firestore()
+        let userRef = db.collection("Children2").document(childId)
+        let friendRequestRef = db.collection("Children2").document(friendChildId).collection("friendRequests").document(childId)
+          
+          // Check if already friends
+          userRef.collection("friends").document(friendChildId).getDocument { [weak self] (document, error) in
+              if let document = document, document.exists {
+                  self?.status = "Friends"
+                  return
+              }
+              
+              // Check for pending requests
+              friendRequestRef.getDocument { [weak self] (document, error) in
+                  if let document = document, document.exists  {
+                      self?.status = "Pending"
+                  } else {
+                      self?.status = "Send Request"
+                  }
+              }
+          }
+      }
 }
 struct FriendProfileView: View {
     var friendId: String
@@ -93,7 +138,7 @@ struct FriendProfileView: View {
         Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
     ]
     @State private var isRemoved = false
-    
+    @Environment(\.dismiss) var dismiss
     var body: some View {
         NavigationStack {
             
@@ -138,32 +183,54 @@ struct FriendProfileView: View {
                                     tiltAngle = 10 // Adjust this value to control the tilt range
                                 }
                             }
-                        VStack(alignment: .leading) {
-                            
+                        HStack {
+                            VStack(alignment: .leading) {
+                                
                                 
                                 Text("@\(viewModel.child?.username ?? "N/A")")
                                     .font(.title)
-                               
                                 
-                            
-                            
-                            Text("\(viewModel.numberOfFriends) Friends")
-                                .font(.title2)
-                            Spacer()
-                            if !isRemoved {
-                                Button("Remove", systemImage: "person.crop.circle.fill.badge.minus") {
-                                    viewModel.removeFriend(childId: childId, docID: friendId)
-                                    viewModel.removeFriend(childId: friendId, docID: childId)
-                                    isRemoved = true
+                                
+                                
+                                
+                                Text("\(viewModel.numberOfFriends) Friends")
+                                    .font(.title2)
+                                Spacer()
+                                if viewModel.status == "Friends" {
                                     
+                                    
+                                    if !isRemoved {
+                                        Button("Remove", systemImage: "person.crop.circle.fill.badge.minus") {
+                                            viewModel.removeFriend(childId: childId, docID: friendId)
+                                            viewModel.removeFriend(childId: friendId, docID: childId)
+                                            isRemoved = true
+                                            
+                                        }
+                                        .foregroundStyle(.black)
+                                    }
                                 }
-                                .foregroundStyle(.black)
+                                
+                                if viewModel.status != "Friends" && viewModel.status != "Pending" {
+                                    Button("Add Friend") {
+                                        
+                                        viewModel.sendFriendRequest(toChildId: friendId, fromChildId: childId)
+                                        
+                                    }
+                                    .foregroundStyle(.black)
+                                }
+                                
+                                if viewModel.status == "Pending" {
+                                    Text("Request Sent.")
+                                        .foregroundStyle(.black)
+                                }
                             }
-                            
-                            
-                            
-                            
-                            
+                            Spacer()
+                            VStack {
+                                Button("Close") {
+                                    dismiss()
+                                }
+                                Spacer()
+                            }
                         }
                         .padding()
                         Spacer()
@@ -216,7 +283,7 @@ struct FriendProfileView: View {
                
                 viewModel.fetchChild(ChildId: friendId)
                 viewModel.getFriendsCount(childId: friendId)
-              
+                viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
             }
         }
     }
