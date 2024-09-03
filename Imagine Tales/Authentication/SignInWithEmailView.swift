@@ -418,25 +418,7 @@ struct SignInWithEmailView: View {
                                                                     ForEach(viewModel.children) { child in
                                                                         VStack {
                                                                             
-                                                                            AsyncImage(url: URL(string: child.profileImage)) { phase in
-                                                                                switch phase {
-                                                                                case .success(let image):
-                                                                                    image
-                                                                                        .resizable()
-                                                                                        .scaledToFill()
-                                                                                        .frame(width: 100)
-                                                                                        .clipShape(Circle()) // Clip to circle shape
-                                                                                        .frame(width: 100, height: 100) // Ensure the frame is square
-                                                                                   
-                                                                                case .empty, .failure:
-                                                                                    Circle()
-                                                                                        .fill(Color.gray.opacity(0.3))
-                                                                                        .frame(width: 100)
-                                                                                    
-                                                                                @unknown default:
-                                                                                    EmptyView()
-                                                                                }
-                                                                            }
+                                                                            AsyncCircularImageView(urlString: child.profileImage, size: 100)
                                                                             
                                                                             Text(child.name)
                                                                         }

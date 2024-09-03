@@ -157,7 +157,7 @@ struct ProfileView: View {
     @State private var selectedStory: Story?
     @State private var isSelectingImage = false
     @State private var profileURL = ""
-    @AppStorage("dpurl") private var dpUrl = ""
+   
     var body: some View {
         NavigationStack {
             
@@ -191,8 +191,12 @@ struct ProfileView: View {
                         VStack(alignment: .leading) {
                             Text("@\(viewModel.child?.username ?? "N/A")")
                                 .font(.title)
-                            Text("\(viewModel.numberOfFriends) Friends")
-                                .font(.title2)
+                            NavigationLink(destination: FriendsView()) {
+                                Text("\(viewModel.numberOfFriends) Friends")
+                                    .font(.title2)
+                            }
+                            
+                                
                         }
                         .padding()
                         Spacer()
@@ -262,7 +266,7 @@ struct ProfileView: View {
                 viewModel.fetchChild(ChildId: childId)
                 viewModel.getFriendsCount(childId: childId)
                 try? viewModel.getPin()
-                dpUrl = viewModel.profileURL
+               
             }
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {

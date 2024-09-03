@@ -152,28 +152,30 @@ struct FriendsView: View {
     @AppStorage("childId") var childId: String = "Default Value"
     
     var body: some View {
-        VStack {
-            FriendRequestView()
-            
+        NavigationStack {
             VStack {
-                Text("Friends")
-                    .font(.largeTitle)
-                    .padding()
                 
-                List(viewModel.children) { friend in
-                    VStack {
-                        Text(friend.username)
-                        
-                        Button("Remove") {
-                            viewModel.removeFriend(childId: childId, docID: friend.id)
-                            viewModel.removeFriend(childId: friend.id, docID: childId)
+                
+                VStack {
+                    List(viewModel.children) { friend in
+                        HStack {
+                            AsyncCircularImageView(urlString: friend.profileImage, size: 50)
+                            Text(friend.username)
+                            Spacer()
+                            Button("Remove", systemImage: "person.crop.circle.fill.badge.minus") {
+                                viewModel.removeFriend(childId: childId, docID: friend.id)
+                                viewModel.removeFriend(childId: friend.id, docID: childId)
+                            }
+                            .padding()
+                            
                         }
                     }
-                }
-                .onAppear {
-                    viewModel.fetchFriends(childId: childId)
+                    .onAppear {
+                        viewModel.fetchFriends(childId: childId)
+                    }
                 }
             }
+            .navigationTitle("Friends")
         }
     }
 }

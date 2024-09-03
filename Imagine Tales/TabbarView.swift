@@ -132,25 +132,26 @@ struct TabbarView: View {
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarLeading) {
                 
-                AsyncImage(url: URL(string: dpUrl)) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 40)
-                            .clipShape(Circle()) // Clip to circle shape
-                            .frame(width: 40, height: 40) // Ensure the frame is square
-                       
-                    case .empty, .failure:
-                        Circle()
-                            .fill(Color.gray.opacity(0.3))
-                            .frame(width: 40)
-                        
-                    @unknown default:
-                        EmptyView()
-                    }
-                }
+                AsyncCircularImageView(urlString: dpUrl, size: 40)
+//                AsyncImage(url: URL(string: dpUrl)) { phase in
+//                    switch phase {
+//                    case .success(let image):
+//                        image
+//                            .resizable()
+//                            .scaledToFill()
+//                            .frame(width: 40)
+//                            .clipShape(Circle()) // Clip to circle shape
+//                            .frame(width: 40, height: 40) // Ensure the frame is square
+//                       
+//                    case .empty, .failure:
+//                        Circle()
+//                            .fill(Color.gray.opacity(0.3))
+//                            .frame(width: 40)
+//                        
+//                    @unknown default:
+//                        EmptyView()
+//                    }
+//                }
              
             }
             
