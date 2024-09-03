@@ -224,11 +224,11 @@ struct ProfileView: View {
                                     .degrees(tiltAngle),
                                     axis: (x: 0, y: 1, z: 0)
                                 )
-                                .onAppear {
-                                    withAnimation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
-                                        tiltAngle = 10 // Adjust this value to control the tilt range
-                                    }
+                        .onAppear {
+                                withAnimation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                                    tiltAngle = 10 // Adjust this value to control the tilt range
                                 }
+                            }
                         VStack(alignment: .leading) {
                                HStack {
                                 if isEditingUsername {
