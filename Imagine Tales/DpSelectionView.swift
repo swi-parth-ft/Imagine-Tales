@@ -14,62 +14,7 @@ final class DpSelectionViewModel: ObservableObject {
     @AppStorage("dpurl") private var dpUrl = ""
     
     @Published var imageURL = ""
-//    func uploadImage(image: UIImage, completion: @escaping (_ url: String?) -> Void)  {
-//        guard let imageData = image.jpegData(compressionQuality: 0.4) else {
-//            print("Error: Could not convert image to data.")
-//            completion(nil)
-//            return
-//        }
-//
-//        // Create a reference to Firebase Storage
-//        let storageRef = Storage.storage().reference()
-//        let imageName = UUID().uuidString // Unique name for the image
-//        let imageRef = storageRef.child("images/\(imageName).jpg")
-//
-//        // Upload the image data
-//        let uploadTask = imageRef.putData(imageData, metadata: nil) { metadata, error in
-//            if let error = error {
-//                print("Error uploading image: \(error.localizedDescription)")
-//                completion(nil)
-//                return
-//            }
-//
-//            // Fetch the download URL
-//            imageRef.downloadURL { url, error in
-//                if let error = error {
-//                    print("Error fetching download URL: \(error.localizedDescription)")
-//                    completion(nil)
-//                    return
-//                }
-//
-//                guard let downloadURL = url else {
-//                    print("Error: Download URL is nil.")
-//                    completion(nil)
-//                    return
-//                }
-//
-//                completion(downloadURL.absoluteString)
-//            }
-//        }
-//
-//        // Handle upload progress and completion (optional)
-//        uploadTask.observe(.progress) { snapshot in
-//            // Observe upload progress
-//            let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
-//            print("Upload is \(percentComplete)% complete")
-//        }
-//
-//        uploadTask.observe(.success) { snapshot in
-//            // Upload completed successfully
-//            print("Upload completed successfully")
-//        }
-//
-//        uploadTask.observe(.failure) { snapshot in
-//            if let error = snapshot.error {
-//                print("Upload failed with error: \(error.localizedDescription)")
-//            }
-//        }
-//    }
+
     
     
     func updateFieldInCollection(childId: String, url: String) {
@@ -120,30 +65,75 @@ final class DpSelectionViewModel: ObservableObject {
 struct DpSelectionView: View {
     @StateObject var viewModel = DpSelectionViewModel()
     @AppStorage("childId") var childId: String = "Default Value"
-    
-    let images: [String] = ["dp1", "dp2", "dp3"] // Use image names as an array of strings
-    @State private var selectedImage = Image("dp1")
+    let columns = [
+            GridItem(.flexible()),
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ]
+    let images: [String] = ["dp2", "dp1", "dp3", "dp4", "dp5", "dp6", "dp7", "dp8", "dp9", "dp10", "dp11", "dp12" ] // Use image names as an array of strings
+    @State private var selectedImage = ""
     @AppStorage("dpurl") private var dpUrl = ""
     var body: some View {
-        NavigationStack {
-            List {
-                ForEach(images, id: \.self) { imageName in
-                    HStack {
-                        Image(imageName) // Create Image from the string name
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 200)
-                        
-                        Spacer()
-                        
-                        Button("Set") {
-                            viewModel.updateFieldInCollection(childId: childId, url: String(imageName + ".jpg"))
-                            viewModel.fetchProfileImage(dp: imageName + ".jpg")
-                       
+       
+            ZStack {
+               
+                VisualEffectBlur(blurStyle: .systemThinMaterial)
+                    .cornerRadius(20)
+                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                VStack(alignment: .leading) {
+                    Text("Select Profile Image")
+                        .font(.title)
+                        .padding([.leading, .top])
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 16) {
+                            
+                            ForEach(images, id: \.self) { image in
+                                VStack {
+                                    
+                                    ZStack {
+                                        
+                                        Circle()
+                                            .fill(Color.white)
+                                            .frame(width: 170, height: 170)
+                                        Image(image)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 150, height: 150)
+                                            .clipShape(Circle())
+                                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                        
+                                        
+                                            .scaleEffect(image == selectedImage ? 1.1 : 1)
+                                        
+                                        VStack {
+                                            
+                                            if image == selectedImage {
+                                                Button("Set", systemImage: "checkmark.circle.fill") {
+                                                    viewModel.updateFieldInCollection(childId: childId, url: String(image + ".jpg"))
+                                                    viewModel.fetchProfileImage(dp: image + ".jpg")
+                                                }
+                                                .padding()
+                                                .background(Color.white.opacity(0.9))
+                                                .foregroundStyle(.black)
+                                                .cornerRadius(22)
+                                            }
+                                            
+                                        }
+                                    }
+                                }
+                                .onTapGesture {
+                                    withAnimation {
+                                        selectedImage = image
+                                    }
+                                }
+                            }
                         }
+                        .padding()
                     }
+                    
                 }
-            }
+            
+
         }
     }
 }

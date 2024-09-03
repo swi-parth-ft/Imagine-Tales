@@ -204,8 +204,9 @@ struct ProfileView: View {
                             Circle()
                                 .fill(Color.white)
                                 .frame(width: 250, height: 250)
-                                .shadow(radius: 5)
+                                
                             AsyncCircularImageView(urlString: dpUrl, size: 200)
+                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                 .onTapGesture {
                                     isSelectingImage = true
                                 }
@@ -315,6 +316,9 @@ struct ProfileView: View {
                     }
                     .sheet(isPresented: $isSelectingImage) {
                         DpSelectionView()
+                            .background {
+                                BackgroundClearView()
+                            }
                     }
                     
                 }

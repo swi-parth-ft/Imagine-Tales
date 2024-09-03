@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "7300_4_04.jpg",
+      "filename" : "dp3.jpg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "7300_4_04 1.jpg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "7300_4_04 2.jpg",
       "idiom" : "universal",
       "scale" : "3x"
     }
