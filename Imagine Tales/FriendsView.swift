@@ -211,6 +211,7 @@ struct FriendsView: View {
                                   
                                         
                                     }
+                                    .padding()
                                     
                                 }
                             
