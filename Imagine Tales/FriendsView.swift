@@ -159,7 +159,7 @@ struct FriendsView: View {
                 VStack {
                     List(viewModel.children) { friend in
                         HStack {
-                            AsyncCircularImageView(urlString: friend.profileImage, size: 50)
+                            AsyncDp(urlString: friend.profileImage, size: 50)
                             Text(friend.username)
                             Spacer()
                             Button("Remove", systemImage: "person.crop.circle.fill.badge.minus") {

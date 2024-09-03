@@ -10,6 +10,7 @@ import FirebaseFirestore
 import FirebaseAuth
 import GoogleSignIn
 import FirebaseCore
+import FirebaseStorage
 
 final class ReAuthentication: ObservableObject {
     @Published var reAuthenticated: Bool = false
@@ -92,6 +93,8 @@ final class ProfileViewModel: ObservableObject {
     @Published var pin: String = ""
     @Published var profileURL = ""
     @Published var numberOfFriends = 0
+    @Published var imageURL: String = ""
+    
     func loadUser() throws {
         user = try AuthenticationManager.shared.getAuthenticatedUser()
     }
@@ -123,7 +126,6 @@ final class ProfileViewModel: ObservableObject {
             }
         }
         
-        // Firestore.firestore().collection("users").document(userId).updateData(["pin": pin])
     }
     
     func getFriendsCount(childId: String) {
@@ -163,6 +165,8 @@ final class ProfileViewModel: ObservableObject {
         }
     }
     
+   
+    
     
 }
 
@@ -174,6 +178,8 @@ struct ProfileView: View {
     
     @AppStorage("childId") var childId: String = "Default Value"
     @AppStorage("ipf") private var ipf: Bool = true
+    @AppStorage("dpurl") private var dpUrl = ""
+    
     @State private var isAddingPin = false
     @StateObject var parentViewModel = ParentViewModel()
     @State private var selectedStory: Story?
@@ -185,6 +191,7 @@ struct ProfileView: View {
     @FocusState private var isTextFieldFocused: Bool
     @State var counter: Int = 0
     @State var origin: CGPoint = .zero
+    
     var body: some View {
         NavigationStack {
             
@@ -198,10 +205,11 @@ struct ProfileView: View {
                                 .fill(Color.white)
                                 .frame(width: 250, height: 250)
                                 .shadow(radius: 5)
-                            AsyncCircularImageView(urlString: viewModel.profileURL, size: 200)
+                            AsyncCircularImageView(urlString: dpUrl, size: 200)
                                 .onTapGesture {
                                     isSelectingImage = true
                                 }
+                            
                         }
                         .onPressingChanged { point in
                             if let point {

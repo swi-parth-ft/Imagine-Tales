@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseStorage
 
 final class SignInWithEmailViewModel: ObservableObject {
     
@@ -21,8 +22,28 @@ final class SignInWithEmailViewModel: ObservableObject {
     @Published var number = ""
     @Published var username = ""
     var userId = ""
-
-    
+    @AppStorage("dpurl") private var dpUrl = ""
+    func fetchProfileImage(dp: String) {
+        
+            let storage = Storage.storage()
+            let storageRef = storage.reference()
+            
+            // Assuming the profilePicture field contains "1.jpg", "2.jpg", etc.
+            let imageRef = storageRef.child("profileImages/\(dp)")
+            
+            // Fetch the download URL
+            imageRef.downloadURL { url, error in
+                if let error = error {
+                    print("Error fetching image URL: \(error)")
+                    return
+                }
+                if let url = url {
+                    self.dpUrl = url.absoluteString
+                   
+                }
+            }
+        
+        }
     func resetPassword() async throws {
 
         try await AuthenticationManager.shared.resetPassword(email: email)
@@ -418,7 +439,7 @@ struct SignInWithEmailView: View {
                                                                     ForEach(viewModel.children) { child in
                                                                         VStack {
                                                                             
-                                                                            AsyncCircularImageView(urlString: child.profileImage, size: 100)
+                                                                            AsyncDp(urlString: child.profileImage, size: 100)
                                                                             
                                                                             Text(child.name)
                                                                         }
@@ -426,10 +447,11 @@ struct SignInWithEmailView: View {
                                                                             
                                                                             childId = child.id
                                                                             showSignInView = false
-                                                                            dpUrl = child.profileImage
+                                                                           
                                                                             if !isiPhone {
                                                                                 ipf = false
                                                                             }
+                                                                            viewModel.fetchProfileImage(dp: child.profileImage)
                                                                             
                                                                         }
                                                                     }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseStorage
 
 final class ParentViewModel: ObservableObject {
     
@@ -16,7 +17,7 @@ final class ParentViewModel: ObservableObject {
     @Published var age: String = ""
     @Published var parent: UserModel?
     @Published var username: String = ""
-    
+    @AppStorage("dpurl") private var dpUrl = ""
     
     func deleteStory(storyId: String) {
         Firestore.firestore().collection("Story").document(storyId).delete() { err in
@@ -95,6 +96,28 @@ final class ParentViewModel: ObservableObject {
       
         Firestore.firestore().collection("Story").document(id).updateData(["status": status])
     }
+    
+    func fetchProfileImage(dp: String) {
+        
+            let storage = Storage.storage()
+            let storageRef = storage.reference()
+            
+            // Assuming the profilePicture field contains "1.jpg", "2.jpg", etc.
+            let imageRef = storageRef.child("profileImages/\(dp)")
+            
+            // Fetch the download URL
+            imageRef.downloadURL { url, error in
+                if let error = error {
+                    print("Error fetching image URL: \(error)")
+                    return
+                }
+                if let url = url {
+                    self.dpUrl = url.absoluteString
+                   
+                }
+            }
+        
+        }
     
 }
 
@@ -196,7 +219,7 @@ struct ChildView: View {
                 Button("back to \(child.name)'s playground") {
                     childId = child.id
                     ipf = false
-                    dpUrl = child.profileImage
+                    viewModel.fetchProfileImage(dp: child.profileImage)
                 }
             }
             

@@ -10,63 +10,66 @@ import FirebaseStorage
 import FirebaseFirestore
 
 final class DpSelectionViewModel: ObservableObject {
+    
+    @AppStorage("dpurl") private var dpUrl = ""
+    
     @Published var imageURL = ""
-    func uploadImage(image: UIImage, completion: @escaping (_ url: String?) -> Void)  {
-        guard let imageData = image.jpegData(compressionQuality: 0.4) else {
-            print("Error: Could not convert image to data.")
-            completion(nil)
-            return
-        }
-
-        // Create a reference to Firebase Storage
-        let storageRef = Storage.storage().reference()
-        let imageName = UUID().uuidString // Unique name for the image
-        let imageRef = storageRef.child("images/\(imageName).jpg")
-
-        // Upload the image data
-        let uploadTask = imageRef.putData(imageData, metadata: nil) { metadata, error in
-            if let error = error {
-                print("Error uploading image: \(error.localizedDescription)")
-                completion(nil)
-                return
-            }
-
-            // Fetch the download URL
-            imageRef.downloadURL { url, error in
-                if let error = error {
-                    print("Error fetching download URL: \(error.localizedDescription)")
-                    completion(nil)
-                    return
-                }
-
-                guard let downloadURL = url else {
-                    print("Error: Download URL is nil.")
-                    completion(nil)
-                    return
-                }
-
-                completion(downloadURL.absoluteString)
-            }
-        }
-
-        // Handle upload progress and completion (optional)
-        uploadTask.observe(.progress) { snapshot in
-            // Observe upload progress
-            let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
-            print("Upload is \(percentComplete)% complete")
-        }
-
-        uploadTask.observe(.success) { snapshot in
-            // Upload completed successfully
-            print("Upload completed successfully")
-        }
-
-        uploadTask.observe(.failure) { snapshot in
-            if let error = snapshot.error {
-                print("Upload failed with error: \(error.localizedDescription)")
-            }
-        }
-    }
+//    func uploadImage(image: UIImage, completion: @escaping (_ url: String?) -> Void)  {
+//        guard let imageData = image.jpegData(compressionQuality: 0.4) else {
+//            print("Error: Could not convert image to data.")
+//            completion(nil)
+//            return
+//        }
+//
+//        // Create a reference to Firebase Storage
+//        let storageRef = Storage.storage().reference()
+//        let imageName = UUID().uuidString // Unique name for the image
+//        let imageRef = storageRef.child("images/\(imageName).jpg")
+//
+//        // Upload the image data
+//        let uploadTask = imageRef.putData(imageData, metadata: nil) { metadata, error in
+//            if let error = error {
+//                print("Error uploading image: \(error.localizedDescription)")
+//                completion(nil)
+//                return
+//            }
+//
+//            // Fetch the download URL
+//            imageRef.downloadURL { url, error in
+//                if let error = error {
+//                    print("Error fetching download URL: \(error.localizedDescription)")
+//                    completion(nil)
+//                    return
+//                }
+//
+//                guard let downloadURL = url else {
+//                    print("Error: Download URL is nil.")
+//                    completion(nil)
+//                    return
+//                }
+//
+//                completion(downloadURL.absoluteString)
+//            }
+//        }
+//
+//        // Handle upload progress and completion (optional)
+//        uploadTask.observe(.progress) { snapshot in
+//            // Observe upload progress
+//            let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+//            print("Upload is \(percentComplete)% complete")
+//        }
+//
+//        uploadTask.observe(.success) { snapshot in
+//            // Upload completed successfully
+//            print("Upload completed successfully")
+//        }
+//
+//        uploadTask.observe(.failure) { snapshot in
+//            if let error = snapshot.error {
+//                print("Upload failed with error: \(error.localizedDescription)")
+//            }
+//        }
+//    }
     
     
     func updateFieldInCollection(childId: String, url: String) {
@@ -90,6 +93,29 @@ final class DpSelectionViewModel: ObservableObject {
             }
         }
     }
+    
+    func fetchProfileImage(dp: String) {
+        
+            let storage = Storage.storage()
+            let storageRef = storage.reference()
+            
+            // Assuming the profilePicture field contains "1.jpg", "2.jpg", etc.
+            let imageRef = storageRef.child("profileImages/\(dp)")
+            
+            // Fetch the download URL
+            imageRef.downloadURL { url, error in
+                if let error = error {
+                    print("Error fetching image URL: \(error)")
+                    return
+                }
+                if let url = url {
+                    self.dpUrl = url.absoluteString
+                   
+                }
+            }
+        
+        }
+
 }
 struct DpSelectionView: View {
     @StateObject var viewModel = DpSelectionViewModel()
@@ -107,17 +133,15 @@ struct DpSelectionView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 200)
+                        
                         Spacer()
+                        
                         Button("Set") {
-                            viewModel.uploadImage(image: UIImage(named: imageName)!) { url in
-                                if let url = url {
-                                    viewModel.updateFieldInCollection(childId: childId, url: url)
-                                    dpUrl = url
-                                }
-                            }
+                            viewModel.updateFieldInCollection(childId: childId, url: String(imageName + ".jpg"))
+                            viewModel.fetchProfileImage(dp: imageName + ".jpg")
+                       
                         }
                     }
-                    
                 }
             }
         }

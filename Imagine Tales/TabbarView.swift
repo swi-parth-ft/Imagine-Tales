@@ -133,9 +133,13 @@ struct TabbarView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarLeading) {
-                
-                AsyncCircularImageView(urlString: dpUrl, size: 40)
-
+                ZStack {
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 45, height: 45)
+                    AsyncCircularImageView(urlString: dpUrl, size: 40)
+                        .clipShape(Circle())
+                }
              
             }
             
