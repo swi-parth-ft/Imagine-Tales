@@ -17,6 +17,7 @@ final class ReAuthentication: ObservableObject {
     @Published var password = ""
     @Published var signedInWithGoogle = false
     
+    
     func checkIfGoogle() {
         if let user = Auth.auth().currentUser {
             // Loop through the user's provider data
@@ -89,7 +90,8 @@ final class ProfileViewModel: ObservableObject {
     @Published private(set) var user: AuthDataResultModel? = nil
     @Published var child: UserChildren?
     @Published var pin: String = ""
-    
+    @Published var profileURL = ""
+    @Published var numberOfFriends = 0
     func loadUser() throws {
         user = try AuthenticationManager.shared.getAuthenticatedUser()
     }
@@ -105,7 +107,7 @@ final class ProfileViewModel: ObservableObject {
             switch result {
             case .success(let document):
                 self.child = document
-                
+                self.profileURL = document.profileImage
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -124,6 +126,20 @@ final class ProfileViewModel: ObservableObject {
         // Firestore.firestore().collection("users").document(userId).updateData(["pin": pin])
     }
     
+    func getFriendsCount(childId: String) {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("Children2").document(childId).collection("friends")
+        
+        collectionRef.getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                let documentCount = querySnapshot?.count ?? 0
+                print("Number of documents: \(documentCount)")
+                self.numberOfFriends = documentCount
+            }
+        }
+    }
     
     
 }
@@ -139,13 +155,49 @@ struct ProfileView: View {
     @State private var isAddingPin = false
     @StateObject var parentViewModel = ParentViewModel()
     @State private var selectedStory: Story?
-    
+    @State private var isSelectingImage = false
+    @State private var profileURL = ""
+    @AppStorage("dpurl") private var dpUrl = ""
     var body: some View {
         NavigationStack {
             
             ZStack {
                 
                 VStack {
+                    
+                    Button("add Profile Picture") {
+                        isSelectingImage = true
+                    }
+                    HStack {
+                        AsyncImage(url: URL(string: viewModel.profileURL)) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 200)
+                                    .clipShape(Circle()) // Clip to circle shape
+                                    .frame(width: 200, height: 200) // Ensure the frame is square
+                                    .padding()
+                            case .empty, .failure:
+                                Circle()
+                                    .fill(Color.gray.opacity(0.3))
+                                    .frame(width: 200)
+                                
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                        VStack(alignment: .leading) {
+                            Text("@\(viewModel.child?.username ?? "N/A")")
+                                .font(.title)
+                            Text("\(viewModel.numberOfFriends) Friends")
+                                .font(.title2)
+                        }
+                        .padding()
+                        Spacer()
+                    }
+                    
                     List {
                         Section("Your Stories") {
                             ForEach(parentViewModel.story, id: \.id) { story in
@@ -170,9 +222,14 @@ struct ProfileView: View {
                     .onAppear {
                         do {
                             try parentViewModel.getStory(childId: childId)
+                            viewModel.getFriendsCount(childId: childId)
+                            
                         } catch {
                             print(error.localizedDescription)
                         }
+                    }
+                    .sheet(isPresented: $isSelectingImage) {
+                        DpSelectionView()
                     }
                     
                 }
@@ -182,6 +239,8 @@ struct ProfileView: View {
                 .onChange(of: reload) {
                     try? viewModel.loadUser()
                     viewModel.fetchChild(ChildId: childId)
+                    viewModel.getFriendsCount(childId: childId)
+                    
                     try? viewModel.getPin()
                     
                     do {
@@ -201,7 +260,9 @@ struct ProfileView: View {
             .onAppear {
                 try? viewModel.loadUser()
                 viewModel.fetchChild(ChildId: childId)
+                viewModel.getFriendsCount(childId: childId)
                 try? viewModel.getPin()
+                dpUrl = viewModel.profileURL
             }
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {

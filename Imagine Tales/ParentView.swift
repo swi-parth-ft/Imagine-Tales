@@ -184,6 +184,8 @@ struct ParentView: View {
 struct ChildView: View {
     @AppStorage("childId") var childId: String = "Default Value"
     @AppStorage("ipf") private var ipf: Bool = true
+    @AppStorage("dpurl") private var dpUrl = ""
+    
     @Binding var isiPhone: Bool
     
     var child: UserChildren
@@ -194,6 +196,7 @@ struct ChildView: View {
                 Button("back to \(child.name)'s playground") {
                     childId = child.id
                     ipf = false
+                    dpUrl = child.profileImage
                 }
             }
             

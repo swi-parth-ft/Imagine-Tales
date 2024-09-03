@@ -159,6 +159,7 @@ final class UserManager {
             "name" : name,
             "age" : age,
             "username" : username,
+            "profileImage" : "",
             "dateCreated" : Timestamp()
         ]
         
@@ -215,6 +216,7 @@ struct UserChildren: Codable, Identifiable {
     let age: String
     let dateCreated: Date
     let username: String
+    let profileImage: String
 }
 
 extension Query {

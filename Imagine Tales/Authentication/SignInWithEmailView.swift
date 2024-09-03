@@ -116,6 +116,9 @@ struct SignInWithEmailView: View {
 @State private var addingChildDetails = false
     @AppStorage("childId") var childId: String = "Default Value"
     @AppStorage("ipf") private var ipf: Bool = false
+    
+    @AppStorage("dpurl") private var dpUrl = ""
+    
     let isNewGoogleUser = AuthenticationManager.shared.isNewUser
     var continueAsChild: Bool
     var signedInWithGoogle: Bool
@@ -414,9 +417,26 @@ struct SignInWithEmailView: View {
                                                                     }
                                                                     ForEach(viewModel.children) { child in
                                                                         VStack {
-                                                                            Circle()
-                                                                                .fill(Color.blue)
-                                                                                .frame(width: 100, height: 100)
+                                                                            
+                                                                            AsyncImage(url: URL(string: child.profileImage)) { phase in
+                                                                                switch phase {
+                                                                                case .success(let image):
+                                                                                    image
+                                                                                        .resizable()
+                                                                                        .scaledToFill()
+                                                                                        .frame(width: 100)
+                                                                                        .clipShape(Circle()) // Clip to circle shape
+                                                                                        .frame(width: 100, height: 100) // Ensure the frame is square
+                                                                                   
+                                                                                case .empty, .failure:
+                                                                                    Circle()
+                                                                                        .fill(Color.gray.opacity(0.3))
+                                                                                        .frame(width: 100)
+                                                                                    
+                                                                                @unknown default:
+                                                                                    EmptyView()
+                                                                                }
+                                                                            }
                                                                             
                                                                             Text(child.name)
                                                                         }
@@ -424,7 +444,7 @@ struct SignInWithEmailView: View {
                                                                             
                                                                             childId = child.id
                                                                             showSignInView = false
-                                                                            
+                                                                            dpUrl = child.profileImage
                                                                             if !isiPhone {
                                                                                 ipf = false
                                                                             }

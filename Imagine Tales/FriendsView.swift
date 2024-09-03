@@ -153,58 +153,7 @@ struct FriendsView: View {
     
     var body: some View {
         VStack {
-            Text("Friend Requests")
-                .font(.largeTitle)
-                .padding()
-            
-            List(viewModel.friendRequests, id: \.requestId) { request in
-                HStack {
-                    if let username = viewModel.child?.username {
-                        Text("From: \(username)")
-                    } else {
-                        Text("From: ")
-                    }
-                    Spacer()
-                    
-                    // Encapsulate each button in a ZStack and give fixed width
-                    ZStack {
-                        Button(action: {
-                            viewModel.respondToFriendRequest(childId: childId, requestId: request.requestId, response: "accepted", friendUserId: request.fromUserId)
-                            viewModel.deleteRequest(childId: childId, docID: request.fromUserId)
-                        }) {
-                            Text("Accept")
-                                .foregroundColor(.red)
-                                .padding()
-                                .background(Color.red.opacity(0.2)) // For visual debugging
-                                .cornerRadius(8)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                    .contentShape(Rectangle()) // Ensure the button only responds to touches on its visible area
-                    
-                    ZStack {
-                        Button(action: {
-                            viewModel.respondToFriendRequest(childId: childId, requestId: request.requestId, response: "denied", friendUserId: request.fromUserId)
-                            viewModel.deleteRequest(childId: childId, docID: request.fromUserId)
-                        }) {
-                            Text("Deny")
-                                .foregroundColor(.red)
-                                .padding()
-                                .background(Color.red.opacity(0.2)) // For visual debugging
-                                .cornerRadius(8)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                    .padding(.vertical, 10)
-                }
-                .onAppear {
-                    viewModel.fetchChild(ChildId: request.fromUserId)
-                }
-                .padding(.vertical, 10) // Add vertical padding for better button spacing
-            }
-            .onAppear {
-                viewModel.fetchFriendRequests(childId: childId)
-            }
+            FriendRequestView()
             
             VStack {
                 Text("Friends")
@@ -226,6 +175,77 @@ struct FriendsView: View {
                 }
             }
         }
+    }
+}
+
+struct FriendRequestView: View {
+    @StateObject var viewModel = FriendsViewModel()
+    @AppStorage("childId") var childId: String = "Default value"
+    
+    var body: some View {
+       
+            ZStack {
+                VisualEffectBlur(blurStyle: .systemThinMaterial)
+                    .cornerRadius(20)
+                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                VStack {
+                    
+                    
+                    List(viewModel.friendRequests, id: \.requestId) { request in
+                        HStack {
+                            if let username = viewModel.child?.username {
+                                Text("\(username)")
+                            } else {
+                                Text("")
+                            }
+                            Spacer()
+                            
+                            // Encapsulate each button in a ZStack and give fixed width
+                            ZStack {
+                                Button(action: {
+                                    viewModel.respondToFriendRequest(childId: childId, requestId: request.requestId, response: "accepted", friendUserId: request.fromUserId)
+                                    viewModel.deleteRequest(childId: childId, docID: request.fromUserId)
+                                }) {
+                                    Text("Accept")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .frame(width: 110)
+                                        .background(Color.green.opacity(0.2)) // For visual debugging
+                                        .cornerRadius(8)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                            .contentShape(Rectangle()) // Ensure the button only responds to touches on its visible area
+                            
+                            ZStack {
+                                Button(action: {
+                                    viewModel.respondToFriendRequest(childId: childId, requestId: request.requestId, response: "denied", friendUserId: request.fromUserId)
+                                    viewModel.deleteRequest(childId: childId, docID: request.fromUserId)
+                                }) {
+                                    Text("Deny")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .frame(width: 110)
+                                        .background(Color.red.opacity(0.2)) // For visual debugging
+                                        .cornerRadius(8)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                            .padding(.vertical, 10)
+                        }
+                        .onAppear {
+                            viewModel.fetchChild(ChildId: request.fromUserId)
+                        }
+                        //                    .padding(.vertical, 10)
+                        .listRowBackground(Color.white.opacity(0.5))
+                    }
+                    .onAppear {
+                        viewModel.fetchFriendRequests(childId: childId)
+                    }
+                    .scrollContentBackground(.hidden)
+                }
+            }
+     
     }
 }
 

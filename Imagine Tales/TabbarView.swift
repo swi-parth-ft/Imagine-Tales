@@ -64,6 +64,9 @@ struct TabbarView: View {
         Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
     ]
     @State private var isSearching = false
+    @State private var isShowingFriendReq = false
+    @AppStorage("dpurl") private var dpUrl = ""
+    
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
@@ -128,10 +131,27 @@ struct TabbarView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarLeading) {
-                Image(systemName: "person.circle.fill") // Replace with your image name
-                    .resizable()
-                    .frame(width: 40, height: 40) // Adjust the size as needed
-                    .clipShape(Circle())
+                
+                AsyncImage(url: URL(string: dpUrl)) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40)
+                            .clipShape(Circle()) // Clip to circle shape
+                            .frame(width: 40, height: 40) // Ensure the frame is square
+                       
+                    case .empty, .failure:
+                        Circle()
+                            .fill(Color.gray.opacity(0.3))
+                            .frame(width: 40)
+                        
+                    @unknown default:
+                        EmptyView()
+                    }
+                }
+             
             }
             
             
@@ -142,7 +162,7 @@ struct TabbarView: View {
                 
                 
                 Button("Notifications", systemImage: "bell") {
-                    
+                    isShowingFriendReq = true
                 }
             }
         }
@@ -151,6 +171,15 @@ struct TabbarView: View {
         
         }) {
             SearchView()
+                .background {
+                    BackgroundClearView()
+                }
+        }
+        .sheet(isPresented: $isShowingFriendReq) {
+            FriendRequestView()
+                .background {
+                    BackgroundClearView()
+                }
         }
     }
         
@@ -193,4 +222,16 @@ extension TabbarView{
         .cornerRadius(12)
         .padding(.horizontal, 5)
     }
+}
+
+struct BackgroundClearView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        DispatchQueue.main.async {
+            view.superview?.superview?.backgroundColor = .clear
+        }
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
 }

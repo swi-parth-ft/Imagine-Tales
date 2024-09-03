@@ -15,26 +15,28 @@ struct SearchView: View {
     @State private var children: [UserChildren] = []
 
     var body: some View {
-        VStack {
-            TextField("Search...", text: $searchText)
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            
-            Button(action: {
-                performSearch(query: searchText)
-            }) {
-                Text("Search")
+        ZStack {
+            VisualEffectBlur(blurStyle: .systemThinMaterial)
+                .cornerRadius(20)
+                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                
+            VStack {
+                TextField("Search...", text: $searchText)
                     .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(22)
+                
+                List(children, id: \.id) { result in
+                    Text(result.username)
+                        .listRowBackground(Color.gray.opacity(0.1))
+                }
+                .scrollContentBackground(.hidden)
+                .onChange(of: searchText) {
+                    performSearch(query: searchText)
+                }
             }
-            
-            List(children, id: \.id) { result in
-                Text(result.username)
-            }
+            .padding()
         }
-        .padding()
     }
 
     func performSearch(query: String) {
@@ -58,4 +60,8 @@ struct SearchView: View {
                 }
             }
     }
+}
+
+#Preview {
+    SearchView()
 }
