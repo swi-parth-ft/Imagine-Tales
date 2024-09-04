@@ -165,6 +165,27 @@ final class ProfileViewModel: ObservableObject {
         }
     }
     
+    func getProfileImage(documentID: String, completion: @escaping (String?) -> Void) {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("Children2") // Replace with your collection name
+
+        collectionRef.document(documentID).getDocument { document, error in
+            if let error = error {
+                print("Error getting document: \(error)")
+                completion(nil)
+                return
+            }
+
+            if let document = document, document.exists {
+                let profileImage = document.get("profileImage") as? String
+                completion(profileImage)
+            } else {
+                print("Document does not exist")
+                completion(nil)
+            }
+        }
+    }
+    
    
     
     
@@ -559,6 +580,7 @@ struct StoryFromProfileView: View {
     @State private var count = 0
     @State private var currentPage = 0
     @StateObject var viewModel = ParentViewModel()
+    @StateObject var profileViewModel = ProfileViewModel()
     var shader = TransitionShader(name: "Crosswarp (→)", transition: .crosswarpLTR)
     @State var counter: Int = 0
     @State var origin: CGPoint = .zero
@@ -575,6 +597,15 @@ struct StoryFromProfileView: View {
         Color(red: 255/255, green: 250/255, blue: 215/255),  // More vivid Old Lace
         Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
     ]
+    @State private var imgUrl = ""
+    @State private var showFriendProfile = false
+    
+    @StateObject var homeViewModel = HomeViewModel()
+    @State private var isLiked = false
+    @State private var likeCount = 0
+    @State private var isSaved = false
+    @State private var likeObserver = false
+    @AppStorage("childId") var childId: String = "Default Value"
     
     var body: some View {
         NavigationStack {
@@ -592,6 +623,61 @@ struct StoryFromProfileView: View {
                 ScrollView {
                     VStack {
                         VStack {
+                            HStack {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.white)
+                                        .frame(width: 110)
+                                    AsyncDp(urlString: imgUrl, size: 100)
+                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                        .id(imgUrl)
+                                }
+                                .onTapGesture {
+                                    showFriendProfile = true
+                                }
+                                .padding(.bottom)
+                                
+                                Spacer()
+                                VStack {
+                                    HStack {
+                                        
+                                        Button(action: {
+                                            homeViewModel.toggleSaveStory(childId: childId, storyId: story.id)
+                                            isSaved.toggle()
+                                            
+                                        }) {
+                                            Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                                                .font(.system(size: 40))
+                                                .symbolEffect(.bounce, value: isSaved)
+                                            
+                                        }
+                                        
+                                        Button(action: {
+                                            homeViewModel.likeStory(childId: childId, storyId: story.id)
+                                            
+                                            isLiked.toggle()
+                                            // reload.toggle()
+                                            
+                                        }) {
+                                            Image(systemName: isLiked ? "heart.fill" : "heart")
+                                                .font(.system(size: 40))
+                                                .tint(.red)
+                                                .symbolEffect(.bounce, value: isLiked)
+                                                .padding(.trailing)
+                                        }
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            .onAppear {
+                                profileViewModel.getProfileImage(documentID: story.childId) { profileImage in
+                                    if let imageUrl = profileImage {
+                                        imgUrl = imageUrl
+                                    } else {
+                                        print("Failed to retrieve profile image.")
+                                    }
+                                }
+                            }
                             ZStack(alignment: .topTrailing) {
                                 VisualEffectBlur(blurStyle: .systemThinMaterial)
                                     .frame(width: UIScreen.main.bounds.width * 0.9)
@@ -718,8 +804,28 @@ struct StoryFromProfileView: View {
                     }
                     .padding()
                     .navigationTitle(story.title)
+                
+                }
+                .fullScreenCover(isPresented: $showFriendProfile) {
+                    FriendProfileView(friendId: story.childId, dp: imgUrl)
+                }
+                .onAppear {
+                    homeViewModel.checkIfChildLikedStory(childId: childId, storyId: story.id) { hasLiked in
+                        isLiked = hasLiked
+                        if isLiked {
+                            likeObserver = true
+                        }
+                        
+                        
+                    }
+                    
+                    homeViewModel.checkIfChildSavedStory(childId: childId, storyId: story.id) { hasSaved in
+                        isSaved = hasSaved
+                        print(isSaved)
+                    }
                 }
             }
+         
         }
     }
     
