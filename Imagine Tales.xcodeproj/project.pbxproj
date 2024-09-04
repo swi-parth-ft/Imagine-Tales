@@ -22,7 +22,6 @@
 		0701FBAC2C83F194004BEE9F /* TransitionPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBAB2C83F194004BEE9F /* TransitionPreview.swift */; };
 		0701FBAE2C861739004BEE9F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBAD2C861739004BEE9F /* SearchView.swift */; };
 		0701FBB02C862845004BEE9F /* DpSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBAF2C862845004BEE9F /* DpSelectionView.swift */; };
-		0701FBB22C864840004BEE9F /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBB12C864840004BEE9F /* SwiftUIView.swift */; };
 		0701FBB42C8695D0004BEE9F /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBB32C8695D0004BEE9F /* AsyncImage.swift */; };
 		0701FBB62C8755C5004BEE9F /* RippleEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBB52C8755C5004BEE9F /* RippleEffectView.swift */; };
 		0701FBB82C8755D1004BEE9F /* Ripple.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBB72C8755D1004BEE9F /* Ripple.metal */; };
@@ -88,7 +87,6 @@
 		0701FBAB2C83F194004BEE9F /* TransitionPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionPreview.swift; sourceTree = "<group>"; };
 		0701FBAD2C861739004BEE9F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		0701FBAF2C862845004BEE9F /* DpSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DpSelectionView.swift; sourceTree = "<group>"; };
-		0701FBB12C864840004BEE9F /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		0701FBB32C8695D0004BEE9F /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		0701FBB52C8755C5004BEE9F /* RippleEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RippleEffectView.swift; sourceTree = "<group>"; };
 		0701FBB72C8755D1004BEE9F /* Ripple.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Ripple.metal; sourceTree = "<group>"; };
@@ -240,7 +238,6 @@
 				077BE2752C800A4A00760D5A /* GradientRectView.swift */,
 				0701FBAB2C83F194004BEE9F /* TransitionPreview.swift */,
 				0701FBA92C83F126004BEE9F /* TransitionShader.swift */,
-				0701FBB12C864840004BEE9F /* SwiftUIView.swift */,
 				076C22992C7E8C3E001DAB3F /* HomeView.swift */,
 				0792C1D72C7AA2FB000C42A7 /* CharacterView.swift */,
 				0701FBAD2C861739004BEE9F /* SearchView.swift */,
@@ -392,7 +389,6 @@
 				077BE2892C81263F00760D5A /* TextPlaceholderView.swift in Sources */,
 				0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */,
 				0701FBB42C8695D0004BEE9F /* AsyncImage.swift in Sources */,
-				0701FBB22C864840004BEE9F /* SwiftUIView.swift in Sources */,
 				0701FBAA2C83F126004BEE9F /* TransitionShader.swift in Sources */,
 				0792C1DA2C7BD95E000C42A7 /* ParentView.swift in Sources */,
 			);

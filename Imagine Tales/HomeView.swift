@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseStorage
 
 // Struct for each story text item
 struct StoryTextItem: Codable, Hashable {
@@ -29,7 +30,7 @@ struct Story: Codable, Hashable {
 
 final class HomeViewModel: ObservableObject {
     @Published var stories: [Story] = []
-    @Published var genre: String = "Adventure"
+    @Published var genre: String = "Following"
     @Published var status = ""
     var tempStories: [Story] = []
     
@@ -246,6 +247,29 @@ final class HomeViewModel: ObservableObject {
               }
           }
       }
+    
+
+
+    func getProfileImage(documentID: String, completion: @escaping (String?) -> Void) {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("Children2") // Replace with your collection name
+
+        collectionRef.document(documentID).getDocument { document, error in
+            if let error = error {
+                print("Error getting document: \(error)")
+                completion(nil)
+                return
+            }
+
+            if let document = document, document.exists {
+                let profileImage = document.get("profileImage") as? String
+                completion(profileImage)
+            } else {
+                print("Document does not exist")
+                completion(nil)
+            }
+        }
+    }
 }
 
 struct HomeView: View {
@@ -326,6 +350,7 @@ struct HomeView: View {
                                     print(error.localizedDescription)
                                 }
                             }
+                            
                         }
                     
                 }
@@ -377,154 +402,179 @@ struct StoryRowView: View {
     @State private var isSaved = false
     @Binding var reload: Bool
     @State private var likeObserver = false
+    @State private var imgUrl = ""
     
     var body: some View {
         NavigationStack {
-            VStack(alignment: .center) {
-                VStack(spacing: -20) {
-                    // Title
-                    HStack(alignment: .top) {
-                        
-                        Text(story.title)
-                            .font(.system(size: 24))
-                        // Adjust font weight if needed
-                            .padding(.leading, 16) // Add padding to align the text properly
-                        
-                        Spacer() // Spacer to push icons to the right
-                        
-                        
-                        HStack(spacing: 20) {
-                            Button(action: {
-                                viewModel.toggleSaveStory(childId: childId, storyId: story.id)
-                                isSaved.toggle()
-                                reload.toggle()
-                            }) {
-                                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
-                                    .font(.system(size: 20))
+            ZStack {
+                
+               
+                VStack(alignment: .center) {
+                    VStack(spacing: -20) {
+                        // Title
+                        HStack(alignment: .center) {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.white)
+                                    .frame(width: 60)
+                                AsyncDp(urlString: imgUrl, size: 50)
+                                    .shadow(color: Color.black.opacity(0.2), radius: 3, x: 0, y: 3)
                             }
-                        }
-                    }
-                    .padding(.horizontal)
-                    NavigationLink(destination: StoryFromProfileView(story: story)) {
-                        ZStack(alignment: .topTrailing) {
+                                .padding(.bottom, 30)
+                            Text(story.title)
+                                .font(.system(size: 24))
+                            // Adjust font weight if needed
+                                .padding(.leading, 16) // Add padding to align the text properly
                             
-                            AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
-                                switch phase {
-                                case .empty:
-                                    GradientRectView()
-                                case .success(let image):
-                                    
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(height: 500)
-                                        .clipped()
-                                        .cornerRadius(30)
-                                        .overlay(
-                                            // User profile overlay
-                                            HStack {
-                                                Image(systemName: "person.crop.circle")
-                                                Text(story.childUsername)
-                                                    .font(.subheadline)
-                                                Spacer()
-                                                if childId != story.childId {
-                                                    Image(systemName: viewModel.status == "Friends" ? "person.crop.circle.badge.checkmark" : (viewModel.status == "Pending" ? "clock" : "plus"))
-                                                }
-                                            }
-                                                .padding(5)
-                                                .frame(width: 200)
-                                                .background(Color.black.opacity(0.7))
-                                                .foregroundColor(.white)
-                                                .cornerRadius(15)
-                                                .padding()
-                                                .onTapGesture {
-                                                    if childId != story.childId {
-                                                        if viewModel.status != "Friends" && viewModel.status != "Pending" {
-                                                            viewModel.sendFriendRequest(toChildId: story.childId, fromChildId: childId)
-                                                        }
-                                                    }
-                                                    
-                                                }
-                                                .onAppear {
-                                                    viewModel.checkFriendshipStatus(childId: childId, friendChildId: story.childId)
-                                                }
-                                            
-                                            , alignment: .topTrailing
-                                        )
-                                        .padding()
-                                        
-                                    
-                                    
-                                case .failure(_):
-                                    Image(systemName: "photo")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 500)
-                                        .cornerRadius(10)
-                                        .padding()
-                                    
-                                @unknown default:
-                                    EmptyView()
+                            Spacer() // Spacer to push icons to the right
+                            
+                            
+                            HStack(spacing: 20) {
+                                Button(action: {
+                                    viewModel.toggleSaveStory(childId: childId, storyId: story.id)
+                                    isSaved.toggle()
+                                    reload.toggle()
+                                }) {
+                                    Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                                        .font(.system(size: 20))
                                 }
                             }
-                            .frame(width: UIScreen.main.bounds.width, height: 500)
-                            .cornerRadius(10)
-                            
+                            .padding(.bottom, 30)
                         }
-                        
-                    }
-                }
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("The Minions hatch a clever plan to steal the world’s biggest banana, but things go hilariously wrong when they encounter a banana-loving monkey!")
-                            .font(.body)
-                            .padding(.horizontal)
-                            .frame(width: UIScreen.main.bounds.width * 0.7)
-                        
-                       // Text(viewModel.status)
-                            
-                    }
-                    HStack {
-                        Spacer()
-                        
-                        // Like button with count
-                        HStack(spacing: 5) {
-                            Button(action: {
-                                viewModel.likeStory(childId: childId, storyId: story.id)
+                        .padding(.horizontal)
+                        NavigationLink(destination: StoryFromProfileView(story: story)) {
+                            ZStack(alignment: .topTrailing) {
                                 
-                                isLiked.toggle()
-                               // reload.toggle()
+                                AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
+                                    switch phase {
+                                    case .empty:
+                                        GradientRectView()
+                                    case .success(let image):
+                                        
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(height: 500)
+                                            .clipped()
+                                            .cornerRadius(30)
+                                            .overlay(
+                                                // User profile overlay
+                                                HStack {
+                                                  
+                                                   
+                                                    Text(story.childUsername)
+                                                        .font(.subheadline)
+                                                    Spacer()
+                                                    if childId != story.childId {
+                                                        Image(systemName: viewModel.status == "Friends" ? "person.crop.circle.badge.checkmark" : (viewModel.status == "Pending" ? "clock" : "plus"))
+                                                    }
+                                                }
+                                                    .padding(5)
+                                                    .frame(width: 200)
+                                                    .background(Color.black.opacity(0.7))
+                                                    .foregroundColor(.white)
+                                                    .cornerRadius(15)
+                                                    .padding()
+                                                    .onTapGesture {
+                                                        if childId != story.childId {
+                                                            if viewModel.status != "Friends" && viewModel.status != "Pending" {
+                                                                viewModel.sendFriendRequest(toChildId: story.childId, fromChildId: childId)
+                                                            }
+                                                        }
+                                                        
+                                                    }
+                                                    .onAppear {
+                                                        viewModel.checkFriendshipStatus(childId: childId, friendChildId: story.childId)
+                                                        
+                                                        viewModel.getProfileImage(documentID: story.childId) { profileImage in
+                                                            if let imageUrl = profileImage {
+                                                                imgUrl = imageUrl
+                                                            } else {
+                                                                print("Failed to retrieve profile image.")
+                                                            }
+                                                        }
+                                                    }
+                                                
+                                                , alignment: .topTrailing
+                                            )
+                                            .padding()
+                                            .shadow(radius: 5)
+                                        
+                                        
+                                        
+                                    case .failure(_):
+                                        Image(systemName: "photo")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: 500)
+                                            .cornerRadius(10)
+                                            .padding()
+                                        
+                                    @unknown default:
+                                        EmptyView()
+                                    }
+                                }
+                                .frame(width: UIScreen.main.bounds.width, height: 500)
+                                .cornerRadius(10)
                                 
-                            }) {
-                                Image(systemName: isLiked ? "heart.fill" : "heart")
-                                    .tint(.red)
                             }
                             
-                            Text("\(isLiked ? story.likes + 1 : story.likes)")
                         }
-                        .padding(.trailing)
-                        .font(.system(size: 20))
-                        
-                        // Share button
-                        Image(systemName: "paperplane")
+                    }
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("The Minions hatch a clever plan to steal the world’s biggest banana, but things go hilariously wrong when they encounter a banana-loving monkey!")
+                                .font(.body)
+                                .padding(.horizontal)
+                                .frame(width: UIScreen.main.bounds.width * 0.7)
+                            
+                            // Text(viewModel.status)
+                            
+                        }
+                        HStack {
+                            Spacer()
+                            
+                            // Like button with count
+                            HStack(spacing: 5) {
+                                Button(action: {
+                                    viewModel.likeStory(childId: childId, storyId: story.id)
+                                    
+                                    isLiked.toggle()
+                                    // reload.toggle()
+                                    
+                                }) {
+                                    Image(systemName: isLiked ? "heart.fill" : "heart")
+                                        .tint(.red)
+                                }
+                                
+                                Text("\(isLiked ? story.likes + 1 : story.likes)")
+                            }
+                            .padding(.trailing)
                             .font(.system(size: 20))
+                            
+                            // Share button
+                            Image(systemName: "paperplane")
+                                .font(.system(size: 20))
+                        }
+                        .padding()
                     }
                     .padding()
                 }
-                .padding()
-            }
-            .padding(.vertical)
-            .onAppear {
-                viewModel.checkIfChildLikedStory(childId: childId, storyId: story.id) { hasLiked in
-                    isLiked = hasLiked
-                    if isLiked {
-                        likeObserver = true
+                .padding(.vertical)
+                .onAppear {
+                    viewModel.checkIfChildLikedStory(childId: childId, storyId: story.id) { hasLiked in
+                        isLiked = hasLiked
+                        if isLiked {
+                            likeObserver = true
+                        }
+                        
+                        
                     }
-                }
-                
-                viewModel.checkIfChildSavedStory(childId: childId, storyId: story.id) { hasSaved in
-                    isSaved = hasSaved
-                    print(isSaved)
+                    
+                    viewModel.checkIfChildSavedStory(childId: childId, storyId: story.id) { hasSaved in
+                        isSaved = hasSaved
+                        print(isSaved)
+                    }
                 }
             }
         }
