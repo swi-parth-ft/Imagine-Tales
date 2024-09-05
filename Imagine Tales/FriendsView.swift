@@ -14,9 +14,10 @@ final class FriendsViewModel: ObservableObject {
     @Published var friendRequests = [(requestId: String, fromUserId: String)]()
     @Published var child: UserChildren?
     @Published var children: [UserChildren] = []
-    
+    @Published var friendReqIds = [String]()
     
     func fetchFriends(childId: String) {
+        self.children.removeAll()
         let db = Firestore.firestore()
         db.collection("Children2").document(childId).collection("friends").addSnapshotListener { snapshot, error in
             if let error = error {
@@ -24,6 +25,7 @@ final class FriendsViewModel: ObservableObject {
             } else {
                 if let snapshot = snapshot {
                     self.friends = snapshot.documents.compactMap { $0["friendUserId"] as? String }
+                    
                     self.fetchChildren()
                 }
             }
@@ -37,11 +39,24 @@ final class FriendsViewModel: ObservableObject {
                 print("Error fetching friend requests: \(error.localizedDescription)")
             } else {
                 if let snapshot = snapshot {
+                    self.friendReqIds = snapshot.documents.compactMap { $0["fromUserId"] as? String }
+                    
+                    self.fetchChildrenFromReqs()
                     self.friendRequests = snapshot.documents.compactMap {
-                        let requestId = $0.documentID
-                        let fromUserId = $0["fromUserId"] as? String ?? ""
-                        return (requestId: requestId, fromUserId: fromUserId)
-                    }
+                                            let requestId = $0.documentID
+                                            let fromUserId = $0["fromUserId"] as? String ?? ""
+                                            return (requestId: requestId, fromUserId: fromUserId)
+                                        }
+                    print(self.friendRequests)
+                    print(self.friendReqIds)
+                        
+                    
+//                    self.friendRequests = snapshot.documents.compactMap {
+//                        let requestId = $0.documentID
+//                        let fromUserId = $0["fromUserId"] as? String ?? ""
+//                        
+//                        return (requestId: requestId, fromUserId: fromUserId)
+//                    }
                 }
             }
         }
@@ -120,6 +135,28 @@ final class FriendsViewModel: ObservableObject {
                 }
             }
         }
+    
+    func fetchChildrenFromReqs() {
+            let db = Firestore.firestore()
+            
+            // Clear the existing array
+            self.children.removeAll()
+            
+            for childId in friendReqIds {
+                let docRef = db.collection("Children2").document(childId)
+                
+                docRef.getDocument(as: UserChildren.self) { result in
+                    switch result {
+                    case .success(let document):
+                        self.children.append(document)
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+        }
+    
+
     
     func deleteRequest(childId: String, docID: String) {
         
@@ -232,70 +269,118 @@ struct FriendsView: View {
 struct FriendRequestView: View {
     @StateObject var viewModel = FriendsViewModel()
     @AppStorage("childId") var childId: String = "Default value"
-    
+    let columns = [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ]
     var body: some View {
-       
+        NavigationStack {
             ZStack {
-                VisualEffectBlur(blurStyle: .systemThinMaterial)
-                    .cornerRadius(20)
-                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                MeshGradient(
+                    width: 3,
+                    height: 3,
+                    points: [
+                        [0, 0], [0.5, 0], [1, 0],
+                        [0, 0.5], [0.5, 0.5], [1, 0.5],
+                        [0, 1], [0.5, 1], [1, 1]
+                    ],
+                    colors: FriendsView().bookBackgroundColors
+                ).ignoresSafeArea()
                 VStack {
                     
-                    
-                    List(viewModel.friendRequests, id: \.requestId) { request in
-                        HStack {
-                            if let username = viewModel.child?.username {
-                                Text("\(username)")
-                            } else {
-                                Text("")
-                            }
-                            Spacer()
-                            
-                            // Encapsulate each button in a ZStack and give fixed width
-                            ZStack {
-                                Button(action: {
-                                    viewModel.respondToFriendRequest(childId: childId, requestId: request.requestId, response: "accepted", friendUserId: request.fromUserId)
-                                    viewModel.deleteRequest(childId: childId, docID: request.fromUserId)
-                                }) {
-                                    Text("Accept")
-                                        .foregroundColor(.black)
-                                        .padding()
-                                        .frame(width: 110)
-                                        .background(Color.green.opacity(0.2)) // For visual debugging
-                                        .cornerRadius(8)
+                    if viewModel.children.isEmpty {
+                        ContentUnavailableView("No New Friend Requests",
+                                               systemImage: "person.crop.circle.badge.exclamationmark",
+                                               description: Text("You currently don't have any new friend requests."))
+                    } else {
+                        ScrollView {
+                            Text("Friend Requests")
+                                .font(.title)
+                                .padding(.top)
+                            LazyVGrid(columns: columns, spacing: 16) {
+                                
+                                ForEach(viewModel.children) { friend in
+                                    NavigationLink(destination: FriendProfileView(friendId: friend.id, dp: friend.profileImage)) {
+                                        ZStack {
+                                            VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                                .cornerRadius(20)
+                                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                            VStack {
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(Color.white)
+                                                        .frame(width: 170)
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                    AsyncDp(urlString: friend.profileImage, size: 150)
+                                                }
+                                                .padding()
+                                                
+                                                
+                                                Text("\(friend.username)")
+                                                    .foregroundStyle(.black)
+                                                
+                                                Button(action: {
+                                                    var requestId = ""
+                                                    if let request = viewModel.friendRequests.first(where: { $0.fromUserId == friend.id }) {
+                                                        requestId = request.requestId // This is safe to use now
+                                                        print("Request ID: \(requestId)")
+                                                    } else {
+                                                        print("No request found for the given user ID.")
+                                                    }
+                                                    viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "accepted", friendUserId: friend.id)
+                                                    viewModel.deleteRequest(childId: childId, docID: friend.id)
+                                                }) {
+                                                    Text("Accept")
+                                                        .foregroundStyle(.white)
+                                                    
+                                                        .padding()
+                                                        .frame(width: 200)
+                                                        .background(Color(hex: "#FF6F61"))
+                                                    
+                                                        .cornerRadius(8)
+                                                }
+                                                
+                                                Button(action: {
+                                                    var requestId = ""
+                                                    if let request = viewModel.friendRequests.first(where: { $0.fromUserId == friend.id }) {
+                                                        requestId = request.requestId // This is safe to use now
+                                                        print("Request ID: \(requestId)")
+                                                    } else {
+                                                        print("No request found for the given user ID.")
+                                                    }
+                                                    viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "denied", friendUserId: friend.id)
+                                                    viewModel.deleteRequest(childId: childId, docID: friend.id)
+                                                }) {
+                                                    Text("Deny")
+                                                        .foregroundStyle(.black)
+                                                    
+                                                        .padding()
+                                                        .frame(width: 200)
+                                                        .background(Color(hex: "#D0FFD0"))
+                                                        .cornerRadius(8)
+                                                }
+                                                
+                                            }
+                                            .padding()
+                                        }
+                                        
+                                    }
+                                    .padding()
+                                    
                                 }
-                                .buttonStyle(PlainButtonStyle())
+                                
+                                
                             }
-                            .contentShape(Rectangle()) // Ensure the button only responds to touches on its visible area
-                            
-                            ZStack {
-                                Button(action: {
-                                    viewModel.respondToFriendRequest(childId: childId, requestId: request.requestId, response: "denied", friendUserId: request.fromUserId)
-                                    viewModel.deleteRequest(childId: childId, docID: request.fromUserId)
-                                }) {
-                                    Text("Deny")
-                                        .foregroundColor(.black)
-                                        .padding()
-                                        .frame(width: 110)
-                                        .background(Color.red.opacity(0.2)) // For visual debugging
-                                        .cornerRadius(8)
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                            }
-                            .padding(.vertical, 10)
                         }
-                        .onAppear {
-                            viewModel.fetchChild(ChildId: request.fromUserId)
-                        }
-                        //                    .padding(.vertical, 10)
-                        .listRowBackground(Color.white.opacity(0.5))
                     }
-                    .onAppear {
-                        viewModel.fetchFriendRequests(childId: childId)
-                    }
-                    .scrollContentBackground(.hidden)
                 }
             }
+            
+            .onAppear {
+                viewModel.fetchFriendRequests(childId: childId)
+                //  viewModel.fetchChildrenRequest()
+            }
+        }
      
     }
 }
