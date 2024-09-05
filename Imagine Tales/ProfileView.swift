@@ -630,7 +630,7 @@ struct StoryFromProfileView: View {
                                     AsyncImage(url: URL(string: story.storyText[count].image)) { phase in
                                         switch phase {
                                         case .empty:
-                                            GradientRectView()
+                                            GradientRectView(size: 500)
                                         case .success(let image):
                                             image
                                                 .resizable()
@@ -773,9 +773,6 @@ struct StoryFromProfileView: View {
                                 
                             }) {
                                 Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 40, height: 40)
                                     .foregroundStyle(
                                         LinearGradient(gradient: Gradient(colors: [Color.black, Color.gray]),
                                                        startPoint: .top,
@@ -792,9 +789,6 @@ struct StoryFromProfileView: View {
                                     
                                 }) {
                                     Image(systemName: isLiked ? "heart.fill" : "heart")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 40, height: 40)
                                         .foregroundStyle(
                                             LinearGradient(gradient: Gradient(colors: [Color.red, Color.pink]),
                                                            startPoint: .top,

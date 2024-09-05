@@ -145,7 +145,7 @@ struct TabbarView: View {
             
             
             ToolbarItemGroup(placement: .navigationBarTrailing) {
-                Button("search", systemImage: "sparkle.magnifyingglass") {
+                Button("search", systemImage: "magnifyingglass") {
                     isSearching = true
                 }
                 

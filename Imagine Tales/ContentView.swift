@@ -314,7 +314,7 @@ struct ContentView: View {
                                         if isLoadingImage {
                                             VStack {
                                                
-                                                    GradientRectView()
+                                                GradientRectView(size: 500)
                                                     .transition(shader.transition)
                                                 
                                                 

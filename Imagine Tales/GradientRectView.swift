@@ -10,7 +10,7 @@ import SwiftUI
 struct GradientRectView: View {
     
     
-    
+    let size: CGFloat
     @State private var gradientColors: [Color] = generateRandomColors()
     let colorChangeInterval: Double = 2.0
     @State private var showDetail = false
@@ -35,7 +35,7 @@ struct GradientRectView: View {
             }
             Color.white.opacity(0.3)
         }
-        .frame(height: 500)
+        .frame(height: size)
         .onAppear {
             startColorChange()
         }
@@ -58,7 +58,7 @@ struct GradientRectView: View {
 }
 
 #Preview {
-    GradientRectView()
+    GradientRectView(size: 500)
 }
 
 

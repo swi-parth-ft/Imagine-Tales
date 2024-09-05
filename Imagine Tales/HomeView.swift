@@ -441,7 +441,7 @@ struct StoryRowView: View {
                                     reload.toggle()
                                 }) {
                                     Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
-                                        .font(.system(size: 20))
+                                        .font(.system(size: 24))
                                 }
                             }
                             .padding(.bottom, 30)
@@ -453,13 +453,14 @@ struct StoryRowView: View {
                                 AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
                                     switch phase {
                                     case .empty:
-                                        GradientRectView()
+                                        GradientRectView(size: 400)
+                                           
                                     case .success(let image):
                                         
                                         image
                                             .resizable()
                                             .scaledToFill()
-                                            .frame(height: 500)
+                                            .frame(height: 400)
                                             .clipped()
                                             .cornerRadius(30)
                                             .overlay(
@@ -474,8 +475,8 @@ struct StoryRowView: View {
                                                         Image(systemName: viewModel.status == "Friends" ? "person.crop.circle.badge.checkmark" : (viewModel.status == "Pending" ? "clock" : "plus"))
                                                     }
                                                 }
-                                                    .padding(5)
-                                                    .frame(width: 200)
+                                                    .padding()
+                                                    .frame(width: 200, height: 56)
                                                     .background(Color.black.opacity(0.7))
                                                     .foregroundColor(.white)
                                                     .cornerRadius(15)
@@ -529,7 +530,7 @@ struct StoryRowView: View {
                                         EmptyView()
                                     }
                                 }
-                                .frame(width: UIScreen.main.bounds.width, height: 500)
+                                .frame(width: UIScreen.main.bounds.width, height: 400)
                                 .cornerRadius(10)
                                 .id(retryCount)
                                 
@@ -541,7 +542,7 @@ struct StoryRowView: View {
                         VStack(alignment: .leading) {
                             Text("The Minions hatch a clever plan to steal the world’s biggest banana, but things go hilariously wrong when they encounter a banana-loving monkey!")
                                 .font(.body)
-                                .padding(.horizontal)
+                               // .padding(.horizontal)
                                 .frame(width: UIScreen.main.bounds.width * 0.7)
                             
                             // Text(viewModel.status)
@@ -561,20 +562,23 @@ struct StoryRowView: View {
                                 }) {
                                     Image(systemName: isLiked ? "heart.fill" : "heart")
                                         .tint(.red)
+                                        .font(.system(size: 24))
+                                    
                                 }
                                 
                                 Text("\(isLiked ? story.likes + 1 : story.likes)")
                             }
                             .padding(.trailing)
-                            .font(.system(size: 20))
+                            .font(.system(size: 24))
                             
                             // Share button
                             Image(systemName: "paperplane")
-                                .font(.system(size: 20))
+                              
+                                .font(.system(size: 24))
                         }
                         .padding()
                     }
-                    .padding()
+                   
                 }
                 .padding(.vertical)
                 .onAppear {
