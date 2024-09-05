@@ -50,6 +50,9 @@ struct SearchView: View {
                         .padding()
                         .background(Color.gray.opacity(0.1))
                         .cornerRadius(22)
+                    if children.isEmpty {
+                        ContentUnavailableView("No Results", systemImage: "person.crop.badge.magnifyingglass.fill", description: Text("Try searching with username."))
+                    }
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 16) {
                             
