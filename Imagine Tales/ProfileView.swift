@@ -616,78 +616,6 @@ struct StoryFromProfileView: View {
                 ScrollView {
                     VStack {
                         VStack {
-                            HStack {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color.white)
-                                        .frame(width: 110)
-                                    AsyncDp(urlString: imgUrl, size: 100)
-                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                        .id(imgUrl)
-                                }
-                                .onTapGesture {
-                                    showFriendProfile = true
-                                }
-                                .padding(.bottom)
-                                
-                                Spacer()
-                                VStack {
-                                    
-                                    HStack {
-                                        Button(action: {
-                                            homeViewModel.toggleSaveStory(childId: childId, storyId: story.id)
-                                            isSaved.toggle()
-                                            
-                                        }) {
-                                            Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 40, height: 40)
-                                                .foregroundStyle(
-                                                    LinearGradient(gradient: Gradient(colors: [Color.black, Color.gray]),
-                                                                   startPoint: .top,
-                                                                   endPoint: .bottom)
-                                                )
-                                                .shadow(color: isSaved ? Color.black.opacity(0.5) : Color.gray.opacity(0.5), radius: 10, x: 0, y: 5)
-                                            
-                                        }
-                                        .padding(.trailing)
-                                        
-                                            Button(action: {
-                                                homeViewModel.likeStory(childId: childId, storyId: story.id)
-                                                
-                                                isLiked.toggle()
-                                                // reload.toggle()
-                                                
-                                            }) {
-                                                Image(systemName: isLiked ? "heart.fill" : "heart")
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                    .frame(width: 40, height: 40)
-                                                    .foregroundStyle(
-                                                        LinearGradient(gradient: Gradient(colors: [Color.red, Color.pink]),
-                                                                       startPoint: .top,
-                                                                       endPoint: .bottom)
-                                                    )
-                                                    .shadow(color: isLiked ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 10, x: 0, y: 5)
-                                                    .scaleEffect(isLiked ? 1.2 : 1)
-                                                    .animation(.easeInOut, value: isLiked)
-                                            }
-                                            .padding(.trailing)
-                                        }
-                                    
-                                    Spacer()
-                                }
-                            }
-                            .onAppear {
-                                profileViewModel.getProfileImage(documentID: story.childId) { profileImage in
-                                    if let imageUrl = profileImage {
-                                        imgUrl = imageUrl
-                                    } else {
-                                        print("Failed to retrieve profile image.")
-                                    }
-                                }
-                            }
                             ZStack(alignment: .topTrailing) {
                                 VisualEffectBlur(blurStyle: .systemThinMaterial)
                                     .frame(width: UIScreen.main.bounds.width * 0.9)
@@ -710,6 +638,21 @@ struct StoryFromProfileView: View {
                                                 .frame(height: 500)
                                                 .clipped()
                                                 .cornerRadius(30)
+                                                .overlay(
+                                                    ZStack {
+                                                        Circle()
+                                                            .fill(Color.white)
+                                                            .frame(width: 110)
+                                                        AsyncDp(urlString: imgUrl, size: 100)
+                                                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                            .id(imgUrl)
+                                                    }
+                                                        .padding()
+                                                    .onTapGesture {
+                                                        showFriendProfile = true
+                                                    }
+                                                    , alignment: .topLeading
+                                                )
                                                 .padding()
                                                 .onPressingChanged { point in
                                                     if let point {
@@ -742,6 +685,15 @@ struct StoryFromProfileView: View {
                                 .padding(.top)
                                 .id(count)
                                 .transition(shader.transition)
+                                .onAppear {
+                                    profileViewModel.getProfileImage(documentID: story.childId) { profileImage in
+                                        if let imageUrl = profileImage {
+                                            imgUrl = imageUrl
+                                        } else {
+                                            print("Failed to retrieve profile image.")
+                                        }
+                                    }
+                                }
                             }
                             
                         }
@@ -756,7 +708,7 @@ struct StoryFromProfileView: View {
                                                 
                                                 VisualEffectBlur(blurStyle: .systemThinMaterial)
                                                     .frame(width: 100, height: 100)
-                                                    .cornerRadius(20)
+                                                    .cornerRadius(50)
                                                     .overlay(
                                                         Circle() // Circular stroke
                                                             .stroke(Color.white.opacity(0.2), lineWidth: 1)
@@ -781,7 +733,7 @@ struct StoryFromProfileView: View {
                                                 
                                                 VisualEffectBlur(blurStyle: .systemThinMaterial)
                                                     .frame(width: 100, height: 100)
-                                                    .cornerRadius(20)
+                                                    .cornerRadius(50)
                                                     .overlay(
                                                         Circle() // Circular stroke
                                                             .stroke(Color.white.opacity(0.2), lineWidth: 1)
@@ -813,6 +765,46 @@ struct StoryFromProfileView: View {
                     }
                     .padding()
                     .navigationTitle(story.title)
+                    .toolbar {
+                        HStack {
+                            Button(action: {
+                                homeViewModel.toggleSaveStory(childId: childId, storyId: story.id)
+                                isSaved.toggle()
+                                
+                            }) {
+                                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 40, height: 40)
+                                    .foregroundStyle(
+                                        LinearGradient(gradient: Gradient(colors: [Color.black, Color.gray]),
+                                                       startPoint: .top,
+                                                       endPoint: .bottom)
+                                    )
+                                
+                            }
+                            
+                                Button(action: {
+                                    homeViewModel.likeStory(childId: childId, storyId: story.id)
+                                    
+                                    isLiked.toggle()
+                                    // reload.toggle()
+                                    
+                                }) {
+                                    Image(systemName: isLiked ? "heart.fill" : "heart")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 40, height: 40)
+                                        .foregroundStyle(
+                                            LinearGradient(gradient: Gradient(colors: [Color.red, Color.pink]),
+                                                           startPoint: .top,
+                                                           endPoint: .bottom)
+                                        )
+                                        .scaleEffect(isLiked ? 1.2 : 1)
+                                        .animation(.easeInOut, value: isLiked)
+                                }
+                            }
+                    }
                 
                 }
                 .fullScreenCover(isPresented: $showFriendProfile) {

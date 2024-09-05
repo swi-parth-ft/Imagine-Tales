@@ -43,7 +43,7 @@ final class HomeViewModel: ObservableObject {
                     let friendIds = friendDocuments.map { $0.documentID }
 
                 for friendId in friendIds {
-                    let storyDocuments = try await Firestore.firestore().collection("Story").whereField("childId", isEqualTo: friendId).getDocuments() { (querySnapshot, error) in
+                /*    let storyDocuments: Void = try await*/ Firestore.firestore().collection("Story").whereField("childId", isEqualTo: friendId).getDocuments() { (querySnapshot, error) in
                         if let error = error {
                             print("Error getting documents: \(error)")
                             return
@@ -52,8 +52,10 @@ final class HomeViewModel: ObservableObject {
                         self.tempStories = querySnapshot?.documents.compactMap { document in
                             try? document.data(as: Story.self)
                         } ?? []
-                        
-                        self.stories.append(contentsOf: self.tempStories)
+                    self.stories.append(contentsOf: self.tempStories.filter { tempStory in
+                        !self.stories.contains(where: { $0.id == tempStory.id })
+                    })
+                      //  self.stories.append(contentsOf: self.tempStories)
                         print(self.stories)
                     }
                 }
@@ -403,6 +405,9 @@ struct StoryRowView: View {
     @Binding var reload: Bool
     @State private var likeObserver = false
     @State private var imgUrl = ""
+    @State private var retryCount = 0
+    @State private var maxRetryAttempts = 3 // Set max retry attempts
+    @State private var retryDelay = 2.0
     
     var body: some View {
         NavigationStack {
@@ -503,12 +508,22 @@ struct StoryRowView: View {
                                         
                                         
                                     case .failure(_):
-                                        Image(systemName: "photo")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 500)
-                                            .cornerRadius(10)
-                                            .padding()
+                                        
+                                                Image(systemName: "photo")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(height: 500)
+                                                        .cornerRadius(10)
+                                                        .padding()
+                                                        .onAppear {
+                                                            if retryCount < maxRetryAttempts {
+                                                                        // Retry logic with delay
+                                                                        DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+                                                                            retryCount += 1
+                                                                        }
+                                                                    }
+                                                        }
+                                                
                                         
                                     @unknown default:
                                         EmptyView()
@@ -516,6 +531,7 @@ struct StoryRowView: View {
                                 }
                                 .frame(width: UIScreen.main.bounds.width, height: 500)
                                 .cornerRadius(10)
+                                .id(retryCount)
                                 
                             }
                             
