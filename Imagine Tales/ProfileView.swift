@@ -213,6 +213,7 @@ struct ProfileView: View {
     @State var counter: Int = 0
     @State var origin: CGPoint = .zero
     @State private var isShowingAlert = false
+    @Binding var showingProfile: Bool
     
     var body: some View {
         NavigationStack {
@@ -390,17 +391,20 @@ struct ProfileView: View {
                
             }
             .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button("Log out", systemImage: "rectangle.portrait.and.arrow.right") {
-                        isShowingAlert = true
-
-                    }
-                }
                 
-                ToolbarItemGroup(placement: .navigationBarLeading) {
-                    Button("Parent Dashboard") {
-                        
-                        isAddingPin = true
+                if showingProfile {
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        Button("Log out", systemImage: "rectangle.portrait.and.arrow.right") {
+                            isShowingAlert = true
+                            
+                        }
+                    }
+                    
+                    ToolbarItemGroup(placement: .navigationBarLeading) {
+                        Button("Parent Dashboard") {
+                            
+                            isAddingPin = true
+                        }
                     }
                 }
             }
@@ -843,7 +847,7 @@ struct VisualEffectBlur: UIViewRepresentable {
 
 
 #Preview {
-    ProfileView(showSignInView: .constant(false), reload: .constant(false))
+    ProfileView(showSignInView: .constant(false), reload: .constant(false), showingProfile: .constant(true))
     
 }
 

@@ -66,7 +66,7 @@ struct TabbarView: View {
     @State private var isSearching = false
     @State private var isShowingFriendReq = false
     @AppStorage("dpurl") private var dpUrl = ""
-  
+  @State private var showingProfile = false
     
     var body: some View {
         NavigationStack {
@@ -99,7 +99,7 @@ struct TabbarView: View {
                         .tag(3)
                         .padding()
                     
-                    ProfileView(showSignInView: $showSignInView, reload: $reload)
+                    ProfileView(showSignInView: $showSignInView, reload: $reload, showingProfile: $showingProfile)
                         .tag(4)
                         .padding()
                 }
@@ -111,6 +111,7 @@ struct TabbarView: View {
                             ForEach((TabItems.allCases), id: \.self){ item in
                                 Button{
                                     selectedTab = item.rawValue
+                                    showingProfile = selectedTab == 4 ? true : false
                                     reload.toggle()
                                 } label: {
                                     CustomTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
