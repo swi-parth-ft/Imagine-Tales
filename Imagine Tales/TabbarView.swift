@@ -90,6 +90,7 @@ struct TabbarView: View {
                     ExploreView()
                         .tag(1)
                         .padding()
+                        .ignoresSafeArea()
                     
                     ContentView()
                         .tag(2)
