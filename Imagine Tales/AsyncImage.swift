@@ -11,6 +11,9 @@ import FirebaseStorage
 struct AsyncCircularImageView: View {
     let urlString: String
     let size: CGFloat
+    @State private var retryCount = 0
+    @State private var maxRetryAttempts = 3 // Set max retry attempts
+    @State private var retryDelay = 2.0
     
     var body: some View {
         AsyncImage(url: URL(string: urlString)) { phase in
@@ -26,6 +29,14 @@ struct AsyncCircularImageView: View {
                 Circle()
                     .fill(Color.gray.opacity(0.3))
                     .frame(width: size, height: size)
+                    .onAppear {
+                            if retryCount < maxRetryAttempts {
+                                        // Retry logic with delay
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+                                            retryCount += 1
+                                        }
+                                    }
+                        }
                 
             @unknown default:
                 EmptyView()

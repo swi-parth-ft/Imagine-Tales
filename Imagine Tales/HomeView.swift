@@ -555,15 +555,23 @@ struct StoryRowView: View {
                             HStack(spacing: 5) {
                                 Button(action: {
                                     viewModel.likeStory(childId: childId, storyId: story.id)
-                                    
-                                    isLiked.toggle()
+                                    withAnimation {
+                                        isLiked.toggle()
+                                    }
                                     // reload.toggle()
                                     
                                 }) {
-                                    Image(systemName: isLiked ? "heart.fill" : "heart")
-                                        .tint(.red)
-                                        .font(.system(size: 24))
-                                    
+                                    if isLiked {
+                                        Image("hearts")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 44)
+                                    } else {
+                                        Image(systemName: "heart")
+                                            .tint(.red)
+                                            .font(.system(size: 24))
+                                            .frame(width: 44, height: 44)
+                                    }
                                 }
                                 
                                 Text("\(isLiked ? story.likes + 1 : story.likes)")
