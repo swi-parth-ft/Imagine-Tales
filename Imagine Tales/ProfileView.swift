@@ -212,6 +212,7 @@ struct ProfileView: View {
     @FocusState private var isTextFieldFocused: Bool
     @State var counter: Int = 0
     @State var origin: CGPoint = .zero
+    @State private var isShowingAlert = false
     
     var body: some View {
         NavigationStack {
@@ -365,19 +366,19 @@ struct ProfileView: View {
                     PinView()
                     
                 }
-//                .sheet(isPresented: $isEditingUsername) {
-//                    VStack {
-//                        TextField(text: $newUsername) {
-//                            Text("New Username")
-//                        }
-//                        Button("Update") {
-//                            viewModel.updateUsername(childId: childId, username: newUsername)
-//                            reload.toggle()
-//                        }
-//                    }
-//                    
-//                }
-                
+
+                CustomAlert(isShowing: $isShowingAlert, title: "Already Leaving?", message1: "You’ll miss all the fun! 😢", message2: "But don’t worry, you can come back anytime!", onConfirm: {
+                    Task {
+                        do {
+                            try viewModel.logOut()
+                            childId = ""
+                            showSignInView = true
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                        
+                    }
+                            })
                 
             }
             .navigationTitle("Hey, \(viewModel.child?.name ?? "N/A")")
@@ -391,16 +392,8 @@ struct ProfileView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button("Log out", systemImage: "rectangle.portrait.and.arrow.right") {
-                        Task {
-                            do {
-                                try viewModel.logOut()
-                                childId = ""
-                                showSignInView = true
-                            } catch {
-                                print(error.localizedDescription)
-                            }
-                            
-                        }
+                        isShowingAlert = true
+
                     }
                 }
                 
@@ -639,33 +632,50 @@ struct StoryFromProfileView: View {
                                 
                                 Spacer()
                                 VStack {
+                                    
                                     HStack {
-                                        
                                         Button(action: {
                                             homeViewModel.toggleSaveStory(childId: childId, storyId: story.id)
                                             isSaved.toggle()
                                             
                                         }) {
                                             Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
-                                                .font(.system(size: 40))
-                                                .symbolEffect(.bounce, value: isSaved)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 40, height: 40)
+                                                .foregroundStyle(
+                                                    LinearGradient(gradient: Gradient(colors: [Color.black, Color.gray]),
+                                                                   startPoint: .top,
+                                                                   endPoint: .bottom)
+                                                )
+                                                .shadow(color: isSaved ? Color.black.opacity(0.5) : Color.gray.opacity(0.5), radius: 10, x: 0, y: 5)
                                             
                                         }
+                                        .padding(.trailing)
                                         
-                                        Button(action: {
-                                            homeViewModel.likeStory(childId: childId, storyId: story.id)
-                                            
-                                            isLiked.toggle()
-                                            // reload.toggle()
-                                            
-                                        }) {
-                                            Image(systemName: isLiked ? "heart.fill" : "heart")
-                                                .font(.system(size: 40))
-                                                .tint(.red)
-                                                .symbolEffect(.bounce, value: isLiked)
-                                                .padding(.trailing)
+                                            Button(action: {
+                                                homeViewModel.likeStory(childId: childId, storyId: story.id)
+                                                
+                                                isLiked.toggle()
+                                                // reload.toggle()
+                                                
+                                            }) {
+                                                Image(systemName: isLiked ? "heart.fill" : "heart")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 40, height: 40)
+                                                    .foregroundStyle(
+                                                        LinearGradient(gradient: Gradient(colors: [Color.red, Color.pink]),
+                                                                       startPoint: .top,
+                                                                       endPoint: .bottom)
+                                                    )
+                                                    .shadow(color: isLiked ? Color.red.opacity(0.5) : Color.gray.opacity(0.5), radius: 10, x: 0, y: 5)
+                                                    .scaleEffect(isLiked ? 1.2 : 1)
+                                                    .animation(.easeInOut, value: isLiked)
+                                            }
+                                            .padding(.trailing)
                                         }
-                                    }
+                                    
                                     Spacer()
                                 }
                             }
@@ -700,7 +710,6 @@ struct StoryFromProfileView: View {
                                                 .frame(height: 500)
                                                 .clipped()
                                                 .cornerRadius(30)
-                                            
                                                 .padding()
                                                 .onPressingChanged { point in
                                                     if let point {
