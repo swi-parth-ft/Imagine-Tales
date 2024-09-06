@@ -73,6 +73,9 @@ struct ExploreView: View {
     @State private var retryDelay = 2.0
     @State private var themes: [String] = []
   
+    @State private var isFullHeight = false
+    @State private var imageOffset = CGSize.zero
+ 
     var body: some View {
         VStack {
             ZStack {
@@ -80,18 +83,19 @@ struct ExploreView: View {
                 AsyncImage(url: URL(string: viewModel.topStory?.storyText[0].image ?? "")) { phase in
                     switch phase {
                     case .empty:
-                        GradientRectView(size: 600)
+                        GradientRectView(size: isFullHeight ? 600 : 300)
                         
                     case .success(let image):
                         
                         image
                             .resizable()
                             .scaledToFill()
-                            .frame(height: 600)
+                            .frame(height: isFullHeight ? 600 : 300)
                             .clipped()
                             .cornerRadius(30)
                         
                             .shadow(radius: 5)
+                            
                         
                         
                         
@@ -118,39 +122,73 @@ struct ExploreView: View {
                         EmptyView()
                     }
                 }
-                .frame(width: UIScreen.main.bounds.width, height: 600)
+                .frame(width: UIScreen.main.bounds.width + 30, height: isFullHeight ? 600 : 300)
                 .ignoresSafeArea()
                 
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(LinearGradient(colors: [.black, .white.opacity(0.1), .white.opacity(0.1)], startPoint: .bottom, endPoint: .top))
-                    .frame(height: 600)
+                    .fill(LinearGradient(colors: [.black, .white.opacity(0.1), .white.opacity(1)], startPoint: .bottom, endPoint: .top))
+                    .frame(height: isFullHeight ? 600 : 300)
                     .ignoresSafeArea()
-                VStack(spacing: -45) { // Adjust spacing between the text views
+                VStack { // Adjust spacing between the text views
                     Spacer()
+                    ZStack {
+                        Text(viewModel.topStory?.title ?? "nothing")
+                            .font(.system(size: 46))
+                            .foregroundStyle(.white)
+                            .padding()
                     
-                    Text(viewModel.topStory?.title ?? "nothing")
-                        .font(.system(size: 46))
-                        .foregroundStyle(.white)
-                    HStack {
-                        Text(viewModel.topStory?.genre ?? "")
-                            .font(.system(size: 32))
-                            .foregroundStyle(.white)
-                        Circle()
-                            .foregroundStyle(.white)
-                            .frame(width: 15)
-                            .padding(.horizontal)
-                        Text("\(viewModel.topStory?.likes ?? 0) Likes")
-                            .font(.system(size: 32))
-                            .foregroundStyle(.white)
+                        HStack {
+                            Text(viewModel.topStory?.genre ?? "")
+                                .font(.system(size: 32))
+                                .foregroundStyle(.white)
+                            Circle()
+                                .foregroundStyle(.white)
+                                .frame(width: 15)
+                                .padding(.horizontal)
+                            Text("\(viewModel.topStory?.likes ?? 0) Likes")
+                                .font(.system(size: 32))
+                                .foregroundStyle(.white)
+                        }
+                        .padding(.top, 30)
+                   
                     }
-                }
-                .padding(.bottom, 20) // Adjust bottom padding to control the vertical layout
-                .frame(height: 600)
+                } // Adjust bottom padding to control the vertical layout
+                .frame(height: isFullHeight ? 600 : 300)
                 .ignoresSafeArea()
             }
             .shadow(radius: 20)
+            .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    // Update offset based on drag
+                                    imageOffset = value.translation
+                                }
+                                .onEnded { value in
+                                    // Handle swipe gestures
+                                    let verticalAmount = value.translation.height
+                                    if verticalAmount > 15 {
+                                        // Swipe down
+                                        print("Swiped Down")
+                                        withAnimation {
+                                            isFullHeight = true
+                                        }
+                                    } else if verticalAmount < -15 {
+                                        // Swipe up
+                                        print("Swiped Up")
+                                        withAnimation {
+                                            isFullHeight = false
+                                        }
+                                    } else {
+                                        // Reset position
+                                        withAnimation {
+                                            imageOffset = .zero
+                                        }
+                                    }
+                                }
+                        )
             
             List {
+                
                 ForEach(viewModel.storiesByGenre.keys.sorted(), id: \.self) { genre in
                     VStack(alignment: .leading) {
                         Text(genre)
@@ -162,58 +200,61 @@ struct ExploreView: View {
                             LazyHStack(spacing: 20) {
                                
                                 ForEach(viewModel.storiesByGenre[genre] ?? []) { story in
-                                    VStack {
-                                        AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
-                                            switch phase {
-                                            case .empty:
-                                                GradientRectView(size: 200)
-                                                
-                                            case .success(let image):
-                                                
-                                                image
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: 400, height: 200)
-                                                    .clipped()
-                                                    .cornerRadius(30)
-                                                
-                                            case .failure(_):
-                                                
-                                                Image(systemName: "photo")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(height: 200)
-                                                    .cornerRadius(10)
-                                                    .padding()
-                                                    .onAppear {
-                                                        if retryCount < maxRetryAttempts {
-                                                            // Retry logic with delay
-                                                            DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
-                                                                retryCount += 1
+                                    NavigationLink(destination: StoryFromProfileView(story: story)) {
+                                        VStack {
+                                            AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
+                                                switch phase {
+                                                case .empty:
+                                                    GradientRectView(size: 200)
+                                                    
+                                                case .success(let image):
+                                                    
+                                                    image
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: 400, height: 200)
+                                                        .clipped()
+                                                        .cornerRadius(30)
+                                                    
+                                                case .failure(_):
+                                                    
+                                                    Image(systemName: "photo")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(height: 200)
+                                                        .cornerRadius(10)
+                                                        .padding()
+                                                        .onAppear {
+                                                            if retryCount < maxRetryAttempts {
+                                                                // Retry logic with delay
+                                                                DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+                                                                    retryCount += 1
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                
-                                                
-                                            @unknown default:
-                                                EmptyView()
+                                                    
+                                                    
+                                                @unknown default:
+                                                    EmptyView()
+                                                }
                                             }
+                                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                            Text(story.title)
                                         }
-                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                        Text(story.title)
                                     }
                                     }
                                 }
                             }
-                            .padding(.horizontal)
                         }
                     .listRowBackground(Color.white.opacity(0.0))
                         .padding(.bottom)
                   
                 }
             }
+            .ignoresSafeArea()
             .scrollContentBackground(.hidden)
             .navigationTitle("Stories by Genre")
+       
             .onAppear {
                 viewModel.fetchStories()
             }
