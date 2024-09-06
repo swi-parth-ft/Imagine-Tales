@@ -16,7 +16,7 @@ struct StoryTextItem: Codable, Hashable {
 }
 
 // Struct for the story document
-struct Story: Codable, Hashable {
+struct Story: Codable, Hashable, Identifiable {
     let id: String
     var parentId: String
     var childId: String
