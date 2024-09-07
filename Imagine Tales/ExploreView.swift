@@ -195,11 +195,13 @@ struct ExploreView: View {
             List {
                 ForEach(viewModel.storiesByGenre.keys.sorted(), id: \.self) { genre in
                     VStack(alignment: .leading) {
-                        Text(genre)
-                            .font(.title2)
-                            .bold()
-                            .padding(.leading)
-                        
+                        NavigationLink(destination: StoryByGenreView(genre: genre)) {
+                            Text(genre)
+                                .font(.title2)
+                                .bold()
+                                .padding(.leading)
+                        }
+                        .frame(width: 150)
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 20) {
                                 ForEach(viewModel.storiesByGenre[genre] ?? []) { story in
