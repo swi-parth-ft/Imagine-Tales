@@ -9,13 +9,14 @@ import SwiftUI
 import FirebaseFirestore
 
 final class ExploreViewModel: ObservableObject {
-    @Published var topStory: Story?
-    func getMostLikedStory() {
+    @Published var topStories: [Story] = []
+
+    func getMostLikedStories() {
         let db = Firestore.firestore()
         
         db.collection("Story")
             .order(by: "likes", descending: true)
-            .limit(to: 1) // Limit to the top result
+            .limit(to: 3) // Limit to the top 3 results
             .getDocuments { (querySnapshot, error) in
                 // Log any error that occurs
                 if let error = error {
@@ -29,18 +30,21 @@ final class ExploreViewModel: ObservableObject {
                     return
                 }
                 
-                // Update topStory with the most liked story
-                if let firstDocument = documents.first {
+                // Parse the top 3 stories
+                var fetchedStories: [Story] = []
+                for document in documents {
                     do {
-                        let story = try firstDocument.data(as: Story.self)
-                        // Update UI on main thread if needed
-                        DispatchQueue.main.async {
-                            self.topStory = story
-                            print("Top story successfully fetched and parsed: \(story)")
-                        }
+                        let story = try document.data(as: Story.self)
+                        fetchedStories.append(story)
                     } catch {
                         print("Error decoding Story: \(error.localizedDescription)")
                     }
+                }
+                
+                // Update the topStories array on the main thread
+                DispatchQueue.main.async {
+                    self.topStories = fetchedStories
+                    print("Top stories successfully fetched and parsed: \(fetchedStories)")
                 }
             }
     }
@@ -75,120 +79,120 @@ struct ExploreView: View {
   
     @State private var isFullHeight = false
     @State private var imageOffset = CGSize.zero
+    @State private var currentIndex = 0 // Track current story index
  
     var body: some View {
         VStack {
             ZStack {
-                
-                AsyncImage(url: URL(string: viewModel.topStory?.storyText[0].image ?? "")) { phase in
-                    switch phase {
-                    case .empty:
-                        GradientRectView(size: isFullHeight ? 600 : 300)
-                        
-                    case .success(let image):
-                        
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(height: isFullHeight ? 600 : 300)
-                            .clipped()
-                            .cornerRadius(30)
-                        
-                            .shadow(radius: 5)
-                            
-                        
-                        
-                        
-                    case .failure(_):
-                        
-                        Image(systemName: "photo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 600)
-                            .cornerRadius(10)
-                            .padding()
-                        
-                            .onAppear {
-                                if retryCount < maxRetryAttempts {
-                                    // Retry logic with delay
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
-                                        retryCount += 1
+                TabView(selection: $currentIndex) { // TabView for carousel effect
+                    ForEach(0..<min(viewModel.topStories.count, 3), id: \.self) { index in
+                        let story = viewModel.topStories[index]
+                        NavigationLink(destination: StoryFromProfileView(story: story)) {
+                            ZStack {
+                                AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
+                                    switch phase {
+                                    case .empty:
+                                        GradientRectView(size: isFullHeight ? 600 : 300)
+                                        
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(height: isFullHeight ? 600 : 300)
+                                            .clipped()
+                                            .cornerRadius(30)
+                                            .shadow(radius: 5)
+                                        
+                                    case .failure(_):
+                                        Image(systemName: "photo")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: 600)
+                                            .cornerRadius(10)
+                                            .padding()
+                                        
+                                            .onAppear {
+                                                if retryCount < maxRetryAttempts {
+                                                    // Retry logic with delay
+                                                    DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+                                                        retryCount += 1
+                                                    }
+                                                }
+                                            }
+                                        
+                                    @unknown default:
+                                        EmptyView()
                                     }
                                 }
+                                .frame(width: UIScreen.main.bounds.width + 30, height: isFullHeight ? 600 : 300)
+                                .ignoresSafeArea()
+                                
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(LinearGradient(colors: [.black, .white.opacity(0.1), .white.opacity(1)], startPoint: .bottom, endPoint: .top))
+                                    .frame(height: isFullHeight ? 600 : 300)
+                                    .ignoresSafeArea()
+                                
+                                VStack {
+                                    Spacer()
+                                    ZStack {
+                                        Text(story.title)
+                                            .font(.system(size: 46))
+                                            .foregroundStyle(.white)
+                                            .padding()
+                                        
+                                        HStack {
+                                            Text(story.genre)
+                                                .font(.system(size: 32))
+                                                .foregroundStyle(.white)
+                                            Circle()
+                                                .foregroundStyle(.white)
+                                                .frame(width: 15)
+                                                .padding(.horizontal)
+                                            Text("\(story.likes) Likes")
+                                                .font(.system(size: 32))
+                                                .foregroundStyle(.white)
+                                        }
+                                        .padding(.top, 30)
+                                    }
+                                }
+                                .frame(height: isFullHeight ? 600 : 300)
+                                .ignoresSafeArea()
                             }
-                        
-                        
-                    @unknown default:
-                        EmptyView()
+                            .tag(index)
+                        }
                     }
                 }
-                .frame(width: UIScreen.main.bounds.width + 30, height: isFullHeight ? 600 : 300)
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic)) // Enable the dots for page control
+                .shadow(radius: 20)
                 .ignoresSafeArea()
-                
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(LinearGradient(colors: [.black, .white.opacity(0.1), .white.opacity(1)], startPoint: .bottom, endPoint: .top))
-                    .frame(height: isFullHeight ? 600 : 300)
-                    .ignoresSafeArea()
-                VStack { // Adjust spacing between the text views
-                    Spacer()
-                    ZStack {
-                        Text(viewModel.topStory?.title ?? "nothing")
-                            .font(.system(size: 46))
-                            .foregroundStyle(.white)
-                            .padding()
-                    
-                        HStack {
-                            Text(viewModel.topStory?.genre ?? "")
-                                .font(.system(size: 32))
-                                .foregroundStyle(.white)
-                            Circle()
-                                .foregroundStyle(.white)
-                                .frame(width: 15)
-                                .padding(.horizontal)
-                            Text("\(viewModel.topStory?.likes ?? 0) Likes")
-                                .font(.system(size: 32))
-                                .foregroundStyle(.white)
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            imageOffset = value.translation
                         }
-                        .padding(.top, 30)
-                   
-                    }
-                } // Adjust bottom padding to control the vertical layout
-                .frame(height: isFullHeight ? 600 : 300)
-                .ignoresSafeArea()
+                        .onEnded { value in
+                            let verticalAmount = value.translation.height
+                            if verticalAmount > 15 {
+                                withAnimation {
+                                    isFullHeight = true
+                                }
+                            } else if verticalAmount < -15 {
+                                withAnimation {
+                                    isFullHeight = false
+                                }
+                            } else {
+                                withAnimation {
+                                    imageOffset = .zero
+                                }
+                            }
+                        }
+                )
             }
-            .shadow(radius: 20)
-            .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    // Update offset based on drag
-                                    imageOffset = value.translation
-                                }
-                                .onEnded { value in
-                                    // Handle swipe gestures
-                                    let verticalAmount = value.translation.height
-                                    if verticalAmount > 15 {
-                                        // Swipe down
-                                        print("Swiped Down")
-                                        withAnimation {
-                                            isFullHeight = true
-                                        }
-                                    } else if verticalAmount < -15 {
-                                        // Swipe up
-                                        print("Swiped Up")
-                                        withAnimation {
-                                            isFullHeight = false
-                                        }
-                                    } else {
-                                        // Reset position
-                                        withAnimation {
-                                            imageOffset = .zero
-                                        }
-                                    }
-                                }
-                        )
+            .frame(width: UIScreen.main.bounds.width + 30, height: isFullHeight ? 600 : 300)
+            .ignoresSafeArea()
             
+            Spacer()
             List {
-                
                 ForEach(viewModel.storiesByGenre.keys.sorted(), id: \.self) { genre in
                     VStack(alignment: .leading) {
                         Text(genre)
@@ -198,7 +202,6 @@ struct ExploreView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 20) {
-                               
                                 ForEach(viewModel.storiesByGenre[genre] ?? []) { story in
                                     NavigationLink(destination: StoryFromProfileView(story: story)) {
                                         VStack {
@@ -208,7 +211,6 @@ struct ExploreView: View {
                                                     GradientRectView(size: 200)
                                                     
                                                 case .success(let image):
-                                                    
                                                     image
                                                         .resizable()
                                                         .scaledToFill()
@@ -217,7 +219,6 @@ struct ExploreView: View {
                                                         .cornerRadius(30)
                                                     
                                                 case .failure(_):
-                                                    
                                                     Image(systemName: "photo")
                                                         .resizable()
                                                         .scaledToFit()
@@ -226,14 +227,11 @@ struct ExploreView: View {
                                                         .padding()
                                                         .onAppear {
                                                             if retryCount < maxRetryAttempts {
-                                                                // Retry logic with delay
                                                                 DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
                                                                     retryCount += 1
                                                                 }
                                                             }
                                                         }
-                                                    
-                                                    
                                                 @unknown default:
                                                     EmptyView()
                                                 }
@@ -242,19 +240,18 @@ struct ExploreView: View {
                                             Text(story.title)
                                         }
                                     }
-                                    }
                                 }
                             }
                         }
+                    }
                     .listRowBackground(Color.white.opacity(0.0))
-                        .padding(.bottom)
-                  
+                    .padding(.bottom)
                 }
             }
             .ignoresSafeArea()
             .scrollContentBackground(.hidden)
             .navigationTitle("Stories by Genre")
-       
+            .padding(.bottom)
             .onAppear {
                 viewModel.fetchStories()
             }
@@ -262,12 +259,10 @@ struct ExploreView: View {
             Spacer()
         }
         .onAppear {
-            viewModel.getMostLikedStory()
-     
+            viewModel.getMostLikedStories() // Ensure this fetches the top 3 stories
         }
     }
 }
-
 #Preview {
     ExploreView()
 }
