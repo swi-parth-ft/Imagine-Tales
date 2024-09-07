@@ -11,8 +11,6 @@ import FirebaseVertexAI
 import FirebaseFirestore
 import FirebaseStorage
 
-
-
 final class StoryViewModel: ObservableObject {
     @Published var storyText: [StoryTextItem] = []
     @Published var imageURL = ""
@@ -119,7 +117,6 @@ final class StoryViewModel: ObservableObject {
                     print(error.localizedDescription)
                 }
             }
-        
         }
 }
 

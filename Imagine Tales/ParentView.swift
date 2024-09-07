@@ -18,6 +18,33 @@ final class ParentViewModel: ObservableObject {
     @Published var parent: UserModel?
     @Published var username: String = ""
     @AppStorage("dpurl") private var dpUrl = ""
+    var childId = ""
+    
+    func deleteChild(at offsets: IndexSet) {
+        offsets.forEach { index in
+            let childToDelete = children[index]
+            if let indexToRemove = children.firstIndex(where: { $0.id == childToDelete.id }) {
+                deleteChildFromFirebase(child: children[indexToRemove])
+                do {
+                    try getChildren()
+                } catch {
+                        print(error.localizedDescription)
+                    }
+                    
+            }
+        }
+    }
+    
+    func deleteChildFromFirebase(child: UserChildren) {
+        Firestore.firestore().collection("Children2").document(child.id).delete() { err in
+        if let err = err {
+          print("Error removing document: \(err)")
+        }
+        else {
+          print("Document successfully removed!")
+        }
+      }
+    }
     
     func deleteStory(storyId: String) {
         Firestore.firestore().collection("Story").document(storyId).delete() { err in
@@ -130,10 +157,30 @@ struct ParentView: View {
     @Binding var isiPhone: Bool
     @AppStorage("ipf") private var ipf: Bool = true
     @AppStorage("childId") var childId: String = "Default Value"
-    
+    let bookBackgroundColors: [Color] = [
+        Color(red: 255/255, green: 235/255, blue: 190/255),  // More vivid Beige
+        Color(red: 220/255, green: 220/255, blue: 220/255),  // More vivid Light Gray
+        Color(red: 255/255, green: 230/255, blue: 240/255),  // More vivid Lavender Blush
+        Color(red: 255/255, green: 255/255, blue: 245/255),  // More vivid Mint Cream
+        Color(red: 230/255, green: 255/255, blue: 230/255),  // More vivid Honeydew
+        Color(red: 230/255, green: 248/255, blue: 255/255),  // More vivid Alice Blue
+        Color(red: 255/255, green: 250/255, blue: 230/255),  // More vivid Seashell
+        Color(red: 255/255, green: 250/255, blue: 215/255),  // More vivid Old Lace
+        Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
+    ]
     var body: some View {
         NavigationStack {
             ZStack {
+                MeshGradient(
+                    width: 3,
+                    height: 3,
+                    points: [
+                        [0, 0], [0.5, 0], [1, 0],
+                        [0, 0.5], [0.5, 0.5], [1, 0.5],
+                        [0, 1], [0.5, 1], [1, 1]
+                    ],
+                    colors: bookBackgroundColors
+                ).ignoresSafeArea()
                 VStack {
                     List {
                         
@@ -141,13 +188,15 @@ struct ParentView: View {
                             NavigationLink(destination: ChildView(isiPhone: $isiPhone, child: child)) {
                                 Text(child.name)
                           }
+                        .listRowBackground(Color.white.opacity(0.4))
+                        
                         }
+                        .onDelete(perform: viewModel.deleteChild)
                         Button("Add Child") {
                             isAddingNew = true
                         }
-                        
-                    
-                        
+                        .listRowBackground(Color.white.opacity(0.4))
+
                         
                     }
                     .onAppear {
@@ -170,6 +219,7 @@ struct ParentView: View {
                             }
                         }
                                     }
+                    .scrollContentBackground(.hidden)
                 }
                 .sheet(isPresented: $isAddingNew, onDismiss: {
                     Task {
@@ -208,57 +258,80 @@ struct ChildView: View {
     @AppStorage("childId") var childId: String = "Default Value"
     @AppStorage("ipf") private var ipf: Bool = true
     @AppStorage("dpurl") private var dpUrl = ""
-    
     @Binding var isiPhone: Bool
-    
+    let bookBackgroundColors: [Color] = [
+        Color(red: 255/255, green: 235/255, blue: 190/255),  // More vivid Beige
+        Color(red: 220/255, green: 220/255, blue: 220/255),  // More vivid Light Gray
+        Color(red: 255/255, green: 230/255, blue: 240/255),  // More vivid Lavender Blush
+        Color(red: 255/255, green: 255/255, blue: 245/255),  // More vivid Mint Cream
+        Color(red: 230/255, green: 255/255, blue: 230/255),  // More vivid Honeydew
+        Color(red: 230/255, green: 248/255, blue: 255/255),  // More vivid Alice Blue
+        Color(red: 255/255, green: 250/255, blue: 230/255),  // More vivid Seashell
+        Color(red: 255/255, green: 250/255, blue: 215/255),  // More vivid Old Lace
+        Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
+    ]
     var child: UserChildren
     @StateObject var viewModel = ParentViewModel()
     var body: some View {
-        VStack {
-            if !isiPhone {
-                Button("back to \(child.name)'s playground") {
-                    childId = child.id
-                    ipf = false
-                    viewModel.fetchProfileImage(dp: child.profileImage)
+        ZStack {
+            MeshGradient(
+                width: 3,
+                height: 3,
+                points: [
+                    [0, 0], [0.5, 0], [1, 0],
+                    [0, 0.5], [0.5, 0.5], [1, 0.5],
+                    [0, 1], [0.5, 1], [1, 1]
+                ],
+                colors: bookBackgroundColors
+            ).ignoresSafeArea()
+            VStack {
+                if !isiPhone {
+                    Button("back to \(child.name)'s playground") {
+                        childId = child.id
+                        ipf = false
+                        viewModel.fetchProfileImage(dp: child.profileImage)
+                    }
                 }
-            }
-            
-            List {
-                ForEach(viewModel.story, id: \.id) { story in
-                    NavigationLink(destination: StoryView(story: story)) {
-                        ZStack {
-                            HStack {
-                                VStack {
-                                    Spacer()
-                                    Text("\(story.title)")
-                                }
-                                Spacer()
-                                Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
-                                    .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
-                            }
-                            
-                        }
-                  }
-                }
-                .onDelete { indexSet in
-                                if let index = indexSet.first {
-                                    let storyID = viewModel.story[index].id
-                                    viewModel.deleteStory(storyId: storyID)
-                                    
-                                    do {
-                                        try viewModel.getStory(childId: child.id)
-                                    } catch {
-                                        print(error.localizedDescription)
+                
+                List {
+                    ForEach(viewModel.story, id: \.id) { story in
+                        NavigationLink(destination: StoryView(story: story)) {
+                            ZStack {
+                                HStack {
+                                    VStack {
+                                        Spacer()
+                                        Text("\(story.title)")
                                     }
+                                    Spacer()
+                                    Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
+                                        .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
                                 }
+                                
                             }
+                        }
+                        .listRowBackground(Color.white.opacity(0.4))
+                    }
+                    .onDelete { indexSet in
+                        if let index = indexSet.first {
+                            let storyID = viewModel.story[index].id
+                            viewModel.deleteStory(storyId: storyID)
+                            
+                            do {
+                                try viewModel.getStory(childId: child.id)
+                            } catch {
+                                print(error.localizedDescription)
+                            }
+                        }
+                    }
+                }
+                .scrollContentBackground(.hidden)
             }
-        }
-        .onAppear {
-            do {
-                try viewModel.getStory(childId: child.id)
-            } catch {
-                print(error.localizedDescription)
+            .onAppear {
+                do {
+                    try viewModel.getStory(childId: child.id)
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
         }
     }
