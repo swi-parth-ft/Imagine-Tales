@@ -14,6 +14,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     FirebaseApp.configure()
     return true
   }
+    
+    
 }
 
 @main
@@ -21,6 +23,7 @@ struct Imagine_TalesApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @AppStorage("isOnboarding") var isOnboarding: Bool = true
+    @StateObject var screenTimeManager = ScreenTimeManager()
     
     var body: some Scene {
         WindowGroup {
@@ -28,6 +31,7 @@ struct Imagine_TalesApp: App {
                 OnBoardingView()
             } else {
                 RootView()
+                    .environmentObject(screenTimeManager)
             }
         }
     }

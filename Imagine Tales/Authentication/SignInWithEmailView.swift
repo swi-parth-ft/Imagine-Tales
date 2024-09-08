@@ -172,6 +172,7 @@ struct SignInWithEmailView: View {
     @State private var otp: [String] = Array(repeating: "", count: 4)
     @FocusState private var focusedIndex: Int?
     @State private var isShowingButtons = true
+    @EnvironmentObject var screenTimeViewModel: ScreenTimeManager
     
     var body: some View {
         NavigationStack {
@@ -453,6 +454,7 @@ struct SignInWithEmailView: View {
                                                                             }
                                                                             viewModel.fetchProfileImage(dp: child.profileImage)
                                                                             
+                                                                            screenTimeViewModel.startScreenTime(for: childId)
                                                                         }
                                                                     }
                                                                 }

@@ -214,7 +214,7 @@ struct ProfileView: View {
     @State var origin: CGPoint = .zero
     @State private var isShowingAlert = false
     @Binding var showingProfile: Bool
-    
+    @StateObject var screenTimeViewModel = ScreenTimeManager()
     var body: some View {
         NavigationStack {
             
@@ -374,6 +374,8 @@ struct ProfileView: View {
                             try viewModel.logOut()
                             childId = ""
                             showSignInView = true
+                            screenTimeViewModel.stopScreenTime()
+                            
                         } catch {
                             print(error.localizedDescription)
                         }
@@ -424,13 +426,12 @@ struct PinView: View {
     @AppStorage("ipf") private var ipf: Bool = true
     @StateObject private var viewModel = ProfileViewModel()
     @StateObject private var reAuthModel = ReAuthentication()
-    
     @State private var otp: [String] = Array(repeating: "", count: 4)
     @FocusState private var focusedIndex: Int?
     @State private var error = ""
     @State private var isResetting = false
     @State private var isPinWrong = false
-    
+    @EnvironmentObject var screenTimeViewModel: ScreenTimeManager
     var body: some View {
         ZStack {
             Color(hex: "#8AC640").ignoresSafeArea()
@@ -491,6 +492,7 @@ struct PinView: View {
                             }
                         } else {
                             if otp.joined() == viewModel.pin {
+                                screenTimeViewModel.stopScreenTime()
                                 ipf = true
                             } else {
                                 isPinWrong = true

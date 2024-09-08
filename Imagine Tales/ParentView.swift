@@ -279,10 +279,6 @@ struct ParentView: View {
     }
 }
 
-#Preview {
-    ParentView(showSigninView: .constant(false), reload: .constant(false), isiPhone: .constant(false))
-}
-
 struct ChildView: View {
     @AppStorage("childId") var childId: String = "Default Value"
     @AppStorage("ipf") private var ipf: Bool = true
@@ -305,6 +301,7 @@ struct ChildView: View {
     @State var counter: Int = 0
     @State var origin: CGPoint = .zero
     @State private var tiltAngle: Double = 0
+    @EnvironmentObject var screenTimeViewModel: ScreenTimeManager
     
     var body: some View {
         NavigationStack {
@@ -364,6 +361,7 @@ struct ChildView: View {
                                         childId = child.id
                                         ipf = false
                                         viewModel.fetchProfileImage(dp: child.profileImage)
+                                        screenTimeViewModel.startScreenTime(for: childId)
                                         dismiss()
                                     }
                                     .font(.title)
@@ -433,85 +431,91 @@ struct StoryView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                ForEach(0..<story.storyText.count, id: \.self) { index in
-                    VStack {
-                        ZStack(alignment: .topTrailing) {
-                            AsyncImage(url: URL(string: story.storyText[index].image)) { phase in
-                                switch phase {
-                                case .empty:
-                                    ProgressView()
-                                        .progressViewStyle(CircularProgressViewStyle())
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(height: 500)
-                                        .clipped()
-                                        .cornerRadius(30)
-                                        .padding()
-                                case .failure(_):
-                                    Image(systemName: "photo")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .padding()
-                                @unknown default:
-                                    EmptyView()
+            ZStack {
+                BackGroundMesh()
+                ScrollView {
+                    ForEach(0..<story.storyText.count, id: \.self) { index in
+                        VStack {
+                            ZStack(alignment: .topTrailing) {
+                                AsyncImage(url: URL(string: story.storyText[index].image)) { phase in
+                                    switch phase {
+                                    case .empty:
+                                        ProgressView()
+                                            .progressViewStyle(CircularProgressViewStyle())
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(height: 300)
+                                            .clipped()
+                                            .cornerRadius(30)
+                                            
+                                    case .failure(_):
+                                        Image(systemName: "photo")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .padding()
+                                    @unknown default:
+                                        EmptyView()
+                                    }
                                 }
+                                .frame(width: UIScreen.main.bounds.width * 0.9, height: 300)
+                                .cornerRadius(10)
                             }
-                            .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
-                            .cornerRadius(10)
+                            
+                            Text(story.storyText[index].text)
+                                .frame(width: UIScreen.main.bounds.width * 0.9)
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding()
+                            
+                            
+                            
                         }
-                        
-                        Text(story.storyText[index].text)
-                            .frame(width: UIScreen.main.bounds.width * 0.8)
-                            .padding()
-                        
-                        
-                        
+                        .padding()
                     }
-                    .padding()
                 }
-            }
-            .padding()
-            .navigationTitle(story.title)
-            .toolbar {
-                            ToolbarItemGroup(placement: .bottomBar) {
-                              
-                                    Button("Approve") {
-                                        do {
-                                            try viewModel.reviewStory(status: "Approve", id: story.id)
-                                            status = "Approve"
-                                        } catch {
-                                            print(error.localizedDescription)
-                                        }
-                                    }
-                                    .foregroundStyle(status == "Approve" ? .gray : .green)
-                                
-                                Spacer()
-                                Text(status == "Approve" ? "Approved" : (status == "Reject" ? "Rejected" : "Pending"))
-                                    .foregroundStyle(status == "Approve" ? .green : (status == "Reject" ? .red : .blue ))
-                                Spacer()
-                                
-                                Button("Reject") {
-                                    do {
-                                        try viewModel.reviewStory(status: "Reject", id: story.id)
-                                        status = "Reject"
-                                    } catch {
-                                        print(error.localizedDescription)
-                                    }
-                                }
-                                .foregroundStyle(status == "Reject" ? .gray : .red)
+                .padding()
+                .navigationTitle(story.title)
+                .toolbar {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        
+                        Button("Approve") {
+                            do {
+                                try viewModel.reviewStory(status: "Approve", id: story.id)
+                                status = "Approve"
+                            } catch {
+                                print(error.localizedDescription)
                             }
                         }
-            .onAppear {
-                status = story.status
+                        .foregroundStyle(status == "Approve" ? .gray : .green)
+                        
+                        Spacer()
+                        Text(status == "Approve" ? "Approved" : (status == "Reject" ? "Rejected" : "Pending"))
+                            .foregroundStyle(status == "Approve" ? .green : (status == "Reject" ? .red : .blue ))
+                        Spacer()
+                        
+                        Button("Reject") {
+                            do {
+                                try viewModel.reviewStory(status: "Reject", id: story.id)
+                                status = "Reject"
+                            } catch {
+                                print(error.localizedDescription)
+                            }
+                        }
+                        .foregroundStyle(status == "Reject" ? .gray : .red)
+                    }
+                }
+                .onAppear {
+                    status = story.status
+                }
             }
             
         }
     }
     
 }
+
 struct AddChildForm: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var viewModel = ParentViewModel()
@@ -598,20 +602,26 @@ struct parentSettings: View {
     @Binding var showSigninView: Bool
     
     var body: some View {
-        VStack {
-            List {
-                Button("Log out") {
-                    Task {
-                        do {
-                            try viewModel.logOut()
-                            showSigninView = true
-                            dismiss()
-                        } catch {
-                            print(error.localizedDescription)
+        NavigationStack {
+            ZStack {
+                BackGroundMesh()
+                VStack {
+                    List {
+                        Button("Log out") {
+                            Task {
+                                do {
+                                    try viewModel.logOut()
+                                    showSigninView = true
+                                    dismiss()
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
                         }
                     }
                 }
             }
+            .navigationTitle("Settings")
         }
     }
 }
@@ -693,3 +703,6 @@ struct DpSelection: View {
     }
 }
 
+#Preview {
+    ParentView(showSigninView: .constant(false), reload: .constant(false), isiPhone: .constant(false))
+}
