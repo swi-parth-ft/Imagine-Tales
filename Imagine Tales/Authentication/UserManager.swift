@@ -149,7 +149,7 @@ final class UserManager {
         try await document.setData(data, merge: true)
     }
     
-    func addChild2(userId: String, name: String, age: String, username: String) async throws {
+    func addChild2(userId: String, name: String, age: String, username: String, imageUrl: String) async throws {
         let document = childDocument()
         let documentId = document.documentID
         
@@ -159,7 +159,7 @@ final class UserManager {
             "name" : name,
             "age" : age,
             "username" : username,
-            "profileImage" : "",
+            "profileImage" : imageUrl,
             "dateCreated" : Timestamp()
         ]
         

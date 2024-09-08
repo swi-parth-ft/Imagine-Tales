@@ -109,7 +109,7 @@ final class SignInWithEmailViewModel: ObservableObject {
     
     func addChild(age: String) async throws {
         let _ = try await UserManager.shared.addChild(userId: userId, name: name, age: age)
-        let _ = try await UserManager.shared.addChild2(userId: userId, name: name, age: age, username: username)
+        let _ = try await UserManager.shared.addChild2(userId: userId, name: name, age: age, username: username, imageUrl: "")
     }
     
     func setPin(pin: String) throws {
