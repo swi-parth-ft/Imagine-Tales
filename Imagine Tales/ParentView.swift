@@ -377,6 +377,8 @@ struct ChildView: View {
                     .frame(height: isiPhone ? 250 / 2 : 250)
                     .padding(.leading)
                     
+                    ScreenTimeChartView(selectedChildId: child.id)
+                    
                     List {
                         ForEach(viewModel.story, id: \.id) { story in
                             NavigationLink(destination: StoryView(story: story)) {

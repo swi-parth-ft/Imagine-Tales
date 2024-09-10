@@ -63,6 +63,7 @@
 		078DACD62C8CA44900F04A65 /* StoryByGenreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACD52C8CA44900F04A65 /* StoryByGenreView.swift */; };
 		078DACDA2C8D202500F04A65 /* BackGroundMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACD92C8D202500F04A65 /* BackGroundMesh.swift */; };
 		078DACDC2C8DFA3300F04A65 /* ScreenTimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */; };
+		078DACDE2C8E054200F04A65 /* ScreenTimeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACDD2C8E054200F04A65 /* ScreenTimeChartView.swift */; };
 		0792C1D62C76A20D000C42A7 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */; };
 		0792C1D82C7AA2FB000C42A7 /* CharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D72C7AA2FB000C42A7 /* CharacterView.swift */; };
 		0792C1DA2C7BD95E000C42A7 /* ParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D92C7BD95E000C42A7 /* ParentView.swift */; };
@@ -118,6 +119,7 @@
 		078DACD52C8CA44900F04A65 /* StoryByGenreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryByGenreView.swift; sourceTree = "<group>"; };
 		078DACD92C8D202500F04A65 /* BackGroundMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackGroundMesh.swift; sourceTree = "<group>"; };
 		078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTimeManager.swift; sourceTree = "<group>"; };
+		078DACDD2C8E054200F04A65 /* ScreenTimeChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTimeChartView.swift; sourceTree = "<group>"; };
 		0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
 		0792C1D72C7AA2FB000C42A7 /* CharacterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterView.swift; sourceTree = "<group>"; };
 		0792C1D92C7BD95E000C42A7 /* ParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentView.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				077BE2862C810FF800760D5A /* SavedStoryView.swift */,
 				0792C1D92C7BD95E000C42A7 /* ParentView.swift */,
 				078DACD92C8D202500F04A65 /* BackGroundMesh.swift */,
+				078DACDD2C8E054200F04A65 /* ScreenTimeChartView.swift */,
 				0701FBB32C8695D0004BEE9F /* AsyncImage.swift */,
 				077BE2752C800A4A00760D5A /* GradientRectView.swift */,
 				079E924F2C89250A00433869 /* CustomAlert.swift */,
@@ -370,6 +373,7 @@
 				0701FBB82C8755D1004BEE9F /* Ripple.metal in Sources */,
 				0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */,
 				0711F3702C6D71EC006C86AA /* AuthenticationManager.swift in Sources */,
+				078DACDE2C8E054200F04A65 /* ScreenTimeChartView.swift in Sources */,
 				0711F37A2C6D8BEB006C86AA /* OpenAIService.swift in Sources */,
 				0792C1D62C76A20D000C42A7 /* OnBoardingView.swift in Sources */,
 				073F2CF22C6F9C1F00BCF6F0 /* UserManager.swift in Sources */,

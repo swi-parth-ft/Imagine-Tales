@@ -1352,7 +1352,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "222A1575-5361-443C-90B7-9FACEDDD4DF3"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/ScreenTimeManager.swift"
@@ -1368,7 +1368,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "4C084FE9-B4D9-47A8-AB2D-F9B54B8F00CD"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/ScreenTimeManager.swift"

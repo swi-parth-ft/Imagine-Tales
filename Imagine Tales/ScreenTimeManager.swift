@@ -74,4 +74,45 @@ class ScreenTimeManager: ObservableObject {
                 }
             }
     }
+    
+    func getScreenTimeForMonth(childId: String, year: Int, month: Int, completion: @escaping ([Date: TimeInterval]) -> Void) {
+        let db = Firestore.firestore()
+        
+        let calendar = Calendar.current
+        var components = DateComponents()
+        components.year = year
+        components.month = month
+        components.day = 1
+        let startDate = calendar.date(from: components)!
+        
+        components.month = month + 1
+        components.day = 0
+        let endDate = calendar.date(from: components)!
+        
+        db.collection("screentime")
+            .document(childId)
+            .collection("sessions")
+            .whereField("startTime", isGreaterThanOrEqualTo: startDate)
+            .whereField("startTime", isLessThanOrEqualTo: endDate)
+            .getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting screen time: \(error)")
+                    completion([:])
+                    return
+                }
+                
+                var dailyScreenTime: [Date: TimeInterval] = [:]
+                
+                // Process the documents and group them by day
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+                    if let startTime = (data["startTime"] as? Timestamp)?.dateValue(),
+                       let duration = data["duration"] as? TimeInterval {
+                        let day = calendar.startOfDay(for: startTime)
+                        dailyScreenTime[day, default: 0] += duration
+                    }
+                }
+                completion(dailyScreenTime)
+            }
+    }
 }
