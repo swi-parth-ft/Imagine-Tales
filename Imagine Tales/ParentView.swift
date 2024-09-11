@@ -376,10 +376,10 @@ struct ChildView: View {
                     }
                     .frame(height: isiPhone ? 250 / 2 : 250)
                     .padding(.leading)
-                    
-                    ScreenTimeChartView(selectedChildId: child.id)
-                    
+                   
                     List {
+                        ScreenTimeChartView(selectedChildId: child.id)
+                        .listRowBackground(Color.white.opacity(0))
                         ForEach(viewModel.story, id: \.id) { story in
                             NavigationLink(destination: StoryView(story: story)) {
                                 ZStack {
