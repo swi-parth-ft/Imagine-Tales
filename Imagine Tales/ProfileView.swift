@@ -613,7 +613,7 @@ struct StoryFromProfileView: View {
                 if let snapshot = snapshot, let document = snapshot.documents.first {
                     let reviewNotes = document.data()["parentReviewNotes"] as? String
                     self.comment = reviewNotes ?? "No Comments"
-                    self.isShowingCmt.toggle()
+                    
                 } else {
                     
                 }
@@ -809,9 +809,9 @@ struct StoryFromProfileView: View {
                                         .scaleEffect(isLiked ? 1.2 : 1)
                                         .animation(.easeInOut, value: isLiked)
                                 }
-                            if childId == story.childId {
-                                Button("", systemImage: "message") {
-                                    fetchStoryAndReview(storyID: story.id)                                
+                            if childId == story.childId && comment != "" {
+                                Button("", systemImage: "message.fill") {
+                                    isShowingCmt.toggle()
                                 }
                             }
                             
@@ -841,6 +841,8 @@ struct StoryFromProfileView: View {
                         isSaved = hasSaved
                         print(isSaved)
                     }
+                    
+                    fetchStoryAndReview(storyID: story.id)
                 }
             }
          
