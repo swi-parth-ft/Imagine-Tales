@@ -31,14 +31,28 @@ struct StoryByGenreView: View {
     var genre: String
     
     var body: some View {
-        List {
-            ForEach(viewModel.stories) { story in
-                Text(story.title)
-                
+        
+        NavigationStack {
+            ZStack {
+                BackGroundMesh()
+                List {
+                    ForEach(viewModel.stories) { story in
+                        NavigationLink(destination: StoryFromProfileView(story: story)) {
+                            VStack {
+                                Spacer()
+                                Text(story.title)
+                            }
+                        }
+                        .listRowBackground(Color.white.opacity(0.4))
+                        
+                    }
+                }
+                .scrollContentBackground(.hidden)
+                .onAppear {
+                    viewModel.fetchStories(genre: genre)
+                }
             }
-        }
-        .onAppear {
-            viewModel.fetchStories(genre: genre)
+            .navigationTitle(genre)
         }
     }
 }
