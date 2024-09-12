@@ -22,6 +22,26 @@ final class ParentViewModel: ObservableObject {
     @Published var numberOfFriends = 0
     @Published var imageUrl = ""
     
+    
+    
+    
+    func addReview(storyID: String, reviewNotes: String) {
+        let db = Firestore.firestore()
+        
+        let reviewData: [String: Any] = [
+            "storyID": storyID,
+            "parentReviewNotes": reviewNotes
+        ]
+        
+        db.collection("reviews").addDocument(data: reviewData) { error in
+            if let error = error {
+                print("Error adding review: \(error)")
+            } else {
+                print("Review successfully added")
+            }
+        }
+    }
+    
     func getFriendsCount(childId: String) {
         let db = Firestore.firestore()
         let collectionRef = db.collection("Children2").document(childId).collection("friends")
@@ -303,6 +323,8 @@ struct ChildView: View {
     @State private var tiltAngle: Double = 0
     @EnvironmentObject var screenTimeViewModel: ScreenTimeManager
     
+   
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -430,6 +452,8 @@ struct StoryView: View {
     var story: Story
     @StateObject var viewModel = ParentViewModel()
     @State private var status = ""
+    @State private var comment = ""
+    @State private var isAddingCmt = false
     
     var body: some View {
         NavigationStack {
@@ -476,10 +500,18 @@ struct StoryView: View {
                         }
                         .padding()
                     }
+                    
+                    
                 }
                 .padding()
                 .navigationTitle(story.title)
                 .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("", systemImage: "message") {
+                            isAddingCmt.toggle()
+                            
+                        }
+                    }
                     ToolbarItemGroup(placement: .bottomBar) {
                         
                         Button("Approve") {
@@ -511,6 +543,16 @@ struct StoryView: View {
                 .onAppear {
                     status = story.status
                 }
+                .alert("Add Review", isPresented: $isAddingCmt, actions: {
+                    TextField("Enter your review here", text: $comment)
+                    Button("Submit") {
+                        viewModel.addReview(storyID: story.id, reviewNotes: comment)
+                    }
+                            Button("Cancel", role: .cancel, action: {})
+                        }, message: {
+                            Text("Please add your review for the child's story.")
+                        })
+                
             }
             
         }

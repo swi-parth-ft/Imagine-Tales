@@ -16,7 +16,7 @@ struct TextPlaceholderView: View {
     var body: some View {
         VStack(alignment: .leading) {
             
-            ForEach(0..<count) { _ in
+            ForEach(0..<count, id: \.self) { _ in
                 RoundedRectangle(cornerRadius: 12)
                     .fill(LinearGradient(
                         gradient: Gradient(colors: gradientColors),

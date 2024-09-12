@@ -95,7 +95,7 @@ final class StoryViewModel: ObservableObject {
             "title" : title,
             "status" : "pending",
             "genre" : genre,
-            "childUsername" : child?.username,
+            "childUsername" : child?.username ?? "",
             "likes" : 0,
             "dateCreated" : Timestamp()
         ]

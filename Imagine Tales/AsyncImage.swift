@@ -48,6 +48,9 @@ struct AsyncDp: View {
     let urlString: String
     let size: CGFloat
     @State private var dpUrl = ""
+    @State private var retryCount = 0
+    @State private var maxRetryAttempts = 30 // Set max retry attempts
+    @State private var retryDelay = 2.0
     
     var body: some View {
         AsyncImage(url: URL(string: dpUrl)) { phase in
@@ -63,6 +66,14 @@ struct AsyncDp: View {
                 Circle()
                     .fill(Color.gray.opacity(0.3))
                     .frame(width: size, height: size)
+                    .onAppear {
+                            if retryCount < maxRetryAttempts {
+                                        // Retry logic with delay
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+                                            retryCount += 1
+                                        }
+                                    }
+                        }
                 
             @unknown default:
                 EmptyView()

@@ -215,6 +215,10 @@ struct ProfileView: View {
     @State private var isShowingAlert = false
     @Binding var showingProfile: Bool
     @StateObject var screenTimeViewModel = ScreenTimeManager()
+    
+    
+    
+    
     var body: some View {
         NavigationStack {
             
@@ -312,20 +316,26 @@ struct ProfileView: View {
                     List {
                         Section("Your Stories") {
                             ForEach(parentViewModel.story, id: \.id) { story in
+                                
                                 NavigationLink(destination: StoryFromProfileView(story: story)) {
                                     
                                     HStack {
                                         VStack {
                                             Spacer()
                                             Text("\(story.title)")
+                                           
+                                            
                                         }
                                         Spacer()
+                                        
                                         Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
                                             .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
                                     }
                                     
                                 }
                                 .listRowBackground(Color.white.opacity(0.5))
+                                
+                               
                             }
                         }
                     }
@@ -584,18 +594,7 @@ struct StoryFromProfileView: View {
     @State var counter: Int = 0
     @State var origin: CGPoint = .zero
     @State private var offset = CGSize.zero
-    
-    let bookBackgroundColors: [Color] = [
-        Color(red: 255/255, green: 235/255, blue: 190/255),  // More vivid Beige
-        Color(red: 220/255, green: 220/255, blue: 220/255),  // More vivid Light Gray
-        Color(red: 255/255, green: 230/255, blue: 240/255),  // More vivid Lavender Blush
-        Color(red: 255/255, green: 255/255, blue: 245/255),  // More vivid Mint Cream
-        Color(red: 230/255, green: 255/255, blue: 230/255),  // More vivid Honeydew
-        Color(red: 230/255, green: 248/255, blue: 255/255),  // More vivid Alice Blue
-        Color(red: 255/255, green: 250/255, blue: 230/255),  // More vivid Seashell
-        Color(red: 255/255, green: 250/255, blue: 215/255),  // More vivid Old Lace
-        Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
-    ]
+  
     @State private var imgUrl = ""
     @State private var showFriendProfile = false
     
@@ -605,20 +604,27 @@ struct StoryFromProfileView: View {
     @State private var isSaved = false
     @State private var likeObserver = false
     @AppStorage("childId") var childId: String = "Default Value"
+    @State private var comment = ""
+    @State private var isShowingCmt = false
+    func fetchStoryAndReview(storyID: String) {
+        let db = Firestore.firestore()
+        
+        db.collection("reviews").whereField("storyID", isEqualTo: storyID).getDocuments { snapshot, error in
+                if let snapshot = snapshot, let document = snapshot.documents.first {
+                    let reviewNotes = document.data()["parentReviewNotes"] as? String
+                    self.comment = reviewNotes ?? "No Comments"
+                    self.isShowingCmt.toggle()
+                } else {
+                    
+                }
+            }
+        
+    }
     
     var body: some View {
         NavigationStack {
             ZStack {
-                MeshGradient(
-                    width: 3,
-                    height: 3,
-                    points: [
-                        [0, 0], [0.5, 0], [1, 0],
-                        [0, 0.5], [0.5, 0.5], [1, 0.5],
-                        [0, 1], [0.5, 1], [1, 1]
-                    ],
-                    colors: bookBackgroundColors
-                ).ignoresSafeArea()
+                BackGroundMesh()
                 ScrollView {
                     VStack {
                         VStack {
@@ -803,10 +809,21 @@ struct StoryFromProfileView: View {
                                         .scaleEffect(isLiked ? 1.2 : 1)
                                         .animation(.easeInOut, value: isLiked)
                                 }
+                            if childId == story.childId {
+                                Button("", systemImage: "message") {
+                                    fetchStoryAndReview(storyID: story.id)                                
+                                }
+                            }
+                            
                             }
                     }
                 
                 }
+                .alert("Parent's Comment", isPresented: $isShowingCmt) {
+                            Button("OK", role: .cancel) { }
+                        } message: {
+                            Text(comment)
+                        }
                 .fullScreenCover(isPresented: $showFriendProfile) {
                     FriendProfileView(friendId: story.childId, dp: imgUrl)
                 }
