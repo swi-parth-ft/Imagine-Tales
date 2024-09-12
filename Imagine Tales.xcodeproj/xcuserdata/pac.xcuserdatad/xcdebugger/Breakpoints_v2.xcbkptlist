@@ -1422,8 +1422,8 @@
             filePath = "Imagine Tales/ParentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "559"
-            endingLineNumber = "559"
+            startingLineNumber = "596"
+            endingLineNumber = "596"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -1438,8 +1438,24 @@
             filePath = "Imagine Tales/ParentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "571"
-            endingLineNumber = "571"
+            startingLineNumber = "608"
+            endingLineNumber = "608"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BCCA6F74-81AC-4E5B-BCDD-962DA1CCFF65"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/ParentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "530"
+            endingLineNumber = "530"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>

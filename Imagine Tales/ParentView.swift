@@ -468,6 +468,8 @@ struct StoryView: View {
     @State private var status = ""
     @State private var comment = ""
     @State private var isAddingCmt = false
+    @State private var isRejecting = false
+    
     
     var body: some View {
         NavigationStack {
@@ -514,8 +516,70 @@ struct StoryView: View {
                         }
                         .padding()
                     }
-                    
-                    
+                    HStack {
+                        Spacer()
+                        if status == "Reject" {
+                            HStack {
+                                
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(.black)
+                                    .font(.title)
+                                    .padding(.leading)
+                                    .onTapGesture {
+                                        do {
+                                            try viewModel.reviewStory(status: "Approve", id: story.id)
+                                            withAnimation {
+                                                status = "Approve"
+                                            }
+                                        } catch {
+                                            print(error.localizedDescription)
+                                        }
+                                    }
+                                
+                                Text("Rejected")
+                                    .padding()
+                                    .background(.red.opacity(0.4))
+                                    .foregroundStyle(.black)
+                                    .cornerRadius(22)
+                                
+                                
+                                
+                            }
+                            .background(.white)
+                            .cornerRadius(22)
+                            .padding()
+                        } else {
+                            HStack {
+                                Button(status == "Approve" ? "Approved" : "Approve?") {
+                                    do {
+                                        try viewModel.reviewStory(status: "Approve", id: story.id)
+                                        withAnimation {
+                                            status = "Approve"
+                                        }
+                                    } catch {
+                                        print(error.localizedDescription)
+                                    }
+                                }
+                                .padding()
+                                .background(.white)
+                                .foregroundStyle(.black)
+                                .cornerRadius(22)
+                                
+                                
+                                Image(systemName: "x.circle.fill")
+                                    .foregroundStyle(.red)
+                                    .font(.title)
+                                    .padding(.trailing)
+                                    .onTapGesture {
+                                        isRejecting.toggle()
+                                    }
+                            }
+                            .background(.red.opacity(0.4))
+                            .cornerRadius(22)
+                            .padding()
+                        }
+                    }
+                    .padding()
                 }
                 .padding()
                 .navigationTitle(story.title)
@@ -525,33 +589,6 @@ struct StoryView: View {
                             isAddingCmt.toggle()
                             
                         }
-                    }
-                    ToolbarItemGroup(placement: .bottomBar) {
-                        
-                        Button("Approve") {
-                            do {
-                                try viewModel.reviewStory(status: "Approve", id: story.id)
-                                status = "Approve"
-                            } catch {
-                                print(error.localizedDescription)
-                            }
-                        }
-                        .foregroundStyle(status == "Approve" ? .gray : .green)
-                        
-                        Spacer()
-                        Text(status == "Approve" ? "Approved" : (status == "Reject" ? "Rejected" : "Pending"))
-                            .foregroundStyle(status == "Approve" ? .green : (status == "Reject" ? .red : .blue ))
-                        Spacer()
-                        
-                        Button("Reject") {
-                            do {
-                                try viewModel.reviewStory(status: "Reject", id: story.id)
-                                status = "Reject"
-                            } catch {
-                                print(error.localizedDescription)
-                            }
-                        }
-                        .foregroundStyle(status == "Reject" ? .gray : .red)
                     }
                 }
                 .onAppear {
@@ -564,13 +601,30 @@ struct StoryView: View {
                     Button("Submit") {
                         viewModel.addReview(storyID: story.id, reviewNotes: comment)
                     }
-                            Button("Cancel", role: .cancel, action: {})
-                        }, message: {
-                            Text("Please add your review for the child's story.")
-                                .onAppear {
-                                    comment = viewModel.comment
-                                }
-                        })
+                    Button("Cancel", role: .cancel, action: {})
+                }, message: {
+                    Text("Please add your review for the child's story.")
+                        .onAppear {
+                            comment = viewModel.comment
+                        }
+                })
+                .alert("Reject Story", isPresented: $isRejecting, actions: {
+                    
+                    Button("Reject") {
+                        do {
+                            try viewModel.reviewStory(status: "Reject", id: story.id)
+                            withAnimation {
+                                status = "Reject"
+                            }
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                    Button("Cancel", role: .cancel, action: {})
+                }, message: {
+                    Text("Are you sure you want to reject this story?")
+                   
+                })
                 
             }
             
