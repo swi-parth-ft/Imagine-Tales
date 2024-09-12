@@ -21,8 +21,22 @@ final class ParentViewModel: ObservableObject {
     var childId = ""
     @Published var numberOfFriends = 0
     @Published var imageUrl = ""
+    @Published var comment = ""
     
-    
+    func fetchStoryAndReview(storyID: String) {
+        let db = Firestore.firestore()
+        
+        db.collection("reviews").whereField("storyID", isEqualTo: storyID).getDocuments { snapshot, error in
+                if let snapshot = snapshot, let document = snapshot.documents.first {
+                    let reviewNotes = document.data()["parentReviewNotes"] as? String
+                    self.comment = reviewNotes ?? ""
+                    
+                } else {
+                    self.comment = ""
+                }
+            }
+        
+    }
     
     
     func addReview(storyID: String, reviewNotes: String) {
@@ -542,6 +556,8 @@ struct StoryView: View {
                 }
                 .onAppear {
                     status = story.status
+                    viewModel.fetchStoryAndReview(storyID: story.id)
+                    
                 }
                 .alert("Add Review", isPresented: $isAddingCmt, actions: {
                     TextField("Enter your review here", text: $comment)
@@ -551,6 +567,9 @@ struct StoryView: View {
                             Button("Cancel", role: .cancel, action: {})
                         }, message: {
                             Text("Please add your review for the child's story.")
+                                .onAppear {
+                                    comment = viewModel.comment
+                                }
                         })
                 
             }
