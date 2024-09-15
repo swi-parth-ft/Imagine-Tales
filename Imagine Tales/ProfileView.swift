@@ -315,6 +315,20 @@ struct ProfileView: View {
                     
                     List {
                         Section("Your Stories") {
+                            if parentViewModel.story.isEmpty {
+                                ContentUnavailableView {
+                                    Label("No Stories Yet", systemImage: "book.fill")
+                                } description: {
+                                    Text("It looks like there's no stories posted yet.")
+                                } actions: {
+        //                                    Button {
+        //                                        /// Function that creates a new note
+        //                                    } label: {
+        //                                        Label("Create a new note", systemImage: "plus")
+        //                                    }
+                                }
+                                .listRowBackground(Color.clear)
+                            }
                             ForEach(parentViewModel.story, id: \.id) { story in
                                 
                                 NavigationLink(destination: StoryFromProfileView(story: story)) {

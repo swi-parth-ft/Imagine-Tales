@@ -342,6 +342,20 @@ struct HomeView: View {
                         .padding(.horizontal)
                     }
                     .padding()
+                    if viewModel.stories.isEmpty {
+                        ContentUnavailableView {
+                            Label("No Stories Yet", systemImage: "book.fill")
+                        } description: {
+                            Text("It looks like there's no stories posted yet.")
+                        } actions: {
+//                                    Button {
+//                                        /// Function that creates a new note
+//                                    } label: {
+//                                        Label("Create a new note", systemImage: "plus")
+//                                    }
+                        }
+                        .listRowBackground(Color.clear)
+                    }
                     StoryListView(stories: viewModel.stories, reload: $reload, childId: childId)
                     
                         .onAppear {

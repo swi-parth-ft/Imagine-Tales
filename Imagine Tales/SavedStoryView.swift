@@ -61,6 +61,20 @@ struct SavedStoryView: View {
     
     var body: some View {
         NavigationStack {
+            if viewModel.savedStories.isEmpty {
+                ContentUnavailableView {
+                    Label("No Saved Stories Yet", systemImage: "book.fill")
+                } description: {
+                    Text("It looks like there's no stories saved yet.")
+                } actions: {
+//                                    Button {
+//                                        /// Function that creates a new note
+//                                    } label: {
+//                                        Label("Create a new note", systemImage: "plus")
+//                                    }
+                }
+                .listRowBackground(Color.clear)
+            }
             List(viewModel.savedStories, id: \.id) { story in
                 NavigationLink(destination: StoryFromProfileView(story: story)) {
                     HStack {
