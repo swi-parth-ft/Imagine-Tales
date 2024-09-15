@@ -23,10 +23,26 @@ struct ScreenTimeChartView: View {
         ZStack {
             VStack {
 
-                Text(monthLabel())
-                    .font(.title2)
-                    .padding()
-                
+                if !screenTimeData.isEmpty {
+                    
+                    Text(monthLabel())
+                        .font(.title2)
+                        .padding()
+                }
+                if screenTimeData.isEmpty {
+                    ContentUnavailableView {
+                        Label("No Activity Yet", systemImage: "scribble.variable")
+                    } description: {
+                        Text("It looks like there's no screen time yet.")
+                    } actions: {
+//                                    Button {
+//                                        /// Function that creates a new note
+//                                    } label: {
+//                                        Label("Create a new note", systemImage: "plus")
+//                                    }
+                    }
+                    .listRowBackground(Color.clear)
+                }
                 Chart {
                     ForEach(screenTimeData.sorted(by: { $0.key < $1.key }), id: \.key) { day, screenTime in
                         AreaMark(
@@ -79,11 +95,11 @@ struct ScreenTimeChartView: View {
                                         }
                                 )
                 .padding()
-                
-                Text("Screen Time")
-                    .font(.subheadline)
-                    .foregroundStyle(.gray)
-                
+                if !screenTimeData.isEmpty {
+                    Text("Screen Time")
+                        .font(.subheadline)
+                        .foregroundStyle(.gray)
+                }
             }
             .onAppear {
                 fetchScreenTime()
