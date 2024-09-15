@@ -110,6 +110,7 @@ class ScreenTimeManager: ObservableObject {
                        let duration = data["duration"] as? TimeInterval {
                         let day = calendar.startOfDay(for: startTime)
                         dailyScreenTime[day, default: 0] += duration
+                        print(dailyScreenTime)
                     }
                 }
                 completion(dailyScreenTime)

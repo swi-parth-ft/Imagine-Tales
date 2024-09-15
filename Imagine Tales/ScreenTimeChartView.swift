@@ -26,7 +26,7 @@ struct ScreenTimeChartView: View {
                 Text(monthLabel())
                     .font(.title2)
                     .padding()
-
+                
                 Chart {
                     ForEach(screenTimeData.sorted(by: { $0.key < $1.key }), id: \.key) { day, screenTime in
                         AreaMark(
@@ -116,7 +116,14 @@ struct ScreenTimeChartView: View {
             
             screenTimeViewModel.getScreenTimeForMonth(childId: selectedChildId, year: components.year!, month: components.month!) { dailyScreenTime in
                 DispatchQueue.main.async {
-                    self.screenTimeData = dailyScreenTime
+                    // Debugging
+                                print("Fetched screen time data: \(dailyScreenTime)")
+                                
+                                // Ensure that the data is in the expected format
+                                self.screenTimeData = dailyScreenTime
+                                
+                                // Additional debug print to verify the data
+                                print("Updated screenTimeData: \(self.screenTimeData)")
                 }
             }
         }
@@ -124,6 +131,6 @@ struct ScreenTimeChartView: View {
 
 #Preview {
     let mockScreenTimeManager = ScreenTimeManager()
-    ScreenTimeChartView(selectedChildId: "3n5X2ipZdgBb0x8BAHOn")
+    ScreenTimeChartView(selectedChildId: "wZpOdPBPwhm8QCQ9jYYf")
         .environmentObject(mockScreenTimeManager)
 }
