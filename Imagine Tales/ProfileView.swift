@@ -381,10 +381,11 @@ struct ProfileView: View {
                 CustomAlert(isShowing: $isShowingAlert, title: "Already Leaving?", message1: "You’ll miss all the fun! 😢", message2: "But don’t worry, you can come back anytime!", onConfirm: {
                     Task {
                         do {
+                            screenTimeViewModel.stopScreenTime()
                             try viewModel.logOut()
                             childId = ""
                             showSignInView = true
-                            screenTimeViewModel.stopScreenTime()
+                            
                             
                         } catch {
                             print(error.localizedDescription)
