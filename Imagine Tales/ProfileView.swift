@@ -232,7 +232,12 @@ struct ProfileView: View {
                                 .fill(Color.white)
                                 .frame(width: 250, height: 250)
                                 
-                            AsyncCircularImageView(urlString: dpUrl, size: 200)
+                       //     AsyncCircularImageView(urlString: dpUrl, size: 200)
+                            Image((viewModel.child?.profileImage.removeJPGExtension() ?? ""))
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 200, height: 200)
+                                .cornerRadius(100)
                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                 .onTapGesture {
                                     isSelectingImage = true
@@ -670,7 +675,12 @@ struct StoryFromProfileView: View {
                                                         Circle()
                                                             .fill(Color.white)
                                                             .frame(width: 110)
-                                                        AsyncDp(urlString: imgUrl, size: 100)
+//                                                        AsyncDp(urlString: imgUrl, size: 100)
+                                                        Image(imgUrl.removeJPGExtension())
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(width: 100, height: 100)
+                                                            .cornerRadius(50)
                                                             .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                                             .id(imgUrl)
                                                     }

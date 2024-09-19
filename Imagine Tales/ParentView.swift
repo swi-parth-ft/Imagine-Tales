@@ -241,7 +241,12 @@ struct ParentView: View {
                         ForEach(viewModel.children) { child in
                             NavigationLink(destination: ChildView(isiPhone: $isiPhone, child: child)) {
                                 HStack {
-                                    AsyncDp(urlString: child.profileImage, size: 50)
+                                   // AsyncDp(urlString: child.profileImage, size: 50)
+                                    Image(child.profileImage.removeJPGExtension())
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 50, height: 50)
+                                        .cornerRadius(25)
                                     Text(child.name)
                                     Spacer()
                                 }

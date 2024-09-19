@@ -161,7 +161,11 @@ struct FriendProfileView: View {
                                 .fill(Color.white)
                                 .frame(width: 250, height: 250)
                                 
-                            AsyncDp(urlString: dp, size: 200)
+                            Image(dp.removeJPGExtension())
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 200, height: 200)
+                                .cornerRadius(100)
                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                
                             

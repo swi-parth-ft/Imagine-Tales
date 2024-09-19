@@ -311,7 +311,12 @@ struct FriendRequestView: View {
                                                         .fill(Color.white)
                                                         .frame(width: 170)
                                                         .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                                    AsyncDp(urlString: friend.profileImage, size: 150)
+//                                                    AsyncDp(urlString: friend.profileImage, size: 150)
+                                                    Image(friend.profileImage.removeJPGExtension())
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 150, height: 150)
+                                                        .cornerRadius(75)
                                                 }
                                                 .padding()
                                                 

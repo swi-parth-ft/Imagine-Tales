@@ -54,7 +54,7 @@ final class ExploreViewModel: ObservableObject {
         private var db = Firestore.firestore()
 
         func fetchStories() {
-            db.collection("Story").getDocuments { [weak self] snapshot, error in
+            db.collection("Story").whereField("status", isEqualTo: "Approve").getDocuments { [weak self] snapshot, error in
                 if let error = error {
                     print("Error fetching documents: \(error)")
                     return
@@ -84,6 +84,7 @@ struct ExploreView: View {
     var body: some View {
         VStack {
             ZStack {
+                
                 TabView(selection: $currentIndex) { // TabView for carousel effect
                     ForEach(0..<min(viewModel.topStories.count, 3), id: \.self) { index in
                         let story = viewModel.topStories[index]
@@ -206,40 +207,57 @@ struct ExploreView: View {
                             LazyHStack(spacing: 20) {
                                 ForEach(viewModel.storiesByGenre[genre] ?? []) { story in
                                     NavigationLink(destination: StoryFromProfileView(story: story)) {
-                                        VStack {
-                                            AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
-                                                switch phase {
-                                                case .empty:
-                                                    GradientRectView(size: 200)
-                                                    
-                                                case .success(let image):
-                                                    image
-                                                        .resizable()
-                                                        .scaledToFill()
-                                                        .frame(width: 400, height: 200)
-                                                        .clipped()
-                                                        .cornerRadius(30)
-                                                    
-                                                case .failure(_):
-                                                    Image(systemName: "photo")
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(height: 200)
-                                                        .cornerRadius(10)
-                                                        .padding()
-                                                        .onAppear {
-                                                            if retryCount < maxRetryAttempts {
-                                                                DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
-                                                                    retryCount += 1
+                                        ZStack(alignment: .top) {
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .stroke(Color(hex: "#F4F4DA"))
+                                                .frame(width: 300, height: 250)
+                                            VStack(alignment: .leading) {
+                                                
+                                                AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
+                                                    switch phase {
+                                                    case .empty:
+                                                        GradientRectView(size: 150)
+                                                        
+                                                    case .success(let image):
+                                                        image
+                                                            .resizable()
+                                                            .scaledToFill()
+                                                            .frame(width: 300, height: 150)
+                                                            .clipped()
+                                                            .cornerRadius(12)
+                                                        
+                                                    case .failure(_):
+                                                        Image(systemName: "photo")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(height: 200)
+                                                            .cornerRadius(10)
+                                                            .padding()
+                                                            .onAppear {
+                                                                if retryCount < maxRetryAttempts {
+                                                                    DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+                                                                        retryCount += 1
+                                                                    }
                                                                 }
                                                             }
-                                                        }
-                                                @unknown default:
-                                                    EmptyView()
+                                                    @unknown default:
+                                                        EmptyView()
+                                                    }
                                                 }
+                                                .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 5)
+                                                VStack(alignment: .leading, spacing: -16) {
+                                                    Text(story.title)
+                                                        .font(.system(size: 20))
+                                                    VStack(alignment: .leading) {
+                                                        Text(story.childUsername)
+                                                        Text("\(story.likes) Likes")
+                                                    }
+                                                }
+                                                .foregroundStyle(.black)
+                                                .padding([.top, .leading], 8)
+                                                .padding(.bottom)
+                                                Spacer()
                                             }
-                                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                            Text(story.title)
                                         }
                                     }
                                 }
@@ -247,7 +265,7 @@ struct ExploreView: View {
                         }
                     }
                     .listRowBackground(Color.white.opacity(0.0))
-                    .padding(.bottom)
+                    .listRowSeparator(.hidden)
                 }
             }
             .ignoresSafeArea()

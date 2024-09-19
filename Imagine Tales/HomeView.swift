@@ -422,7 +422,6 @@ struct StoryRowView: View {
     @State private var retryCount = 0
     @State private var maxRetryAttempts = 3 // Set max retry attempts
     @State private var retryDelay = 2.0
-    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -436,7 +435,12 @@ struct StoryRowView: View {
                                 Circle()
                                     .fill(Color.white)
                                     .frame(width: 60)
-                                AsyncDp(urlString: imgUrl, size: 50)
+                             //   AsyncDp(urlString: imgUrl, size: 50)
+                                Image(imgUrl.removeJPGExtension())
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 50, height: 50)
+                                    .cornerRadius(50)
                                     .shadow(color: Color.black.opacity(0.2), radius: 3, x: 0, y: 3)
                             }
                                 .padding(.bottom, 30)
@@ -622,7 +626,11 @@ struct StoryRowView: View {
         }
     }
 }
-
+extension String {
+    func removeJPGExtension() -> String {
+        return self.replacingOccurrences(of: ".jpg", with: "")
+    }
+}
 #Preview {
     HomeView(reload: .constant(false))
 }

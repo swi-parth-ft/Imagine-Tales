@@ -425,96 +425,7 @@ struct ContentView: View {
                         
                         
                         VStack {
-//                            //MARK: prompt view
-//                            ZStack {
-////                                if #available(iOS 18, *) {
-////                                    RoundedRectangle(cornerRadius: 22)
-////                                        .fill(
-////                                            
-////                                            MeshGradient(
-////                                                width: 4,
-////                                                height: 3,
-////                                                points: [
-////                                                    [0, 0], [0.33, 0], [0.66, 0], [1, 0],
-////                                                    [0, 0.5], [0.33, 0.5], [0.66, 0.5], [1, 0.5],
-////                                                    [0, 1], [0.33, 1], [0.66, 1], [1, 1]
-////                                                ],
-////                                                colors: [
-////                                                    .blue.opacity(0.6), .purple.opacity(0.4), .cyan.opacity(0.3), .indigo.opacity(0.2),
-////                                                    isAddingNames ? .pink.opacity(0.3) : .teal.opacity(0.2), isAddingNames ? .purple.opacity(0.2) : .blue.opacity(0.1), isAddingNames ? .indigo.opacity(0.2) : .cyan.opacity(0.1), isSelectingGenre || isAddingNames ? .teal.opacity(0.2) : .purple.opacity(0.1),
-////                                                    isAddingNames ? .pink.opacity(0.5) : .blue.opacity(0.3), .purple.opacity(0.2), isSelectingGenre || isAddingNames ? .cyan.opacity(0.3) : .indigo.opacity(0.2), isSelectingGenre || isAddingNames ? .teal.opacity(0.4) : .blue.opacity(0.3)
-////                                                ]
-////                                            )
-////                                            
-////                                        )
-////                                        .shadow(radius: 10)
-////                                       
-////                                }
-//                                
-//                                VStack(alignment: .leading) {
-//                                    HStack {
-//                                        Text("Wish")
-//                                            .foregroundStyle(Color(hex: "#DA70D6"))
-//                                            .font(.system(size: 24, weight: .bold))
-//                                        Spacer()
-//                                        Image(systemName: "shuffle")
-//                                            .font(.system(size: 24))
-//                                            .frame(width: 20, height: 20)
-//                                            .onTapGesture {
-//                                                isRandom = true
-//                                                characters = "Random 2-3 characters"
-//                                                genre = genres.randomElement()!
-//                                                theme = "random theme"
-//                                                generateStory()
-//                                            }
-//                                    }
-//                                    .padding(.horizontal, 30)
-//                                    
-//                                    
-//                                    HStack {
-//                                        Text(displayPrompt)
-//                                            .font(.system(size: 20))
-//                                        
-//                                        Text(theme)
-//                                            .font(.system(size: 20, weight: .bold))
-//                                            .foregroundStyle(Color(hex: "#FF6F61"))
-//                                        
-//                                        Text("theme")
-//                                            .font(.system(size: 20))
-//                                        
-//                                        if isSelectingGenre || isAddingNames {
-//                                            Text("with genre of")
-//                                                .font(.system(size: 20))
-//                                            
-//                                            Text(genre)
-//                                                .font(.system(size: 20, weight: .bold))
-//                                                .foregroundStyle(.cyan)
-//                                        }
-//                                        
-//                                        
-//                                        
-//                                    }
-//                                    .padding(.leading, 30)
-//                                    HStack {
-//                                        if isAddingNames {
-//                                            Text("with")
-//                                                .font(.system(size: 20))
-//                                            
-//                                            Text(characters == "" ? "no" : formattedChars)
-//                                                .font(.system(size: 20, weight: .bold))
-//                                                .foregroundStyle(.purple)
-//                                            
-//                                            Text(characters == "" ? "characters" : "as characters")
-//                                                .font(.system(size: 20))
-//                                        }
-//                                    }
-//                                    .padding(.leading, 30)
-//                                    
-//                                    
-//                                }
-//                            }
-//                            .frame(height: isAddingNames ? 150 : 120)
-                            
+
                             //MARK: Title Section
                             ZStack {
                                 if isSelectingGenre || isAddingNames  {
@@ -606,7 +517,6 @@ struct ContentView: View {
                                     }
                                     
                                 }
-                                .frame(height: 500)
                                 .padding()
                                 .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
                                // .animation(.easeInOut(duration: 1.0))
@@ -662,7 +572,7 @@ struct ContentView: View {
                                     
                                                 
                                 }
-                                .frame(height: 500)
+                                
                                 .padding()
                                 .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
                                
@@ -782,7 +692,6 @@ struct ContentView: View {
                                         .padding()
                                     }
                                 }
-                                .frame(height: 500)
                                 .padding()
 
                                
@@ -845,6 +754,9 @@ struct ContentView: View {
                                 }
                                     
                             }
+                            
+                            Spacer()
+                            
                             //MARK: Buttons
                             if !preview {
                                 VStack {
@@ -892,7 +804,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    
+                   
                 }
                 .onAppear {
                     withAnimation {
@@ -903,6 +815,7 @@ struct ContentView: View {
                 }
                 .padding()
                 .padding(.bottom, 70)
+                
             }
             .navigationTitle(isGeneratingTitle ? "\(title)" : "Imagine a Story")
             .sheet(isPresented: $isAddingChar, onDismiss: {
