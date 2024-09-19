@@ -55,6 +55,7 @@
 		073F2CF22C6F9C1F00BCF6F0 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073F2CF12C6F9C1F00BCF6F0 /* UserManager.swift */; };
 		073F2CF42C6FA0A800BCF6F0 /* SignInWithEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */; };
 		073F2CF62C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */; };
+		0755780D2C9C770E009F4F9A /* StoryReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0755780C2C9C770E009F4F9A /* StoryReviewView.swift */; };
 		076C22982C7E66B6001DAB3F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 076C22972C7E66B6001DAB3F /* FirebaseStorage */; };
 		076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C22992C7E8C3E001DAB3F /* HomeView.swift */; };
 		077BE2762C800A4A00760D5A /* GradientRectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077BE2752C800A4A00760D5A /* GradientRectView.swift */; };
@@ -112,6 +113,7 @@
 		073F2CF12C6F9C1F00BCF6F0 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithEmailView.swift; sourceTree = "<group>"; };
 		073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ComicNeue-Regular.ttf"; sourceTree = "<group>"; };
+		0755780C2C9C770E009F4F9A /* StoryReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryReviewView.swift; sourceTree = "<group>"; };
 		076C22992C7E8C3E001DAB3F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		077BE2752C800A4A00760D5A /* GradientRectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientRectView.swift; sourceTree = "<group>"; };
 		077BE2862C810FF800760D5A /* SavedStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedStoryView.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 				0711F3502C6D5DCA006C86AA /* TabbarView.swift */,
 				0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */,
 				07FB384A2C62BEAB0070EEFA /* ContentView.swift */,
+				0755780C2C9C770E009F4F9A /* StoryReviewView.swift */,
 				077BE2882C81263F00760D5A /* TextPlaceholderView.swift */,
 				0701FB8C2C822816004BEE9F /* FriendsView.swift */,
 				077BE2862C810FF800760D5A /* SavedStoryView.swift */,
@@ -372,6 +375,7 @@
 				077BE2762C800A4A00760D5A /* GradientRectView.swift in Sources */,
 				0701FBB82C8755D1004BEE9F /* Ripple.metal in Sources */,
 				0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */,
+				0755780D2C9C770E009F4F9A /* StoryReviewView.swift in Sources */,
 				0711F3702C6D71EC006C86AA /* AuthenticationManager.swift in Sources */,
 				078DACDE2C8E054200F04A65 /* ScreenTimeChartView.swift in Sources */,
 				0711F37A2C6D8BEB006C86AA /* OpenAIService.swift in Sources */,

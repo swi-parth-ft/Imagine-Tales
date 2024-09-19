@@ -254,6 +254,7 @@ struct ContentView: View {
         Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
     ]
     @State private var isGeneratingCover = true
+    @State private var preview = false
     
     var body: some View {
         NavigationStack {
@@ -424,99 +425,99 @@ struct ContentView: View {
                         
                         
                         VStack {
-                            //MARK: prompt view
-                            ZStack {
-                                if #available(iOS 18, *) {
-                                    RoundedRectangle(cornerRadius: 22)
-                                        .fill(
-                                            
-                                            MeshGradient(
-                                                width: 4,
-                                                height: 3,
-                                                points: [
-                                                    [0, 0], [0.33, 0], [0.66, 0], [1, 0],
-                                                    [0, 0.5], [0.33, 0.5], [0.66, 0.5], [1, 0.5],
-                                                    [0, 1], [0.33, 1], [0.66, 1], [1, 1]
-                                                ],
-                                                colors: [
-                                                    .blue.opacity(0.6), .purple.opacity(0.4), .cyan.opacity(0.3), .indigo.opacity(0.2),
-                                                    isAddingNames ? .pink.opacity(0.3) : .teal.opacity(0.2), isAddingNames ? .purple.opacity(0.2) : .blue.opacity(0.1), isAddingNames ? .indigo.opacity(0.2) : .cyan.opacity(0.1), isSelectingGenre || isAddingNames ? .teal.opacity(0.2) : .purple.opacity(0.1),
-                                                    isAddingNames ? .pink.opacity(0.5) : .blue.opacity(0.3), .purple.opacity(0.2), isSelectingGenre || isAddingNames ? .cyan.opacity(0.3) : .indigo.opacity(0.2), isSelectingGenre || isAddingNames ? .teal.opacity(0.4) : .blue.opacity(0.3)
-                                                ]
-                                            )
-                                            
-                                        )
-                                        .shadow(radius: 10)
-                                       
-                                }
-                                
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        Text("Wish")
-                                            .foregroundStyle(Color(hex: "#DA70D6"))
-                                            .font(.system(size: 24, weight: .bold))
-                                        Spacer()
-                                        Image(systemName: "shuffle")
-                                            .font(.system(size: 24))
-                                            .frame(width: 20, height: 20)
-                                            .onTapGesture {
-                                                isRandom = true
-                                                characters = "Random 2-3 characters"
-                                                genre = genres.randomElement()!
-                                                theme = "random theme"
-                                                generateStory()
-                                            }
-                                    }
-                                    .padding(.horizontal, 30)
-                                    
-                                    
-                                    HStack {
-                                        Text(displayPrompt)
-                                            .font(.system(size: 20))
-                                        
-                                        Text(theme)
-                                            .font(.system(size: 20, weight: .bold))
-                                            .foregroundStyle(Color(hex: "#FF6F61"))
-                                        
-                                        Text("theme")
-                                            .font(.system(size: 20))
-                                        
-                                        if isSelectingGenre || isAddingNames {
-                                            Text("with genre of")
-                                                .font(.system(size: 20))
-                                            
-                                            Text(genre)
-                                                .font(.system(size: 20, weight: .bold))
-                                                .foregroundStyle(.cyan)
-                                        }
-                                        
-                                        
-                                        
-                                    }
-                                    .padding(.leading, 30)
-                                    HStack {
-                                        if isAddingNames {
-                                            Text("with")
-                                                .font(.system(size: 20))
-                                            
-                                            Text(characters == "" ? "no" : formattedChars)
-                                                .font(.system(size: 20, weight: .bold))
-                                                .foregroundStyle(.purple)
-                                            
-                                            Text(characters == "" ? "characters" : "as characters")
-                                                .font(.system(size: 20))
-                                        }
-                                    }
-                                    .padding(.leading, 30)
-                                    
-                                    
-                                }
-                            }
-                            .frame(height: isAddingNames ? 150 : 120)
+//                            //MARK: prompt view
+//                            ZStack {
+////                                if #available(iOS 18, *) {
+////                                    RoundedRectangle(cornerRadius: 22)
+////                                        .fill(
+////                                            
+////                                            MeshGradient(
+////                                                width: 4,
+////                                                height: 3,
+////                                                points: [
+////                                                    [0, 0], [0.33, 0], [0.66, 0], [1, 0],
+////                                                    [0, 0.5], [0.33, 0.5], [0.66, 0.5], [1, 0.5],
+////                                                    [0, 1], [0.33, 1], [0.66, 1], [1, 1]
+////                                                ],
+////                                                colors: [
+////                                                    .blue.opacity(0.6), .purple.opacity(0.4), .cyan.opacity(0.3), .indigo.opacity(0.2),
+////                                                    isAddingNames ? .pink.opacity(0.3) : .teal.opacity(0.2), isAddingNames ? .purple.opacity(0.2) : .blue.opacity(0.1), isAddingNames ? .indigo.opacity(0.2) : .cyan.opacity(0.1), isSelectingGenre || isAddingNames ? .teal.opacity(0.2) : .purple.opacity(0.1),
+////                                                    isAddingNames ? .pink.opacity(0.5) : .blue.opacity(0.3), .purple.opacity(0.2), isSelectingGenre || isAddingNames ? .cyan.opacity(0.3) : .indigo.opacity(0.2), isSelectingGenre || isAddingNames ? .teal.opacity(0.4) : .blue.opacity(0.3)
+////                                                ]
+////                                            )
+////                                            
+////                                        )
+////                                        .shadow(radius: 10)
+////                                       
+////                                }
+//                                
+//                                VStack(alignment: .leading) {
+//                                    HStack {
+//                                        Text("Wish")
+//                                            .foregroundStyle(Color(hex: "#DA70D6"))
+//                                            .font(.system(size: 24, weight: .bold))
+//                                        Spacer()
+//                                        Image(systemName: "shuffle")
+//                                            .font(.system(size: 24))
+//                                            .frame(width: 20, height: 20)
+//                                            .onTapGesture {
+//                                                isRandom = true
+//                                                characters = "Random 2-3 characters"
+//                                                genre = genres.randomElement()!
+//                                                theme = "random theme"
+//                                                generateStory()
+//                                            }
+//                                    }
+//                                    .padding(.horizontal, 30)
+//                                    
+//                                    
+//                                    HStack {
+//                                        Text(displayPrompt)
+//                                            .font(.system(size: 20))
+//                                        
+//                                        Text(theme)
+//                                            .font(.system(size: 20, weight: .bold))
+//                                            .foregroundStyle(Color(hex: "#FF6F61"))
+//                                        
+//                                        Text("theme")
+//                                            .font(.system(size: 20))
+//                                        
+//                                        if isSelectingGenre || isAddingNames {
+//                                            Text("with genre of")
+//                                                .font(.system(size: 20))
+//                                            
+//                                            Text(genre)
+//                                                .font(.system(size: 20, weight: .bold))
+//                                                .foregroundStyle(.cyan)
+//                                        }
+//                                        
+//                                        
+//                                        
+//                                    }
+//                                    .padding(.leading, 30)
+//                                    HStack {
+//                                        if isAddingNames {
+//                                            Text("with")
+//                                                .font(.system(size: 20))
+//                                            
+//                                            Text(characters == "" ? "no" : formattedChars)
+//                                                .font(.system(size: 20, weight: .bold))
+//                                                .foregroundStyle(.purple)
+//                                            
+//                                            Text(characters == "" ? "characters" : "as characters")
+//                                                .font(.system(size: 20))
+//                                        }
+//                                    }
+//                                    .padding(.leading, 30)
+//                                    
+//                                    
+//                                }
+//                            }
+//                            .frame(height: isAddingNames ? 150 : 120)
                             
                             //MARK: Title Section
                             ZStack {
-                                if isSelectingGenre || isAddingNames {
+                                if isSelectingGenre || isAddingNames  {
                                     HStack {
                                         Button {
                                             if isAddingNames {
@@ -524,10 +525,15 @@ struct ContentView: View {
                                                     isSelectingGenre = true
                                                     isAddingNames = false
                                                 }
-                                            } else {
+                                            } else if isSelectingGenre {
                                                 withAnimation {
                                                     isSelectingTheme = true
                                                     isSelectingGenre = false
+                                                }
+                                            } else {
+                                                withAnimation {
+                                                    preview = false
+                                                    isAddingNames = true
                                                 }
                                             }
                                         } label: {
@@ -547,7 +553,7 @@ struct ContentView: View {
                                     }
                                 }
                                 //Selection Title
-                                Text(isSelectingTheme ? "Select Theme" : isAddingNames ? "Select Characters" : "Select Genre")
+                                Text(isSelectingTheme ? "Select Theme" : isSelectingGenre ? "Select Genre" : isAddingNames ? "Select Charaters" : "Preview")
                                     .font(.system(size: 24))
                                     .frame(height: 75)
                                     .padding()
@@ -793,40 +799,80 @@ struct ContentView: View {
                                 }
                             }
                             
-                            //MARK: Buttons
-                            VStack {
-                                Button("Next", systemImage: "arrowtriangle.right.fill") {
-                                    if isSelectingTheme {
-                                        withAnimation {
-                                            isSelectingTheme = false
-                                            isSelectingGenre = true
-                                        }
-                                    } else if isSelectingGenre {
-                                        withAnimation {
-                                            isSelectingGenre = false
-                                            isAddingNames = true
-                                        }
-                                    } else if isAddingNames {
-                                        generatedImage = nil
-                                        isLoading = true
-                                        isLoadingChunk = true
-                                        
-                                        Task {
-                                            do {
-                                                try await generateStoryWithGemini()
-                                            } catch {
-                                                print(error.localizedDescription)
+                            else if preview {
+                                VStack {
+                                    StoryReviewView(theme: theme, genre: genre, characters: formattedChars, chars: selectedChars)
+                                    
+                                    // Buttons
+                                    HStack {
+                                        Button(action: {
+                                            withAnimation {
+                                                preview = false
+                                                isAddingNames = true
                                             }
+                                        }) {
+                                            Text("Go Back and Edit")
+                                                .padding()
+                                                .frame(maxWidth: .infinity)
+                                                .background(Color(hex: "#F2F2DB"))
+                                                .foregroundStyle(.black)
+                                                .cornerRadius(16)
+                                        }
+
+                                        Button(action: {
+                                            generatedImage = nil
+                                            isLoading = true
+                                            isLoadingChunk = true
+                                            
+                                            Task {
+                                                do {
+                                                    try await generateStoryWithGemini()
+                                                } catch {
+                                                    print(error.localizedDescription)
+                                                }
+                                            }
+                                        }) {
+                                            Text("Generate")
+                                                .bold()
+                                                .padding()
+                                                .frame(maxWidth: .infinity)
+                                                .background(Color(hex: "#FF6F61"))
+                                                .foregroundColor(.white)
+                                                .cornerRadius(16)
                                         }
                                     }
-                                    
+                                    .padding(.horizontal)
                                 }
-                                .padding()
-                                .frame(width:  UIScreen.main.bounds.width * 0.7)
-                                .background(Color(hex: "#FF6F61"))
-                                .foregroundStyle(.white)
-                                .cornerRadius(12)
-                                                            }
+                                    
+                            }
+                            //MARK: Buttons
+                            if !preview {
+                                VStack {
+                                    Button("Next", systemImage: "arrowtriangle.right.fill") {
+                                        if isSelectingTheme {
+                                            withAnimation {
+                                                isSelectingTheme = false
+                                                isSelectingGenre = true
+                                            }
+                                        } else if isSelectingGenre {
+                                            withAnimation {
+                                                isSelectingGenre = false
+                                                isAddingNames = true
+                                            }
+                                        } else if isAddingNames {
+                                            isAddingNames = false
+                                            preview = true
+                                            
+                                        }
+                                        
+                                    }
+                                    .padding()
+                                    .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                    .background(Color(hex: "#FF6F61"))
+                                    .foregroundStyle(.white)
+                                    .cornerRadius(12)
+                                }
+                            }
                         }
 
                     }
@@ -1031,7 +1077,7 @@ struct ContentView: View {
             
             promptForImage = """
                 Create a 3D illustration in a soft, playful style with no text based on the following input:
-
+                Story: \(self.story)
                 • Theme: \(theme)
                 • Genre: \(genre)
                 • Characters: \(charactersText)\(lastSeparator)  // Provide their names, ages, gender, and personality traits
