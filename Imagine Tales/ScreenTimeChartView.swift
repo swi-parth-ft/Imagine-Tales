@@ -35,11 +35,7 @@ struct ScreenTimeChartView: View {
                     } description: {
                         Text("It looks like there's no screen time yet.")
                     } actions: {
-//                                    Button {
-//                                        /// Function that creates a new note
-//                                    } label: {
-//                                        Label("Create a new note", systemImage: "plus")
-//                                    }
+
                     }
                     .listRowBackground(Color.clear)
                 }

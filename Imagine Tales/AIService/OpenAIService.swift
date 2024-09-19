@@ -26,6 +26,7 @@ class OpenAIService {
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         
         let body: [String: Any] = [
+            "model": "dall-e-3",
             "prompt": prompt,
             "n": 1,
             "size": "1024x1024"

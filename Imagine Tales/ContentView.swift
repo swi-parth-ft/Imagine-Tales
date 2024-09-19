@@ -253,6 +253,7 @@ struct ContentView: View {
         Color(red: 255/255, green: 250/255, blue: 215/255),  // More vivid Old Lace
         Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
     ]
+    @State private var isGeneratingCover = true
     
     var body: some View {
         NavigationStack {
@@ -906,9 +907,10 @@ struct ContentView: View {
         }
         
         
-        let prompt = """
-Create an kids story book image that depicts a story with the following prompt: \(promptForImage)
-"""
+//        let prompt = """
+//Create an kids story book image that depicts a story with the following prompt: \(promptForImage)
+//"""
+        let prompt = promptForImage
         OpenAIService.shared.generateImage(from: prompt) { result in
             withAnimation(.easeIn(duration: 1.5)) {
                 isImageLoading = false
@@ -966,12 +968,8 @@ Create an kids story book image that depicts a story with the following prompt: 
                 }
             }
             
-            
-            
             Task {
                 if !isGeneratingTitle {
-                    
-                    
                     do {
                         try await generateImagePrompt()
                     } catch {
@@ -1020,19 +1018,51 @@ Create an kids story book image that depicts a story with the following prompt: 
     }
     
     func generateImagePrompt() async throws {
-        let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
-        let prompt = "Generate me a prompt to create a story book Image using this story \(self.story). within 100 words"
+        let characterDescriptions = selectedChars.map { character in
+            "\(character.name), a white \(character.gender), who is \(character.age) years old and feeling \(character.emotion)"
+        }
         
-        let response = try await model.generateContent(prompt)
-        if let text = response.text {
-            DispatchQueue.main.async {
-                self.promptForImage = text
-                generateImageUsingOpenAI()
-                print(promptForImage)
-                withAnimation {
-                    self.isLoading = false
-                    self.loaded = true
-                }
+        let charactersText = characterDescriptions.joined(separator: ", ")
+        
+        // Use "and" for the last character if there are more than one
+        let lastSeparator = selectedChars.count > 1 ? " and " : ""
+        if isGeneratingCover {
+            
+            
+            promptForImage = """
+                Create a 3D illustration in a soft, playful style with no text based on the following input:
+
+                • Theme: \(theme)
+                • Genre: \(genre)
+                • Characters: \(charactersText)\(lastSeparator)  // Provide their names, ages, gender, and personality traits
+                • Mood: \(theme)  // E.g., joyful, adventurous, mysterious
+
+                Each character should have a toy-like, soft appearance with smooth features and expressive faces. The design should clearly reflect their age, gender, and personality. The background should be simple and minimal, allowing the focus to remain on the characters. Their poses and expressions should align with the overall mood of the story. and there should be no text in image
+                """
+            print(promptForImage)
+            isGeneratingCover = false
+            generateImageUsingOpenAI()
+        } else {
+            let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
+            
+            promptForImage = """
+            Create a 3D illustration in a soft, playful style based on the following paragraph from a children’s story:
+
+            Story: \(self.story)
+
+            Illustrate the following:
+
+                •    Characters: \(charactersText)\(lastSeparator)
+
+            The background should reflect \(theme), with elements like [insert any key features from the scene like glowing trees, fireflies, etc.]. Make sure the mood of the illustration reflects \(genre), based on the story. Keep the design toy-like, with smooth and rounded features to appeal to children. and there should be no text in image”
+
+            """
+            generateImageUsingOpenAI()
+            print(promptForImage)
+            withAnimation {
+                self.isLoading = false
+                self.loaded = true
+                
             }
         }
     }
