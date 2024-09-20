@@ -110,10 +110,12 @@ struct TabbarView: View {
                     ZStack{
                         HStack{
                             ForEach((TabItems.allCases), id: \.self){ item in
-                                Button{
-                                    selectedTab = item.rawValue
-                                    showingProfile = selectedTab == 4 ? true : false
-                                    reload.toggle()
+                                Button {
+                                    if selectedTab != item.rawValue {
+                                        selectedTab = item.rawValue
+                                        reload.toggle()
+                                    }
+                                    showingProfile = selectedTab == 4
                                 } label: {
                                     CustomTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
                                 }

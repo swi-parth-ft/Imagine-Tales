@@ -44,7 +44,7 @@ final class ExploreViewModel: ObservableObject {
                 // Update the topStories array on the main thread
                 DispatchQueue.main.async {
                     self.topStories = fetchedStories
-                    print("Top stories successfully fetched and parsed: \(fetchedStories)")
+                   
                 }
             }
     }
@@ -80,209 +80,217 @@ struct ExploreView: View {
     @State private var isFullHeight = false
     @State private var imageOffset = CGSize.zero
     @State private var currentIndex = 0 // Track current story index
- 
+
+    
     var body: some View {
-        VStack {
-            ZStack {
-                
-                TabView(selection: $currentIndex) { // TabView for carousel effect
-                    ForEach(0..<min(viewModel.topStories.count, 3), id: \.self) { index in
-                        let story = viewModel.topStories[index]
-                        NavigationLink(destination: StoryFromProfileView(story: story)) {
-                            ZStack {
-                                AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
-                                    switch phase {
-                                    case .empty:
-                                        GradientRectView(size: isFullHeight ? 600 : 300)
-                                        
-                                    case .success(let image):
-                                        image
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(height: isFullHeight ? 600 : 300)
-                                            .clipped()
-                                            .cornerRadius(30)
-                                            .shadow(radius: 5)
-                                        
-                                    case .failure(_):
-                                        Image(systemName: "photo")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 600)
-                                            .cornerRadius(10)
-                                            .padding()
-                                        
-                                            .onAppear {
-                                                if retryCount < maxRetryAttempts {
-                                                    // Retry logic with delay
-                                                    DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
-                                                        retryCount += 1
+        NavigationStack {
+            VStack {
+                ZStack {
+                    
+                    TabView(selection: $currentIndex) { // TabView for carousel effect
+                        ForEach(0..<min(viewModel.topStories.count, 3), id: \.self) { index in
+                            let story = viewModel.topStories[index]
+                            NavigationLink(destination: StoryFromProfileView(story: story)) {
+                                ZStack {
+                                    AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
+                                        switch phase {
+                                        case .empty:
+                                            GradientRectView(size: isFullHeight ? 600 : 300)
+                                            
+                                        case .success(let image):
+                                            image
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(height: isFullHeight ? 600 : 300)
+                                                .clipped()
+                                                .cornerRadius(30)
+                                                .shadow(radius: 5)
+                                            
+                                        case .failure(_):
+                                            Image(systemName: "photo")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(height: 600)
+                                                .cornerRadius(10)
+                                                .padding()
+                                            
+                                                .onAppear {
+                                                    if retryCount < maxRetryAttempts {
+                                                        // Retry logic with delay
+                                                        DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+                                                            retryCount += 1
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        
-                                    @unknown default:
-                                        EmptyView()
+                                            
+                                        @unknown default:
+                                            EmptyView()
+                                        }
                                     }
-                                }
-                                .frame(width: UIScreen.main.bounds.width + 30, height: isFullHeight ? 600 : 300)
-                                .ignoresSafeArea()
-                                
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(LinearGradient(colors: [.black, .white.opacity(0.1), .white.opacity(1)], startPoint: .bottom, endPoint: .top))
+                                    .frame(width: UIScreen.main.bounds.width + 30, height: isFullHeight ? 600 : 300)
+                                    .ignoresSafeArea()
+                                    
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(LinearGradient(colors: [.black, .white.opacity(0.1), .white.opacity(1)], startPoint: .bottom, endPoint: .top))
+                                        .frame(height: isFullHeight ? 600 : 300)
+                                        .ignoresSafeArea()
+                                    
+                                    VStack {
+                                        Spacer()
+                                        ZStack {
+                                            Text(story.title)
+                                                .font(.system(size: 46))
+                                                .foregroundStyle(.white)
+                                                .padding()
+                                            
+                                            HStack {
+                                                Text(story.genre)
+                                                    .font(.system(size: 32))
+                                                    .foregroundStyle(.white)
+                                                Circle()
+                                                    .foregroundStyle(.white)
+                                                    .frame(width: 15)
+                                                    .padding(.horizontal)
+                                                Text("\(story.likes) Likes")
+                                                    .font(.system(size: 32))
+                                                    .foregroundStyle(.white)
+                                            }
+                                            .padding(.top, 30)
+                                        }
+                                    }
                                     .frame(height: isFullHeight ? 600 : 300)
                                     .ignoresSafeArea()
-                                
-                                VStack {
-                                    Spacer()
-                                    ZStack {
-                                        Text(story.title)
-                                            .font(.system(size: 46))
-                                            .foregroundStyle(.white)
-                                            .padding()
-                                        
-                                        HStack {
-                                            Text(story.genre)
-                                                .font(.system(size: 32))
-                                                .foregroundStyle(.white)
-                                            Circle()
-                                                .foregroundStyle(.white)
-                                                .frame(width: 15)
-                                                .padding(.horizontal)
-                                            Text("\(story.likes) Likes")
-                                                .font(.system(size: 32))
-                                                .foregroundStyle(.white)
-                                        }
-                                        .padding(.top, 30)
-                                    }
                                 }
-                                .frame(height: isFullHeight ? 600 : 300)
-                                .ignoresSafeArea()
+                                .tag(index)
+                                
                             }
-                            .tag(index)
                         }
                     }
-                }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic)) // Enable the dots for page control
-                .shadow(radius: 20)
-                .ignoresSafeArea()
-                .gesture(
-                    DragGesture()
-                        .onChanged { value in
-                            imageOffset = value.translation
-                        }
-                        .onEnded { value in
-                            let verticalAmount = value.translation.height
-                            if verticalAmount > 15 {
-                                withAnimation {
-                                    isFullHeight = true
-                                }
-                            } else if verticalAmount < -15 {
-                                withAnimation {
-                                    isFullHeight = false
-                                }
-                            } else {
-                                withAnimation {
-                                    imageOffset = .zero
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic)) // Enable the dots for page control
+                    .shadow(radius: 20)
+                    .ignoresSafeArea()
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                imageOffset = value.translation
+                            }
+                            .onEnded { value in
+                                let verticalAmount = value.translation.height
+                                if verticalAmount > 15 {
+                                    withAnimation {
+                                        isFullHeight = true
+                                    }
+                                } else if verticalAmount < -15 {
+                                    withAnimation {
+                                        isFullHeight = false
+                                    }
+                                } else {
+                                    withAnimation {
+                                        imageOffset = .zero
+                                    }
                                 }
                             }
-                        }
-                )
-            }
-            .frame(width: UIScreen.main.bounds.width + 30, height: isFullHeight ? 600 : 300)
-            .ignoresSafeArea()
-            
-            Spacer()
-            List {
-                ForEach(viewModel.storiesByGenre.keys.sorted(), id: \.self) { genre in
-                    VStack(alignment: .leading) {
-                        NavigationLink(destination: StoryByGenreView(genre: genre)) {
-                            Text(genre)
-                                .font(.title2)
-                                .bold()
-                                .padding(.leading)
-                        }
-                        .frame(width: 150)
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack(spacing: 20) {
-                                ForEach(viewModel.storiesByGenre[genre] ?? []) { story in
-                                    NavigationLink(destination: StoryFromProfileView(story: story)) {
-                                        ZStack(alignment: .top) {
-                                            RoundedRectangle(cornerRadius: 12)
-                                                .stroke(Color(hex: "#F4F4DA"))
-                                                .frame(width: 300, height: 250)
-                                            VStack(alignment: .leading) {
-                                                
-                                                AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
-                                                    switch phase {
-                                                    case .empty:
-                                                        GradientRectView(size: 150)
-                                                        
-                                                    case .success(let image):
-                                                        image
-                                                            .resizable()
-                                                            .scaledToFill()
-                                                            .frame(width: 300, height: 150)
-                                                            .clipped()
-                                                            .cornerRadius(12)
-                                                        
-                                                    case .failure(_):
-                                                        Image(systemName: "photo")
-                                                            .resizable()
-                                                            .scaledToFit()
-                                                            .frame(height: 200)
-                                                            .cornerRadius(10)
-                                                            .padding()
-                                                            .onAppear {
-                                                                if retryCount < maxRetryAttempts {
-                                                                    DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
-                                                                        retryCount += 1
+                    )
+                }
+                .frame(width: UIScreen.main.bounds.width + 30, height: isFullHeight ? 600 : 300)
+                .ignoresSafeArea()
+                
+                Spacer()
+                List {
+                    ForEach(viewModel.storiesByGenre.keys.sorted(), id: \.self) { genre in
+                        LazyVStack(alignment: .leading) {
+                            NavigationLink(destination: StoryByGenreView(genre: genre)) {
+                                Text(genre)
+                                    .font(.title2)
+                                    .bold()
+                                    .padding(.leading)
+                            }
+                            .frame(width: 150)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 20) {
+                                    ForEach(viewModel.storiesByGenre[genre] ?? []) { story in
+                                        NavigationLink(destination: StoryFromProfileView(story: story)) {
+                                            ZStack(alignment: .top) {
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .stroke(Color(hex: "#F4F4DA"))
+                                                    .frame(width: 300, height: 250)
+                                                VStack(alignment: .leading) {
+                                                    
+                                                    AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
+                                                        switch phase {
+                                                        case .empty:
+                                                            GradientRectView(size: 150)
+                                                            
+                                                        case .success(let image):
+                                                            image
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: 300, height: 150)
+                                                                .clipped()
+                                                                .cornerRadius(12)
+                                                            
+                                                        case .failure(_):
+                                                            Image(systemName: "photo")
+                                                                .resizable()
+                                                                .scaledToFit()
+                                                                .frame(height: 200)
+                                                                .cornerRadius(10)
+                                                                .padding()
+                                                                .onAppear {
+                                                                    if retryCount < maxRetryAttempts {
+                                                                        DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+                                                                            retryCount += 1
+                                                                        }
                                                                     }
                                                                 }
-                                                            }
-                                                    @unknown default:
-                                                        EmptyView()
+                                                        @unknown default:
+                                                            EmptyView()
+                                                        }
                                                     }
-                                                }
-                                                .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 5)
-                                                VStack(alignment: .leading, spacing: -16) {
-                                                    Text(story.title)
-                                                        .font(.system(size: 20))
-                                                    VStack(alignment: .leading) {
-                                                        Text(story.childUsername)
-                                                        Text("\(story.likes) Likes")
+                                                    .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 5)
+                                                    VStack(alignment: .leading, spacing: -16) {
+                                                        Text(story.title)
+                                                            .font(.system(size: 20))
+                                                        VStack(alignment: .leading) {
+                                                            Text(story.childUsername)
+                                                            Text("\(story.likes) Likes")
+                                                        }
                                                     }
+                                                    .foregroundStyle(.black)
+                                                    .padding([.top, .leading], 8)
+                                                    .padding(.bottom)
+                                                    Spacer()
                                                 }
-                                                .foregroundStyle(.black)
-                                                .padding([.top, .leading], 8)
-                                                .padding(.bottom)
-                                                Spacer()
                                             }
                                         }
                                     }
                                 }
                             }
                         }
+                        .listRowBackground(Color.white.opacity(0.0))
+                        .listRowSeparator(.hidden)
                     }
-                    .listRowBackground(Color.white.opacity(0.0))
-                    .listRowSeparator(.hidden)
                 }
+                .ignoresSafeArea()
+                .scrollContentBackground(.hidden)
+                .navigationTitle("Stories by Genre")
+                .padding(.bottom)
+                .onAppear {
+                    viewModel.fetchStories()
+                }
+
+                  
+                }
+                
+                Spacer()
             }
-            .ignoresSafeArea()
-            .scrollContentBackground(.hidden)
-            .navigationTitle("Stories by Genre")
-            .padding(.bottom)
             .onAppear {
-                viewModel.fetchStories()
+                viewModel.getMostLikedStories() // Ensure this fetches the top 3 stories
             }
             
-            Spacer()
-        }
-        .onAppear {
-            viewModel.getMostLikedStories() // Ensure this fetches the top 3 stories
         }
     }
-}
+
 #Preview {
     ExploreView()
 }

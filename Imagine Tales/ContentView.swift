@@ -197,7 +197,51 @@ struct ContentView: View {
         "Supernatural",
         "Western"
     ]
-    let themes = ["Forest", "Car", "Plane", "Dark", "Colorful", "Cartoon", "Space", "Underwater", "Desert", "Cityscape", "Fantasy", "Sci-Fi", "Nature", "Retro", "Abstract", "Minimalist", "Industrial", "Vintage", "Cyberpunk", "Steampunk"]
+    let themes = [
+        "Magical Adventures",
+        "Underwater Mysteries",
+        "Dinosaur Discoveries",
+        "Space Explorers",
+        "Fairy Tale Kingdoms",
+        "Superhero Chronicles",
+        "Enchanted Forests",
+        "Pirate Quests",
+        "Animal Friends",
+        "Time Traveling",
+        "Monster Mischief",
+        "Robot Wonders",
+        "Mystical Creatures",
+        "Lost Worlds",
+        "Magical School Days",
+        "Jungle Safari",
+        "Winter Wonderland",
+        "Desert Dunes",
+        "Alien Encounter",
+        "Wizard’s Secrets"
+    ]
+    
+    let themeColors: [Color] = [
+        Color.purple,   // "Magical Adventures"
+        Color.teal,     // "Underwater Mysteries"
+        Color.green,    // "Dinosaur Discoveries"
+        Color.blue,     // "Space Explorers"
+        Color.pink,     // "Fairy Tale Kingdoms"
+        Color.red,      // "Superhero Chronicles"
+        Color.green,    // "Enchanted Forests"
+        Color.brown,    // "Pirate Quests"
+        Color.orange,   // "Animal Friends"
+        Color.indigo,   // "Time Traveling"
+        Color.purple,   // "Monster Mischief"
+        Color.gray,     // "Robot Wonders"
+        Color.purple,   // "Mystical Creatures"
+        Color.green,    // "Lost Worlds"
+        Color.yellow,   // "Magical School Days"
+        Color.green,    // "Jungle Safari"
+        Color.blue,     // "Winter Wonderland"
+        Color.orange,   // "Desert Dunes"
+        Color.yellow,     // "Alien Encounter"
+        Color.gray      // "Wizard’s Secrets"
+    ]
     
     @State private var isSelectingTheme = true
     @State private var isSelectingGenre = false
@@ -220,8 +264,30 @@ struct ContentView: View {
     @State private var isGeneratingTitle = false
     @State private var isLoadingImage = false
     @State private var isLoadingTextPart = false
-    
-    
+    @State private var mood = ""
+    let emotionNames = [
+        "Happy",
+        "Sad",
+        "Excited",
+        "Scared",
+        "Curious",
+        "Brave",
+        "Funny",
+        "Surprised",
+        "Angry",
+        "Relaxed",
+        "Adventurous",
+        "Mysterious",
+        "Silly",
+        "Love",
+        "Confused",
+        "Proud",
+        "Nervous",
+        "Sleepy",
+        "Joyful",
+        "Shy"
+    ]
+    @State private var isSelectingMood = false
     @State private var displayedText: String = ""
         @State private var charIndex: Int = 0
         let typingSpeed = 0.03
@@ -424,104 +490,76 @@ struct ContentView: View {
                     if !isLoading && !loaded{
                         
                         
-                        VStack {
-
-                            //MARK: Title Section
-                            ZStack {
-                                if isSelectingGenre || isAddingNames  {
-                                    HStack {
-                                        Button {
-                                            if isAddingNames {
-                                                withAnimation {
-                                                    isSelectingGenre = true
-                                                    isAddingNames = false
-                                                }
-                                            } else if isSelectingGenre {
-                                                withAnimation {
-                                                    isSelectingTheme = true
-                                                    isSelectingGenre = false
-                                                }
-                                            } else {
-                                                withAnimation {
-                                                    preview = false
-                                                    isAddingNames = true
-                                                }
-                                            }
-                                        } label: {
-                                            ZStack {
-                                                Circle()
-                                                    .foregroundStyle(isSelectingGenre ? .cyan.opacity(0.3) :  .purple.opacity(0.3))
-                                                    .frame(width: 75, height: 75)
-                                                    .shadow(radius: 10)
-                                                
-                                                Image("arrow1")
-                                                    .frame(width: 55, height: 55)
-                                                    
-                                            }
-                                        }
-                                        .padding()
-                                        Spacer()
-                                    }
-                                }
-                                //Selection Title
-                                Text(isSelectingTheme ? "Select Theme" : isSelectingGenre ? "Select Genre" : isAddingNames ? "Select Charaters" : "Preview")
-                                    .font(.system(size: 24))
-                                    .frame(height: 75)
-                                    .padding()
-                            }
+                        ZStack {
                             
                             
                             //MARK: Selecting Theme
                             if isSelectingTheme {
                                 GeometryReader { geometry in
-                                    // Calculate dynamic width based on available width and desired number of items per row
-                                    let width = (geometry.size.width - 40) / 8 // Subtract padding and divide by the number of items
-                                    
-                                    ScrollView {
-                                        LazyVGrid(
-                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
-                                            spacing: -10  // Adjust the spacing to bring the rows closer together
+                                    let height = (geometry.size.height - 40) / 5
+
+                                    ScrollView(.horizontal) {
+                                        LazyHGrid(
+                                            rows: Array(repeating: GridItem(.fixed(height), spacing: 70), count: 3),
+                                            spacing: 60  // Adjust the spacing to bring the columns closer together
                                         ) {
-                                            
+
                                             ForEach(0..<themes.count, id: \.self) { index in
                                                 VStack {
                                                     ZStack {
                                                         Circle()
-                                                            .fill(themes[index] == theme ? Color.orange.opacity(0.5) : Color.orange.opacity(0.2))
-                                                            .frame(width: width, height: width)
+                                                            .fill(themes[index] == theme ? themeColors[index].opacity(0.5) : themeColors[index].opacity(0.2))
+                                                            .frame(width: height, height: height)
                                                             .shadow(radius: 5)
-                                                            .scaleEffect(isSelectingTheme ? (themes[index] == theme ? 1.1 : 1.0) : 0.0)
-                                                                                                .animation(.easeInOut(duration: themes[index] == theme ? 0.6 : 0.3), value: isSelectingTheme)
+                                                            .scaleEffect(isSelectingTheme ? (themes[index] == theme ? 1.4 : 1.2) : 0.0)
+                                                            .animation(.easeInOut(duration: themes[index] == theme ? 0.6 : 0.3), value: isSelectingTheme)
                                                         
-                                                        Text(themes[index])
-                                                            .font(.caption)
-                                                            .multilineTextAlignment(.center)
-                                                            .opacity(isSelectingTheme ? 1.0 : 0.0)
-                                                                                                        .animation(.easeInOut(duration: themes[index] == theme ? 0.6 : 0.3), value: isSelectingTheme)
-                                                        
+                                                        VStack {
+                                                            Image("\(themes[index].filter { !$0.isWhitespace })")
+                                                                .resizable()
+                                                                .scaledToFit()
+                                                                .frame(width: height * 0.7, height: height * 0.7, alignment: .center)
+                                                                .shadow(radius: 5)
+                                                                .scaleEffect(isSelectingTheme ? (themes[index] == theme ? 1.2 : 1.0) : 0.0)
+                                                                .animation(.easeInOut(duration: themes[index] == theme ? 0.6 : 0.3), value: isSelectingTheme)
+                                                            
+                                                            let words = themes[index].split(separator: " ")
+
+                                                            VStack {
+                                                                ForEach(words, id: \.self) { word in
+                                                                    Text(String(word))
+                                                                        .font(.caption)
+                                                                        .multilineTextAlignment(.center)
+                                                                        .opacity(isSelectingTheme ? 1.0 : 0.0)
+                                                                        .scaleEffect(isSelectingTheme ? (themes[index] == theme ? 1.2 : 1.0) : 0.0)
+                                                                        .animation(.easeInOut(duration: themes[index] == theme ? 0.6 : 0.3), value: isSelectingTheme)
+                                                                }
+                                                            }
+                                                        }
+                                                        .padding()
+
                                                     }
+                                                    
                                                 }
-                                                // Apply offset for every other row to create hexagonal shape
-                                                .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
-                                                .frame(width: width, height: width)
+                                                // Apply offset for every other column to create hexagonal shape
+                                                .offset(y: (index / 3) % 2 == 0 ? 0 : height / 2)
+                                                .frame(width: height, height: height)
                                                 .onTapGesture {
                                                     withAnimation {
                                                         theme = themes[index]
                                                     }
                                                 }
                                             }
-                                           
-                                            
+
                                         }
-                                        .padding()
+                                        .padding(.leading, 50)
+                                        .padding(.bottom, 70)
                                     }
-                                    
+                                    Spacer()
                                 }
-                                .padding()
                                 .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
-                               // .animation(.easeInOut(duration: 1.0))
+                                // .animation(.easeInOut(duration: 1.0))
                             }
-                            
                             //MARK: Selecting Genre
                             else if isSelectingGenre {
                                 GeometryReader { geometry in
@@ -708,9 +746,62 @@ struct ContentView: View {
                                 }
                             }
                             
+                            else if isSelectingMood {
+                                GeometryReader { geometry in
+                                    // Calculate dynamic width based on available width and desired number of items per row
+                                    let width = (geometry.size.width - 40) / 8 // Subtract padding and divide by the number of items
+                                    
+                                    ScrollView {
+                                        LazyVGrid(
+                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
+                                            spacing: -10  // Adjust the spacing to bring the rows closer together
+                                        ) {
+                                            
+                                            ForEach(0..<emotionNames.count, id: \.self) { index in
+                                                VStack {
+                                                    ZStack {
+                                                        Circle()
+                                                            .fill(emotionNames[index] == mood ? Color.cyan.opacity(0.5) : Color.cyan.opacity(0.2))
+                                                            .frame(width: width, height: width)
+                                                            .shadow(radius: 5)
+                                                            .scaleEffect(emotionNames[index] == mood ? 1.1 : 1.0)
+                                                            .scaleEffect(isSelectingMood ? 1.0 : 0.0)  // Grow when appearing
+                                                            .animation(.easeInOut(duration: genres[index] == genre ? 0.6 : 0.3), value: isSelectingMood)
+                                                        
+                                                        Text(emotionNames[index])
+                                                            .font(.caption)
+                                                            .multilineTextAlignment(.center)
+                                                            .scaleEffect(isSelectingMood ? 1.0 : 0.0)  // Grow when appearing
+                                                            .animation(.easeInOut(duration: emotionNames[index] == mood ? 0.6 : 0.3), value: isSelectingMood)
+                                                        
+                                                    }
+                                                    
+                                                }
+                                                // Apply offset for every other row to create hexagonal shape
+                                                .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
+                                                .frame(width: width, height: width)
+                                                .onTapGesture {
+                                                    withAnimation {
+                                                        mood = emotionNames[index]
+                                                    }
+                                                }
+                                               
+                                            }
+                                            
+                                        }
+                                        .padding()
+                                    }
+                                    
+                                    
+                                                
+                                }
+                                
+                                .padding()
+                                .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
+                            }
                             else if preview {
                                 VStack {
-                                    StoryReviewView(theme: theme, genre: genre, characters: formattedChars, chars: selectedChars)
+                                    StoryReviewView(theme: theme, genre: genre, characters: formattedChars, chars: selectedChars, mood: mood)
                                     
                                     // Buttons
                                     HStack {
@@ -755,36 +846,94 @@ struct ContentView: View {
                                     
                             }
                             
-                            Spacer()
-                            
-                            //MARK: Buttons
-                            if !preview {
-                                VStack {
-                                    Button("Next", systemImage: "arrowtriangle.right.fill") {
-                                        if isSelectingTheme {
-                                            withAnimation {
-                                                isSelectingTheme = false
-                                                isSelectingGenre = true
+                            VStack {
+                                //MARK: Title Section
+                                ZStack {
+                                    if isSelectingGenre || isAddingNames || isSelectingMood {
+                                        HStack {
+                                            Button {
+                                                if isAddingNames {
+                                                    withAnimation {
+                                                        isSelectingMood = true
+                                                        isAddingNames = false
+                                                    }
+                                                } else if isSelectingGenre {
+                                                    withAnimation {
+                                                        isSelectingTheme = true
+                                                        isSelectingGenre = false
+                                                    }
+                                                } else if isSelectingMood {
+                                                    withAnimation {
+                                                        isSelectingMood = false
+                                                        isSelectingGenre = true
+                                                    }
+                                                } else {
+                                                    withAnimation {
+                                                        preview = false
+                                                        isAddingNames = true
+                                                    }
+                                                }
+                                            } label: {
+                                                ZStack {
+                                                    Circle()
+                                                        .foregroundStyle(isSelectingGenre ? .cyan.opacity(0.3) :  .purple.opacity(0.3))
+                                                        .frame(width: 75, height: 75)
+                                                        .shadow(radius: 10)
+                                                    
+                                                    Image("arrow1")
+                                                        .frame(width: 55, height: 55)
+                                                    
+                                                }
                                             }
-                                        } else if isSelectingGenre {
-                                            withAnimation {
-                                                isSelectingGenre = false
-                                                isAddingNames = true
+                                            .padding()
+                                            Spacer()
+                                        }
+                                    }
+                                    //Selection Title
+                                    Text(isSelectingTheme ? "Select Theme" : isSelectingGenre ? "Select Genre" : isAddingNames ? "Select Charaters" : isSelectingMood ? "Select Mood" : "Preview")
+                                        .font(.system(size: 24))
+                                        .frame(height: 75)
+                                        .padding()
+                                }
+                                
+                                Spacer()
+                                //MARK: Buttons
+                                if !preview {
+                                    VStack {
+                                        Button("Next", systemImage: "arrowtriangle.right.fill") {
+                                            if isSelectingTheme {
+                                                withAnimation {
+                                                    isSelectingTheme = false
+                                                    isSelectingGenre = true
+                                                }
+                                            } else if isSelectingGenre {
+                                                withAnimation {
+                                                    isSelectingGenre = false
+                                                    isSelectingMood = true
+                                                }
+                                            } else if isSelectingMood {
+                                                withAnimation {
+                                                    isSelectingMood = false
+                                                    isAddingNames = true
+                                                }
+                                                
+                                            } else if isAddingNames {
+                                                isAddingNames = false
+                                                preview = true
+                                                
                                             }
-                                        } else if isAddingNames {
-                                            isAddingNames = false
-                                            preview = true
                                             
                                         }
-                                        
+                                        .padding()
+                                        .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                        .background(Color(hex: "#FF6F61"))
+                                        .foregroundStyle(.white)
+                                        .cornerRadius(12)
                                     }
-                                    .padding()
-                                    .frame(width:  UIScreen.main.bounds.width * 0.7)
-                                    .background(Color(hex: "#FF6F61"))
-                                    .foregroundStyle(.white)
-                                    .cornerRadius(12)
                                 }
                             }
+                            
+                            
                         }
 
                     }

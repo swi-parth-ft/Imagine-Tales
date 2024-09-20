@@ -14,6 +14,7 @@ struct StoryReviewView: View {
     var genre: String
     var characters: String
     var chars: [Charater]?
+    var mood: String
     
     var body: some View {
         VStack(spacing: 20) {
@@ -61,54 +62,7 @@ struct StoryReviewView: View {
                             .foregroundColor(.primary)
                     }
                     .padding(.leading, 30)
-//                        HStack {
-//                            Text("I want to generate a story book of")
-//                                .font(.system(size: 24))
-//                                .lineLimit(1)
-//                                .fixedSize(horizontal: true, vertical: false)
-//                            
-//                            Text(theme)
-//                                .font(.system(size: 24, weight: .bold))
-//                                .foregroundColor(Color(hex: "#FF6F61"))
-//                                .lineLimit(1)
-//                                .truncationMode(.tail)
-//                            
-//                            Text("theme")
-//                                .font(.system(size: 24))
-//                                .lineLimit(1)
-//                                .fixedSize(horizontal: true, vertical: false)
-//                            
-//                            Text("with genre of")
-//                                .font(.system(size: 24))
-//                                .lineLimit(1)
-//                                .fixedSize(horizontal: true, vertical: false)
-//                            
-//                            Text(genre)
-//                                .font(.system(size: 24, weight: .bold))
-//                                .foregroundColor(.cyan)
-//                                .lineLimit(1)
-//                                .truncationMode(.tail)
-//                        }
-//                        .padding(.leading, 30)
-//
-//                        HStack {
-//                            Text("with")
-//                                .font(.system(size: 24))
-//                                .lineLimit(1)
-//                                .fixedSize(horizontal: true, vertical: false)
-//                            
-//                            Text(characters.isEmpty ? "no" : characters)
-//                                .font(.system(size: 24, weight: .bold))
-//                                .foregroundColor(.purple)
-//                                .lineLimit(1)
-//                                .truncationMode(.tail)
-//                            
-//                            Text(characters.isEmpty ? "characters" : "as characters")
-//                                .font(.system(size: 24))
-//                                .lineLimit(1)
-//                                .fixedSize(horizontal: true, vertical: false)
-//                        }
-//                        .padding(.leading, 30)
+
                     }
                     .padding()
                 }
@@ -148,7 +102,7 @@ struct StoryReviewView: View {
                                     Text("Mood")
                                         .font(.system(size: 20))
                                         .foregroundStyle(.secondary)
-                                    Text("Excited!")
+                                    Text(mood)
                                         .font(.system(size: 24))
                                 }
                                 Spacer()
@@ -225,5 +179,5 @@ struct StoryReviewView: View {
 
 
 #Preview {
-    StoryReviewView(theme: "Forest", genre: "science fiction", characters: "Parth and sara")
+    StoryReviewView(theme: "Forest", genre: "science fiction", characters: "Parth and sara", mood: "happy")
 }

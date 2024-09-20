@@ -217,6 +217,8 @@ struct ProfileView: View {
     @StateObject var screenTimeViewModel = ScreenTimeManager()
     
     
+    @State private var isNavigating = false
+    @State private var openingStory: Story?
     
     
     var body: some View {
@@ -227,40 +229,43 @@ struct ProfileView: View {
                 VStack {
                     
                     HStack {
-                        ZStack {
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 250, height: 250)
+                        VStack {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.white)
+                                    .frame(width: 250, height: 250)
                                 
-                       //     AsyncCircularImageView(urlString: dpUrl, size: 200)
-                            Image((viewModel.child?.profileImage.removeJPGExtension() ?? ""))
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 200, height: 200)
-                                .cornerRadius(100)
-                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                .onTapGesture {
-                                    isSelectingImage = true
+                                //     AsyncCircularImageView(urlString: dpUrl, size: 200)
+                                Image((viewModel.child?.profileImage.removeJPGExtension() ?? ""))
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 200, height: 200)
+                                    .cornerRadius(100)
+                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                    .onTapGesture {
+                                        isSelectingImage = true
+                                    }
+//                                    .onAppear {
+//                                        withAnimation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+//                                            tiltAngle = 10 // Adjust this value to control the tilt range
+//                                        }
+//                                    }
+                                
+                            }
+                            .onPressingChanged { point in
+                                if let point {
+                                    self.origin = point
+                                    self.counter += 1
                                 }
+                            }
+                            .modifier(RippleEffect(at: self.origin, trigger: self.counter))
+                            .shadow(radius: 3, y: 2)
+//                            .rotation3DEffect(
+//                                .degrees(tiltAngle),
+//                                axis: (x: 0, y: 1, z: 0)
+//                            )
                             
                         }
-                        .onPressingChanged { point in
-                            if let point {
-                                self.origin = point
-                                self.counter += 1
-                            }
-                        }
-                        .modifier(RippleEffect(at: self.origin, trigger: self.counter))
-                        .shadow(radius: 3, y: 2)
-                        .rotation3DEffect(
-                                    .degrees(tiltAngle),
-                                    axis: (x: 0, y: 1, z: 0)
-                                )
-                        .onAppear {
-                                withAnimation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
-                                    tiltAngle = 10 // Adjust this value to control the tilt range
-                                }
-                            }
                         VStack(alignment: .leading) {
                                HStack {
                                 if isEditingUsername {
@@ -326,11 +331,6 @@ struct ProfileView: View {
                                 } description: {
                                     Text("It looks like there's no stories posted yet.")
                                 } actions: {
-        //                                    Button {
-        //                                        /// Function that creates a new note
-        //                                    } label: {
-        //                                        Label("Create a new note", systemImage: "plus")
-        //                                    }
                                 }
                                 .listRowBackground(Color.clear)
                             }
@@ -350,8 +350,11 @@ struct ProfileView: View {
                                         Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
                                             .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
                                     }
+                                    .contentShape(Rectangle())
+                                    
                                     
                                 }
+                                .buttonStyle(PlainButtonStyle())
                                 .listRowBackground(Color.white.opacity(0.5))
                                 
                                
@@ -374,6 +377,7 @@ struct ProfileView: View {
                                 BackgroundClearView()
                             }
                     }
+                    
                     
                 }
                 .padding([.trailing, .leading])
@@ -434,7 +438,6 @@ struct ProfileView: View {
                     
                     ToolbarItemGroup(placement: .navigationBarLeading) {
                         Button("Parent Dashboard") {
-                            
                             isAddingPin = true
                         }
                     }
@@ -610,7 +613,7 @@ struct StoryFromProfileView: View {
     @State private var currentPage = 0
     @StateObject var viewModel = ParentViewModel()
     @StateObject var profileViewModel = ProfileViewModel()
-    var shader = TransitionShader(name: "Crosswarp (→)", transition: .crosswarpLTR)
+    
     @State var counter: Int = 0
     @State var origin: CGPoint = .zero
     @State private var offset = CGSize.zero
@@ -675,7 +678,7 @@ struct StoryFromProfileView: View {
                                                         Circle()
                                                             .fill(Color.white)
                                                             .frame(width: 110)
-//                                                        AsyncDp(urlString: imgUrl, size: 100)
+                                                        //                                                        AsyncDp(urlString: imgUrl, size: 100)
                                                         Image(imgUrl.removeJPGExtension())
                                                             .resizable()
                                                             .scaledToFit()
@@ -685,9 +688,9 @@ struct StoryFromProfileView: View {
                                                             .id(imgUrl)
                                                     }
                                                         .padding()
-                                                    .onTapGesture {
-                                                        showFriendProfile = true
-                                                    }
+                                                        .onTapGesture {
+                                                            showFriendProfile = true
+                                                        }
                                                     , alignment: .topLeading
                                                 )
                                                 .padding()
@@ -714,6 +717,7 @@ struct StoryFromProfileView: View {
                                     .cornerRadius(10)
                                     .shadow(radius: 10)
                                     
+                                    
                                     Text(story.storyText[count].text)
                                         .frame(width: UIScreen.main.bounds.width * 0.8)
                                         .padding()
@@ -721,7 +725,6 @@ struct StoryFromProfileView: View {
                                 }
                                 .padding(.top)
                                 .id(count)
-                                .transition(shader.transition)
                                 .onAppear {
                                     profileViewModel.getProfileImage(documentID: story.childId) { profileImage in
                                         if let imageUrl = profileImage {
@@ -731,6 +734,8 @@ struct StoryFromProfileView: View {
                                         }
                                     }
                                 }
+                                // .transition(shader.transition)
+                                
                             }
                             
                         }
@@ -818,37 +823,37 @@ struct StoryFromProfileView: View {
                                 
                             }
                             
-                                Button(action: {
-                                    homeViewModel.likeStory(childId: childId, storyId: story.id)
-                                    
-                                    isLiked.toggle()
-                                    // reload.toggle()
-                                    
-                                }) {
-                                    Image(systemName: isLiked ? "heart.fill" : "heart")
-                                        .foregroundStyle(
-                                            LinearGradient(gradient: Gradient(colors: [Color.red, Color.pink]),
-                                                           startPoint: .top,
-                                                           endPoint: .bottom)
-                                        )
-                                        .scaleEffect(isLiked ? 1.2 : 1)
-                                        .animation(.easeInOut, value: isLiked)
-                                }
+                            Button(action: {
+                                homeViewModel.likeStory(childId: childId, storyId: story.id)
+                                
+                                isLiked.toggle()
+                                // reload.toggle()
+                                
+                            }) {
+                                Image(systemName: isLiked ? "heart.fill" : "heart")
+                                    .foregroundStyle(
+                                        LinearGradient(gradient: Gradient(colors: [Color.red, Color.pink]),
+                                                       startPoint: .top,
+                                                       endPoint: .bottom)
+                                    )
+                                    .scaleEffect(isLiked ? 1.2 : 1)
+                                    .animation(.easeInOut, value: isLiked)
+                            }
                             if childId == story.childId && comment != "" {
                                 Button("", systemImage: "message.fill") {
                                     isShowingCmt.toggle()
                                 }
                             }
                             
-                            }
+                        }
                     }
-                
+                    
                 }
                 .alert("Parent's Comment", isPresented: $isShowingCmt) {
-                            Button("OK", role: .cancel) { }
-                        } message: {
-                            Text(comment)
-                        }
+                    Button("OK", role: .cancel) { }
+                } message: {
+                    Text(comment)
+                }
                 .fullScreenCover(isPresented: $showFriendProfile) {
                     FriendProfileView(friendId: story.childId, dp: imgUrl)
                 }
@@ -870,8 +875,8 @@ struct StoryFromProfileView: View {
                     fetchStoryAndReview(storyID: story.id)
                 }
             }
-         
         }
+        
     }
     
 }

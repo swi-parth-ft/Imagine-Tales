@@ -71,6 +71,7 @@
 		079E92502C89250A00433869 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079E924F2C89250A00433869 /* CustomAlert.swift */; };
 		079E92522C89E64400433869 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079E92512C89E64400433869 /* ExploreView.swift */; };
 		07AF26DD2C703B2C00E41509 /* ComicNeue-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07AF26DC2C703B2C00E41509 /* ComicNeue-Bold.ttf */; };
+		07D70A102C9E12590024B333 /* ThemeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D70A0F2C9E12590024B333 /* ThemeSelectionView.swift */; };
 		07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */; };
 		07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB384A2C62BEAB0070EEFA /* ContentView.swift */; };
 		07FB384D2C62BEAC0070EEFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07FB384C2C62BEAC0070EEFA /* Assets.xcassets */; };
@@ -128,6 +129,7 @@
 		079E924F2C89250A00433869 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
 		079E92512C89E64400433869 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
 		07AF26DC2C703B2C00E41509 /* ComicNeue-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ComicNeue-Bold.ttf"; sourceTree = "<group>"; };
+		07D70A0F2C9E12590024B333 /* ThemeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSelectionView.swift; sourceTree = "<group>"; };
 		07FB38452C62BEAB0070EEFA /* Imagine Tales.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Imagine Tales.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imagine_TalesApp.swift; sourceTree = "<group>"; };
 		07FB384A2C62BEAB0070EEFA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				0711F3502C6D5DCA006C86AA /* TabbarView.swift */,
 				0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */,
 				07FB384A2C62BEAB0070EEFA /* ContentView.swift */,
+				07D70A0F2C9E12590024B333 /* ThemeSelectionView.swift */,
 				0755780C2C9C770E009F4F9A /* StoryReviewView.swift */,
 				077BE2882C81263F00760D5A /* TextPlaceholderView.swift */,
 				0701FB8C2C822816004BEE9F /* FriendsView.swift */,
@@ -411,6 +414,7 @@
 				0711F3782C6D7CDB006C86AA /* SignInAppleHelper.swift in Sources */,
 				0711F3742C6D725C006C86AA /* Utilities.swift in Sources */,
 				078DACDC2C8DFA3300F04A65 /* ScreenTimeManager.swift in Sources */,
+				07D70A102C9E12590024B333 /* ThemeSelectionView.swift in Sources */,
 				078DACDA2C8D202500F04A65 /* BackGroundMesh.swift in Sources */,
 				0711F3762C6D7433006C86AA /* ProfileView.swift in Sources */,
 				0701FBB62C8755C5004BEE9F /* RippleEffectView.swift in Sources */,
