@@ -125,6 +125,7 @@ final class StoryViewModel: ObservableObject {
 final class ContentViewModel: ObservableObject {
     @Published var characters: [Charater] = []
     @AppStorage("childId") var childId: String = "Default Value"
+    @Published var pets: [Pet] = []
     
     func getCharacters() throws {
       
@@ -143,8 +144,36 @@ final class ContentViewModel: ObservableObject {
         }
     }
     
+    func getPets() throws {
+      
+        
+        Firestore.firestore().collection("Children2").document(childId).collection("Pets").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+                return
+            }
+            
+            self.pets = querySnapshot?.documents.compactMap { document in
+                try? document.data(as: Pet.self)
+            } ?? []
+            print(self.pets)
+            
+        }
+    }
+    
     func deleteChar(char: Charater) {
         Firestore.firestore().collection("Children2").document(childId).collection("Characters").document(char.id).delete() { err in
+        if let err = err {
+          print("Error removing document: \(err)")
+        }
+        else {
+          print("Document successfully removed!")
+        }
+      }
+    }
+    
+    func deletePet(pet: Pet) {
+        Firestore.firestore().collection("Children2").document(childId).collection("Pets").document(pet.id).delete() { err in
         if let err = err {
           print("Error removing document: \(err)")
         }
@@ -162,6 +191,7 @@ struct ContentView: View {
     @StateObject private var storyViewModel = StoryViewModel()
     
     @State private var characters = ""
+    @State private var pets = ""
     @State private var char = ""
     @State private var genre = "Adventure"
     @State private var theme = "Dinosaur Discoveries"
@@ -252,7 +282,7 @@ struct ContentView: View {
     @State private var isAddingChar = false
     
     @State private var selectedChars: [Charater] = []
-    
+    @State private var selectedPets: [Pet] = []
     
     @State private var storyChunk: [(String, UIImage)] = []
     @State private var chunkOfText = ""
@@ -707,6 +737,74 @@ struct ContentView: View {
                                             
                                         }
                                         .padding()
+                                        
+                                        LazyVGrid(
+                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
+                                            spacing: -10  // Adjust the spacing to bring the rows closer together
+                                        ) {
+                                            
+                                            ForEach(0..<viewModel.pets.count, id: \.self) { index in
+                                                VStack {
+                                                    ZStack {
+                                                        Circle()
+                                                            .fill(pets.contains(viewModel.pets[index].name) ? Color.purple.opacity(0.5) : Color.purple.opacity(0.2))
+                                                            .frame(width: width, height: width)
+                                                            .shadow(radius: 5)
+                                                            .scaleEffect(pets.contains(viewModel.pets[index].name) ? 1.1 : 1.0)
+                                                        
+                                                        
+                                                        Text(viewModel.pets[index].name)
+                                                            .font(.caption)
+                                                            .multilineTextAlignment(.center)
+                                                        
+                                                    }
+                                                }
+                                                .contextMenu {
+                                                    Button(action: {
+                                                        viewModel.deletePet(pet: viewModel.pets[index])
+                                                        
+                                                        Task {
+                                                            do {
+                                                                try viewModel.getPets()
+                                                            } catch {
+                                                                print(error.localizedDescription)
+                                                            }
+                                                        }
+                                                        
+                                                    }) {
+                                                        Label("Delete", systemImage: "trash")
+                                                    }
+                                                }
+                                                // Apply offset for every other row to create hexagonal shape
+                                                .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
+                                                .frame(width: width, height: width)
+                                                .onTapGesture {
+                                                    
+                                                    if !pets.contains(viewModel.pets[index].name) {
+                                                        selectedPets.append(viewModel.pets[index])
+                                                        withAnimation {
+                                                            pets.append(pets == "" ? viewModel.pets[index].name : ", \(viewModel.pets[index].name)")
+                                                            
+                                                        }
+                                                   
+                                                    } else {
+                                                        
+                                                        selectedPets = selectedPets.filter { $0.id != viewModel.pets[index].id }
+                                                        
+                                                        withAnimation {
+                                                            let temp = pets.replacingOccurrences(of: viewModel.pets[index].name, with: "")
+                                                            pets = temp
+                                                        }
+                                                
+                                                    }
+                                                }
+                                                
+                                                
+                                                
+                                            }
+                                            
+                                        }
+                                        .padding()
                                     }
                                 }
                                 .padding()
@@ -714,6 +812,7 @@ struct ContentView: View {
                                     Task {
                                         do {
                                             try viewModel.getCharacters()
+                                            try viewModel.getPets()
                                         } catch {
                                             print(error.localizedDescription)
                                         }
@@ -778,7 +877,7 @@ struct ContentView: View {
                             //MARK: Preview
                             else if preview {
                                 VStack {
-                                    StoryReviewView(theme: theme, genre: genre, characters: formattedChars, chars: selectedChars, mood: mood, moodEmoji: selectedEmoji)
+                                    StoryReviewView(theme: theme, genre: genre, characters: formattedChars, chars: selectedChars, pets: selectedPets, mood: mood, moodEmoji: selectedEmoji)
                                     
                                     // Buttons
                                     HStack {
@@ -1061,41 +1160,79 @@ struct ContentView: View {
             
         }
     }
-    
     func generatePrompt() -> String {
         guard !selectedChars.isEmpty else {
-                return "Please select at least one character to generate a prompt."
-            }
-            
-            var prompt = ""
+            return "Please select at least one character to generate a prompt."
+        }
+
+        var prompt = ""
         print(selectedChars)
-            if selectedChars.count == 1 {
-                let character = selectedChars[0]
-                prompt = "Create a \(genre) story where \(character.name), who is \(character.age) years old and feeling \(character.emotion), goes on an exciting adventure in a \(theme) world. And mood of story is \(mood)."
-            } else {
-                let characterDescriptions = selectedChars.map { character in
-                    "\(character.name), who is \(character.age) years old and feeling \(character.emotion)"
-                }
-                
-                let charactersText = characterDescriptions.joined(separator: ", ")
-                
-                // Use "and" for the last character if there are more than one
-                let lastSeparator = selectedChars.count > 1 ? " and " : ""
-                
-                if nextKey {
-                    prompt = "Write a next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. And mood of story is \(mood). In 100 words"
-                    
-                } else if finishKey && !isGeneratingTitle {
-                    prompt = "finish this story: \(continueStory) details: of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. in 100 words"
-                } else if isGeneratingTitle {
-                    prompt = "Give me a story title for this story \(continueStory) in 3 words only. And mood of story is \(mood). output should be only 3 words nothing extra"
-                } else {
-                    prompt = "Write a first begining paragraph/pilot of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together.  And mood of story is \(mood). In 100 words"
-                }
-            }
-            print(prompt)
-            return prompt
+
+        // Building character description
+        let characterDescriptions = selectedChars.map { character in
+            "\(character.name), who is \(character.age) years old and feeling \(character.emotion)"
+        }
+        let charactersText = characterDescriptions.joined(separator: ", ")
+
+        // Use "and" for the last character if there are more than one
+        let lastSeparator = selectedChars.count > 1 ? " and " : ""
+
+        // Building pet description if any pets are selected
+        let petDescriptions = selectedPets.map { pet in
+            "\(pet.name), the \(pet.kind)"
+        }
+        let petsText = petDescriptions.isEmpty ? "" : " along with their pet(s) \(petDescriptions.joined(separator: ", "))"
+
+        if nextKey {
+            prompt = "Write the next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). The mood of the story is \(mood). Write in 100 words."
+            
+        } else if finishKey && !isGeneratingTitle {
+            prompt = "Finish this story: \(continueStory) details: a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). Finish in 100 words."
+            
+        } else if isGeneratingTitle {
+            prompt = "Give me a story title for this story \(continueStory) in 3 words only. The mood of the story is \(mood). Output should be only 3 words, nothing extra."
+            
+        } else {
+            prompt = "Write the first paragraph of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). The mood of the story is \(mood). Write in 100 words."
+        }
+
+        print(prompt)
+        return prompt
     }
+//    func generatePrompt() -> String {
+//        guard !selectedChars.isEmpty else {
+//                return "Please select at least one character to generate a prompt."
+//            }
+//            
+//            var prompt = ""
+//        print(selectedChars)
+//            if selectedChars.count == 1 {
+//                let character = selectedChars[0]
+//                prompt = "Create a \(genre) story where \(character.name), who is \(character.age) years old and feeling \(character.emotion), goes on an exciting adventure in a \(theme) world. And mood of story is \(mood)."
+//            } else {
+//                let characterDescriptions = selectedChars.map { character in
+//                    "\(character.name), who is \(character.age) years old and feeling \(character.emotion)"
+//                }
+//                
+//                let charactersText = characterDescriptions.joined(separator: ", ")
+//                
+//                // Use "and" for the last character if there are more than one
+//                let lastSeparator = selectedChars.count > 1 ? " and " : ""
+//                
+//                if nextKey {
+//                    prompt = "Write a next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. And mood of story is \(mood). In 100 words"
+//                    
+//                } else if finishKey && !isGeneratingTitle {
+//                    prompt = "finish this story: \(continueStory) details: of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. in 100 words"
+//                } else if isGeneratingTitle {
+//                    prompt = "Give me a story title for this story \(continueStory) in 3 words only. And mood of story is \(mood). output should be only 3 words nothing extra"
+//                } else {
+//                    prompt = "Write a first begining paragraph/pilot of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together.  And mood of story is \(mood). In 100 words"
+//                }
+//            }
+//            print(prompt)
+//            return prompt
+//    }
     
     func generateImagePrompt() async throws {
         let characterDescriptions = selectedChars.map { character in
@@ -1104,8 +1241,15 @@ struct ContentView: View {
         
         let charactersText = characterDescriptions.joined(separator: ", ")
         
-        // Use "and" for the last character if there are more than one
+        let petDescription = selectedPets.map { pet in
+            "\(pet.name), the \(pet.kind)"
+        }
+        
+        let petsText = petDescription.joined(separator: ", ")
+        
         let lastSeparator = selectedChars.count > 1 ? " and " : ""
+        let petLastSeparator = selectedPets.count > 1 ? " and " : ""
+        
         if isGeneratingCover {
             
             
@@ -1114,8 +1258,9 @@ struct ContentView: View {
                 Story: \(self.story)
                 • Theme: \(theme)
                 • Genre: \(genre)
-                • Characters: \(charactersText)\(lastSeparator)  // Provide their names, ages, gender, and personality traits
-                • Mood: \(mood)  // E.g., joyful, adventurous, mysterious
+                • Characters: \(charactersText)\(lastSeparator)
+                • Pets: \(petsText)\(petLastSeparator)
+                • Mood: \(mood)  
 
                 Each character should have a toy-like, soft appearance with smooth features and expressive faces. The design should clearly reflect their age, gender, and personality. The background should be simple and minimal, allowing the focus to remain on the characters. Their poses and expressions should align with the overall mood of the story. and there should be no text in image
                 """
@@ -1132,7 +1277,8 @@ struct ContentView: View {
 
             Illustrate the following:
 
-                •    Characters: \(charactersText)\(lastSeparator)
+                • Characters: \(charactersText)\(lastSeparator)
+                • Pets: \(petsText)\(petLastSeparator)
 
             The background should reflect \(theme), with elements like [insert any key features from the scene like glowing trees, fireflies, etc.]. Make sure the mood of the illustration reflects \(mood) and \(genre), based on the story. Keep the design toy-like, with smooth and rounded features to appeal to children. and there should be no text in image”
 

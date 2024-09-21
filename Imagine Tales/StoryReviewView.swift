@@ -14,6 +14,7 @@ struct StoryReviewView: View {
     var genre: String
     var characters: String
     var chars: [Charater]
+    var pets: [Pet]
     var mood: String
     var moodEmoji: String
     var body: some View {
@@ -172,6 +173,14 @@ struct StoryReviewView: View {
                                         HStack {
                                             ForEach(chars) { character in
                                                 Text(character.name)
+                                                    .font(.system(size: 24))
+                                                    .padding()
+                                                    .background(Color(hex: "#F2F2DB"))
+                                                    .cornerRadius(22)
+                                            }
+                                            
+                                            ForEach(pets) { pet in
+                                                Text(pet.name)
                                                     .font(.system(size: 24))
                                                     .padding()
                                                     .background(Color(hex: "#F2F2DB"))

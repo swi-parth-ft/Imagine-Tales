@@ -69,6 +69,10 @@ final class UserManager {
         childCollection2.document(childId).collection("Characters")
     }
     
+    private func petCollection(childId: String) -> CollectionReference {
+        childCollection2.document(childId).collection("Pets")
+    }
+    
     
     //    private func childDocument(userId: String, favoriteProductId: String) -> DocumentReference {
     //        childCollection(userId: userId).document(favoriteProductId)
@@ -128,6 +132,20 @@ final class UserManager {
             "age" : char.age,
             "gender" : char.gender,
             "emotion" : char.emotion,
+            "dateCreated" : Timestamp()
+        ]
+        
+        try await document.setData(data, merge: true)
+    }
+    
+    func addPet(childId: String, pet: Pet) async throws {
+        let document = petCollection(childId: childId).document()
+        let documentId = document.documentID
+        
+        let data: [String:Any] = [
+            "id" : documentId,
+            "name" : pet.name,
+            "kind" : pet.kind,
             "dateCreated" : Timestamp()
         ]
         
