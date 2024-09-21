@@ -13,9 +13,9 @@ struct StoryReviewView: View {
     var theme: String
     var genre: String
     var characters: String
-    var chars: [Charater]?
+    var chars: [Charater]
     var mood: String
-    
+    var moodEmoji: String
     var body: some View {
         VStack(spacing: 20) {
             // Prompt section
@@ -87,6 +87,11 @@ struct StoryReviewView: View {
                                     .font(.system(size: 24))
                             }
                             Spacer()
+                            Image("\(theme.filter { !$0.isWhitespace })")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 80)
+                                .shadow(radius: 5)
                         }
                         .padding()
                     }
@@ -106,7 +111,7 @@ struct StoryReviewView: View {
                                         .font(.system(size: 24))
                                 }
                                 Spacer()
-                                Text("🤩")
+                                Text(moodEmoji)
                                     .font(.system(size: 54))
                             }
                             .padding()
@@ -135,27 +140,33 @@ struct StoryReviewView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 22)
                             .fill(Color(hex: "#F8F8E4"))
-                            .frame(width: 200, height: 120)
+                            .frame(width: 500, height: 120)
                         HStack {
                             
-                            VStack {
+                            VStack(alignment: .center) {
                                 Text("Characters")
                                     .font(.system(size: 20))
                                     .foregroundStyle(.secondary)
-                                HStack {
-                                    Text("Sam")
-                                        .font(.system(size: 24))
-                                        .padding()
-                                        .background(Color(hex: "#F2F2DB"))
-                                        .cornerRadius(22)
+                                
+                                
+                                    ScrollView(.horizontal) {
+                                        HStack {
+                                            ForEach(chars) { character in
+                                                Text(character.name)
+                                                    .font(.system(size: 24))
+                                                    .padding()
+                                                    .background(Color(hex: "#F2F2DB"))
+                                                    .cornerRadius(22)
+                                            }
+                                        }
+                                    }
+                                    .frame(width: 480)
+                                    .padding(.horizontal)
+                                
+                           
+                                       
                                     
-                                    Text("Jade")
-                                        .font(.system(size: 24))
-                                        .padding()
-                                        .background(Color(hex: "#F2F2DB"))
-                                        .cornerRadius(22)
-                                    
-                                }
+                                
                             }
                             
                         }
@@ -163,9 +174,25 @@ struct StoryReviewView: View {
                     }
                     .padding(.horizontal)
                  
+                    HStack {
+                        Image("\(theme.filter { !$0.isWhitespace })1")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100)
+                        
+                        Spacer()
+                        
+                        Image("\(theme.filter { !$0.isWhitespace })2")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100)
+                        
+                    }
                 }
                 .padding()
                 .cornerRadius(10)
+                
+                
             }
           
 
@@ -178,6 +205,6 @@ struct StoryReviewView: View {
 
 
 
-#Preview {
-    StoryReviewView(theme: "Forest", genre: "science fiction", characters: "Parth and sara", mood: "happy")
-}
+//#Preview {
+//    StoryReviewView(theme: "Forest", genre: "science fiction", characters: "Parth and sara", mood: "happy")
+//}

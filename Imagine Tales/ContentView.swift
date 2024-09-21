@@ -162,7 +162,7 @@ struct ContentView: View {
     @State private var characters = ""
     @State private var char = ""
     @State private var genre = "Adventure"
-    @State private var theme = "Forest"
+    @State private var theme = "Dinosaur Discoveries"
     @State private var story = ""
     @State private var isLoading = false
     @State private var words:[String] =  []
@@ -265,28 +265,9 @@ struct ContentView: View {
     @State private var isLoadingImage = false
     @State private var isLoadingTextPart = false
     @State private var mood = ""
-    let emotionNames = [
-        "Happy",
-        "Sad",
-        "Excited",
-        "Scared",
-        "Curious",
-        "Brave",
-        "Funny",
-        "Surprised",
-        "Angry",
-        "Relaxed",
-        "Adventurous",
-        "Mysterious",
-        "Silly",
-        "Love",
-        "Confused",
-        "Proud",
-        "Nervous",
-        "Sleepy",
-        "Joyful",
-        "Shy"
-    ]
+    let moods = ["Happy", "Sad", "Excited", "Scared", "Curious", "Brave", "Funny", "Surprised", "Angry", "Relaxed", "Adventurous", "Mysterious", "Silly", "Love", "Confused", "Proud", "Nervous", "Sleepy", "Joyful", "Shy"]
+    let moodEmojis = ["😊", "😢", "😃", "😱", "🤔", "💪", "😄", "😮", "😠", "😌", "🧭", "🕵️‍♂️", "🤪", "❤️", "😕", "😎", "😬", "😴", "😁", "😳"]
+  @State private var selectedEmoji = ""
     @State private var isSelectingMood = false
     @State private var displayedText: String = ""
         @State private var charIndex: Int = 0
@@ -558,60 +539,55 @@ struct ContentView: View {
                                     Spacer()
                                 }
                                 .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
-                                // .animation(.easeInOut(duration: 1.0))
                             }
+                            
                             //MARK: Selecting Genre
                             else if isSelectingGenre {
                                 GeometryReader { geometry in
-                                    // Calculate dynamic width based on available width and desired number of items per row
-                                    let width = (geometry.size.width - 40) / 8 // Subtract padding and divide by the number of items
-                                    
-                                    ScrollView {
-                                        LazyVGrid(
-                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
-                                            spacing: -10  // Adjust the spacing to bring the rows closer together
+                                    let height = (geometry.size.height - 40) / 7
+
+                                    ScrollView(.horizontal) {
+                                        LazyHGrid(
+                                            rows: Array(repeating: GridItem(.fixed(height), spacing: 70), count: 4),
+                                            spacing: 60  // Adjust the spacing to bring the columns closer together
                                         ) {
-                                            
+
                                             ForEach(0..<genres.count, id: \.self) { index in
                                                 VStack {
                                                     ZStack {
                                                         Circle()
                                                             .fill(genres[index] == genre ? Color.cyan.opacity(0.5) : Color.cyan.opacity(0.2))
-                                                            .frame(width: width, height: width)
+                                                            .frame(width: height, height: height)
                                                             .shadow(radius: 5)
-                                                            .scaleEffect(genres[index] == genre ? 1.1 : 1.0)
-                                                            .scaleEffect(isSelectingGenre ? 1.0 : 0.0)  // Grow when appearing
-                                                                                                        .animation(.easeInOut(duration: genres[index] == genre ? 0.6 : 0.3), value: isSelectingGenre)
+                                                            .scaleEffect(isSelectingGenre ? (genres[index] == genre ? 1.4 : 1.2) : 0.0)
+                                                            .animation(.easeInOut(duration: genres[index] == genre ? 0.6 : 0.3), value: isSelectingGenre)
                                                         
                                                         Text(genres[index])
                                                             .font(.caption)
-                                                            .multilineTextAlignment(.center)
-                                                            .scaleEffect(isSelectingGenre ? 1.0 : 0.0)  // Grow when appearing
-                                                                                                        .animation(.easeInOut(duration: genres[index] == genre ? 0.6 : 0.3), value: isSelectingGenre)
+                                                            .opacity(isSelectingGenre ? 1.0 : 0.0)
+                                                            .scaleEffect(isSelectingGenre ? (genres[index] == genre ? 1.2 : 1.0) : 0.0)
+                                                            .animation(.easeInOut(duration: genres[index] == genre ? 0.6 : 0.3), value: isSelectingGenre)
                                                         
+
                                                     }
                                                     
                                                 }
-                                                // Apply offset for every other row to create hexagonal shape
-                                                .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
-                                                .frame(width: width, height: width)
+                                                // Apply offset for every other column to create hexagonal shape
+                                                .offset(y: (index / 4) % 2 == 0 ? 0 : height / 2)
+                                                .frame(width: height, height: height)
                                                 .onTapGesture {
                                                     withAnimation {
                                                         genre = genres[index]
                                                     }
                                                 }
-                                               
                                             }
-                                            
+
                                         }
-                                        .padding()
+                                        .padding(.leading, 50)
+                                        .padding(.bottom, 70)
                                     }
-                                    
-                                    
-                                                
+                                    Spacer()
                                 }
-                                
-                                .padding()
                                 .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
                                
                             }
@@ -639,8 +615,9 @@ struct ContentView: View {
                                                     .frame(width: width / 2, height: width / 2)
                                             }
                                         }
+                                        .padding(.top, 80)
                                         LazyVGrid(
-                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 5),
+                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
                                             spacing: -10  // Adjust the spacing to bring the rows closer together
                                         ) {
                                             
@@ -652,7 +629,7 @@ struct ContentView: View {
                                                             .frame(width: width, height: width)
                                                             .shadow(radius: 5)
                                                             .scaleEffect(characters.contains(viewModel.characters[index].name) ? 1.1 : 1.0)
-                                                            
+                                                        
                                                         
                                                         Text(viewModel.characters[index].name)
                                                             .font(.caption)
@@ -722,8 +699,8 @@ struct ContentView: View {
                                                     }
                                                 }
                                                 
-                                                    
-                                                    
+                                                
+                                                
                                             }
                                             
                                         }
@@ -731,9 +708,6 @@ struct ContentView: View {
                                     }
                                 }
                                 .padding()
-
-                               
-                                
                                 .onAppear {
                                     Task {
                                         do {
@@ -746,62 +720,63 @@ struct ContentView: View {
                                 }
                             }
                             
+                            //MARK: Selecting Mood
                             else if isSelectingMood {
                                 GeometryReader { geometry in
-                                    // Calculate dynamic width based on available width and desired number of items per row
-                                    let width = (geometry.size.width - 40) / 8 // Subtract padding and divide by the number of items
+                                    let height = (geometry.size.height - 40) / 8
                                     
-                                    ScrollView {
-                                        LazyVGrid(
-                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
-                                            spacing: -10  // Adjust the spacing to bring the rows closer together
+                                    ScrollView(.horizontal) {
+                                        LazyHGrid(
+                                            rows: Array(repeating: GridItem(.fixed(height), spacing: 70), count: 4),
+                                            spacing: 60  // Adjust the spacing to bring the columns closer together
                                         ) {
                                             
-                                            ForEach(0..<emotionNames.count, id: \.self) { index in
+                                            ForEach(0..<moods.count, id: \.self) { index in
                                                 VStack {
                                                     ZStack {
                                                         Circle()
-                                                            .fill(emotionNames[index] == mood ? Color.cyan.opacity(0.5) : Color.cyan.opacity(0.2))
-                                                            .frame(width: width, height: width)
+                                                            .fill(moods[index] == mood ? Color.yellow.opacity(0.5) : Color.yellow.opacity(0.2))
+                                                            .frame(width: height, height: height)
                                                             .shadow(radius: 5)
-                                                            .scaleEffect(emotionNames[index] == mood ? 1.1 : 1.0)
-                                                            .scaleEffect(isSelectingMood ? 1.0 : 0.0)  // Grow when appearing
-                                                            .animation(.easeInOut(duration: genres[index] == genre ? 0.6 : 0.3), value: isSelectingMood)
+                                                            .scaleEffect(isSelectingMood ? (moods[index] == mood ? 1.4 : 1.2) : 0.0)
+                                                            .animation(.easeInOut(duration: moods[index] == mood ? 0.6 : 0.3), value: isSelectingMood)
                                                         
-                                                        Text(emotionNames[index])
-                                                            .font(.caption)
-                                                            .multilineTextAlignment(.center)
-                                                            .scaleEffect(isSelectingMood ? 1.0 : 0.0)  // Grow when appearing
-                                                            .animation(.easeInOut(duration: emotionNames[index] == mood ? 0.6 : 0.3), value: isSelectingMood)
-                                                        
+                                                        VStack {
+                                                            Text(moodEmojis[index])
+                                                                .font(.system(size: 32))
+                                                            Text(moods[index])
+                                                                .font(.caption)
+                                                                .opacity(isSelectingMood ? 1.0 : 0.0)
+                                                                .scaleEffect(isSelectingMood ? (moods[index] == mood ? 1.2 : 1.0) : 0.0)
+                                                                .animation(.easeInOut(duration: moods[index] == mood ? 0.6 : 0.3), value: isSelectingMood)
+                                                        }
                                                     }
                                                     
                                                 }
-                                                // Apply offset for every other row to create hexagonal shape
-                                                .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
-                                                .frame(width: width, height: width)
+                                                // Apply offset for every other column to create hexagonal shape
+                                                .offset(y: (index / 4) % 2 == 0 ? 0 : height / 2)
+                                                .frame(width: height, height: height)
                                                 .onTapGesture {
                                                     withAnimation {
-                                                        mood = emotionNames[index]
+                                                        mood = moods[index]
+                                                        selectedEmoji = moodEmojis[index]
                                                     }
                                                 }
-                                               
                                             }
                                             
                                         }
-                                        .padding()
+                                        .padding(.leading, 50)
+                                        .padding(.bottom, 70)
                                     }
-                                    
-                                    
-                                                
+                                    Spacer()
                                 }
-                                
-                                .padding()
                                 .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
                             }
+                            
+                            //MARK: Preview
                             else if preview {
                                 VStack {
-                                    StoryReviewView(theme: theme, genre: genre, characters: formattedChars, chars: selectedChars, mood: mood)
+                                    StoryReviewView(theme: theme, genre: genre, characters: formattedChars, chars: selectedChars, mood: mood, moodEmoji: selectedEmoji)
                                     
                                     // Buttons
                                     HStack {
@@ -818,7 +793,7 @@ struct ContentView: View {
                                                 .foregroundStyle(.black)
                                                 .cornerRadius(16)
                                         }
-
+                                        
                                         Button(action: {
                                             generatedImage = nil
                                             isLoading = true
@@ -876,7 +851,7 @@ struct ContentView: View {
                                             } label: {
                                                 ZStack {
                                                     Circle()
-                                                        .foregroundStyle(isSelectingGenre ? .cyan.opacity(0.3) :  .purple.opacity(0.3))
+                                                        .foregroundStyle(isSelectingGenre ? .cyan.opacity(0.3) :  isSelectingMood ? .yellow.opacity(0.3) : .purple.opacity(0.3))
                                                         .frame(width: 75, height: 75)
                                                         .shadow(radius: 10)
                                                     
