@@ -214,7 +214,7 @@ struct ExploreView: View {
                                                 RoundedRectangle(cornerRadius: 12)
                                                     .stroke(Color(hex: "#F4F4DA"))
                                                     .frame(width: 300, height: 250)
-                                                VStack(alignment: .center, spacing: -26) {
+                                                VStack(alignment: .center, spacing: -9) {
                                                     
                                                     AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
                                                         switch phase {
@@ -251,6 +251,14 @@ struct ExploreView: View {
                                                     
                                                     ZStack {
                                                         HStack {
+                                                            Spacer()
+                                                            Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")")
+                                                                .resizable()
+                                                                .scaledToFit()
+                                                                .frame(width: 80, height: 80)
+                                                                .padding(.bottom, 20)
+                                                        }
+                                                        HStack {
                                                             VStack(alignment: .leading, spacing: -16) {
                                                                 Text(story.title)
                                                                     .font(.system(size: 20))
@@ -267,14 +275,7 @@ struct ExploreView: View {
                                                             .padding(.bottom, 20)
                                                             Spacer()
                                                         }
-                                                        HStack {
-                                                            Spacer()
-                                                            Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")")
-                                                                .resizable()
-                                                                .scaledToFit()
-                                                                .frame(width: 140, height: 140)
-                                                                .padding(.bottom, 20)
-                                                        }
+                                                  
                                                     }
                                                     .padding(10)
                                                     .frame(width: 310)

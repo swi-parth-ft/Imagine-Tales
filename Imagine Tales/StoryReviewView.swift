@@ -71,7 +71,26 @@ struct StoryReviewView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 22)
                     .fill(Color(hex: "#F2F2DB"))
-                    .frame(height: 500)
+                    .frame(height: 600)
+                VStack {
+                    Spacer()
+                    
+                    HStack {
+                        Image("\(theme.filter { !$0.isWhitespace })1")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 220)
+                        
+                        Spacer()
+                        
+                        Image("\(theme.filter { !$0.isWhitespace })2")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 220)
+                        
+                    }
+                }
+                .frame(height: 600)
                 VStack(alignment: .center) {
                     
                     ZStack {
@@ -139,7 +158,7 @@ struct StoryReviewView: View {
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 22)
-                            .fill(Color(hex: "#F8F8E4"))
+                            .fill(Color(hex: "#F8F8E4").opacity(0.5))
                             .frame(width: 500, height: 120)
                         HStack {
                             
@@ -174,20 +193,7 @@ struct StoryReviewView: View {
                     }
                     .padding(.horizontal)
                  
-                    HStack {
-                        Image("\(theme.filter { !$0.isWhitespace })1")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100)
-                        
-                        Spacer()
-                        
-                        Image("\(theme.filter { !$0.isWhitespace })2")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100)
-                        
-                    }
+                    
                 }
                 .padding()
                 .cornerRadius(10)
