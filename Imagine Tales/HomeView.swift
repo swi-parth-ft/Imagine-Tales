@@ -26,6 +26,7 @@ struct Story: Codable, Hashable, Identifiable {
     var genre: String
     var childUsername: String
     var likes: Int
+    var theme: String?
 }
 
 final class HomeViewModel: ObservableObject {

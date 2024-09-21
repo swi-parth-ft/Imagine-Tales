@@ -73,7 +73,7 @@ final class StoryViewModel: ObservableObject {
         }
     }
     
-    func uploadStoryToFirestore(stroTextItem: [StoryTextItem], childId: String, title: String, genre: String) async throws {
+    func uploadStoryToFirestore(stroTextItem: [StoryTextItem], childId: String, title: String, genre: String, theme: String, mood: String) async throws {
         
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
         
@@ -97,6 +97,8 @@ final class StoryViewModel: ObservableObject {
             "genre" : genre,
             "childUsername" : child?.username ?? "",
             "likes" : 0,
+            "theme" : theme,
+            "mood" : mood,
             "dateCreated" : Timestamp()
         ]
         
@@ -440,7 +442,7 @@ struct ContentView: View {
                                                     Button("Share") {
                                                         Task {
                                                             do {
-                                                                try await storyViewModel.uploadStoryToFirestore(stroTextItem: storyTextItem, childId: childId, title: title, genre: genre)
+                                                                try await storyViewModel.uploadStoryToFirestore(stroTextItem: storyTextItem, childId: childId, title: title, genre: genre, theme: theme, mood: mood)
                                                             } catch {
                                                                 print(error.localizedDescription)
                                                             }

@@ -214,7 +214,7 @@ struct ExploreView: View {
                                                 RoundedRectangle(cornerRadius: 12)
                                                     .stroke(Color(hex: "#F4F4DA"))
                                                     .frame(width: 300, height: 250)
-                                                VStack(alignment: .leading) {
+                                                VStack(alignment: .center, spacing: -26) {
                                                     
                                                     AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
                                                         switch phase {
@@ -233,7 +233,7 @@ struct ExploreView: View {
                                                             Image(systemName: "photo")
                                                                 .resizable()
                                                                 .scaledToFit()
-                                                                .frame(height: 200)
+                                                                .frame(height: 150)
                                                                 .cornerRadius(10)
                                                                 .padding()
                                                                 .onAppear {
@@ -248,17 +248,36 @@ struct ExploreView: View {
                                                         }
                                                     }
                                                     .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 5)
-                                                    VStack(alignment: .leading, spacing: -16) {
-                                                        Text(story.title)
-                                                            .font(.system(size: 20))
-                                                        VStack(alignment: .leading) {
-                                                            Text(story.childUsername)
-                                                            Text("\(story.likes) Likes")
+                                                    
+                                                    ZStack {
+                                                        HStack {
+                                                            VStack(alignment: .leading, spacing: -16) {
+                                                                Text(story.title)
+                                                                    .font(.system(size: 20))
+                                                                
+                                                                VStack(alignment: .leading) {
+                                                                    Text(story.childUsername)
+                                                                    Text("\(story.likes) Likes")
+                                                                }
+                                                                
+                                                                
+                                                            }
+                                                            .foregroundStyle(.black)
+                                                            //   .padding([.top, .leading], 8)
+                                                            .padding(.bottom, 20)
+                                                            Spacer()
+                                                        }
+                                                        HStack {
+                                                            Spacer()
+                                                            Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")")
+                                                                .resizable()
+                                                                .scaledToFit()
+                                                                .frame(width: 140, height: 140)
+                                                                .padding(.bottom, 20)
                                                         }
                                                     }
-                                                    .foregroundStyle(.black)
-                                                    .padding([.top, .leading], 8)
-                                                    .padding(.bottom)
+                                                    .padding(10)
+                                                    .frame(width: 310)
                                                     Spacer()
                                                 }
                                             }
