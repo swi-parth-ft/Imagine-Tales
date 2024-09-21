@@ -988,11 +988,6 @@ struct ContentView: View {
         withAnimation(.easeIn(duration: 1.5)) {
             isLoadingImage = true
         }
-        
-        
-//        let prompt = """
-//Create an kids story book image that depicts a story with the following prompt: \(promptForImage)
-//"""
         let prompt = promptForImage
         OpenAIService.shared.generateImage(from: prompt) { result in
             withAnimation(.easeIn(duration: 1.5)) {
@@ -1074,7 +1069,7 @@ struct ContentView: View {
         print(selectedChars)
             if selectedChars.count == 1 {
                 let character = selectedChars[0]
-                prompt = "Create a \(genre) story where \(character.name), who is \(character.age) years old and feeling \(character.emotion), goes on an exciting adventure in a \(theme) world."
+                prompt = "Create a \(genre) story where \(character.name), who is \(character.age) years old and feeling \(character.emotion), goes on an exciting adventure in a \(theme) world. And mood of story is \(mood)."
             } else {
                 let characterDescriptions = selectedChars.map { character in
                     "\(character.name), who is \(character.age) years old and feeling \(character.emotion)"
@@ -1086,14 +1081,14 @@ struct ContentView: View {
                 let lastSeparator = selectedChars.count > 1 ? " and " : ""
                 
                 if nextKey {
-                    prompt = "Write a next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. In 100 words"
+                    prompt = "Write a next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. And mood of story is \(mood). In 100 words"
                     
                 } else if finishKey && !isGeneratingTitle {
                     prompt = "finish this story: \(continueStory) details: of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. in 100 words"
                 } else if isGeneratingTitle {
-                    prompt = "Give me a story title for this story \(continueStory) in 3 words only. output should be only 3 words nothing extra"
+                    prompt = "Give me a story title for this story \(continueStory) in 3 words only. And mood of story is \(mood). output should be only 3 words nothing extra"
                 } else {
-                    prompt = "Write a first begining paragraph/pilot of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. In 100 words"
+                    prompt = "Write a first begining paragraph/pilot of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together.  And mood of story is \(mood). In 100 words"
                 }
             }
             print(prompt)
@@ -1118,7 +1113,7 @@ struct ContentView: View {
                 • Theme: \(theme)
                 • Genre: \(genre)
                 • Characters: \(charactersText)\(lastSeparator)  // Provide their names, ages, gender, and personality traits
-                • Mood: \(theme)  // E.g., joyful, adventurous, mysterious
+                • Mood: \(mood)  // E.g., joyful, adventurous, mysterious
 
                 Each character should have a toy-like, soft appearance with smooth features and expressive faces. The design should clearly reflect their age, gender, and personality. The background should be simple and minimal, allowing the focus to remain on the characters. Their poses and expressions should align with the overall mood of the story. and there should be no text in image
                 """
@@ -1137,7 +1132,7 @@ struct ContentView: View {
 
                 •    Characters: \(charactersText)\(lastSeparator)
 
-            The background should reflect \(theme), with elements like [insert any key features from the scene like glowing trees, fireflies, etc.]. Make sure the mood of the illustration reflects \(genre), based on the story. Keep the design toy-like, with smooth and rounded features to appeal to children. and there should be no text in image”
+            The background should reflect \(theme), with elements like [insert any key features from the scene like glowing trees, fireflies, etc.]. Make sure the mood of the illustration reflects \(mood) and \(genre), based on the story. Keep the design toy-like, with smooth and rounded features to appeal to children. and there should be no text in image”
 
             """
             generateImageUsingOpenAI()
