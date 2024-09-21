@@ -172,21 +172,38 @@ struct StoryReviewView: View {
                                     ScrollView(.horizontal) {
                                         HStack {
                                             ForEach(chars) { character in
-                                                Text(character.name)
-                                                    .font(.system(size: 24))
-                                                    .padding()
-                                                    .background(Color(hex: "#F2F2DB"))
-                                                    .cornerRadius(22)
+                                                HStack {
+                                                    Text(character.name)
+                                                        .font(.system(size: 24))
+                                                        .padding()
+                                                        .background(Color(hex: "#F2F2DB"))
+                                                        .cornerRadius(22)
+                                                    Image(character.gender)
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 40, height: 40)
+                                                }
+                                                .background(Color(hex: "#F2F2DB"))
+                                                .cornerRadius(22)
                                             }
                                             
                                             ForEach(pets) { pet in
-                                                Text(pet.name)
-                                                    .font(.system(size: 24))
-                                                    .padding()
-                                                    .background(Color(hex: "#F2F2DB"))
-                                                    .cornerRadius(22)
+                                                HStack {
+                                                    Text(pet.name)
+                                                        .font(.system(size: 24))
+                                                        .padding()
+                                                        .background(Color(hex: "#F2F2DB"))
+                                                        .cornerRadius(22)
+                                                    Image(pet.kind.filter { !$0.isWhitespace })
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 40, height: 40)
+                                                }
+                                                .background(Color(hex: "#F2F2DB"))
+                                                .cornerRadius(22)
                                             }
                                         }
+                                        
                                     }
                                     .frame(width: 480)
                                     .padding(.horizontal)

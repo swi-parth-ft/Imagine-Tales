@@ -629,7 +629,7 @@ struct ContentView: View {
                                 
                                 GeometryReader { geometry in
                                     // Calculate dynamic width based on available width and desired number of items per row
-                                    let width = (geometry.size.width - 40) / 8 // Subtract padding and divide by the number of items
+                                    let width = (geometry.size.width - 40) / 5 // Subtract padding and divide by the number of items
                                     
                                     ScrollView {
                                         Button {
@@ -657,17 +657,29 @@ struct ContentView: View {
                                                 VStack {
                                                     ZStack {
                                                         Circle()
-                                                            .fill(characters.contains(viewModel.characters[index].name) ? Color.purple.opacity(0.5) : Color.purple.opacity(0.2))
+                                                            .fill(characters.contains(viewModel.characters[index].name) ?
+                                                                (viewModel.characters[index].gender == "Female" ? Color.pink.opacity(0.5) : Color.blue.opacity(0.5)) :
+                                                                (viewModel.characters[index].gender == "Female" ? Color.pink.opacity(0.2) : Color.blue.opacity(0.2))
+                                                            )
                                                             .frame(width: width, height: width)
                                                             .shadow(radius: 5)
                                                             .scaleEffect(characters.contains(viewModel.characters[index].name) ? 1.1 : 1.0)
-                                                        
-                                                        
-                                                        Text(viewModel.characters[index].name)
-                                                            .font(.caption)
-                                                            .multilineTextAlignment(.center)
-                                                        
+                                                        VStack {
+                                                            Image(viewModel.characters[index].gender)
+                                                                .resizable()
+                                                                .scaledToFit()
+                                                                .frame(width: width * 0.6, height: width * 0.6)
+                                                                .scaleEffect(characters.contains(viewModel.characters[index].name) ? 1.1 : 1.0)
+                                                            
+                                                            Text(viewModel.characters[index].name)
+                                                                .font(.caption)
+                                                                .multilineTextAlignment(.center)
+                                                                .scaleEffect(characters.contains(viewModel.characters[index].name) ? 1.1 : 1.0)
+                                                        }
                                                     }
+                                                        
+                                                        
+                                                    
                                                 }
                                                 .contextMenu {
                                                     Button(action: {
@@ -747,15 +759,22 @@ struct ContentView: View {
                                                 VStack {
                                                     ZStack {
                                                         Circle()
-                                                            .fill(pets.contains(viewModel.pets[index].name) ? Color.purple.opacity(0.5) : Color.purple.opacity(0.2))
+                                                            .fill(pets.contains(viewModel.pets[index].name) ? getPetColor(viewModel.pets[index].kind, 0.5) : getPetColor(viewModel.pets[index].kind, 0.2))
                                                             .frame(width: width, height: width)
                                                             .shadow(radius: 5)
                                                             .scaleEffect(pets.contains(viewModel.pets[index].name) ? 1.1 : 1.0)
-                                                        
-                                                        
-                                                        Text(viewModel.pets[index].name)
-                                                            .font(.caption)
-                                                            .multilineTextAlignment(.center)
+                                                        VStack {
+                                                            Image(viewModel.pets[index].kind.filter { !$0.isWhitespace })
+                                                                .resizable()
+                                                                .scaledToFit()
+                                                                .frame(width: width * 0.6, height: width * 0.6)
+                                                                .scaleEffect(pets.contains(viewModel.pets[index].name) ? 1.1 : 1.0)
+                                                            
+                                                            Text(viewModel.pets[index].name)
+                                                                .font(.caption)
+                                                                .multilineTextAlignment(.center)
+                                                                .scaleEffect(pets.contains(viewModel.pets[index].name) ? 1.1 : 1.0)
+                                                        }
                                                         
                                                     }
                                                 }
@@ -1048,6 +1067,7 @@ struct ContentView: View {
                 Task {
                     do {
                         try viewModel.getCharacters()
+                        try viewModel.getPets()
                     } catch {
                         print(error.localizedDescription)
                     }
@@ -1055,6 +1075,23 @@ struct ContentView: View {
             }) {
                 CharacterView()
             }
+        }
+    }
+    
+    private func getPetColor(_ kind: String, _ opacity: Double) -> Color {
+        switch kind {
+        case "Dog":
+            return Color.brown.opacity(opacity)
+        case "Cat":
+            return Color.gray.opacity(opacity)
+        case "Unicorn":
+            return Color.purple.opacity(opacity)
+        case "Baby Dinosaur":
+            return Color.green.opacity(opacity)
+        case "Dragon":
+            return Color.red.opacity(opacity)
+        default:
+            return Color.black.opacity(opacity)
         }
     }
     

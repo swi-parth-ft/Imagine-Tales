@@ -198,7 +198,7 @@ struct CharacterView: View {
                                 Task {
                                     do {
                                         try await viewModel.createPet()
-                                        try PviewModel.getCharacters()
+                                        try PviewModel.getPets()
                                         dismiss()
                                     } catch {
                                         print(error.localizedDescription)
