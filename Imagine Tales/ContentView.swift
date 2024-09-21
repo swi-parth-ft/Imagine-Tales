@@ -193,7 +193,7 @@ struct ContentView: View {
     @State private var characters = ""
     @State private var pets = ""
     @State private var char = ""
-    @State private var genre = "Adventure"
+    @State private var genre = "Detective"
     @State private var theme = "Dinosaur Discoveries"
     @State private var story = ""
     @State private var isLoading = false
@@ -296,7 +296,7 @@ struct ContentView: View {
     @State private var isGeneratingTitle = false
     @State private var isLoadingImage = false
     @State private var isLoadingTextPart = false
-    @State private var mood = ""
+    @State private var mood = "Brave"
     let moods = ["Happy", "Sad", "Excited", "Scared", "Curious", "Brave", "Funny", "Surprised", "Angry", "Relaxed", "Adventurous", "Mysterious", "Silly", "Love", "Confused", "Proud", "Nervous", "Sleepy", "Joyful", "Shy"]
     let moodEmojis = ["😊", "😢", "😃", "😱", "🤔", "💪", "😄", "😮", "😠", "😌", "🧭", "🕵️‍♂️", "🤪", "❤️", "😕", "😎", "😬", "😴", "😁", "😳"]
   @State private var selectedEmoji = ""
@@ -541,7 +541,7 @@ struct ContentView: View {
                                                             VStack {
                                                                 ForEach(words, id: \.self) { word in
                                                                     Text(String(word))
-                                                                        .font(.caption)
+                                                                        .font(.custom("ComicNeue-Bold", size: 24))
                                                                         .multilineTextAlignment(.center)
                                                                         .opacity(isSelectingTheme ? 1.0 : 0.0)
                                                                         .scaleEffect(isSelectingTheme ? (themes[index] == theme ? 1.2 : 1.0) : 0.0)
@@ -595,7 +595,7 @@ struct ContentView: View {
                                                             .animation(.easeInOut(duration: genres[index] == genre ? 0.6 : 0.3), value: isSelectingGenre)
                                                         
                                                         Text(genres[index])
-                                                            .font(.caption)
+                                                            .font(.custom("ComicNeue-Bold", size: 24))
                                                             .opacity(isSelectingGenre ? 1.0 : 0.0)
                                                             .scaleEffect(isSelectingGenre ? (genres[index] == genre ? 1.2 : 1.0) : 0.0)
                                                             .animation(.easeInOut(duration: genres[index] == genre ? 0.6 : 0.3), value: isSelectingGenre)
@@ -632,22 +632,7 @@ struct ContentView: View {
                                     let width = (geometry.size.width - 40) / 5 // Subtract padding and divide by the number of items
                                     
                                     ScrollView {
-                                        Button {
-                                            isAddingChar = true
-                                            
-                                        } label: {
-                                            ZStack {
-                                                Circle()
-                                                    .fill(Color.purple.opacity(0.2))
-                                                    .frame(width: width, height: width)
-                                                    .shadow(radius: 5)
-                                                    .scaleEffect(1.0)
-                                                
-                                                Image(systemName: "plus")
-                                                    .frame(width: width / 2, height: width / 2)
-                                            }
-                                        }
-                                        .padding(.top, 80)
+                                        
                                         LazyVGrid(
                                             columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
                                             spacing: -10  // Adjust the spacing to bring the rows closer together
@@ -672,7 +657,7 @@ struct ContentView: View {
                                                                 .scaleEffect(characters.contains(viewModel.characters[index].name) ? 1.1 : 1.0)
                                                             
                                                             Text(viewModel.characters[index].name)
-                                                                .font(.caption)
+                                                                .font(.custom("ComicNeue-Bold", size: 24))
                                                                 .multilineTextAlignment(.center)
                                                                 .scaleEffect(characters.contains(viewModel.characters[index].name) ? 1.1 : 1.0)
                                                         }
@@ -771,7 +756,7 @@ struct ContentView: View {
                                                                 .scaleEffect(pets.contains(viewModel.pets[index].name) ? 1.1 : 1.0)
                                                             
                                                             Text(viewModel.pets[index].name)
-                                                                .font(.caption)
+                                                                .font(.custom("ComicNeue-Bold", size: 24))
                                                                 .multilineTextAlignment(.center)
                                                                 .scaleEffect(pets.contains(viewModel.pets[index].name) ? 1.1 : 1.0)
                                                         }
@@ -825,7 +810,10 @@ struct ContentView: View {
                                         }
                                         .padding()
                                     }
+                                    
+                                    .padding(.top, 90)
                                 }
+                                .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
                                 .padding()
                                 .onAppear {
                                     Task {
@@ -865,7 +853,7 @@ struct ContentView: View {
                                                             Text(moodEmojis[index])
                                                                 .font(.system(size: 32))
                                                             Text(moods[index])
-                                                                .font(.caption)
+                                                                .font(.custom("ComicNeue-Bold", size: 24))
                                                                 .opacity(isSelectingMood ? 1.0 : 0.0)
                                                                 .scaleEffect(isSelectingMood ? (moods[index] == mood ? 1.2 : 1.0) : 0.0)
                                                                 .animation(.easeInOut(duration: moods[index] == mood ? 0.6 : 0.3), value: isSelectingMood)
@@ -897,6 +885,7 @@ struct ContentView: View {
                             else if preview {
                                 VStack {
                                     StoryReviewView(theme: theme, genre: genre, characters: formattedChars, chars: selectedChars, pets: selectedPets, mood: mood, moodEmoji: selectedEmoji)
+                                        .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
                                     
                                     // Buttons
                                     HStack {
@@ -906,12 +895,19 @@ struct ContentView: View {
                                                 isAddingNames = true
                                             }
                                         }) {
-                                            Text("Go Back and Edit")
-                                                .padding()
-                                                .frame(maxWidth: .infinity)
-                                                .background(Color(hex: "#F2F2DB"))
-                                                .foregroundStyle(.black)
-                                                .cornerRadius(16)
+                                            
+                                            HStack(alignment: .center) {
+                                                
+                                                Text("Go Back and Edit")
+                                                Image(systemName: "arrowshape.turn.up.backward.fill")
+                                                    .font(.system(size: 18))
+                                                
+                                            }
+                                            .padding()
+                                            .frame(maxWidth: .infinity)
+                                            .background(Color(hex: "#F2F2DB"))
+                                            .foregroundStyle(.black)
+                                            .cornerRadius(16)
                                         }
                                         
                                         Button(action: {
@@ -927,13 +923,18 @@ struct ContentView: View {
                                                 }
                                             }
                                         }) {
-                                            Text("Generate")
-                                                .bold()
-                                                .padding()
-                                                .frame(maxWidth: .infinity)
-                                                .background(Color(hex: "#FF6F61"))
-                                                .foregroundColor(.white)
-                                                .cornerRadius(16)
+                                            HStack(alignment: .center) {
+                                                  
+                                                Text("Generate")
+                                                    .bold()
+                                                Image(systemName: "wand.and.stars")
+                                                    .font(.system(size: 18))
+                                            }
+                                            .padding()
+                                            .frame(maxWidth: .infinity)
+                                            .background(Color(hex: "#FF6F61"))
+                                            .foregroundColor(.white)
+                                            .cornerRadius(16)
                                         }
                                     }
                                     .padding(.horizontal)
@@ -943,9 +944,26 @@ struct ContentView: View {
                             
                             VStack {
                                 //MARK: Title Section
-                                ZStack {
+                                HStack {
+                                    
+                                    //Selection Title
+                                    Text(isSelectingTheme ? "Select Theme" : isSelectingGenre ? "Select Genre" : isAddingNames ? "Select Charaters" : isSelectingMood ? "Select Mood" : "Preview")
+                                        .font(.custom("ComicNeue-Bold", size: 32))
+                                        .frame(height: 75)
+                                        .padding()
+                                    Spacer()
+                                    if isAddingNames {
+                                        Button("Add Character", systemImage: "plus") {
+                                            isAddingChar = true
+                                        }
+                                        .font(.custom("ComicNeue-Bold", size: 24))
+                                        .padding()
+                                        .background(Color(hex: "#D0FFD0"))
+                                        .cornerRadius(22)
+                                        .shadow(radius: 10)
+                                    }
                                     if isSelectingGenre || isAddingNames || isSelectingMood {
-                                        HStack {
+                                       
                                             Button {
                                                 if isAddingNames {
                                                     withAnimation {
@@ -971,7 +989,7 @@ struct ContentView: View {
                                             } label: {
                                                 ZStack {
                                                     Circle()
-                                                        .foregroundStyle(isSelectingGenre ? .cyan.opacity(0.3) :  isSelectingMood ? .yellow.opacity(0.3) : .purple.opacity(0.3))
+                                                        .foregroundStyle(isSelectingGenre ? .cyan.opacity(0.3) :  isSelectingMood ? .yellow.opacity(0.3) : Color(hex: "#D0FFD0"))
                                                         .frame(width: 75, height: 75)
                                                         .shadow(radius: 10)
                                                     
@@ -981,21 +999,18 @@ struct ContentView: View {
                                                 }
                                             }
                                             .padding()
-                                            Spacer()
-                                        }
+                                      
                                     }
-                                    //Selection Title
-                                    Text(isSelectingTheme ? "Select Theme" : isSelectingGenre ? "Select Genre" : isAddingNames ? "Select Charaters" : isSelectingMood ? "Select Mood" : "Preview")
-                                        .font(.system(size: 24))
-                                        .frame(height: 75)
-                                        .padding()
+                                    
                                 }
+                                .padding()
+                                .padding(.bottom, 20)
                                 
                                 Spacer()
                                 //MARK: Buttons
                                 if !preview {
                                     VStack {
-                                        Button("Next", systemImage: "arrowtriangle.right.fill") {
+                                        Button {
                                             if isSelectingTheme {
                                                 withAnimation {
                                                     isSelectingTheme = false
@@ -1011,19 +1026,23 @@ struct ContentView: View {
                                                     isSelectingMood = false
                                                     isAddingNames = true
                                                 }
-                                                
                                             } else if isAddingNames {
                                                 isAddingNames = false
                                                 preview = true
-                                                
                                             }
-                                            
+                                        } label: {
+                                            HStack {
+                                                Text("Next")
+                                                    .font(.custom("ComicNeue-Bold", size: 24))
+                                                Image(systemName: "arrowtriangle.right.fill")
+                                            }
+                                            .padding()
+                                            .frame(width: UIScreen.main.bounds.width * 0.7)
+                                            .background(Color(hex: "#FF6F61"))
+                                            .foregroundColor(.white)  // Use .foregroundColor for text/icons
+                                            .cornerRadius(12)
                                         }
-                                        .padding()
-                                        .frame(width:  UIScreen.main.bounds.width * 0.7)
-                                        .background(Color(hex: "#FF6F61"))
-                                        .foregroundStyle(.white)
-                                        .cornerRadius(12)
+                                        .contentShape(Rectangle())
                                     }
                                 }
                             }
@@ -1236,40 +1255,6 @@ struct ContentView: View {
         print(prompt)
         return prompt
     }
-//    func generatePrompt() -> String {
-//        guard !selectedChars.isEmpty else {
-//                return "Please select at least one character to generate a prompt."
-//            }
-//            
-//            var prompt = ""
-//        print(selectedChars)
-//            if selectedChars.count == 1 {
-//                let character = selectedChars[0]
-//                prompt = "Create a \(genre) story where \(character.name), who is \(character.age) years old and feeling \(character.emotion), goes on an exciting adventure in a \(theme) world. And mood of story is \(mood)."
-//            } else {
-//                let characterDescriptions = selectedChars.map { character in
-//                    "\(character.name), who is \(character.age) years old and feeling \(character.emotion)"
-//                }
-//                
-//                let charactersText = characterDescriptions.joined(separator: ", ")
-//                
-//                // Use "and" for the last character if there are more than one
-//                let lastSeparator = selectedChars.count > 1 ? " and " : ""
-//                
-//                if nextKey {
-//                    prompt = "Write a next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. And mood of story is \(mood). In 100 words"
-//                    
-//                } else if finishKey && !isGeneratingTitle {
-//                    prompt = "finish this story: \(continueStory) details: of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together. in 100 words"
-//                } else if isGeneratingTitle {
-//                    prompt = "Give me a story title for this story \(continueStory) in 3 words only. And mood of story is \(mood). output should be only 3 words nothing extra"
-//                } else {
-//                    prompt = "Write a first begining paragraph/pilot of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together.  And mood of story is \(mood). In 100 words"
-//                }
-//            }
-//            print(prompt)
-//            return prompt
-//    }
     
     func generateImagePrompt() async throws {
         let characterDescriptions = selectedChars.map { character in

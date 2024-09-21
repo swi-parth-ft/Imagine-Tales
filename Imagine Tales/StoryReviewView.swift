@@ -101,7 +101,7 @@ struct StoryReviewView: View {
                         HStack {
                             VStack(alignment: .leading) {
                                 Text("Theme")
-                                    .font(.system(size: 20))
+                                    .font(.custom("ComicNeue-Bold", size: 20))
                                     .foregroundStyle(.secondary)
                                 Text(theme)
                                     .font(.system(size: 24))
@@ -125,7 +125,7 @@ struct StoryReviewView: View {
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text("Mood")
-                                        .font(.system(size: 20))
+                                        .font(.custom("ComicNeue-Bold", size: 20))
                                         .foregroundStyle(.secondary)
                                     Text(mood)
                                         .font(.system(size: 24))
@@ -145,7 +145,7 @@ struct StoryReviewView: View {
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text("Genre")
-                                        .font(.system(size: 20))
+                                        .font(.custom("ComicNeue-Bold", size: 20))
                                         .foregroundStyle(.secondary)
                                     Text(genre)
                                         .font(.system(size: 24))
@@ -165,7 +165,7 @@ struct StoryReviewView: View {
                             
                             VStack(alignment: .center) {
                                 Text("Characters")
-                                    .font(.system(size: 20))
+                                    .font(.custom("ComicNeue-Bold", size: 20))
                                     .foregroundStyle(.secondary)
                                 
                                 
