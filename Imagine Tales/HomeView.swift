@@ -403,7 +403,7 @@ struct StoryListView: View {
                     }
                 }
             }
-            .padding(.bottom, 50)
+//            .padding(.bottom, 50)
         }
     }
 }

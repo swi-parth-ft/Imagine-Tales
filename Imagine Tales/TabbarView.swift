@@ -82,30 +82,31 @@ struct TabbarView: View {
                     colors: bookBackgroundColors
                 ).ignoresSafeArea()
                     
-                TabView(selection: $selectedTab) {
-                    HomeView(reload: $reload)
-                        .tag(0)
-                        .padding()
-                    
-                    ExploreView()
-                        .tag(1)
-                        .padding()
-                        .ignoresSafeArea()
-                    
-                    ContentView()
-                        .tag(2)
-                        .padding()
-                    
-                    SavedStoryView(reload: $reload)
-                        .tag(3)
-                        .padding()
-                    
-                    ProfileView(showSignInView: $showSignInView, reload: $reload, showingProfile: $showingProfile)
-                        .tag(4)
-                        .padding()
+                ZStack {
+                    // Switch between views based on selectedTab
+                    switch selectedTab {
+                    case 0:
+                        HomeView(reload: $reload)
+                            .padding()
+                    case 1:
+                        ExploreView()
+                            .padding()
+                            .ignoresSafeArea(edges: .top)
+                    case 2:
+                        ContentView()
+                            .padding()
+                    case 3:
+                        SavedStoryView(reload: $reload)
+                            .padding()
+                    case 4:
+                        ProfileView(showSignInView: $showSignInView, reload: $reload, showingProfile: $showingProfile)
+                            .padding()
+                    default:
+                        HomeView(reload: $reload)
+                            .padding()
+                    }
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                .ignoresSafeArea()
+                //.ignoresSafeArea()
                 .safeAreaInset(edge: .bottom) {
                     ZStack{
                         HStack{

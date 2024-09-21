@@ -940,7 +940,7 @@ struct ContentView: View {
                     storyViewModel.fetchChild(ChildId: childId)
                 }
                 .padding()
-                .padding(.bottom, 70)
+                
                 
             }
             .navigationTitle(isGeneratingTitle ? "\(title)" : "Imagine a Story")
