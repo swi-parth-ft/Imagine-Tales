@@ -198,6 +198,7 @@ struct ContentView: View {
     @State private var story = ""
     @State private var isLoading = false
     @State private var words:[String] =  []
+    @State private var petWords:[String] =  []
     @State private var loaded = false
     @State private var isRandom = false
     @State private var scale: CGFloat = 1.0
@@ -279,6 +280,7 @@ struct ContentView: View {
     @State private var isSelectingGenre = false
     @State private var isAddingNames = false
     @State private var formattedChars = ""
+    @State private var formattedPets = ""
     @State private var isAddingChar = false
     
     @State private var selectedChars: [Charater] = []
@@ -632,7 +634,8 @@ struct ContentView: View {
                                     let width = (geometry.size.width - 40) / 5 // Subtract padding and divide by the number of items
                                     
                                     ScrollView {
-                                        
+                                        Text("Persons")
+                                            .font(.custom("ComicNeue-Bold", size: 30))
                                         LazyVGrid(
                                             columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
                                             spacing: -10  // Adjust the spacing to bring the rows closer together
@@ -734,7 +737,8 @@ struct ContentView: View {
                                             
                                         }
                                         .padding()
-                                        
+                                        Text("Pets")
+                                            .font(.custom("ComicNeue-Bold", size: 30))
                                         LazyVGrid(
                                             columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
                                             spacing: -10  // Adjust the spacing to bring the rows closer together
@@ -790,6 +794,18 @@ struct ContentView: View {
                                                             pets.append(pets == "" ? viewModel.pets[index].name : ", \(viewModel.pets[index].name)")
                                                             
                                                         }
+                                                        
+                                                        petWords = extractWords(from: pets)
+                                                        if petWords.count > 1 {
+                                                            let lastName = petWords.removeLast()
+                                                            withAnimation {
+                                                                formattedPets = petWords.joined(separator: ", ") + " and " + lastName
+                                                            }
+                                                        } else {
+                                                            withAnimation {
+                                                                formattedPets = petWords.first ?? ""
+                                                            }
+                                                        }
                                                    
                                                     } else {
                                                         
@@ -798,6 +814,18 @@ struct ContentView: View {
                                                         withAnimation {
                                                             let temp = pets.replacingOccurrences(of: viewModel.pets[index].name, with: "")
                                                             pets = temp
+                                                        }
+                                                        
+                                                        petWords = extractWords(from: pets)
+                                                        if petWords.count > 1 {
+                                                            let lastName = petWords.removeLast()
+                                                            withAnimation {
+                                                                formattedPets = petWords.joined(separator: ", ") + " and " + lastName
+                                                            }
+                                                        } else {
+                                                            withAnimation {
+                                                                formattedPets = petWords.first ?? ""
+                                                            }
                                                         }
                                                 
                                                     }
@@ -884,7 +912,7 @@ struct ContentView: View {
                             //MARK: Preview
                             else if preview {
                                 VStack {
-                                    StoryReviewView(theme: theme, genre: genre, characters: formattedChars, chars: selectedChars, pets: selectedPets, mood: mood, moodEmoji: selectedEmoji)
+                                    StoryReviewView(theme: theme, genre: genre, characters: formattedChars, petString: formattedPets, chars: selectedChars, pets: selectedPets, mood: mood, moodEmoji: selectedEmoji)
                                         .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
                                     
                                     // Buttons
@@ -947,7 +975,7 @@ struct ContentView: View {
                                 HStack {
                                     
                                     //Selection Title
-                                    Text(isSelectingTheme ? "Select Theme" : isSelectingGenre ? "Select Genre" : isAddingNames ? "Select Charaters" : isSelectingMood ? "Select Mood" : "Preview")
+                                    Text(isSelectingTheme ? "Select Theme" : isSelectingGenre ? "Select Genre" : isAddingNames ? "Select Characters" : isSelectingMood ? "Select Mood" : "")
                                         .font(.custom("ComicNeue-Bold", size: 32))
                                         .frame(height: 75)
                                         .padding()

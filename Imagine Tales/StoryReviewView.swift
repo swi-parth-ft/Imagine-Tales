@@ -13,6 +13,7 @@ struct StoryReviewView: View {
     var theme: String
     var genre: String
     var characters: String
+    var petString: String
     var chars: [Charater]
     var pets: [Pet]
     var mood: String
@@ -20,6 +21,8 @@ struct StoryReviewView: View {
     var body: some View {
         VStack(spacing: 20) {
             // Prompt section
+            Text("Preview")
+                .font(.custom("ComicNeue-Bold", size: 32))
             ZStack {
                 RoundedRectangle(cornerRadius: 22)
                     .stroke(Color(hex: "#F2F2DB"), lineWidth: 2)
@@ -39,31 +42,49 @@ struct StoryReviewView: View {
                         
                         Divider()
                             .background(Color(hex: "#F2F2DB"))
-                        HStack {
-                        Text("I want to generate a story book of ")
-                            .font(.system(size: 24))
-                            .foregroundColor(.primary) +
-                        Text(theme)
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(Color(hex: "#FF6F61")) +
-                        Text(" theme with genre of ")
-                            .font(.system(size: 24))
-                            .foregroundColor(.primary) +
-                        Text(genre)
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(.cyan) +
-                        Text(" with ")
-                            .font(.system(size: 24))
-                            .foregroundColor(.primary) +
-                        Text(characters.isEmpty ? "no" : characters)
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(.purple) +
-                        Text(characters.isEmpty ? " characters" : " as characters")
-                            .font(.system(size: 24))
-                            .foregroundColor(.primary)
-                    }
-                    .padding(.leading, 30)
-
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text("Awesome! You've chosen to create a ")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.primary) +
+                                Text(theme)
+                                    .font(.system(size: 24, weight: .bold))
+                                    .foregroundColor(Color(hex: "#FF6F61")) +
+                                Text(" story with genre of ")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.primary) +
+                                Text(genre)
+                                    .font(.system(size: 24, weight: .bold))
+                                    .foregroundColor(.cyan) +
+                                Text(" with ")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.primary) +
+                                Text(characters.isEmpty ? "no" : characters)
+                                    .font(.system(size: 24, weight: .bold))
+                                    .foregroundColor(.purple) +
+                                Text(characters.isEmpty ? " characters " : " as characters ")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.primary)
+                                
+                            }
+                            .padding(.leading, 30)
+                            HStack {
+                                Text(petString.isEmpty ? "" : " with ")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.primary) +
+                                Text(petString.isEmpty ? "" : petString)
+                                    .font(.system(size: 24, weight: .bold))
+                                    .foregroundColor(.purple) +
+                                Text(". The mood of your story will be ")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.primary) +
+                                Text("\(mood)!")
+                                    .font(.system(size: 24, weight: .bold))
+                                    .foregroundColor(.yellow)
+                                
+                            }
+                            .padding(.leading, 25)
+                        }
                     }
                     .padding()
                 }
