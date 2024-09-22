@@ -199,22 +199,31 @@ struct ExploreView: View {
                 List {
                     ForEach(viewModel.storiesByGenre.keys.sorted(), id: \.self) { genre in
                         LazyVStack(alignment: .leading) {
-                            NavigationLink(destination: StoryByGenreView(genre: genre)) {
+                            HStack {
                                 Text(genre)
-                                    .font(.title2)
-                                    .bold()
+                                    .font(.custom("ComicNeue-Bold", size: 28))
                                     .padding(.leading)
+                                Spacer()
+                                NavigationLink(destination: StoryByGenreView(genre: genre)) {
+                                    Text("View All")
+                                        .underline()
+                                        .font(.custom("ComicNeue-Bold", size: 28))
+                                    
+                                }
+                                .frame(width: 150)
                             }
-                            .frame(width: 150)
+                            .frame(width: UIScreen.main.bounds.width)
+                            
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 20) {
                                     ForEach(viewModel.storiesByGenre[genre] ?? []) { story in
                                         NavigationLink(destination: StoryFromProfileView(story: story)) {
                                             ZStack(alignment: .top) {
-                                                RoundedRectangle(cornerRadius: 12)
-                                                    .stroke(Color(hex: "#F4F4DA"))
-                                                    .frame(width: 300, height: 250)
-                                                VStack(alignment: .center, spacing: -9) {
+                                                RoundedRectangle(cornerRadius: 22)
+                                                  //  .stroke(Color(hex: "#F4F4DA"))
+                                                    .fill(LinearGradient(colors: [Color(hex: "#F4F4DA"), Color(hex: "#F4F4DA").opacity(0.3), .clear, .clear], startPoint: .bottomLeading, endPoint: .topTrailing))
+                                                    .frame(width: 300, height: 260)
+                                                VStack(alignment: .center, spacing: 7) {
                                                     
                                                     AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
                                                         switch phase {
@@ -250,34 +259,36 @@ struct ExploreView: View {
                                                     .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 5)
                                                     
                                                     ZStack {
+                                                       
                                                         HStack {
-                                                            Spacer()
-                                                            Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")")
-                                                                .resizable()
-                                                                .scaledToFit()
-                                                                .frame(width: 80, height: 80)
-                                                                .padding(.bottom, 20)
-                                                        }
-                                                        HStack {
-                                                            VStack(alignment: .leading, spacing: -16) {
+                                                            VStack(alignment: .leading, spacing: -18) {
                                                                 Text(story.title)
-                                                                    .font(.system(size: 20))
+                                                                    .font(.system(size: 18))
                                                                 
                                                                 VStack(alignment: .leading) {
-                                                                    Text(story.childUsername)
-                                                                    Text("\(story.likes) Likes")
+                                                                    Text("By \(story.childUsername)")
+                                                                    HStack {
+                                                                        Text(story.theme ?? "")
+                                                                            .padding(7)
+                                                                            .background(.green)
+                                                                            .foregroundStyle(.white)
+                                                                            .cornerRadius(22)
+                                                                        Text("\(story.likes) Likes")
+                                                                    }
                                                                 }
+                                                                .padding(.bottom, 30)
                                                                 
                                                                 
                                                             }
                                                             .foregroundStyle(.black)
-                                                            //   .padding([.top, .leading], 8)
-                                                            .padding(.bottom, 20)
+                                                            
                                                             Spacer()
                                                         }
+                                                        .padding(.horizontal)
+                                                        .frame(width: 300)
                                                   
                                                     }
-                                                    .padding(10)
+                                                    .padding(7)
                                                     .frame(width: 310)
                                                     Spacer()
                                                 }
