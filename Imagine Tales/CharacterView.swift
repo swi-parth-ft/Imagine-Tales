@@ -114,6 +114,10 @@ struct CharacterView: View {
                             .pickerStyle(.segmented)
                             .frame(width: UIScreen.main.bounds.width * 0.5)
                             
+                            Text("\(viewModel.gender == "Male" ? "He" : "She") is a \(viewModel.emotion) Person")
+                                .font(.custom("ComicNeue-Bold", size: 20))
+                                .padding(.top)
+                            
                             
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 16) {
@@ -151,7 +155,11 @@ struct CharacterView: View {
                                 }
                                 .padding()
                             }
-                            .frame(width: UIScreen.main.bounds.width * 0.5)
+                            .frame(width: UIScreen.main.bounds.width * 0.6)
+                            .padding(.leading, 30)
+                            
+                            Text("Age")
+                                .font(.custom("ComicNeue-Bold", size: 20))
                             
                             HStack {
                                 ZStack {
@@ -234,6 +242,10 @@ struct CharacterView: View {
                                 .cornerRadius(22)
                                 .tint(Color(hex: "#FF6F61"))
                             
+                            Text("It's a \(viewModel.petKind)")
+                                .font(.custom("ComicNeue-Bold", size: 20))
+                                .padding(.top)
+                            
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 16) {
                                     ForEach(pets, id: \.self) { pet in
@@ -266,7 +278,8 @@ struct CharacterView: View {
                                 }
                                 .padding()
                             }
-                            .frame(width:  UIScreen.main.bounds.width * 0.5)
+                            .frame(width: UIScreen.main.bounds.width * 0.6)
+                            .padding(.leading, 30)
                             
                             
                             
