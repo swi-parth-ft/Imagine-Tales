@@ -637,8 +637,8 @@ struct ContentView: View {
                                         Text("Persons")
                                             .font(.custom("ComicNeue-Bold", size: 30))
                                         LazyVGrid(
-                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
-                                            spacing: -10  // Adjust the spacing to bring the rows closer together
+                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 17), count: 4),
+                                            spacing: 10  // Adjust the spacing to bring the rows closer together
                                         ) {
                                             
                                             ForEach(0..<viewModel.characters.count, id: \.self) { index in
@@ -740,7 +740,7 @@ struct ContentView: View {
                                         Text("Pets")
                                             .font(.custom("ComicNeue-Bold", size: 30))
                                         LazyVGrid(
-                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 7), count: 4),
+                                            columns: Array(repeating: GridItem(.fixed(width), spacing: 17), count: 4),
                                             spacing: -10  // Adjust the spacing to bring the rows closer together
                                         ) {
                                             

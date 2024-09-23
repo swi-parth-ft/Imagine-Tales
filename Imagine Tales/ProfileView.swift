@@ -685,8 +685,9 @@ struct StoryFromProfileView: View {
                                                             .frame(width: 100, height: 100)
                                                             .cornerRadius(50)
                                                             .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                                            .id(imgUrl)
+                                                            
                                                     }
+                                                        
                                                         .padding()
                                                         .onTapGesture {
                                                             showFriendProfile = true
@@ -713,6 +714,7 @@ struct StoryFromProfileView: View {
                                             EmptyView()
                                         }
                                     }
+                                    .id(imgUrl)
                                     .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
                                     .cornerRadius(10)
                                     .shadow(radius: 10)
