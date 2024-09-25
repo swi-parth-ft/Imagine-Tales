@@ -66,6 +66,7 @@ final class HomeViewModel: ObservableObject {
         
         // Set data with fromId, toId, and storyId
         newSharedStory.setData([
+            "id" : newSharedStory.documentID,
             "fromid": fromId,
             "toid": toId,
             "storyid": storyId

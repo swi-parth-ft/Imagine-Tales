@@ -107,9 +107,9 @@ final class SignInWithEmailViewModel: ObservableObject {
         let _ = try await UserManager.shared.createNewUser(user: user)
     }
     
-    func addChild(age: String) async throws {
+    func addChild(age: String, dpUrl: String) async throws {
         let _ = try await UserManager.shared.addChild(userId: userId, name: name, age: age)
-        let _ = try await UserManager.shared.addChild2(userId: userId, name: name, age: age, username: username, imageUrl: "")
+        let _ = try await UserManager.shared.addChild2(userId: userId, name: name, age: age, username: username, imageUrl: dpUrl)
     }
     
     func setPin(pin: String) throws {
@@ -173,7 +173,9 @@ struct SignInWithEmailView: View {
     @FocusState private var focusedIndex: Int?
     @State private var isShowingButtons = true
     @EnvironmentObject var screenTimeViewModel: ScreenTimeManager
-    
+    @State private var isSelectingImage = false
+    @State private var selectedImageName = ""
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -661,12 +663,46 @@ struct SignInWithEmailView: View {
                                 //MARK: adding child View
                                 else {
                                     VStack(alignment: .leading) {
-                                        TextField("Name", text: $viewModel.name)
-                                            .customTextFieldStyle(isCompact: isCompact)
-                                        
-                                        TextField("username", text: $viewModel.username)
-                                            .customTextFieldStyle(isCompact: isCompact)
-                                        
+                                        HStack {
+                                            VStack {
+                                                TextField("Name", text: $viewModel.name)
+                                                    .padding()
+                                                    .background(Color.white)
+                                                    .frame(width: UIScreen.main.bounds.width * 0.55)
+                                                    .cornerRadius(12)
+                                                
+                                                TextField("username", text: $viewModel.username)
+                                                    .padding()
+                                                    .background(Color.white)
+                                                    .frame(width: UIScreen.main.bounds.width * 0.55)
+                                                    .cornerRadius(12)
+                                            }
+                                            ZStack {
+                                                Circle()
+                                                    .fill(Color.white)
+                                                    .frame(width: 150, height: 130)
+                                                
+                                                if selectedImageName == "" {
+                                                    Image(systemName: "plus.circle.fill")
+                                                        .font(.system(size: 100))
+                                                        .foregroundStyle(.gray.opacity(0.4))
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                } else {
+                                                    Image(selectedImageName)
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: 100, height: 100)
+                                                        .clipShape(Circle())
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                }
+                                                
+                                            }
+                                            .onTapGesture {
+                                                isSelectingImage = true
+                                            }
+                                            
+                                        }
+                                        .frame(width: UIScreen.main.bounds.width * 0.7)
                                         Text("Select age range for better content.")
                                             .font(.custom("ComicNeue-Regular", size: 24))
                                         
@@ -684,7 +720,7 @@ struct SignInWithEmailView: View {
                                             Button("Add Child") {
                                                 Task {
                                                     do {
-                                                        try await viewModel.addChild(age: selectedAgeRange?.rawValue ?? "n/a")
+                                                        try await viewModel.addChild(age: selectedAgeRange?.rawValue ?? "n/a", dpUrl: "\(selectedImageName).jpg")
                                                         settingPassword = false
                                                         isSignedUp = true
                                                         isAddingChild = false
@@ -718,6 +754,12 @@ struct SignInWithEmailView: View {
                                                   
                                     }
                                     .frame(width:  UIScreen.main.bounds.width * 0.7)
+                                    .sheet(isPresented: $isSelectingImage, onDismiss: {
+                                       
+                                        
+                                    }) {
+                                        DpSelection(selectedImageName: $selectedImageName, isCompact: isCompact)
+                                    }
                                 }
                                 
                                 //MARK: toggle newUser

@@ -13,7 +13,7 @@ import FirebaseCore
 import FirebaseStorage
 
 struct SharedStory: Codable, Hashable {
-    var id = UUID()
+    let id: String
     let story: Story
     let fromId: String
 }
@@ -206,23 +206,23 @@ final class ProfileViewModel: ObservableObject {
                     for document in snapshot.documents {
                         let storyId = document["storyid"] as? String ?? ""
                         let fromId = document["fromid"] as? String ?? ""
-                        
-                        // Fetch the story using the storyId
-                        self.fetchWholeStory(storyId: storyId, fromId: fromId)
+                        let id = document["id"] as? String ?? ""
+                         // Fetch the story using the storyId
+                        self.fetchWholeStory(storyId: storyId, fromId: fromId, id: id)
                     }
                 }
             }
         }
     }
     
-    func fetchWholeStory(storyId: String, fromId: String) {
+    func fetchWholeStory(storyId: String, fromId: String, id: String) {
         let db = Firestore.firestore()
         let docRef = db.collection("Story").document(storyId)
         
         docRef.getDocument(as: Story.self) { result in
             switch result {
             case .success(let story):
-                let sharedStory = SharedStory(story: story, fromId: fromId)
+                let sharedStory = SharedStory(id: id, story: story, fromId: fromId)
                 self.sharedStories.append(sharedStory)
                 print(self.sharedStories)
             case .failure(let error):
@@ -231,28 +231,17 @@ final class ProfileViewModel: ObservableObject {
         }
     }
     
-    func deleteSharedStory(fromId: String, storyId: String) {
+    func deleteSharedStory(childId: String, id: String) {
         let db = Firestore.firestore()
         // Perform the query
-        db.collection("sharedStories")
-            .whereField("fromid", isEqualTo: fromId)
-            .whereField("storyid", isEqualTo: storyId)
-            .getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    print("Error getting documents: \(error)")
-                } else {
-                    for document in querySnapshot!.documents {
-                        // Deleting each matching document
-                        document.reference.delete { err in
-                            if let err = err {
-                                print("Error removing document: \(err)")
-                            } else {
-                                print("Document successfully removed!")
-                            }
-                        }
-                    }
-                }
+        db.collection("Children2").document(childId).collection("sharedStories").document(id).delete() { err in
+            if let err = err {
+                print("Error removing document: \(err)")
             }
+            else {
+                print("Document successfully removed!")
+            }
+        }
     }
 }
 
@@ -286,41 +275,7 @@ struct ProfileView: View {
     @State private var openingStory: Story?
     @State private var isShowingSharedStories = false
     
-    func deleteSharedStory(at offsets: IndexSet) {
-        for index in offsets {
-            let storyToDelete = viewModel.sharedStories[index]
-            
-            let storyId = storyToDelete.story.id
-            let fromId = storyToDelete.fromId
-            
-            let db = Firestore.firestore()
-            
-            // Query the collection based on both storyId and fromId
-            db.collection("sharedStories")
-                .whereField("storyid", isEqualTo: storyId)
-                .whereField("fromid", isEqualTo: fromId)
-                .getDocuments { (querySnapshot, error) in
-                    if let error = error {
-                        print("Error getting documents: \(error)")
-                    } else {
-                        for document in querySnapshot!.documents {
-                            // Delete the matching document
-                            document.reference.delete { err in
-                                if let err = err {
-                                    print("Error removing document: \(err)")
-                                } else {
-                                    // Remove from local array after Firestore deletion
-                                    DispatchQueue.main.async {
-                                        viewModel.sharedStories.remove(at: index)
-                                    }
-                                    print("Document successfully removed!")
-                                }
-                            }
-                        }
-                    }
-                }
-        }
-    }
+    
     
     var body: some View {
         NavigationStack {
@@ -482,9 +437,9 @@ struct ProfileView: View {
                             Section("Shared with you") {
                                 if viewModel.sharedStories.isEmpty {
                                     ContentUnavailableView {
-                                        Label("No Stories Yet", systemImage: "book.fill")
+                                        Label("No Stories Yet", systemImage: "paperplane.fill")
                                     } description: {
-                                        Text("It looks like there's no stories posted yet.")
+                                        Text("Stories shared with you will appear here.")
                                     } actions: {
                                     }
                                     .listRowBackground(Color.clear)
@@ -515,9 +470,7 @@ struct ProfileView: View {
                                 }
                                 .onDelete { indexSet in
                                     if let index = indexSet.first {
-                                        let storyID = viewModel.sharedStories[index].story.id
-                                        let fromId = viewModel.sharedStories[index].fromId
-                                        viewModel.deleteSharedStory(fromId: fromId, storyId: storyID)
+                                        viewModel.deleteSharedStory(childId: childId, id: viewModel.sharedStories[index].id)
                                     
                                         viewModel.fetchSharedStories(childId: childId)
                                      
