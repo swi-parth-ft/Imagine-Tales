@@ -68,6 +68,7 @@
 		0792C1D62C76A20D000C42A7 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */; };
 		0792C1D82C7AA2FB000C42A7 /* CharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D72C7AA2FB000C42A7 /* CharacterView.swift */; };
 		0792C1DA2C7BD95E000C42A7 /* ParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792C1D92C7BD95E000C42A7 /* ParentView.swift */; };
+		0793FC002CA23A63008A7CBB /* Neumorphic in Frameworks */ = {isa = PBXBuildFile; productRef = 0793FBFF2CA23A63008A7CBB /* Neumorphic */; };
 		079E92502C89250A00433869 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079E924F2C89250A00433869 /* CustomAlert.swift */; };
 		079E92522C89E64400433869 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079E92512C89E64400433869 /* ExploreView.swift */; };
 		07AF26DD2C703B2C00E41509 /* ComicNeue-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07AF26DC2C703B2C00E41509 /* ComicNeue-Bold.ttf */; };
@@ -151,6 +152,7 @@
 				0711F36D2C6D6E2B006C86AA /* GoogleSignInSwift in Frameworks */,
 				0711F3892C6DB68B006C86AA /* GoogleSignIn in Frameworks */,
 				0711F38B2C6DB68B006C86AA /* GoogleSignInSwift in Frameworks */,
+				0793FC002CA23A63008A7CBB /* Neumorphic in Frameworks */,
 				0711F38D2C6DB698006C86AA /* FloatingTabBar in Frameworks */,
 				0711F3642C6D6C6F006C86AA /* FirebaseAnalytics in Frameworks */,
 				0711F36B2C6D6E2B006C86AA /* GoogleSignIn in Frameworks */,
@@ -346,6 +348,7 @@
 				0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				0711F3692C6D6E2B006C86AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				0711F37D2C6D96EC006C86AA /* XCRemoteSwiftPackageReference "dotlottie-ios" */,
+				0793FBFE2CA23A63008A7CBB /* XCRemoteSwiftPackageReference "neumorphic" */,
 			);
 			productRefGroup = 07FB38462C62BEAB0070EEFA /* Products */;
 			projectDirPath = "";
@@ -674,6 +677,14 @@
 				kind = branch;
 			};
 		};
+		0793FBFE2CA23A63008A7CBB /* XCRemoteSwiftPackageReference "neumorphic" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/costachung/neumorphic/";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -750,6 +761,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		0793FBFF2CA23A63008A7CBB /* Neumorphic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0793FBFE2CA23A63008A7CBB /* XCRemoteSwiftPackageReference "neumorphic" */;
+			productName = Neumorphic;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

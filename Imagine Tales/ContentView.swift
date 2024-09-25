@@ -10,6 +10,7 @@ import DotLottie
 import FirebaseVertexAI
 import FirebaseFirestore
 import FirebaseStorage
+import Neumorphic
 
 final class StoryViewModel: ObservableObject {
     @Published var storyText: [StoryTextItem] = []
@@ -73,7 +74,7 @@ final class StoryViewModel: ObservableObject {
         }
     }
     
-    func uploadStoryToFirestore(stroTextItem: [StoryTextItem], childId: String, title: String, genre: String, theme: String, mood: String) async throws {
+    func uploadStoryToFirestore(stroTextItem: [StoryTextItem], childId: String, title: String, genre: String, theme: String, mood: String, summary: String) async throws {
         
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
         
@@ -99,6 +100,7 @@ final class StoryViewModel: ObservableObject {
             "likes" : 0,
             "theme" : theme,
             "mood" : mood,
+            "summary" : summary,
             "dateCreated" : Timestamp()
         ]
         
@@ -306,6 +308,8 @@ struct ContentView: View {
     @State private var displayedText: String = ""
         @State private var charIndex: Int = 0
         let typingSpeed = 0.03
+    @State private var summary: String = ""
+    @State private var isGeneratingSummary = false
     
     func startTyping(chunk: String) {
             displayedText = ""
@@ -472,9 +476,11 @@ struct ContentView: View {
                                                     
                                                 } else {
                                                     Button("Share") {
+                                                      
                                                         Task {
                                                             do {
-                                                                try await storyViewModel.uploadStoryToFirestore(stroTextItem: storyTextItem, childId: childId, title: title, genre: genre, theme: theme, mood: mood)
+                                                                
+                                                                try await storyViewModel.uploadStoryToFirestore(stroTextItem: storyTextItem, childId: childId, title: title, genre: genre, theme: theme, mood: mood, summary: summary)
                                                             } catch {
                                                                 print(error.localizedDescription)
                                                             }
@@ -486,6 +492,7 @@ struct ContentView: View {
                                                         Task {
                                                             do {
                                                                 try await generateStoryWithGemini()
+                                                                try await generateSummary()
                                                                 
                                                             } catch {
                                                                 print(error.localizedDescription)
@@ -1017,9 +1024,9 @@ struct ContentView: View {
                                             } label: {
                                                 ZStack {
                                                     Circle()
-                                                        .foregroundStyle(isSelectingGenre ? .cyan.opacity(0.3) :  isSelectingMood ? .yellow.opacity(0.3) : Color(hex: "#D0FFD0"))
+                                                        .fill(Color.Neumorphic.main).softOuterShadow()
                                                         .frame(width: 75, height: 75)
-                                                        .shadow(radius: 10)
+                                                     
                                                     
                                                     Image("arrow1")
                                                         .frame(width: 55, height: 55)
@@ -1199,6 +1206,18 @@ struct ContentView: View {
                 print("Error generating image: \(error.localizedDescription)")
             }
         }
+    }
+    
+    func generateSummary() async throws {
+        let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
+        let prompt = "write me a short and kids friendly summary in 50 words for this story \(continueStory)"
+        let response = try await model.generateContent(prompt)
+        if let text = response.text {
+            DispatchQueue.main.async {
+                self.summary = text
+            }
+        }
+
     }
     
     func generateStoryWithGemini() async throws {

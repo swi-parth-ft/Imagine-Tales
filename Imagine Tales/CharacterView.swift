@@ -98,21 +98,43 @@ struct CharacterView: View {
                 if !isSelectionPet {
                     VStack {
                         VStack {
-                            TextField("Name", text: $viewModel.name)
-                                .padding()
-                                .frame(width: UIScreen.main.bounds.width * 0.5)
-                                .background(.white.opacity(0.8))
-                                .shadow(radius: 2)
-                                .cornerRadius(22)
-                                .tint(Color(hex: "#FF6F61"))
+                            HStack(alignment: .center) {
+                                TextField("Name", text: $viewModel.name)
+                                    .padding()
+                                    .frame(width: UIScreen.main.bounds.width * 0.3)
+                                    .background(.white.opacity(0.8))
+                                    .shadow(radius: 2)
+                                    .cornerRadius(22)
+                                    .tint(Color(hex: "#FF6F61"))
+                                Spacer()
+                            HStack {
+                                    Image("Male")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 50)
+                                        .scaleEffect(viewModel.gender == "Male" ? 1.3 : 1)
+                                        .onTapGesture {
+                                            withAnimation {
+                                                viewModel.gender = "Male"
+                                            }
+                                        }
                             
-                            
-                            Picker("Gender", selection: $viewModel.gender) {
-                                Text("Male").tag("Male")
-                                Text("Female").tag("Female")
+                                   
+                                    Image("Female")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 50)
+                                        .scaleEffect(viewModel.gender == "Female" ? 1.3 : 1)
+                                        .onTapGesture {
+                                            withAnimation {
+                                                viewModel.gender = "Female"
+                                            }
+                                        }
+                                
+                                }
                             }
-                            .pickerStyle(.segmented)
-                            .frame(width: UIScreen.main.bounds.width * 0.5)
+                            .frame(height: 70)
+                            .frame(width: UIScreen.main.bounds.width * 0.3)
                             
                             Text("\(viewModel.gender == "Male" ? "He" : "She") is a \(viewModel.emotion) Person")
                                 .font(.custom("ComicNeue-Bold", size: 20))
@@ -165,11 +187,11 @@ struct CharacterView: View {
                                 ZStack {
                                     Circle()
                                         .fill(Color.white.opacity(0.4))
-                                        .frame(width: 100, height: 100)
+                                        .frame(width: 70, height: 70)
                                         .shadow(radius: 3)
                                     
                                     Image(systemName: "minus")
-                                        .font(.system(size: 40))
+                                        .font(.system(size: 30))
                                 }
                                 .onTapGesture {
                                     if viewModel.age > 3 {
@@ -180,16 +202,16 @@ struct CharacterView: View {
                                 }
                                 Spacer()
                                 Text("\(viewModel.age)")
-                                    .font(.system(size: 70))
+                                    .font(.custom("ComicNeue-Bold", size: 70))
                                 Spacer()
                                 ZStack {
                                     Circle()
                                         .fill(Color.white.opacity(0.4))
-                                        .frame(width: 100, height: 100)
+                                        .frame(width: 70, height: 70)
                                         .shadow(radius: 3)
                                     
                                     Image(systemName: "plus")
-                                        .font(.system(size: 40))
+                                        .font(.system(size: 30))
                                 }
                                 .onTapGesture {
                                     if viewModel.age < 88 {
@@ -199,7 +221,7 @@ struct CharacterView: View {
                                     }
                                 }
                             }
-                            .frame(width: UIScreen.main.bounds.width * 0.5)
+                            .frame(width: UIScreen.main.bounds.width * 0.3)
                         
                             
                             
