@@ -34,7 +34,49 @@ final class HomeViewModel: ObservableObject {
     @Published var stories: [Story] = []
     @Published var genre: String = "Following"
     @Published var status = ""
+    @Published var friendUsernames = [String]()
+    @Published var friends = [UserChildren]()
     var tempStories: [Story] = []
+    @Published var child: UserChildren?
+    
+    let db = Firestore.firestore()
+    
+    func fetchChild(ChildId: String) {
+        let docRef = Firestore.firestore().collection("Children2").document(ChildId)
+        
+        
+        docRef.getDocument(as: UserChildren.self) { result in
+            switch result {
+            case .success(let document):
+                self.child = document
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
+    
+    // Function to add a shared story
+    func addSharedStory(childId: String, fromId: String, toId: String, storyId: String) {
+        // Access the specific child document in the 'Children2' collection
+        let sharedStoriesRef = db.collection("Children2").document(childId).collection("sharedStories")
+        
+        // Create a new document in 'sharedStories'
+        let newSharedStory = sharedStoriesRef.document()
+        
+        // Set data with fromId, toId, and storyId
+        newSharedStory.setData([
+            "fromid": fromId,
+            "toid": toId,
+            "storyid": storyId
+        ]) { error in
+            if let error = error {
+                print("Error adding shared story: \(error)")
+            } else {
+                print("Shared story successfully added!")
+            }
+        }
+    }
     
     @MainActor
     func getStories(childId: String) async throws {
@@ -252,7 +294,42 @@ final class HomeViewModel: ObservableObject {
           }
       }
     
-
+    func fetchFriends(childId: String) {
+        self.friends.removeAll()
+        let db = Firestore.firestore()
+        db.collection("Children2").document(childId).collection("friends").addSnapshotListener { snapshot, error in
+            if let error = error {
+                print("Error fetching friends: \(error.localizedDescription)")
+            } else {
+                if let snapshot = snapshot {
+                    self.friendUsernames = snapshot.documents.compactMap { $0["friendUserId"] as? String }
+                    
+                    self.fetchChildren()
+                }
+            }
+        }
+    }
+    
+    func fetchChildren() {
+            let db = Firestore.firestore()
+            
+            // Clear the existing array
+        self.friends.removeAll()
+            
+            for childId in friendUsernames {
+                let docRef = db.collection("Children2").document(childId)
+                
+                docRef.getDocument(as: UserChildren.self) { result in
+                    switch result {
+                    case .success(let document):
+                        self.friends.append(document)
+                        print(self.friends)
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+        }
 
     func getProfileImage(documentID: String, completion: @escaping (String?) -> Void) {
         let db = Firestore.firestore()
@@ -361,6 +438,8 @@ struct HomeView: View {
                     StoryListView(stories: viewModel.stories, reload: $reload, childId: childId)
                     
                         .onAppear {
+                            
+                            
                             Task {
                                 do {
                                     try await viewModel.getStories(childId: childId)
@@ -383,6 +462,10 @@ struct HomeView: View {
                         }
                     }
                 }
+            }
+            .onAppear {
+                viewModel.fetchChild(ChildId: childId)
+                viewModel.fetchFriends(childId: childId)
             }
         
             
@@ -424,6 +507,7 @@ struct StoryRowView: View {
     @State private var retryCount = 0
     @State private var maxRetryAttempts = 3 // Set max retry attempts
     @State private var retryDelay = 2.0
+    @State private var showShareList = false
     var body: some View {
         NavigationStack {
             ZStack {
@@ -563,7 +647,7 @@ struct StoryRowView: View {
                             Text(story.summary ?? "The Minions hatch a clever plan to steal the world’s biggest banana, but things go hilariously wrong when they encounter a banana-loving monkey!")
                                 .font(.body)
                                 .padding(.leading)
-                                .frame(width: UIScreen.main.bounds.width * 0.8)
+                                .frame(width: UIScreen.main.bounds.width * 0.7)
                             
                             // Text(viewModel.status)
                             
@@ -603,6 +687,35 @@ struct StoryRowView: View {
                             Image(systemName: "paperplane")
                               
                                 .font(.system(size: 24))
+                                .onTapGesture {
+                                    withAnimation {
+                                        showShareList.toggle()
+                                    }
+                                }
+                                .popover(isPresented: $showShareList) {
+                                    List {
+                                        
+                                        ForEach(viewModel.friends) { friend in
+                                            HStack {
+                                                Image(friend.profileImage.removeJPGExtension())
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 40, height: 40)
+                                                    .cornerRadius(50)
+                                                Text(friend.name)
+                                            }
+                                            .onTapGesture {
+                                                viewModel.addSharedStory(childId: friend.id, fromId: viewModel.child?.username ?? "", toId: friend.id, storyId: story.id)
+                                            }
+                                        }
+                                    }
+                                    .frame(width: 300, height: 500)
+                                    .onAppear {
+                                        viewModel.fetchChild(ChildId: childId)
+                                        viewModel.fetchFriends(childId: childId)
+                                    }
+                                }
+                            
                         }
                         .padding()
                     }
@@ -624,6 +737,7 @@ struct StoryRowView: View {
                         print(isSaved)
                     }
                 }
+                
             }
         }
     }

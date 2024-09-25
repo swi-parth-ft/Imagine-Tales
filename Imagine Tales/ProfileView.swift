@@ -12,6 +12,12 @@ import GoogleSignIn
 import FirebaseCore
 import FirebaseStorage
 
+struct SharedStory: Codable, Hashable {
+    var id = UUID()
+    let story: Story
+    let fromId: String
+}
+
 final class ReAuthentication: ObservableObject {
     @Published var reAuthenticated: Bool = false
     @Published var email = ""
@@ -117,6 +123,7 @@ final class ProfileViewModel: ObservableObject {
         }
         
     }
+    
     func getPin() throws {
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
         Firestore.firestore().collection("users").document(authDataResult.uid).getDocument { doc, error in
@@ -168,14 +175,14 @@ final class ProfileViewModel: ObservableObject {
     func getProfileImage(documentID: String, completion: @escaping (String?) -> Void) {
         let db = Firestore.firestore()
         let collectionRef = db.collection("Children2") // Replace with your collection name
-
+        
         collectionRef.document(documentID).getDocument { document, error in
             if let error = error {
                 print("Error getting document: \(error)")
                 completion(nil)
                 return
             }
-
+            
             if let document = document, document.exists {
                 let profileImage = document.get("profileImage") as? String
                 completion(profileImage)
@@ -186,9 +193,67 @@ final class ProfileViewModel: ObservableObject {
         }
     }
     
-   
+    @Published var sharedStories: [SharedStory] = []
     
+    func fetchSharedStories(childId: String) {
+        self.sharedStories.removeAll() // Clear current stories
+        let db = Firestore.firestore()
+        db.collection("Children2").document(childId).collection("sharedStories").addSnapshotListener { snapshot, error in
+            if let error = error {
+                print("Error fetching shared stories: \(error.localizedDescription)")
+            } else {
+                if let snapshot = snapshot {
+                    for document in snapshot.documents {
+                        let storyId = document["storyid"] as? String ?? ""
+                        let fromId = document["fromid"] as? String ?? ""
+                        
+                        // Fetch the story using the storyId
+                        self.fetchWholeStory(storyId: storyId, fromId: fromId)
+                    }
+                }
+            }
+        }
+    }
     
+    func fetchWholeStory(storyId: String, fromId: String) {
+        let db = Firestore.firestore()
+        let docRef = db.collection("Story").document(storyId)
+        
+        docRef.getDocument(as: Story.self) { result in
+            switch result {
+            case .success(let story):
+                let sharedStory = SharedStory(story: story, fromId: fromId)
+                self.sharedStories.append(sharedStory)
+                print(self.sharedStories)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func deleteSharedStory(fromId: String, storyId: String) {
+        let db = Firestore.firestore()
+        // Perform the query
+        db.collection("sharedStories")
+            .whereField("fromid", isEqualTo: fromId)
+            .whereField("storyid", isEqualTo: storyId)
+            .getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting documents: \(error)")
+                } else {
+                    for document in querySnapshot!.documents {
+                        // Deleting each matching document
+                        document.reference.delete { err in
+                            if let err = err {
+                                print("Error removing document: \(err)")
+                            } else {
+                                print("Document successfully removed!")
+                            }
+                        }
+                    }
+                }
+            }
+    }
 }
 
 struct ProfileView: View {
@@ -219,7 +284,43 @@ struct ProfileView: View {
     
     @State private var isNavigating = false
     @State private var openingStory: Story?
+    @State private var isShowingSharedStories = false
     
+    func deleteSharedStory(at offsets: IndexSet) {
+        for index in offsets {
+            let storyToDelete = viewModel.sharedStories[index]
+            
+            let storyId = storyToDelete.story.id
+            let fromId = storyToDelete.fromId
+            
+            let db = Firestore.firestore()
+            
+            // Query the collection based on both storyId and fromId
+            db.collection("sharedStories")
+                .whereField("storyid", isEqualTo: storyId)
+                .whereField("fromid", isEqualTo: fromId)
+                .getDocuments { (querySnapshot, error) in
+                    if let error = error {
+                        print("Error getting documents: \(error)")
+                    } else {
+                        for document in querySnapshot!.documents {
+                            // Delete the matching document
+                            document.reference.delete { err in
+                                if let err = err {
+                                    print("Error removing document: \(err)")
+                                } else {
+                                    // Remove from local array after Firestore deletion
+                                    DispatchQueue.main.async {
+                                        viewModel.sharedStories.remove(at: index)
+                                    }
+                                    print("Document successfully removed!")
+                                }
+                            }
+                        }
+                    }
+                }
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -322,62 +423,114 @@ struct ProfileView: View {
                         .padding()
                         Spacer()
                     }
+                    Button(isShowingSharedStories ? "Your Stories" : "Shared with you") {
+                        isShowingSharedStories.toggle()
+                    }
                     
-                    List {
-                        Section("Your Stories") {
-                            if parentViewModel.story.isEmpty {
-                                ContentUnavailableView {
-                                    Label("No Stories Yet", systemImage: "book.fill")
-                                } description: {
-                                    Text("It looks like there's no stories posted yet.")
-                                } actions: {
-                                }
-                                .listRowBackground(Color.clear)
-                            }
-                            ForEach(parentViewModel.story, id: \.id) { story in
-                                
-                                NavigationLink(destination: StoryFromProfileView(story: story)) {
-                                    
-                                    HStack {
-                                        VStack {
-                                            Spacer()
-                                            Text("\(story.title)")
-                                           
-                                            
-                                        }
-                                        Spacer()
-                                        
-                                        Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
-                                            .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
+                    if !isShowingSharedStories {
+                        List {
+                            Section("Your Stories") {
+                                if parentViewModel.story.isEmpty {
+                                    ContentUnavailableView {
+                                        Label("No Stories Yet", systemImage: "book.fill")
+                                    } description: {
+                                        Text("It looks like there's no stories posted yet.")
+                                    } actions: {
                                     }
-                                    .contentShape(Rectangle())
+                                    .listRowBackground(Color.clear)
+                                }
+                                ForEach(parentViewModel.story, id: \.id) { story in
+                                    
+                                    NavigationLink(destination: StoryFromProfileView(story: story)) {
+                                        
+                                        HStack {
+                                            VStack {
+                                                Spacer()
+                                                Text("\(story.title)")
+                                                
+                                                
+                                            }
+                                            Spacer()
+                                            
+                                            Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
+                                                .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
+                                        }
+                                        .contentShape(Rectangle())
+                                        
+                                        
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    .listRowBackground(Color.white.opacity(0.5))
                                     
                                     
                                 }
-                                .buttonStyle(PlainButtonStyle())
-                                .listRowBackground(Color.white.opacity(0.5))
+                            }
+                        }
+                        .scrollContentBackground(.hidden)
+                        .onAppear {
+                            do {
+                                try parentViewModel.getStory(childId: childId)
+                                viewModel.getFriendsCount(childId: childId)
                                 
+                            } catch {
+                                print(error.localizedDescription)
+                            }
+                        }
+                        
+                    } else {
+                        List {
+                            Section("Shared with you") {
+                                if viewModel.sharedStories.isEmpty {
+                                    ContentUnavailableView {
+                                        Label("No Stories Yet", systemImage: "book.fill")
+                                    } description: {
+                                        Text("It looks like there's no stories posted yet.")
+                                    } actions: {
+                                    }
+                                    .listRowBackground(Color.clear)
+                                }
+                                ForEach(viewModel.sharedStories, id: \.self) { s in
+                                    
+                                    NavigationLink(destination: StoryFromProfileView(story: s.story)) {
+                                        
+                                        HStack {
+                                            VStack {
+                                                Spacer()
+                                                Text("\(s.story.title)")
+                                                
+                                                
+                                            }
+                                            Spacer()
+                                            
+                                            Text("Shared By \(s.fromId)")
+                                        }
+                                        .contentShape(Rectangle())
+                                        
+                                        
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    .listRowBackground(Color.white.opacity(0.5))
+                                    
+                                    
+                                }
+                                .onDelete { indexSet in
+                                    if let index = indexSet.first {
+                                        let storyID = viewModel.sharedStories[index].story.id
+                                        let fromId = viewModel.sharedStories[index].fromId
+                                        viewModel.deleteSharedStory(fromId: fromId, storyId: storyID)
+                                    
+                                        viewModel.fetchSharedStories(childId: childId)
+                                     
+                                    }
+                                }
                                
                             }
                         }
-                    }
-                    .scrollContentBackground(.hidden)
-                    .onAppear {
-                        do {
-                            try parentViewModel.getStory(childId: childId)
-                            viewModel.getFriendsCount(childId: childId)
-                            
-                        } catch {
-                            print(error.localizedDescription)
+                        .scrollContentBackground(.hidden)
+                        .onAppear {
+                            viewModel.fetchSharedStories(childId: childId)
                         }
                     }
-                    .sheet(isPresented: $isSelectingImage) {
-                        DpSelectionView()
-                            .background {
-                                BackgroundClearView()
-                            }
-                    }
-                    
                     
                 }
                 .padding([.trailing, .leading])
@@ -399,6 +552,12 @@ struct ProfileView: View {
                 .sheet(isPresented: $isAddingPin) {
                     PinView()
                     
+                }
+                .sheet(isPresented: $isSelectingImage) {
+                    DpSelectionView()
+                        .background {
+                            BackgroundClearView()
+                        }
                 }
 
                 CustomAlert(isShowing: $isShowingAlert, title: "Already Leaving?", message1: "You’ll miss all the fun! 😢", message2: "But don’t worry, you can come back anytime!", onConfirm: {

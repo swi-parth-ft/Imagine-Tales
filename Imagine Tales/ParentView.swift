@@ -23,6 +23,7 @@ final class ParentViewModel: ObservableObject {
     @Published var imageUrl = ""
     @Published var comment = ""
     
+    
     func fetchStoryAndReview(storyID: String) {
         let db = Firestore.firestore()
         
