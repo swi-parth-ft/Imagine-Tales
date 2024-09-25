@@ -107,7 +107,7 @@ struct AuthenticationView: View {
                                         .font(.custom("ComicNeue-Bold", size: isiPhone ? 20 : 32))
                                     
                                     Text("The Number One Best Ebook Store & Reader Application in this Century")
-                                        .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
+                                        .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
                                         .multilineTextAlignment(.center)
                                     Spacer()
                                     Button("Show onBoarding") {
@@ -118,7 +118,7 @@ struct AuthenticationView: View {
                                         
                                     } label: {
                                         Text("Sign Up")
-                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
+                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
                                             .frame(height: isiPhone ? 35 : 55)
                                             .frame(maxWidth: .infinity)
                                             .background(Color(hex: "#FF6F61"))
@@ -131,7 +131,7 @@ struct AuthenticationView: View {
                                         
                                     } label: {
                                         Text("Continue as Parent")
-                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
+                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
                                             .frame(height: isiPhone ? 35 : 55)
                                             .frame(maxWidth: .infinity)
                                             .background(Color(hex: "#DFFFDF"))

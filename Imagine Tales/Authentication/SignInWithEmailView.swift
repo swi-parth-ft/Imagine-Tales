@@ -539,21 +539,17 @@ struct SignInWithEmailView: View {
                                         if !isSettingPin && isShowingButtons {
                                                 VStack {
                                                     
-                                                    //MARK: Main Button
-                                                    Button(settingPassword ? "Sign up" : (isSignedUp ? "Continue" : "Next")) {
-                                                        
+                                                    // MARK: Main Button
+                                                    Button(action: {
                                                         if settingPassword {
                                                             if viewModel.password == confirmPassword {
-                                                                
                                                                 Task {
                                                                     do {
                                                                         if let _ = try await viewModel.createAccount() {
-                                                                            
                                                                             isSettingPin = true
                                                                             isSignedUp = true
                                                                             settingPassword = false
-                                                                            
-                                                                            
+
                                                                             try await viewModel.createUserProfile(isParent: isParent)
                                                                             try viewModel.getChildren()
                                                                         }
@@ -576,28 +572,31 @@ struct SignInWithEmailView: View {
                                                                 settingPassword = true
                                                             }
                                                         }
+                                                    }) {
+                                                        Text(settingPassword ? "Sign up" : (isSignedUp ? "Continue" : "Next"))
+                                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                                            .foregroundColor(.white)
                                                     }
                                                     .padding()
-                                                    .frame(width:  UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
-                                                    
+                                                    .frame(width: UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
                                                     .background(Color(hex: "#FF6F61"))
-                                                    .foregroundStyle(.white)
                                                     .cornerRadius(isCompact ? 6 : 12)
                                                     
-                                                    
-                                                    //MARK: Add Later Button
+                                                    // MARK: Add Later Button
                                                     if isSignedUp {
-                                                        Button("Add Later") {
+                                                        Button(action: {
                                                             withAnimation {
                                                                 ipf = true
                                                                 showSignInView = false
-                                                                
                                                             }
+                                                        }) {
+                                                            Text("Add Later")
+                                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                                                .foregroundColor(.black)
                                                         }
                                                         .padding()
-                                                        .frame(width:  UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
+                                                        .frame(width: UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
                                                         .background(Color(hex: "#DFFFDF"))
-                                                        .foregroundStyle(.black)
                                                         .cornerRadius(isCompact ? 6 : 12)
                                                     }
                                                 }
@@ -625,14 +624,14 @@ struct SignInWithEmailView: View {
                                                         }
                                                     }
                                                 }
-                                                .font(.system(size: isCompact ?  14 : 24))
+                                                .font(.system(size: isCompact ?  10 : 14))
                                                     .foregroundStyle(.black)
                                             }
                                             .frame(width: UIScreen.main.bounds.width * (isCompact ? 0.8 : 0.7))
                                             .padding(.top, isCompact ? 2 : 5)
                                             Spacer()
                                             
-                                            Button("Sign in") {
+                                            Button(action: {
                                                 Task {
                                                     do {
                                                         if let _ = try await viewModel.signInWithEmail() {
@@ -642,18 +641,19 @@ struct SignInWithEmailView: View {
                                                             isSignedUp = true
                                                             settingPassword = false
                                                             newUser = true
-                                                         //   viewModel.getChildren()
                                                         }
                                                     } catch {
                                                         print(error.localizedDescription)
                                                     }
                                                 }
+                                            }) {
+                                                Text("Sign in")
+                                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                                    .foregroundColor(.white)
                                             }
                                             .padding()
-                                            .frame(width:  UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
-                                            
+                                            .frame(width: UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
                                             .background(Color(hex: "#FF6F61"))
-                                            .foregroundStyle(.white)
                                             .cornerRadius(isCompact ? 6 : 12)
                                         }
                                     }
@@ -714,7 +714,7 @@ struct SignInWithEmailView: View {
                                             .cornerRadius(12)
                                             
                                         }
-                                        .padding(.bottom, 40)
+                                        .padding(.bottom, keyboardHeight != 0 ? (isCompact ? 60 : 250) : 30)
                                                   
                                     }
                                     .frame(width:  UIScreen.main.bounds.width * 0.7)
@@ -727,8 +727,8 @@ struct SignInWithEmailView: View {
                                             newUser.toggle()
                                         }
                                     }
-                                    .font(.system(size: isCompact ?  13 : 24))
-                                    .padding(.bottom, keyboardHeight != 0 ? (isCompact ? 60 : 150) : 5)
+                                    .font(.system(size: isCompact ?  10 : 14))
+                                    .padding(.bottom, keyboardHeight != 0 ? (isCompact ? 60 : 250) : 5)
                                 }
                             }
                             
