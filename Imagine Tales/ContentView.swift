@@ -1210,7 +1210,7 @@ struct ContentView: View {
     
     func generateSummary() async throws {
         let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
-        let prompt = "write me a short and kids friendly summary in 50 words for this story \(continueStory)"
+        let prompt = "write me a short and kids friendly summary in 25 words for this story \(continueStory)"
         let response = try await model.generateContent(prompt)
         if let text = response.text {
             DispatchQueue.main.async {

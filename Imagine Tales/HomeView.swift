@@ -560,10 +560,10 @@ struct StoryRowView: View {
                     }
                     HStack {
                         VStack(alignment: .leading) {
-                            Text("The Minions hatch a clever plan to steal the world’s biggest banana, but things go hilariously wrong when they encounter a banana-loving monkey!")
+                            Text(story.summary ?? "The Minions hatch a clever plan to steal the world’s biggest banana, but things go hilariously wrong when they encounter a banana-loving monkey!")
                                 .font(.body)
-                               // .padding(.horizontal)
-                                .frame(width: UIScreen.main.bounds.width * 0.7)
+                                .padding(.leading)
+                                .frame(width: UIScreen.main.bounds.width * 0.8)
                             
                             // Text(viewModel.status)
                             
