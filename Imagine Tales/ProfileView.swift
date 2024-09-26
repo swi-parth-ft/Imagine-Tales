@@ -316,10 +316,6 @@ struct ProfileView: View {
                             }
                             .modifier(RippleEffect(at: self.origin, trigger: self.counter))
                             .shadow(radius: 3, y: 2)
-//                            .rotation3DEffect(
-//                                .degrees(tiltAngle),
-//                                axis: (x: 0, y: 1, z: 0)
-//                            )
                             
                         }
                         VStack(alignment: .leading) {
@@ -378,9 +374,19 @@ struct ProfileView: View {
                         .padding()
                         Spacer()
                     }
-                    Button(isShowingSharedStories ? "Your Stories" : "Shared with you") {
-                        isShowingSharedStories.toggle()
+                    HStack {
+                        Spacer()
+                        Button(isShowingSharedStories ? "Your Stories" : "Shared with you", systemImage: isShowingSharedStories ? "book.fill" : "paperplane.fill") {
+                            withAnimation {
+                                isShowingSharedStories.toggle()
+                            }
+                        }
+                        .padding()
+                        .background(Color(hex: "#8AC640"))
+                        .foregroundStyle(.white)
+                        .cornerRadius(22)
                     }
+                    .padding()
                     
                     if !isShowingSharedStories {
                         List {
@@ -397,25 +403,52 @@ struct ProfileView: View {
                                 ForEach(parentViewModel.story, id: \.id) { story in
                                     
                                     NavigationLink(destination: StoryFromProfileView(story: story)) {
-                                        
-                                        HStack {
-                                            VStack {
-                                                Spacer()
-                                                Text("\(story.title)")
-                                                
-                                                
-                                            }
-                                            Spacer()
+                                        ZStack {
                                             
-                                            Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
-                                                .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
+                                            
+                                            HStack {
+                                                Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")1")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .opacity(0.3)
+                                                    .frame(width: 300, height: 300)
+                                                Spacer()
+                                                 Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")2")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .opacity(0.5)
+                                                    .frame(width: 70, height: 70)
+                                                Spacer()
+                                            }
+                                            .frame(height: 100)
+                                           
+                                            HStack {
+                                                VStack {
+                                                   
+                                                    Text("\(story.title)")
+                                                        .font(.custom("ComicNeue-Bold", size: 32))
+                                                        .padding([.leading, .bottom])
+                                                    
+                                                    
+                                                }
+                                                Spacer()
+                                                
+                                                Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))
+                                                    .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue))
+                                                    .padding(.trailing)
+                                            }
+                                            .contentShape(Rectangle())
                                         }
-                                        .contentShape(Rectangle())
-                                        
-                                        
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
-                                    .listRowBackground(Color.white.opacity(0.5))
+                                        .padding(.vertical)
+                                            .background(.white.opacity(0.4))
+                                            .cornerRadius(22)
+                                            .contentShape(Rectangle())
+                                            
+                                        }
+                                        .buttonStyle(.plain)
+                                        .listRowBackground(Color.white.opacity(0))
+                                        .listRowSeparator(.hidden)
+                                    
                                     
                                     
                                 }
@@ -447,24 +480,50 @@ struct ProfileView: View {
                                 ForEach(viewModel.sharedStories, id: \.self) { s in
                                     
                                     NavigationLink(destination: StoryFromProfileView(story: s.story)) {
-                                        
-                                        HStack {
-                                            VStack {
+                                        ZStack {
+                                            HStack {
+                                                Image("\(s.story.theme?.filter { !$0.isWhitespace } ?? "")1")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .opacity(0.3)
+                                                    .frame(width: 300, height: 300)
                                                 Spacer()
-                                                Text("\(s.story.title)")
-                                                
-                                                
+                                                Image("\(s.story.theme?.filter { !$0.isWhitespace } ?? "")2")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .opacity(0.5)
+                                                    .frame(width: 70, height: 70)
+                                                Spacer()
                                             }
-                                            Spacer()
-                                            
-                                            Text("Shared By \(s.fromId)")
+                                            .frame(height: 100)
+                                            HStack {
+                                                VStack {
+                                                    
+                                                    Text("\(s.story.title)")
+                                                        .font(.custom("ComicNeue-Bold", size: 32))
+                                                        .padding([.leading, .bottom])
+                                                    
+                                                    
+                                                }
+                                                Spacer()
+                                                VStack(alignment: .trailing) {
+                                                    Text("Shared By,")
+                                                    Text("\(s.fromId)")
+                                                        
+                                                }
+                                                .padding(.trailing)
+                                            }
+                                            .contentShape(Rectangle())
                                         }
+                                        .padding(.vertical)
+                                        .background(.white.opacity(0.4))
+                                        .cornerRadius(22)
                                         .contentShape(Rectangle())
                                         
-                                        
                                     }
-                                    .buttonStyle(PlainButtonStyle())
-                                    .listRowBackground(Color.white.opacity(0.5))
+                                    .buttonStyle(.plain)
+                                    .listRowBackground(Color.white.opacity(0))
+                                    .listRowSeparator(.hidden)
                                     
                                     
                                 }
@@ -506,7 +565,9 @@ struct ProfileView: View {
                     PinView()
                     
                 }
-                .sheet(isPresented: $isSelectingImage) {
+                .sheet(isPresented: $isSelectingImage, onDismiss: {
+                    viewModel.fetchChild(ChildId: childId)
+                }) {
                     DpSelectionView()
                         .background {
                             BackgroundClearView()

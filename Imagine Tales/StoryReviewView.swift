@@ -101,14 +101,14 @@ struct StoryReviewView: View {
                         Image("\(theme.filter { !$0.isWhitespace })1")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 220)
+                            .frame(width: 190)
                         
                         Spacer()
                         
                         Image("\(theme.filter { !$0.isWhitespace })2")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 220)
+                            .frame(width: 190)
                         
                     }
                 }
@@ -131,7 +131,7 @@ struct StoryReviewView: View {
                             Image("\(theme.filter { !$0.isWhitespace })")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 80)
+                                .frame(width: 100)
                                 .shadow(radius: 5)
                         }
                         .padding()

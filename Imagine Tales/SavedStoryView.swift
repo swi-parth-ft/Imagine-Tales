@@ -77,16 +77,46 @@ struct SavedStoryView: View {
             }
             List(viewModel.savedStories, id: \.id) { story in
                 NavigationLink(destination: StoryFromProfileView(story: story)) {
-                    HStack {
-
-                        VStack {
+                    ZStack {
+                        HStack {
+                            Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")1")
+                                .resizable()
+                                .scaledToFit()
+                                .opacity(0.3)
+                                .frame(width: 300, height: 300)
                             Spacer()
-                            Text(story.title)
+                            Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")2")
+                                .resizable()
+                                .scaledToFit()
+                                .opacity(0.7)
+                                .frame(width: 70, height: 70)
+                            Spacer()
                         }
+                        .frame(height: 100)
+                        HStack {
+                            VStack {
+                                
+                                Text("\(story.title)")
+                                    .font(.custom("ComicNeue-Bold", size: 32))
+                                    .padding([.leading, .bottom])
+                                
+                                
+                            }
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
                     }
                     
+                    .padding(.vertical)
+                    .background(.white.opacity(0.4))
+                    .cornerRadius(22)
+                    .contentShape(Rectangle())
+                    
                 }
-                .listRowBackground(Color.white.opacity(0.5))
+                .buttonStyle(.plain)
+                .listRowBackground(Color.white.opacity(0))
+                .listRowSeparator(.hidden)
+                
                 
                 
             }

@@ -73,6 +73,8 @@ struct DpSelectionView: View {
     let images: [String] = ["dp2", "dp1", "dp3", "dp4", "dp5", "dp6", "dp7", "dp8", "dp9", "dp10", "dp11", "dp12" ] // Use image names as an array of strings
     @State private var selectedImage = ""
     @AppStorage("dpurl") private var dpUrl = ""
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
        
             ZStack {
@@ -111,6 +113,7 @@ struct DpSelectionView: View {
                                                 Button("Set", systemImage: "checkmark.circle.fill") {
                                                     viewModel.updateFieldInCollection(childId: childId, url: String(image + ".jpg"))
                                                     viewModel.fetchProfileImage(dp: image + ".jpg")
+                                                    dismiss()
                                                 }
                                                 .padding()
                                                 .background(Color.white.opacity(0.9))
@@ -124,6 +127,8 @@ struct DpSelectionView: View {
                                 .onTapGesture {
                                     withAnimation {
                                         selectedImage = image
+                                        
+                                        
                                     }
                                 }
                             }

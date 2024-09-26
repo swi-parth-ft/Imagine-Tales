@@ -365,9 +365,14 @@ struct ChildView: View {
                             Circle()
                                 .fill(Color.white)
                                 .frame(width: isiPhone ? 250 / 2 : 250)
-                            
-                            AsyncDp(urlString: child.profileImage, size: isiPhone ? 100 : 200)
+                            Image(child.profileImage.removeJPGExtension())
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: isiPhone ? 100 : 200)
+                                .cornerRadius(isiPhone ? 50 : 100)
                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+//                            AsyncDp(urlString: child.profileImage, size: isiPhone ? 100 : 200)
+//                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                             
                             
                         }

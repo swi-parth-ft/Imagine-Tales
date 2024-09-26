@@ -271,12 +271,37 @@ struct FriendProfileView: View {
                             }
                             ForEach(viewModel.story, id: \.id) { story in
                                 NavigationLink(destination: StoryFromProfileView(story: story)) {
-                                    
-                                    
-                                        VStack {
+                                    ZStack {
+                                        HStack {
+                                            Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")1")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .opacity(0.3)
+                                                .frame(width: 300, height: 300)
                                             Spacer()
-                                            Text("\(story.title)")
+                                            Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")2")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .opacity(0.5)
+                                                .frame(width: 70, height: 70)
+                                            Spacer()
                                         }
+                                        .frame(height: 100)
+                                        HStack {
+                                            VStack {
+                                                
+                                                Text("\(story.title)")
+                                                    .font(.custom("ComicNeue-Bold", size: 32))
+                                                    .padding([.leading, .bottom])
+                                                
+                                                
+                                            }
+                                            Spacer()
+                                            
+                                           
+                                        }
+                                        .contentShape(Rectangle())
+                                    }
                                      
                                     
                                 }
