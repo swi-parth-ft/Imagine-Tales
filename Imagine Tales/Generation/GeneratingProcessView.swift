@@ -81,7 +81,7 @@ struct GeneratingProcessView: View {
                     }
 
                     if isLoadingTextPart {
-                        TextPlaceholderView()
+                        Text("Loading")
                             .frame(height: 55)
                     }
 
