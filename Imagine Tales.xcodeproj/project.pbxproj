@@ -293,9 +293,8 @@
 		07D323592CA7185500846FA3 /* Explore */ = {
 			isa = PBXGroup;
 			children = (
-				079E92512C89E64400433869 /* ExploreView.swift */,
-				078DACD52C8CA44900F04A65 /* StoryByGenreView.swift */,
-				07D323912CA7609700846FA3 /* ExploreViewModel.swift */,
+				07D323B62CA76BB800846FA3 /* Explore View */,
+				07D323B52CA76BAA00846FA3 /* Explore ViewModel */,
 			);
 			path = Explore;
 			sourceTree = "<group>";
@@ -303,16 +302,8 @@
 		07D3235B2CA718F400846FA3 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				0711F3752C6D7433006C86AA /* ProfileView.swift */,
-				07D3239B2CA7621600846FA3 /* ProfileViewModel.swift */,
-				07D323992CA761D600846FA3 /* ReAuthentication.swift */,
-				07D323952CA7615700846FA3 /* PinView.swift */,
-				07D323932CA7614600846FA3 /* StoryFromProfileView.swift */,
-				0701FB8C2C822816004BEE9F /* FriendsView.swift */,
-				07D3239D2CA7629000846FA3 /* FriendsViewModel.swift */,
-				0701FBAF2C862845004BEE9F /* DpSelectionView.swift */,
-				07D323A12CA7641700846FA3 /* FriendRequestView.swift */,
-				07D3239F2CA762A800846FA3 /* DpSelectionViewModel.swift */,
+				07D323B92CA76BE200846FA3 /* Profile ViewModels */,
+				07D323BA2CA76BF200846FA3 /* Profile Views */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -330,12 +321,8 @@
 		07D3235D2CA7197300846FA3 /* SignInProcess */ = {
 			isa = PBXGroup;
 			children = (
-				0711F3572C6D63F1006C86AA /* AuthenticationView.swift */,
-				073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */,
-				07D323612CA7246900846FA3 /* AuthenticationViewModel.swift */,
-				07D323652CA7280F00846FA3 /* UserInfoFormView.swift */,
-				07D323672CA7286600846FA3 /* PasswordFormView.swift */,
-				07D323632CA724B500846FA3 /* SignInWithEmailViewModel.swift */,
+				07D323B02CA76B6000846FA3 /* SignIn Views */,
+				07D323AF2CA76B4A00846FA3 /* SignIn ViewModel */,
 			);
 			path = SignInProcess;
 			sourceTree = "<group>";
@@ -343,15 +330,8 @@
 		07D3235E2CA719BA00846FA3 /* Parent */ = {
 			isa = PBXGroup;
 			children = (
-				078DACDD2C8E054200F04A65 /* ScreenTimeChartView.swift */,
-				078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */,
-				07D323A92CA765A500846FA3 /* AddChildForm.swift */,
-				0792C1D92C7BD95E000C42A7 /* ParentView.swift */,
-				07D323AD2CA765C400846FA3 /* DpSelection.swift */,
-				07D323AB2CA765B300846FA3 /* parentSettings.swift */,
-				07D323A72CA7659500846FA3 /* StoryView.swift */,
-				07D323A52CA7657900846FA3 /* ChildView.swift */,
-				07D323A32CA7653F00846FA3 /* ParentViewModel.swift */,
+				07D323BC2CA76C1F00846FA3 /* Parent Views */,
+				07D323BB2CA76C0E00846FA3 /* Parent ViewModels */,
 			);
 			path = Parent;
 			sourceTree = "<group>";
@@ -382,16 +362,8 @@
 		07D323742CA72AC000846FA3 /* Generation */ = {
 			isa = PBXGroup;
 			children = (
-				07D3236B2CA72AC000846FA3 /* CharacterSelectionView.swift */,
-				07D3236C2CA72AC000846FA3 /* CharacterView.swift */,
-				07D3238F2CA75D4600846FA3 /* CharacterViewModel.swift */,
-				07D3236D2CA72AC000846FA3 /* ContentView.swift */,
-				07D3236E2CA72AC000846FA3 /* GeneratingProcessView.swift */,
-				07D3236F2CA72AC000846FA3 /* GenerationViewModel.swift */,
-				07D323702CA72AC000846FA3 /* GenreSelectionView.swift */,
-				07D323712CA72AC000846FA3 /* MoodSelectionView.swift */,
-				07D323722CA72AC000846FA3 /* StoryReviewView.swift */,
-				07D323732CA72AC000846FA3 /* ThemeSelectionView.swift */,
+				07D323B42CA76B9F00846FA3 /* Generation Views */,
+				07D323B32CA76B8E00846FA3 /* Generation ViewModel */,
 			);
 			path = Generation;
 			sourceTree = "<group>";
@@ -399,9 +371,8 @@
 		07D3237E2CA72F7200846FA3 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				076C22992C7E8C3E001DAB3F /* HomeView.swift */,
-				07D3238B2CA7492E00846FA3 /* StoryRowView.swift */,
-				07D323822CA72FC000846FA3 /* HomeViewModel.swift */,
+				07D323B22CA76B8000846FA3 /* Home Views */,
+				07D323B12CA76B7600846FA3 /* Home ViewModel */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -409,8 +380,8 @@
 		07D3237F2CA72F8C00846FA3 /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				077BE2862C810FF800760D5A /* SavedStoryView.swift */,
-				07D323802CA72FA400846FA3 /* SavedStoryViewModel.swift */,
+				07D323B82CA76BCD00846FA3 /* Lib Views */,
+				07D323B72CA76BC300846FA3 /* Lib ViewModel */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -425,6 +396,147 @@
 				07D3238D2CA74C3F00846FA3 /* Charater.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		07D323AF2CA76B4A00846FA3 /* SignIn ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				07D323612CA7246900846FA3 /* AuthenticationViewModel.swift */,
+				07D323632CA724B500846FA3 /* SignInWithEmailViewModel.swift */,
+			);
+			path = "SignIn ViewModel";
+			sourceTree = "<group>";
+		};
+		07D323B02CA76B6000846FA3 /* SignIn Views */ = {
+			isa = PBXGroup;
+			children = (
+				0711F3572C6D63F1006C86AA /* AuthenticationView.swift */,
+				073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */,
+				07D323652CA7280F00846FA3 /* UserInfoFormView.swift */,
+				07D323672CA7286600846FA3 /* PasswordFormView.swift */,
+			);
+			path = "SignIn Views";
+			sourceTree = "<group>";
+		};
+		07D323B12CA76B7600846FA3 /* Home ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				07D323822CA72FC000846FA3 /* HomeViewModel.swift */,
+			);
+			path = "Home ViewModel";
+			sourceTree = "<group>";
+		};
+		07D323B22CA76B8000846FA3 /* Home Views */ = {
+			isa = PBXGroup;
+			children = (
+				076C22992C7E8C3E001DAB3F /* HomeView.swift */,
+				07D3238B2CA7492E00846FA3 /* StoryRowView.swift */,
+			);
+			path = "Home Views";
+			sourceTree = "<group>";
+		};
+		07D323B32CA76B8E00846FA3 /* Generation ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				07D3238F2CA75D4600846FA3 /* CharacterViewModel.swift */,
+				07D3236F2CA72AC000846FA3 /* GenerationViewModel.swift */,
+			);
+			path = "Generation ViewModel";
+			sourceTree = "<group>";
+		};
+		07D323B42CA76B9F00846FA3 /* Generation Views */ = {
+			isa = PBXGroup;
+			children = (
+				07D3236B2CA72AC000846FA3 /* CharacterSelectionView.swift */,
+				07D3236C2CA72AC000846FA3 /* CharacterView.swift */,
+				07D3236D2CA72AC000846FA3 /* ContentView.swift */,
+				07D3236E2CA72AC000846FA3 /* GeneratingProcessView.swift */,
+				07D323702CA72AC000846FA3 /* GenreSelectionView.swift */,
+				07D323712CA72AC000846FA3 /* MoodSelectionView.swift */,
+				07D323722CA72AC000846FA3 /* StoryReviewView.swift */,
+				07D323732CA72AC000846FA3 /* ThemeSelectionView.swift */,
+			);
+			path = "Generation Views";
+			sourceTree = "<group>";
+		};
+		07D323B52CA76BAA00846FA3 /* Explore ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				07D323912CA7609700846FA3 /* ExploreViewModel.swift */,
+			);
+			path = "Explore ViewModel";
+			sourceTree = "<group>";
+		};
+		07D323B62CA76BB800846FA3 /* Explore View */ = {
+			isa = PBXGroup;
+			children = (
+				079E92512C89E64400433869 /* ExploreView.swift */,
+				078DACD52C8CA44900F04A65 /* StoryByGenreView.swift */,
+			);
+			path = "Explore View";
+			sourceTree = "<group>";
+		};
+		07D323B72CA76BC300846FA3 /* Lib ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				07D323802CA72FA400846FA3 /* SavedStoryViewModel.swift */,
+			);
+			path = "Lib ViewModel";
+			sourceTree = "<group>";
+		};
+		07D323B82CA76BCD00846FA3 /* Lib Views */ = {
+			isa = PBXGroup;
+			children = (
+				077BE2862C810FF800760D5A /* SavedStoryView.swift */,
+			);
+			path = "Lib Views";
+			sourceTree = "<group>";
+		};
+		07D323B92CA76BE200846FA3 /* Profile ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				07D3239B2CA7621600846FA3 /* ProfileViewModel.swift */,
+				07D323992CA761D600846FA3 /* ReAuthentication.swift */,
+				07D3239D2CA7629000846FA3 /* FriendsViewModel.swift */,
+				07D3239F2CA762A800846FA3 /* DpSelectionViewModel.swift */,
+			);
+			path = "Profile ViewModels";
+			sourceTree = "<group>";
+		};
+		07D323BA2CA76BF200846FA3 /* Profile Views */ = {
+			isa = PBXGroup;
+			children = (
+				07D323952CA7615700846FA3 /* PinView.swift */,
+				07D323932CA7614600846FA3 /* StoryFromProfileView.swift */,
+				0711F3752C6D7433006C86AA /* ProfileView.swift */,
+				0701FB8C2C822816004BEE9F /* FriendsView.swift */,
+				0701FBAF2C862845004BEE9F /* DpSelectionView.swift */,
+				07D323A12CA7641700846FA3 /* FriendRequestView.swift */,
+			);
+			path = "Profile Views";
+			sourceTree = "<group>";
+		};
+		07D323BB2CA76C0E00846FA3 /* Parent ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */,
+				07D323A32CA7653F00846FA3 /* ParentViewModel.swift */,
+			);
+			path = "Parent ViewModels";
+			sourceTree = "<group>";
+		};
+		07D323BC2CA76C1F00846FA3 /* Parent Views */ = {
+			isa = PBXGroup;
+			children = (
+				078DACDD2C8E054200F04A65 /* ScreenTimeChartView.swift */,
+				07D323A92CA765A500846FA3 /* AddChildForm.swift */,
+				0792C1D92C7BD95E000C42A7 /* ParentView.swift */,
+				07D323AD2CA765C400846FA3 /* DpSelection.swift */,
+				07D323AB2CA765B300846FA3 /* parentSettings.swift */,
+				07D323A72CA7659500846FA3 /* StoryView.swift */,
+				07D323A52CA7657900846FA3 /* ChildView.swift */,
+			);
+			path = "Parent Views";
 			sourceTree = "<group>";
 		};
 		07FB383C2C62BEAA0070EEFA = {

@@ -26,7 +26,7 @@ final class ProfileViewModel: ObservableObject {
 
     /// Log out the current user
     func logOut() throws {
-        try AuthenticationManager.shared.SignOut() // Sign out the user
+        try AuthenticationManager.shared.signOut() // Sign out the user
     }
 
     /// Fetch child data from Firestore based on the child's ID

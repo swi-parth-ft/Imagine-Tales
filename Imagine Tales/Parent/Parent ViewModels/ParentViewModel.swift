@@ -111,7 +111,7 @@ final class ParentViewModel: ObservableObject {
     
     // Log out the user
     func logOut() throws {
-        try AuthenticationManager.shared.SignOut() // Call sign-out method from AuthenticationManager
+        try AuthenticationManager.shared.signOut() // Call sign-out method from AuthenticationManager
     }
     
     // Fetch children associated with the logged-in parent
