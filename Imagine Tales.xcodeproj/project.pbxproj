@@ -73,6 +73,7 @@
 		079E92522C89E64400433869 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079E92512C89E64400433869 /* ExploreView.swift */; };
 		07AF26DD2C703B2C00E41509 /* ComicNeue-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07AF26DC2C703B2C00E41509 /* ComicNeue-Bold.ttf */; };
 		07C9301D2C9F68B000AB8F06 /* OpenSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07C9301C2C9F68B000AB8F06 /* OpenSans.ttf */; };
+		07D323422CA62F8B00846FA3 /* Drops in Frameworks */ = {isa = PBXBuildFile; productRef = 07D323412CA62F8B00846FA3 /* Drops */; };
 		07D70A102C9E12590024B333 /* ThemeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D70A0F2C9E12590024B333 /* ThemeSelectionView.swift */; };
 		07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */; };
 		07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB384A2C62BEAB0070EEFA /* ContentView.swift */; };
@@ -156,6 +157,7 @@
 				0711F38D2C6DB698006C86AA /* FloatingTabBar in Frameworks */,
 				0711F3642C6D6C6F006C86AA /* FirebaseAnalytics in Frameworks */,
 				0711F36B2C6D6E2B006C86AA /* GoogleSignIn in Frameworks */,
+				07D323422CA62F8B00846FA3 /* Drops in Frameworks */,
 				0711F3852C6DB62D006C86AA /* FirebaseAuth in Frameworks */,
 				076C22982C7E66B6001DAB3F /* FirebaseStorage in Frameworks */,
 				073F2CF02C6F9B4600BCF6F0 /* FirebaseFirestore in Frameworks */,
@@ -349,6 +351,7 @@
 				0711F3692C6D6E2B006C86AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				0711F37D2C6D96EC006C86AA /* XCRemoteSwiftPackageReference "dotlottie-ios" */,
 				0793FBFE2CA23A63008A7CBB /* XCRemoteSwiftPackageReference "neumorphic" */,
+				07D323402CA62F8B00846FA3 /* XCRemoteSwiftPackageReference "Drops" */,
 			);
 			productRefGroup = 07FB38462C62BEAB0070EEFA /* Products */;
 			projectDirPath = "";
@@ -685,6 +688,14 @@
 				kind = branch;
 			};
 		};
+		07D323402CA62F8B00846FA3 /* XCRemoteSwiftPackageReference "Drops" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/omaralbeik/Drops.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -766,6 +777,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0793FBFE2CA23A63008A7CBB /* XCRemoteSwiftPackageReference "neumorphic" */;
 			productName = Neumorphic;
+		};
+		07D323412CA62F8B00846FA3 /* Drops */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07D323402CA62F8B00846FA3 /* XCRemoteSwiftPackageReference "Drops" */;
+			productName = Drops;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

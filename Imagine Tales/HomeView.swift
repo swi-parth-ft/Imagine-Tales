@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseFirestore
 import FirebaseStorage
+import Drops
 
 // Struct for each story text item
 struct StoryTextItem: Codable, Hashable {
@@ -509,6 +510,16 @@ struct StoryRowView: View {
     @State private var maxRetryAttempts = 3 // Set max retry attempts
     @State private var retryDelay = 2.0
     @State private var showShareList = false
+    @State private var searchQuery = ""
+    
+    var filteredFriends: [UserChildren] {
+            if searchQuery.isEmpty {
+                return viewModel.friends
+            } else {
+                return viewModel.friends.filter { $0.name.localizedCaseInsensitiveContains(searchQuery) }
+            }
+        }
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -667,10 +678,11 @@ struct StoryRowView: View {
                                     
                                 }) {
                                     if isLiked {
-                                        Image("hearts")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 44)
+                                        Image(systemName: "heart.fill")
+                                            .tint(.red)
+                                            .font(.system(size: 24))
+                                            .frame(width: 44, height: 44)
+                                            
                                     } else {
                                         Image(systemName: "heart")
                                             .tint(.red)
@@ -678,6 +690,7 @@ struct StoryRowView: View {
                                             .frame(width: 44, height: 44)
                                     }
                                 }
+                                .symbolEffect(.bounce, value: isLiked)
                                 
                                 Text("\(isLiked ? story.likes + 1 : story.likes)")
                             }
@@ -694,26 +707,55 @@ struct StoryRowView: View {
                                     }
                                 }
                                 .popover(isPresented: $showShareList) {
-                                    List {
-                                        
-                                        ForEach(viewModel.friends) { friend in
-                                            HStack {
-                                                Image(friend.profileImage.removeJPGExtension())
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 40, height: 40)
-                                                    .cornerRadius(50)
-                                                Text(friend.name)
+                                    ZStack {
+                                        Color(hex: "#8AC640").ignoresSafeArea()
+                                        VStack {
+                                            
+                                            List {
+                                                Section("Share with Friends") {
+                                                    TextField("Search Friends", text: $searchQuery)
+                                                        .listRowBackground(Color.white.opacity(0.4))
+                                                    ForEach(filteredFriends) { friend in
+                                                        HStack {
+                                                            ZStack {
+                                                                Circle()
+                                                                    .fill(Color.white)
+                                                                    .frame(width: 50)
+                                                                Image(friend.profileImage.removeJPGExtension())
+                                                                    .resizable()
+                                                                    .scaledToFit()
+                                                                    .frame(width: 40, height: 40)
+                                                                    .cornerRadius(50)
+                                                            }
+                                                       
+                                                            Text(friend.username)
+                                                                .foregroundStyle(.black)
+                                                            
+                                                       
+                                                            
+                                                        }
+                                                        .contentShape(Rectangle())
+                                                        .onTapGesture {
+                                                            viewModel.addSharedStory(childId: friend.id, fromId: viewModel.child?.username ?? "", toId: friend.id, storyId: story.id)
+                                                            let drop = Drop(title: "Shared Story with \(friend.username)")
+                                                           
+                                                            Drops.show(drop)
+                                                            
+                                                        }
+                                                        
+                                                        .listRowBackground(Color.white.opacity(0.4))
+                                                     
+                                                    }
+                                                }
                                             }
-                                            .onTapGesture {
-                                                viewModel.addSharedStory(childId: friend.id, fromId: viewModel.child?.username ?? "", toId: friend.id, storyId: story.id)
+                                            .searchable(text: $searchQuery, prompt: "Search Friends")
+                                            .scrollContentBackground(.hidden)
+                                            .frame(width: 300, height: 500)
+                                            .onAppear {
+                                                viewModel.fetchChild(ChildId: childId)
+                                                viewModel.fetchFriends(childId: childId)
                                             }
                                         }
-                                    }
-                                    .frame(width: 300, height: 500)
-                                    .onAppear {
-                                        viewModel.fetchChild(ChildId: childId)
-                                        viewModel.fetchFriends(childId: childId)
                                     }
                                 }
                             
