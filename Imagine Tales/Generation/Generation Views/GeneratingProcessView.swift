@@ -171,6 +171,9 @@ struct GeneratingProcessView: View {
                 }
             }
         }
+        .onAppear {
+            storyViewModel.fetchChild(ChildId: childId)
+        }
     }
     
     func extractWords(from input: String) -> [String] {
