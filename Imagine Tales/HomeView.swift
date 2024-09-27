@@ -553,8 +553,11 @@ struct StoryRowView: View {
                             HStack(spacing: 20) {
                                 Button(action: {
                                     viewModel.toggleSaveStory(childId: childId, storyId: story.id)
+                                    
+                                    let drop = Drop(title: isSaved ? "Story Unsaved" : "Story Saved")
+                                    Drops.show(drop)
                                     isSaved.toggle()
-                                    reload.toggle()
+                                  //  reload.toggle()
                                 }) {
                                     Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
                                         .font(.system(size: 24))
@@ -601,8 +604,12 @@ struct StoryRowView: View {
                                                         if childId != story.childId {
                                                             if viewModel.status != "Friends" && viewModel.status != "Pending" {
                                                                 viewModel.sendFriendRequest(toChildId: story.childId, fromChildId: childId)
+                                                                let drop = Drop(title: "Friend Request to sent \(story.childUsername)!")
+                                                                Drops.show(drop)
                                                             }
                                                         }
+                                                        
+                                                        viewModel.checkFriendshipStatus(childId: childId, friendChildId: story.childId)
                                                         
                                                     }
                                                     .onAppear {
@@ -671,6 +678,8 @@ struct StoryRowView: View {
                             HStack(spacing: 5) {
                                 Button(action: {
                                     viewModel.likeStory(childId: childId, storyId: story.id)
+                                    let drop = Drop(title: isLiked ? "Unlinked" : "Liked")
+                                    Drops.show(drop)
                                     withAnimation {
                                         isLiked.toggle()
                                     }
@@ -779,6 +788,8 @@ struct StoryRowView: View {
                         isSaved = hasSaved
                         print(isSaved)
                     }
+                    
+                    viewModel.checkFriendshipStatus(childId: childId, friendChildId: story.childId)
                 }
                 
             }
