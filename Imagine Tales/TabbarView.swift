@@ -42,6 +42,7 @@ struct TabbarView: View {
     
     @State private var selectedTab = 2  // Index of the currently selected tab (default: ContentView)
     @State private var isShowingFriendReq = false  // Whether the friend request view is shown
+    @State private var isSearching = false  // Whether the search view is shown
     @State private var showingProfile = false  // Whether the profile is shown
     @AppStorage("dpurl") private var dpUrl = ""  // URL for the profile picture (from AppStorage)
 
@@ -98,9 +99,9 @@ struct TabbarView: View {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 // Button for search functionality
                 Button("search", systemImage: "magnifyingglass") {
-                    isShowingFriendReq = true
+                    isSearching = true
                 }
-                .popover(isPresented: $isShowingFriendReq) {
+                .popover(isPresented: $isSearching) {
                     SearchView().frame(width: 600, height: 700)  // Search popover view
                 }
                 
