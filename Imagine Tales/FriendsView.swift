@@ -269,6 +269,8 @@ struct FriendsView: View {
 struct FriendRequestView: View {
     @StateObject var viewModel = FriendsViewModel()
     @AppStorage("childId") var childId: String = "Default value"
+    @State private var selectedFriend: UserChildren?
+    
     let columns = [
             GridItem(.flexible()),
             GridItem(.flexible())
@@ -368,6 +370,9 @@ struct FriendRequestView: View {
                                             }
                                             .padding()
                                         }
+                                        .onTapGesture {
+                                            selectedFriend = friend
+                                        }
                                         
                                     }
                                     .padding()
@@ -377,6 +382,9 @@ struct FriendRequestView: View {
                                 
                             }
                         }
+                        .fullScreenCover(item: $selectedFriend) { friend in
+                                          FriendProfileView(friendId: friend.id, dp: friend.profileImage)
+                                      }
                     }
                 }
             }

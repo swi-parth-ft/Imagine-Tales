@@ -132,7 +132,6 @@ struct StoryReviewView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 100)
-                                .shadow(radius: 5)
                         }
                         .padding()
                     }

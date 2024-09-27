@@ -196,7 +196,7 @@ struct ContentView: View {
     @State private var pets = ""
     @State private var char = ""
     @State private var genre = "Detective"
-    @State private var theme = "Dinosaur Discoveries"
+    @State private var theme = "Underwater Mysteries"
     @State private var story = ""
     @State private var isLoading = false
     @State private var words:[String] =  []
