@@ -511,6 +511,7 @@ struct StoryRowView: View {
     @State private var retryDelay = 2.0
     @State private var showShareList = false
     @State private var searchQuery = ""
+    @State private var isShowingProfile = false
     
     var filteredFriends: [UserChildren] {
             if searchQuery.isEmpty {
@@ -542,6 +543,9 @@ struct StoryRowView: View {
                                     .shadow(color: Color.black.opacity(0.2), radius: 3, x: 0, y: 3)
                             }
                                 .padding(.bottom, 30)
+                                .onTapGesture {
+                                    isShowingProfile.toggle()
+                                }
                             Text(story.title)
                                 .font(.system(size: 24))
                             // Adjust font weight if needed
@@ -792,6 +796,9 @@ struct StoryRowView: View {
                     viewModel.checkFriendshipStatus(childId: childId, friendChildId: story.childId)
                 }
                 
+            }
+            .fullScreenCover(isPresented: $isShowingProfile, onDismiss: { reload.toggle() } ) {
+                FriendProfileView(friendId: story.childId, dp: imgUrl)
             }
         }
     }

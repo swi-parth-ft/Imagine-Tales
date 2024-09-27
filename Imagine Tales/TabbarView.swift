@@ -29,7 +29,6 @@ enum TabItems: Int, CaseIterable {
             return "Profile"
         }
     }
-    
     var iconName: String {
         switch self {
         case .home:
@@ -47,43 +46,22 @@ enum TabItems: Int, CaseIterable {
 }
 
 struct TabbarView: View {
-    
-    
     @Binding var showSignInView: Bool
-    @State private var selectedTab = 2
     @Binding var reload: Bool
-    let bookBackgroundColors: [Color] = [
-        Color(red: 255/255, green: 235/255, blue: 190/255),  // More vivid Beige
-        Color(red: 220/255, green: 220/255, blue: 220/255),  // More vivid Light Gray
-        Color(red: 255/255, green: 230/255, blue: 240/255),  // More vivid Lavender Blush
-        Color(red: 255/255, green: 255/255, blue: 245/255),  // More vivid Mint Cream
-        Color(red: 230/255, green: 255/255, blue: 230/255),  // More vivid Honeydew
-        Color(red: 230/255, green: 248/255, blue: 255/255),  // More vivid Alice Blue
-        Color(red: 255/255, green: 250/255, blue: 230/255),  // More vivid Seashell
-        Color(red: 255/255, green: 250/255, blue: 215/255),  // More vivid Old Lace
-        Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
-    ]
+    
+    @State private var selectedTab = 2
     @State private var isSearching = false
     @State private var isShowingFriendReq = false
+    @State private var showingProfile = false
+    
     @AppStorage("dpurl") private var dpUrl = ""
-  @State private var showingProfile = false
     
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
-                MeshGradient(
-                    width: 3,
-                    height: 3,
-                    points: [
-                        [0, 0], [0.5, 0], [1, 0],
-                        [0, 0.5], [0.5, 0.5], [1, 0.5],
-                        [0, 1], [0.5, 1], [1, 1]
-                    ],
-                    colors: bookBackgroundColors
-                ).ignoresSafeArea()
+                BackGroundMesh().ignoresSafeArea()
                     
                 ZStack {
-                    // Switch between views based on selectedTab
                     switch selectedTab {
                     case 0:
                         HomeView(reload: $reload)
@@ -106,7 +84,6 @@ struct TabbarView: View {
                             .padding()
                     }
                 }
-                //.ignoresSafeArea()
                 .safeAreaInset(edge: .bottom) {
                     ZStack{
                         HStack{
@@ -169,14 +146,8 @@ struct TabbarView: View {
         
         }) {
             SearchView()
-                .background {
-                    BackgroundClearView()
-                }
+              
         }
-//        .sheet(isPresented: $isShowingFriendReq) {
-//            FriendRequestView()
-//             
-//        }
     }
         
         // Hide system tab bar
@@ -197,28 +168,7 @@ struct TabbarView: View {
 
 
 
-extension TabbarView{
-    func CustomTabItem(imageName: String, title: String, isActive: Bool) -> some View{
-        HStack(spacing: 10){
-            Spacer()
-            Image(systemName: isActive ? imageName + ".fill" : imageName)
-                .resizable()
-                .renderingMode(.template)
-                .foregroundColor(isActive ? .white : .black)
-                .frame(width: 20, height: 20)
-            if isActive{
-                Text(title)
-                    .font(.system(size: 14))
-                    .foregroundColor(isActive ? .white : .black)
-            }
-            Spacer()
-        }
-        .frame(width: isActive ? 140 : 120, height: 50)
-        .background(isActive ? Color(hex: "#8AC640") : .clear)
-        .cornerRadius(12)
-        .padding(.horizontal, 5)
-    }
-}
+
 
 struct BackgroundClearView: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
