@@ -291,7 +291,6 @@ struct ProfileView: View {
                                     .fill(Color.white)
                                     .frame(width: 250, height: 250)
                                 
-                                //     AsyncCircularImageView(urlString: dpUrl, size: 200)
                                 Image((viewModel.child?.profileImage.removeJPGExtension() ?? ""))
                                     .resizable()
                                     .scaledToFit()
@@ -301,11 +300,6 @@ struct ProfileView: View {
                                     .onTapGesture {
                                         isSelectingImage = true
                                     }
-//                                    .onAppear {
-//                                        withAnimation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
-//                                            tiltAngle = 10 // Adjust this value to control the tilt range
-//                                        }
-//                                    }
                                 
                             }
                             .onPressingChanged { point in
@@ -577,7 +571,7 @@ struct ProfileView: View {
                         do {
                             screenTimeViewModel.stopScreenTime()
                             try viewModel.logOut()
-                            childId = ""
+//                            childId = ""
                             showSignInView = true
                             
                             

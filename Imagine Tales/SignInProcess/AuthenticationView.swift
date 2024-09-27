@@ -1,4 +1,3 @@
-//
 //  AuthenticationView.swift
 //  Stories
 //
@@ -6,269 +5,230 @@
 //
 
 import SwiftUI
-import GoogleSignIn
-import GoogleSignInSwift
-
-@MainActor
-final class AuthenticationViewModel: ObservableObject {
-    
-    @Published var email = ""
-    @Published var password = ""
-    @Published var didSignInWithApple = false
-
-    let signInAppleHelper = SignInAppleHelper()
-    
-    func signInGoogle() async throws -> AuthDataResultModel?{
-        let helper = SignInGoogleHelper()
-        let tokens = try await helper.signIn()
-        
-        let authDataResult = try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
-            return authDataResult
-        
-      
-    }
-    
-    func signInApple() async throws {
-        signInAppleHelper.startSignInWithAppleFlow { result in
-            switch result {
-            case .success(let signInAppleResult):
-                Task {
-                    do {
-                        let _ = try await AuthenticationManager.shared.signInWithApple(tokens: signInAppleResult)
-                        self.didSignInWithApple = true
-                    } catch {
-                        
-                    }
-                }
-                
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
-}
 
 struct AuthenticationView: View {
-    @Binding var showSignInView: Bool
-    @Binding var isiPhone: Bool
-    @StateObject var viewModel = AuthenticationViewModel()
-    @State private var isParent = true
-    @State private var newUser = true
-    @State private var isSignedInWithGoogle = false
+    @Binding var showSignInView: Bool // Controls the visibility of the sign-in view
+    @Binding var isiPhone: Bool // Determines if the device is an iPhone
+    @StateObject var viewModel = AuthenticationViewModel() // View model for authentication
+    @State private var isParent = true // Tracks if the user is a parent
+    @State private var newUser = true // Tracks if the user is new
+    @State private var isSignedInWithGoogle = false // Tracks Google sign-in status
     
-    @AppStorage("isOnboarding") var isOnboarding: Bool = true
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @AppStorage("isOnboarding") var isOnboarding: Bool = true // Persistent storage for onboarding status
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass // Get the current horizontal size class
 
-    
-    @Binding var isParentFlow: Bool
-    
+    @Binding var isParentFlow: Bool // Determines the flow for parents
+
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "#F5F5DC").ignoresSafeArea()
-                
+                Color(hex: "#F5F5DC").ignoresSafeArea() // Background color
+
+                // Background images
                 VStack {
                     Spacer()
                     HStack {
                         VStack {
                             Spacer()
-                            Image("backgroundShade2")
+                            Image("backgroundShade2") // Left background image
                         }
                         Spacer()
                         VStack {
                             Spacer()
-                            Image("backgroundShade1")
+                            Image("backgroundShade1") // Right background image
                         }
                     }
                 }
                 .edgesIgnoringSafeArea(.all)
                
+                // Main content area
                 VStack {
-                    
                     VStack(spacing: isiPhone ? -45 : -10) {
-                            if isiPhone {
-                                Image("OnBoardingImageLogo")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 300, height: 300)
-                            } else {
-                                Image("OnBoardingImageLogo")
-                            }
+                        // Display onboarding logo
+                        if isiPhone {
+                            Image("OnBoardingImageLogo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 300, height: 300) // Specific size for iPhone
+                        } else {
+                            Image("OnBoardingImageLogo") // Full size for other devices
+                        }
                                 
-                            ZStack(alignment: .center) {
+                        // Rounded rectangle for welcome message and buttons
+                        ZStack(alignment: .center) {
+                            RoundedRectangle(cornerRadius: 50)
+                                .fill(Color(hex: "#8AC640"))
+                                .frame(width: UIScreen.main.bounds.width * (isiPhone ? 0.9 : 0.7), height: UIScreen.main.bounds.height * 0.5)
+
+                            VStack(alignment: .center) {
+                                // Welcome title
+                                Text("Welcome to Imagine Tales")
+                                    .font(.custom("ComicNeue-Bold", size: isiPhone ? 20 : 32))
                                 
-                                RoundedRectangle(cornerRadius: 50)
-                                    .fill(Color(hex: "#8AC640"))
-                                    .frame(width:  UIScreen.main.bounds.width * (isiPhone ? 0.9 : 0.7), height:  UIScreen.main.bounds.height * (isiPhone ? 0.5 : 0.5))
+                                // Subtitle description
+                                Text("The Number One Best Ebook Store & Reader Application in this Century")
+                                    .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
+                                    .multilineTextAlignment(.center)
                                 
-                                VStack(alignment: .center) {
-                                    
-                                    Text("Welcome to Imagine Tales")
-                                        .font(.custom("ComicNeue-Bold", size: isiPhone ? 20 : 32))
-                                    
-                                    Text("The Number One Best Ebook Store & Reader Application in this Century")
+                                Spacer() // Spacer to push content up
+
+                                // Button to show onboarding screen
+                                Button("Show onBoarding") {
+                                    isOnboarding = true // Trigger onboarding flow
+                                }
+
+                                // Navigation link for Sign Up
+                                NavigationLink {
+                                    SignInWithEmailView(
+                                        showSignInView: $showSignInView,
+                                        isiPhone: $isiPhone,
+                                        isParent: true,
+                                        continueAsChild: false,
+                                        signedInWithGoogle: false,
+                                        isParentFlow: false,
+                                        isChildFlow: $isParentFlow
+                                    )
+                                } label: {
+                                    Text("Sign Up")
                                         .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
-                                        .multilineTextAlignment(.center)
-                                    Spacer()
-                                    Button("Show onBoarding") {
-                                        isOnboarding = true
-                                    }
+                                        .frame(height: isiPhone ? 35 : 55)
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color(hex: "#FF6F61")) // Sign Up button color
+                                        .cornerRadius(isiPhone ? 6 : 12) // Button corners
+                                        .foregroundStyle(.black) // Button text color
+                                }
+
+                                // Navigation link for Continue as Parent
+                                NavigationLink {
+                                    SignInWithEmailView(
+                                        showSignInView: $showSignInView,
+                                        isiPhone: $isiPhone,
+                                        isParent: false,
+                                        continueAsChild: true,
+                                        signedInWithGoogle: false,
+                                        isParentFlow: true,
+                                        isChildFlow: $isParentFlow
+                                    )
+                                } label: {
+                                    Text("Continue as Parent")
+                                        .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
+                                        .frame(height: isiPhone ? 35 : 55)
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color(hex: "#DFFFDF")) // Continue button color
+                                        .cornerRadius(isiPhone ? 6 : 12)
+                                        .foregroundStyle(.black) // Button text color
+                                }
+
+                                // Setup for Child button only for non-iPhone devices
+                                if !isiPhone {
                                     NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: true, continueAsChild: false, signedInWithGoogle: false, isParentFlow: false, isChildFlow: $isParentFlow)
-                                        
+                                        SignInWithEmailView(
+                                            showSignInView: $showSignInView,
+                                            isiPhone: $isiPhone,
+                                            isParent: false,
+                                            continueAsChild: true,
+                                            signedInWithGoogle: false,
+                                            isParentFlow: false,
+                                            isChildFlow: $isParentFlow
+                                        )
                                     } label: {
-                                        Text("Sign Up")
-                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
+                                        Text("Setup for Child")
+                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
                                             .frame(height: isiPhone ? 35 : 55)
                                             .frame(maxWidth: .infinity)
-                                            .background(Color(hex: "#FF6F61"))
+                                            .background(Color(hex: "#DFFFDF")) // Setup button color
                                             .cornerRadius(isiPhone ? 6 : 12)
-                                            .foregroundStyle(.black)
+                                            .foregroundStyle(.black) // Button text color
                                     }
+                                }
+                                
+                                // Divider with "or" text
+                                HStack {
+                                    Capsule()
+                                        .fill(Color(hex: "#E9E9E9"))
+                                        .frame(width: isiPhone ? 100 : 200, height: 1) // Left divider
                                     
-                                    NavigationLink {
-                                        SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: false, continueAsChild: true, signedInWithGoogle: false, isParentFlow: true, isChildFlow: $isParentFlow)
-                                        
+                                    Text("or") // Text between dividers
+                                    
+                                    Capsule()
+                                        .fill(Color(hex: "#E9E9E9"))
+                                        .frame(width: isiPhone ? 100 : 200, height: 1) // Right divider
+                                }
+                                
+                                // Sign-in options with Google and Apple buttons
+                                HStack {
+                                    // Google sign-in button
+                                    Button {
+                                        Task {
+                                            do {
+                                                if let _ = try await viewModel.signInGoogle() {
+                                                    isSignedInWithGoogle = true // Update sign-in status
+                                                }
+                                            } catch {
+                                                print(error.localizedDescription) // Log errors
+                                            }
+                                        }
                                     } label: {
-                                        Text("Continue as Parent")
-                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
-                                            .frame(height: isiPhone ? 35 : 55)
-                                            .frame(maxWidth: .infinity)
-                                            .background(Color(hex: "#DFFFDF"))
-                                            .cornerRadius(isiPhone ? 6 : 12)
-                                            .foregroundStyle(.black)
-                                    }
-                                    if !isiPhone {
-                                        NavigationLink {
-                                            SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: false, continueAsChild: true, signedInWithGoogle: false, isParentFlow: false, isChildFlow: $isParentFlow)
-                                            
-                                        } label: {
-                                            Text("Setup for Child")
-                                                .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
-                                                .frame(height: isiPhone ? 35 : 55)
-                                                .frame(maxWidth: .infinity)
-                                                .background(Color(hex: "#DFFFDF"))
-                                                .cornerRadius(isiPhone ? 6 : 12)
-                                                .foregroundStyle(.black)
-                                        }
-                                    }
-                                    
-                                    HStack {
-                                        Capsule()
-                                            .fill(Color(hex: "#E9E9E9"))
-                                            .frame(width: isiPhone ? 100 : 200, height: 1)
-                                        
-                                        Text("or")
-                                        Capsule()
-                                            .fill(Color(hex: "#E9E9E9"))
-                                            .frame(width: isiPhone ? 100 : 200, height: 1)
-                                    }
-                                    
-                                    HStack{
-                                        Button {
-                                            Task {
-                                                do {
-                                                    if let _ = try await viewModel.signInGoogle() {
-                                                        
-                                                        isSignedInWithGoogle = true
-                                                    }
-                                                } catch {
-                                                    print(error.localizedDescription)
-                                                }
-                                            }
-                                        } label: {
-                                            ZStack {
-                                                RoundedRectangle(cornerRadius: 22)
-                                                    .fill(.white)
-                                                    .frame(width: 55, height: 55)
-                                                Image("googleIcon")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 22, height: 22)
-                                            }
-                                            
-                                        }
-                                        .navigationDestination(isPresented: $isSignedInWithGoogle) {
-                                            SignInWithEmailView(showSignInView: $showSignInView, isiPhone: $isiPhone, isParent: true, continueAsChild: false, signedInWithGoogle: true, isParentFlow: true, isChildFlow: $isParentFlow)
-                                        }
-                                        
-                                        
-                                        Button {
-                                            Task {
-                                                do {
-                                                    try await viewModel.signInApple()
-                                                } catch {
-                                                    print(error.localizedDescription)
-                                                }
-                                            }
-                                        } label: {
-                                            Image("appleIcon")
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 22)
+                                                .fill(.white)
+                                                .frame(width: 55, height: 55) // Button size
+                                            Image("googleIcon") // Google icon
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 55, height: 55)
-                                                .cornerRadius(22)
-                                            //                                        signInWithAppleButtonViewRepresentable(type: .signIn, style: .white)
-                                            //                                            .allowsHitTesting(false)
-                                        }
-                                        .onChange(of: viewModel.didSignInWithApple) { oldValue, newValue in
-                                            if newValue {
-                                                showSignInView = false
-                                            }
+                                                .frame(width: 22, height: 22) // Icon size
                                         }
                                     }
-                                    
-                                    
+                                    .navigationDestination(isPresented: $isSignedInWithGoogle) {
+                                        SignInWithEmailView(
+                                            showSignInView: $showSignInView,
+                                            isiPhone: $isiPhone,
+                                            isParent: true,
+                                            continueAsChild: false,
+                                            signedInWithGoogle: true,
+                                            isParentFlow: true,
+                                            isChildFlow: $isParentFlow
+                                        ) // Navigate on successful Google sign-in
+                                    }
+
+                                    // Apple sign-in button
+                                    Button {
+                                        Task {
+                                            do {
+                                                try await viewModel.signInApple() // Attempt to sign in with Apple
+                                            } catch {
+                                                print(error.localizedDescription) // Log errors
+                                            }
+                                        }
+                                    } label: {
+                                        Image("appleIcon") // Apple icon
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 55, height: 55) // Icon size
+                                            .cornerRadius(22) // Rounded corners
+                                    }
+                                    .onChange(of: viewModel.didSignInWithApple) { newValue in
+                                        if newValue {
+                                            showSignInView = false // Dismiss on successful sign-in
+                                        }
+                                    }
                                 }
-                                .frame(width:  UIScreen.main.bounds.width * (isiPhone ? 0.8 : 0.6), height:  UIScreen.main.bounds.height * (isiPhone ? 0.4 : 0.4))
-                                
-                                
                             }
-                            .frame(maxWidth: .infinity)
+                            .frame(width: UIScreen.main.bounds.width * (isiPhone ? 0.8 : 0.6), height: UIScreen.main.bounds.height * (isiPhone ? 0.4 : 0.4)) // Set frame for content
                         }
-                        .frame(maxWidth: .infinity)
-                    
+                        .frame(maxWidth: .infinity) // Expand to fill width
+                    }
+                    .frame(maxWidth: .infinity) // Expand to fill width
                 }
-                .frame(maxWidth: .infinity)
-                .navigationTitle("Welcome onboard")
-                .interactiveDismissDisabled()
-            }
-            .onAppear {
-//                if horizontalSizeClass == .compact {
-//                    isiPhone = true
-//                }
+                .frame(maxWidth: .infinity) // Expand to fill width
+                .navigationTitle("Welcome onboard") // Set navigation title
+                .interactiveDismissDisabled() // Disable interactive dismissal
             }
         }
     }
 }
 
+// Preview structure for AuthenticationView
 #Preview {
     AuthenticationView(showSignInView: .constant(false), isiPhone: .constant(false), isParentFlow: .constant(false))
-}
-
-
-extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let a, r, g, b: UInt64
-        switch hex.count {
-        case 3: // RGB (12-bit)
-            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: // RGB (24-bit)
-            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8: // ARGB (32-bit)
-            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (a, r, g, b) = (255, 0, 0, 0)
-        }
-
-        self.init(
-            .sRGB,
-            red: Double(r) / 255,
-            green: Double(g) / 255,
-            blue: Double(b) / 255,
-            opacity: Double(a) / 255
-        )
-    }
 }
