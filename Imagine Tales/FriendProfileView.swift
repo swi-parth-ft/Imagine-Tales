@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseFirestore
+import Drops
 
 final class FriendProfileViewModel: ObservableObject {
     @Published var child: UserChildren?
@@ -207,7 +208,10 @@ struct FriendProfileView: View {
                                         Button("Remove", systemImage: "person.crop.circle.fill.badge.minus") {
                                             viewModel.removeFriend(childId: childId, docID: friendId)
                                             viewModel.removeFriend(childId: friendId, docID: childId)
+                                            viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
                                             isRemoved = true
+                                            let drop = Drop(title: "Removed Friend")
+                                            Drops.show(drop)
                                             
                                         }
                                         .foregroundStyle(.black)
@@ -218,7 +222,9 @@ struct FriendProfileView: View {
                                     Button("Add Friend") {
                                         
                                         viewModel.sendFriendRequest(toChildId: friendId, fromChildId: childId)
-                                        
+                                        viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
+                                        let drop = Drop(title: "Friend request sent.")
+                                        Drops.show(drop)
                                     }
                                     .foregroundStyle(.black)
                                 }
