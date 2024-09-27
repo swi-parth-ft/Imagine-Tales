@@ -158,6 +158,10 @@ struct TabbarView: View {
                 Button("Notifications", systemImage: "bell") {
                     isShowingFriendReq = true
                 }
+                .popover(isPresented: $isShowingFriendReq) {
+                    FriendRequestView()
+                        .frame(width: 600, height: 700)
+                }
             }
         }
         .tint(.black)
@@ -169,12 +173,10 @@ struct TabbarView: View {
                     BackgroundClearView()
                 }
         }
-        .sheet(isPresented: $isShowingFriendReq) {
-            FriendRequestView()
-                .background {
-                    BackgroundClearView()
-                }
-        }
+//        .sheet(isPresented: $isShowingFriendReq) {
+//            FriendRequestView()
+//             
+//        }
     }
         
         // Hide system tab bar
