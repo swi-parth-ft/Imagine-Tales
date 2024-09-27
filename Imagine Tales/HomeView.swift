@@ -554,7 +554,7 @@ struct StoryRowView: View {
                                 Button(action: {
                                     viewModel.toggleSaveStory(childId: childId, storyId: story.id)
                                     
-                                    let drop = Drop(title: isSaved ? "Story Unsaved" : "Story Saved")
+                                    let drop = Drop(title: isSaved ? "Story Unsaved" : "Story Saved", icon: UIImage(systemName: isSaved ? "bookmark" : "bookmark.fill"))
                                     Drops.show(drop)
                                     isSaved.toggle()
                                   //  reload.toggle()
@@ -604,7 +604,7 @@ struct StoryRowView: View {
                                                         if childId != story.childId {
                                                             if viewModel.status != "Friends" && viewModel.status != "Pending" {
                                                                 viewModel.sendFriendRequest(toChildId: story.childId, fromChildId: childId)
-                                                                let drop = Drop(title: "Friend Request to sent \(story.childUsername)!")
+                                                                let drop = Drop(title: "Friend Request to sent \(story.childUsername)!", icon: UIImage(systemName: "plus"))
                                                                 Drops.show(drop)
                                                             }
                                                         }
@@ -678,7 +678,7 @@ struct StoryRowView: View {
                             HStack(spacing: 5) {
                                 Button(action: {
                                     viewModel.likeStory(childId: childId, storyId: story.id)
-                                    let drop = Drop(title: isLiked ? "Unlinked" : "Liked")
+                                    let drop = Drop(title: isLiked ? "Unlinked" : "Liked", icon: UIImage(systemName: isLiked ? "heart" : "heart.fill" ))
                                     Drops.show(drop)
                                     withAnimation {
                                         isLiked.toggle()

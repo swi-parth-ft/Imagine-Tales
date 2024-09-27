@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseStorage
 import FirebaseFirestore
+import Drops
 
 final class DpSelectionViewModel: ObservableObject {
     
@@ -113,6 +114,8 @@ struct DpSelectionView: View {
                                                 Button("Set", systemImage: "checkmark.circle.fill") {
                                                     viewModel.updateFieldInCollection(childId: childId, url: String(image + ".jpg"))
                                                     viewModel.fetchProfileImage(dp: image + ".jpg")
+                                                    let drop = Drop(title: "Profile Image Changed!", icon: UIImage(systemName: "pawprint.fill"))
+                                                    Drops.show(drop)
                                                     dismiss()
                                                 }
                                                 .padding()
@@ -126,7 +129,9 @@ struct DpSelectionView: View {
                                 }
                                 .onTapGesture {
                                     withAnimation {
+                                        
                                         selectedImage = image
+                                        
                                         
                                         
                                     }

@@ -210,7 +210,7 @@ struct FriendProfileView: View {
                                             viewModel.removeFriend(childId: friendId, docID: childId)
                                             viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
                                             isRemoved = true
-                                            let drop = Drop(title: "Removed Friend")
+                                            let drop = Drop(title: "Removed Friend", icon: UIImage(systemName: "person.crop.circle.fill.badge.minus"))
                                             Drops.show(drop)
                                             
                                         }
@@ -223,7 +223,7 @@ struct FriendProfileView: View {
                                         
                                         viewModel.sendFriendRequest(toChildId: friendId, fromChildId: childId)
                                         viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
-                                        let drop = Drop(title: "Friend request sent.")
+                                        let drop = Drop(title: "Friend request sent.", icon: UIImage(systemName: "plus"))
                                         Drops.show(drop)
                                     }
                                     .foregroundStyle(.black)
