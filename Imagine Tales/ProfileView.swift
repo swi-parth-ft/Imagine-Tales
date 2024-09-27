@@ -569,9 +569,7 @@ struct ProfileView: View {
                     viewModel.fetchChild(ChildId: childId)
                 }) {
                     DpSelectionView()
-                        .background {
-                            BackgroundClearView()
-                        }
+                      
                 }
 
                 CustomAlert(isShowing: $isShowingAlert, title: "Already Leaving?", message1: "You’ll miss all the fun! 😢", message2: "But don’t worry, you can come back anytime!", onConfirm: {

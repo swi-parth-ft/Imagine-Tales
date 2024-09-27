@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -75,9 +75,7 @@
 		07C9301D2C9F68B000AB8F06 /* OpenSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07C9301C2C9F68B000AB8F06 /* OpenSans.ttf */; };
 		07D323422CA62F8B00846FA3 /* Drops in Frameworks */ = {isa = PBXBuildFile; productRef = 07D323412CA62F8B00846FA3 /* Drops */; };
 		07D323442CA6F25200846FA3 /* Extentions .swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D323432CA6F25200846FA3 /* Extentions .swift */; };
-		07D70A102C9E12590024B333 /* ThemeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D70A0F2C9E12590024B333 /* ThemeSelectionView.swift */; };
 		07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */; };
-		07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB384A2C62BEAB0070EEFA /* ContentView.swift */; };
 		07FB384D2C62BEAC0070EEFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07FB384C2C62BEAC0070EEFA /* Assets.xcassets */; };
 		07FB38502C62BEAC0070EEFA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07FB384F2C62BEAC0070EEFA /* Preview Assets.xcassets */; };
 		07FB38642C63B3720070EEFA /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FB38632C63B3720070EEFA /* Environment.swift */; };
@@ -135,16 +133,34 @@
 		07AF26DC2C703B2C00E41509 /* ComicNeue-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ComicNeue-Bold.ttf"; sourceTree = "<group>"; };
 		07C9301C2C9F68B000AB8F06 /* OpenSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = OpenSans.ttf; sourceTree = "<group>"; };
 		07D323432CA6F25200846FA3 /* Extentions .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extentions .swift"; sourceTree = "<group>"; };
-		07D70A0F2C9E12590024B333 /* ThemeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSelectionView.swift; sourceTree = "<group>"; };
 		07FB38452C62BEAB0070EEFA /* Imagine Tales.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Imagine Tales.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imagine_TalesApp.swift; sourceTree = "<group>"; };
-		07FB384A2C62BEAB0070EEFA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		07FB384C2C62BEAC0070EEFA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07FB384F2C62BEAC0070EEFA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		07FB38602C63B2360070EEFA /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		07FB38622C63B3250070EEFA /* Imagine-Tales-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Imagine-Tales-Info.plist"; sourceTree = SOURCE_ROOT; };
 		07FB38632C63B3720070EEFA /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		07D323462CA6F93600846FA3 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CharacterSelectionView.swift,
+				ContentView.swift,
+				GeneratingProcessView.swift,
+				GenerationViewModel.swift,
+				GenreSelectionView.swift,
+				MoodSelectionView.swift,
+				ThemeSelectionView.swift,
+			);
+			target = 07FB38442C62BEAB0070EEFA /* Imagine Tales */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		07D323452CA6F93500846FA3 /* Generation */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (07D323462CA6F93600846FA3 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Generation; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		07FB38422C62BEAB0070EEFA /* Frameworks */ = {
@@ -253,10 +269,9 @@
 				07D323432CA6F25200846FA3 /* Extentions .swift */,
 				078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */,
 				0711F34E2C6D5D79006C86AA /* RootView.swift */,
-				0711F3502C6D5DCA006C86AA /* TabbarView.swift */,
 				0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */,
-				07FB384A2C62BEAB0070EEFA /* ContentView.swift */,
-				07D70A0F2C9E12590024B333 /* ThemeSelectionView.swift */,
+				0711F3502C6D5DCA006C86AA /* TabbarView.swift */,
+				07D323452CA6F93500846FA3 /* Generation */,
 				0755780C2C9C770E009F4F9A /* StoryReviewView.swift */,
 				077BE2882C81263F00760D5A /* TextPlaceholderView.swift */,
 				0701FB8C2C822816004BEE9F /* FriendsView.swift */,
@@ -421,14 +436,12 @@
 				0701FBA42C83E49E004BEE9F /* Radial.metal in Sources */,
 				0711F3582C6D63F1006C86AA /* AuthenticationView.swift in Sources */,
 				079E92522C89E64400433869 /* ExploreView.swift in Sources */,
-				07FB384B2C62BEAB0070EEFA /* ContentView.swift in Sources */,
 				07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */,
 				079E92502C89250A00433869 /* CustomAlert.swift in Sources */,
 				077BE2872C810FF800760D5A /* SavedStoryView.swift in Sources */,
 				0711F3782C6D7CDB006C86AA /* SignInAppleHelper.swift in Sources */,
 				0711F3742C6D725C006C86AA /* Utilities.swift in Sources */,
 				078DACDC2C8DFA3300F04A65 /* ScreenTimeManager.swift in Sources */,
-				07D70A102C9E12590024B333 /* ThemeSelectionView.swift in Sources */,
 				078DACDA2C8D202500F04A65 /* BackGroundMesh.swift in Sources */,
 				0711F3762C6D7433006C86AA /* ProfileView.swift in Sources */,
 				0701FBB62C8755C5004BEE9F /* RippleEffectView.swift in Sources */,

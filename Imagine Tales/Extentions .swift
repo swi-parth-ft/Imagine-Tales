@@ -32,4 +32,20 @@ extension TabbarView{
     }
 }
 
+//MARK: ButtonStyle
+struct ButtonViewModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .buttonStyle(.borderedProminent)
+            .tint(.white.opacity(0.4))
+            .cornerRadius(20)
+            .shadow(radius: 10)
+    }
+}
+extension View {
+    func buttonStyle() -> some View {
+        modifier(ButtonViewModifier())
+    }
+    
+}
 
