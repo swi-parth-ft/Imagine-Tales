@@ -205,7 +205,7 @@ struct StoryRowView: View {
                 List {
                     Section("Share with Friends") {
                         TextField("Search Friends", text: $searchQuery)
-                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.4) : Color.white.opacity(0.4))
+                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.2) : Color.white.opacity(0.4))
                         ForEach(filteredFriends) { friend in
                             HStack {
                                 ZStack {
@@ -234,7 +234,7 @@ struct StoryRowView: View {
                                 
                             }
                             
-                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.4) : Color.white.opacity(0.4))
+                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.2) : Color.white.opacity(0.4))
                             
                         }
                     }

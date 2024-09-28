@@ -29,7 +29,7 @@ struct StoryFromProfileView: View {
     @AppStorage("childId") var childId: String = "Default Value" // Child ID stored in app storage
     @State private var comment = "" // Comment from the parent
     @State private var isShowingCmt = false // Flag to show comment alert
-
+    @Environment(\.colorScheme) var colorScheme
     // Function to fetch story reviews from Firestore
     func fetchStoryAndReview(storyID: String) {
         let db = Firestore.firestore()
@@ -200,11 +200,7 @@ struct StoryFromProfileView: View {
                                 isSaved.toggle()
                             }) {
                                 Image(systemName: isSaved ? "bookmark.fill" : "bookmark") // Toggle bookmark icon
-                                    .foregroundStyle(
-                                        LinearGradient(gradient: Gradient(colors: [Color.black, Color.gray]),
-                                                       startPoint: .top,
-                                                       endPoint: .bottom)
-                                    )
+                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
                             }
                             
                             // Button to like the story

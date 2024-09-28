@@ -16,11 +16,11 @@ struct FriendRequestView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "#8AC640").ignoresSafeArea() // Background color for friend requests
+                colorScheme == .dark ? Color(hex: "#5A6D2A").ignoresSafeArea() : Color(hex: "#8AC640").ignoresSafeArea() // Background color for friend requests
                 VStack {
                     // Check if there are no friend requests
                     if viewModel.children.isEmpty {
@@ -42,7 +42,7 @@ struct FriendRequestView: View {
                                             VStack {
                                                 ZStack {
                                                     Circle()
-                                                        .fill(Color.white)
+                                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white)
                                                         .frame(width: 170)
                                                         .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                                     // Assuming there's an AsyncDp for async loading of images
@@ -55,7 +55,7 @@ struct FriendRequestView: View {
                                                 .padding()
                                                 
                                                 Text("\(friend.username)") // Display friend's username
-                                                    .foregroundStyle(.black)
+                                                    .foregroundStyle(.primary)
                                                 
                                                 // Button to accept the friend request
                                                 Button(action: {
@@ -73,7 +73,7 @@ struct FriendRequestView: View {
                                                         .foregroundStyle(.white)
                                                         .padding()
                                                         .frame(width: 200)
-                                                        .background(Color(hex: "#FF6F61")) // Button color
+                                                        .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61")) // Button color
                                                         .cornerRadius(8)
                                                 }
                                                 
@@ -90,10 +90,10 @@ struct FriendRequestView: View {
                                                     viewModel.deleteRequest(childId: childId, docID: friend.id)
                                                 }) {
                                                     Text("Deny")
-                                                        .foregroundStyle(.black)
+                                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
                                                         .padding()
                                                         .frame(width: 200)
-                                                        .background(Color(hex: "#D0FFD0")) // Button color
+                                                        .background(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#D0FFD0")) // Button color
                                                         .cornerRadius(8)
                                                 }
                                             }

@@ -19,11 +19,12 @@ struct SearchView: View {
             GridItem(.flexible())
         ]
     
-  
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "#8AC640").ignoresSafeArea()
+                colorScheme == .dark ? Color(hex: "#5A6D2A").ignoresSafeArea() : Color(hex: "#8AC640").ignoresSafeArea()
                 
                 VStack {
                     
@@ -46,7 +47,7 @@ struct SearchView: View {
                                             VStack {
                                                 ZStack {
                                                     Circle()
-                                                        .fill(Color.white)
+                                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white)
                                                         .frame(width: 170)
                                                         .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                                     AsyncDp(urlString: friend.profileImage, size: 150)
@@ -54,7 +55,7 @@ struct SearchView: View {
                                                 .padding()
                                               
                                                 Text(friend.username)
-                                                    .foregroundStyle(.black)
+                                                    .foregroundStyle(.primary)
                                             }
                                             .padding()
                                         }

@@ -71,7 +71,7 @@ struct ExploreView: View {
                                     
                                     // Overlay gradient rectangle for styling
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(LinearGradient(colors: [.black, .white.opacity(0.1), .white.opacity(1)], startPoint: .bottom, endPoint: .top))
+                                        .fill(LinearGradient(colors: [.black, colorScheme == .dark ? .black.opacity(0.1) :  .white.opacity(0.1), colorScheme == .dark ? .black : .white.opacity(1)], startPoint: .bottom, endPoint: .top))
                                         .frame(height: isFullHeight ? 600 : 300)
                                         .ignoresSafeArea()
                                     

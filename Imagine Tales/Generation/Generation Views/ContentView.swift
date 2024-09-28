@@ -210,7 +210,7 @@ struct ContentView: View {
                                             .padding()
                                             .frame(maxWidth: .infinity)
                                             .background(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#F2F2DB"))
-                                            .foregroundStyle(.black)
+                                            .foregroundStyle(colorScheme == .dark ? .white : .black)
                                             .cornerRadius(16)
                                         }
                                         
@@ -264,7 +264,7 @@ struct ContentView: View {
                                         }
                                         .font(.custom("ComicNeue-Bold", size: 24))
                                         .padding()
-                                        .background(Color(hex: "#D0FFD0"))
+                                        .background(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#D0FFD0"))
                                         .cornerRadius(22)
                                         .shadow(radius: 10)
                                     }
@@ -298,8 +298,8 @@ struct ContentView: View {
                                                         .fill(Color.Neumorphic.main).softOuterShadow()
                                                         .frame(width: 75, height: 75)
                                                      
-                                                    Image("arrow1")
-                                                        .frame(width: 55, height: 55)
+                                                    Image(systemName: "chevron.backward.circle.fill")
+                                                        .font(.system(size: 55))
                                                     
                                                 }
                                             }
