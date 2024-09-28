@@ -197,7 +197,7 @@ struct FriendProfileView: View {
                                             Drops.show(drop)
                                             
                                         }
-                                        .foregroundStyle(.black)
+                                        .foregroundStyle(.primary)
                                     }
                                 }
                                 
@@ -209,7 +209,7 @@ struct FriendProfileView: View {
                                         let drop = Drop(title: "Friend request sent.", icon: UIImage(systemName: "plus"))
                                         Drops.show(drop)
                                     }
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.primary)
                                 }
                                 
                                 if viewModel.status == "Pending" {
@@ -250,11 +250,6 @@ struct FriendProfileView: View {
                                 } description: {
                                     Text("It looks like there's no stories posted yet.")
                                 } actions: {
-//                                    Button {
-//                                        /// Function that creates a new note
-//                                    } label: {
-//                                        Label("Create a new note", systemImage: "plus")
-//                                    }
                                 }
                                 .listRowBackground(Color.clear)
                             }
@@ -291,10 +286,15 @@ struct FriendProfileView: View {
                                         }
                                         .contentShape(Rectangle())
                                     }
-                                     
-                                    
-                                }
-                                .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.4) : Color.white.opacity(0.5))
+                                    .padding(.vertical)
+                                        .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4)) // Background for story item
+                                        .cornerRadius(22) // Rounded corners for story item
+                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 0)
+                                        .contentShape(Rectangle()) // Expand tappable area
+                                    }
+                                    .buttonStyle(.plain)
+                                    .listRowBackground(Color.white.opacity(0)) // Transparent row background
+                                    .listRowSeparator(.hidden) // Hide row separator
                             }
                         }
                     }

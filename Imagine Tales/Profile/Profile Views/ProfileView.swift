@@ -172,13 +172,13 @@ struct ProfileView: View {
                                                 Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")1")
                                                     .resizable()
                                                     .scaledToFit()
-                                                    .opacity(0.3)
+                                                    .opacity(colorScheme == .dark ? 0.6 : 0.3)
                                                     .frame(width: 300, height: 300)
                                                 Spacer()
                                                 Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")2")
                                                     .resizable()
                                                     .scaledToFit()
-                                                    .opacity(0.5)
+                                                    .opacity(colorScheme == .dark ? 1 : 0.5)
                                                     .frame(width: 70, height: 70)
                                                 Spacer()
                                             }
@@ -200,6 +200,7 @@ struct ProfileView: View {
                                         .padding(.vertical)
                                         .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4)) // Background for story item
                                         .cornerRadius(22) // Rounded corners for story item
+                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 0)
                                         .contentShape(Rectangle()) // Expand tappable area
                                     }
                                     .buttonStyle(.plain)
@@ -241,13 +242,13 @@ struct ProfileView: View {
                                                 Image("\(s.story.theme?.filter { !$0.isWhitespace } ?? "")1")
                                                     .resizable()
                                                     .scaledToFit()
-                                                    .opacity(0.3)
+                                                    .opacity(colorScheme == .dark ? 0.6 : 0.3)
                                                     .frame(width: 300, height: 300)
                                                 Spacer()
                                                 Image("\(s.story.theme?.filter { !$0.isWhitespace } ?? "")2")
                                                     .resizable()
                                                     .scaledToFit()
-                                                    .opacity(0.5)
+                                                    .opacity(colorScheme == .dark ? 1 : 0.5)
                                                     .frame(width: 70, height: 70)
                                                 Spacer()
                                             }
@@ -270,6 +271,7 @@ struct ProfileView: View {
                                         .padding(.vertical)
                                         .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4)) // Background for shared story item
                                         .cornerRadius(22) // Rounded corners for shared story item
+                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 0)
                                         .contentShape(Rectangle()) // Expand tappable area
                                     }
                                     .buttonStyle(.plain)

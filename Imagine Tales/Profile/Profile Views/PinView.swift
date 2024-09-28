@@ -21,10 +21,11 @@ struct PinView: View {
     @State private var isResetting = false // Flag to track if we are resetting the PIN
     @State private var isPinWrong = false // Flag to indicate if the entered PIN is incorrect
     @EnvironmentObject var screenTimeViewModel: ScreenTimeManager // EnvironmentObject for managing screen time
-
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         ZStack {
-            Color(hex: "#8AC640").ignoresSafeArea() // Background color for the view
+            colorScheme == .dark ? Color(hex: "#5A6D2A").ignoresSafeArea() : Color(hex: "#8AC640").ignoresSafeArea() // Background color for the view
             VStack {
                 // Display the appropriate title based on the state
                 Text(reAuthModel.reAuthenticated ? "Enter New PIN" : (isResetting ? "Sign in to reset PIN" : "Enter Parent PIN"))
@@ -43,7 +44,7 @@ struct PinView: View {
                         ForEach(0..<otpLength, id: \.self) { index in
                             TextField("", text: $otp[index])
                                 .frame(width: 50, height: 50)
-                                .background(Color(hex: "#D0FFD0"))
+                                .background(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#D0FFD0"))
                                 .cornerRadius(10)
                                 .shadow(radius: 2)
                                 .multilineTextAlignment(.center)

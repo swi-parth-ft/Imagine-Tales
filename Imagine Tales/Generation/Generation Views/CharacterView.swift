@@ -38,12 +38,14 @@ struct CharacterView: View {
     
     // Available pets for selection
     let pets = ["Dog", "Cat", "Dragon", "Unicorn", "Baby Dinosaur"]
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         NavigationStack {
             ZStack {
                 // Background color for the entire screen
-                Color(hex: "#FFFFF1").ignoresSafeArea()
+//                Color(hex: "#FFFFF1").ignoresSafeArea()
+                colorScheme == .dark ? Color(hex: "#5A6D2A").ignoresSafeArea() : Color(hex: "#8AC640").ignoresSafeArea()
                 
                 // Check if in pet creation mode or character creation mode
                 if !isSelectionPet {
@@ -53,9 +55,9 @@ struct CharacterView: View {
                         HStack {
                             TextField("Name", text: $viewModel.name)
                                 .padding()
-                                .background(.white.opacity(0.8)) // Semi-transparent background
+                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white.opacity(0.8)) // Semi-transparent background
                                 .cornerRadius(22)
-                                .frame(width: UIScreen.main.bounds.width * 0.3)
+                                .frame(width: UIScreen.main.bounds.width * 0.4)
                             
                             Spacer()
                             
@@ -66,17 +68,18 @@ struct CharacterView: View {
                                     .scaledToFit()
                                     .frame(width: 50)
                                     .scaleEffect(viewModel.gender == "Male" ? 1.3 : 1) // Scale based on selection
-                                    .onTapGesture { viewModel.gender = "Male" }
+                                    .onTapGesture { withAnimation { viewModel.gender = "Male" } }
                                 
                                 Image("Female")
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 50)
                                     .scaleEffect(viewModel.gender == "Female" ? 1.3 : 1) // Scale based on selection
-                                    .onTapGesture { viewModel.gender = "Female" }
+                                    .onTapGesture { withAnimation { viewModel.gender = "Female" } }
                             }
+                            
                         }
-                        .frame(height: 70)
+                        .frame(width: UIScreen.main.bounds.width * 0.5,height: 70)
                         
                         // Display selected gender and emotion
                         Text("\(viewModel.gender == "Male" ? "He" : "She") is a \(viewModel.emotion) Person")
@@ -103,13 +106,16 @@ struct CharacterView: View {
                                                         .font(.caption)
                                                 }
                                             )
-                                            .onTapGesture { viewModel.emotion = emotion } // Update selected emotion
+                                            .onTapGesture { withAnimation { viewModel.emotion = emotion } } // Update selected emotion
                                             .scaleEffect(emotion == viewModel.emotion ? 1.1 : 1.0)
                                             .shadow(radius: 3)
                                     }
                                 }
                             }
+                            .padding([.leading, .vertical])
                         }
+                        .frame(width: UIScreen.main.bounds.width * 0.6)
+                        
                         
                         // Age selection label
                         Text("Age").font(.custom("ComicNeue-Bold", size: 20))
@@ -124,12 +130,12 @@ struct CharacterView: View {
                             }
                             .onTapGesture { if viewModel.age > 3 { viewModel.age -= 1 } }
                             
-                            Spacer()
+                           
                             
                             // Display current age
-                            Text("\(viewModel.age)").font(.custom("ComicNeue-Bold", size: 70))
+                            Text("\(viewModel.age)").font(.custom("ComicNeue-Bold", size: 70)).padding(.horizontal)
                             
-                            Spacer()
+                            
                             
                             ZStack {
                                 Circle()
@@ -141,7 +147,7 @@ struct CharacterView: View {
                         }
                         
                         // Create character button
-                        Button("Create") {
+                        Button {
                             Task {
                                 do {
                                     // Try to create the character and update the list
@@ -152,9 +158,13 @@ struct CharacterView: View {
                                     print(error.localizedDescription) // Handle errors
                                 }
                             }
+                        } label: {
+                            Text("Create Character")
+                                .foregroundStyle(.white)
+                                .frame(width: UIScreen.main.bounds.width * 0.5)
                         }
                         .padding()
-                        .background(Color(hex: "#FF6F61"))
+                        .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
                         .cornerRadius(12)
                     }
                     .padding()
@@ -166,11 +176,12 @@ struct CharacterView: View {
                             // TextField for entering pet name
                             TextField("Pet Name", text: $viewModel.petName)
                                 .padding() // Padding around the TextField
-                                .frame(width: UIScreen.main.bounds.width * 0.5) // Set width to half the screen size
-                                .background(.white.opacity(0.8)) // Semi-transparent white background
+                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white.opacity(0.8)) // Semi-transparent white background
+                                .frame(width: UIScreen.main.bounds.width * 0.5)
                                 .shadow(radius: 2) // Slight shadow around the TextField
                                 .cornerRadius(22) // Rounded corners
-                                .tint(Color(hex: "#FF6F61")) // Custom tint color for text cursor
+                                .tint(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#FF6F61")) // Custom tint color for text cursor
+                            
                             
                             // Display the selected pet type dynamically
                             Text("It's a \(viewModel.petKind)")
@@ -215,13 +226,12 @@ struct CharacterView: View {
                                 }
                                 .padding() // Padding for the horizontal stack
                             }
-                            // Limit ScrollView width to 60% of the screen and add padding on the left side
+                            .padding(.leading)
                             .frame(width: UIScreen.main.bounds.width * 0.6)
-                            .padding(.leading, 30)
                         }
                         
                         // Button for creating the pet
-                        Button("Create") {
+                        Button {
                             // Perform asynchronous task to create the pet
                             Task {
                                 do {
@@ -233,11 +243,13 @@ struct CharacterView: View {
                                     print(error.localizedDescription) // Print error if something goes wrong
                                 }
                             }
+                        } label: {
+                            Text("Create Pet")
+                                .foregroundStyle(.white)
+                                .frame(width: UIScreen.main.bounds.width * 0.5)
                         }
                         .padding() // Padding around the button
-                        .frame(width: UIScreen.main.bounds.width * 0.5) // Set width to half the screen
-                        .background(Color(hex: "#FF6F61")) // Custom background color for button
-                        .foregroundStyle(.white) // White text color
+                        .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61")) // Custom background color for button
                         .cornerRadius(12) // Rounded corners for the button
                     }
                     .padding() // Padding for the whole VStack
@@ -261,7 +273,7 @@ struct CharacterView: View {
                 // Extra top padding for spacing
                 .padding(.top, 20)
                 // Custom background color for the button
-                .background(Color(hex: "#FF6F61"))
+                .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
                 // White text color for the button label
                 .foregroundStyle(.white)
                 // Custom font for the button label

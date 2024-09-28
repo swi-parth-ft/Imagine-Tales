@@ -25,11 +25,12 @@ struct DpSelectionView: View {
     @State private var selectedImage = "" // State variable to keep track of the currently selected image
     @AppStorage("dpurl") private var dpUrl = "" // AppStorage to persist the selected profile image URL
     @Environment(\.dismiss) var dismiss // Environment variable to dismiss the view
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         ZStack {
             // Set the background color of the view
-            Color(hex: "#8AC640").ignoresSafeArea()
+            colorScheme == .dark ? Color(hex: "#5A6D2A").ignoresSafeArea() : Color(hex: "#8AC640").ignoresSafeArea()
             VStack(alignment: .leading) {
                 // Title for the selection screen
                 Text("Select Profile Image")
@@ -45,7 +46,7 @@ struct DpSelectionView: View {
                                 ZStack {
                                     // Circle background for each image
                                     Circle()
-                                        .fill(Color.white)
+                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white)
                                         .frame(width: 170, height: 170)
                                     
                                     // Display the profile image

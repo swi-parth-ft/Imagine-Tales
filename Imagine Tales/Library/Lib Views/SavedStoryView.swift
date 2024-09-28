@@ -38,14 +38,14 @@ struct SavedStoryView: View {
                             Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")1")
                                 .resizable() // Make the image resizable
                                 .scaledToFit() // Scale the image to fit its container
-                                .opacity(0.3) // Set opacity for a translucent effect
+                                .opacity(colorScheme == .dark ? 0.7 : 0.3) // Set opacity for a translucent effect
                                 .frame(width: 300, height: 300) // Fixed dimensions for the image
                             Spacer() // Spacer to push the second image to the right
                             // Second background image with reduced size and opacity
                             Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")2")
                                 .resizable()
                                 .scaledToFit()
-                                .opacity(0.7) // Higher opacity than the first image
+                                .opacity(colorScheme == .dark ? 1 : 0.7) // Higher opacity than the first image
                                 .frame(width: 70, height: 70) // Smaller fixed dimensions
                             Spacer() // Spacer to ensure proper layout
                         }
@@ -67,6 +67,7 @@ struct SavedStoryView: View {
                     .padding(.vertical) // Vertical padding for the list item
                     .background(colorScheme == .dark ? Color.black.opacity(0.4) : .white.opacity(0.4)) // Semi-transparent white background
                     .cornerRadius(22) // Rounded corners for the list item
+                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 0)
                     .contentShape(Rectangle()) // Define the tappable area for the overall item
                 }
                 .buttonStyle(.plain) // Use a plain button style for a consistent look

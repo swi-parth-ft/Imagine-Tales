@@ -21,6 +21,7 @@ struct ChildView: View {
     @State var origin: CGPoint = .zero // Store the origin point of the tap
     @State private var tiltAngle: Double = 0 // Angle for 3D tilt effect
     @EnvironmentObject var screenTimeViewModel: ScreenTimeManager // Environment object for managing screen time
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         NavigationStack {
@@ -74,7 +75,7 @@ struct ChildView: View {
                                         dismiss() // Dismiss the view
                                     }
                                     .font(.title)
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.primary)
                                 }
                             }
                             Spacer()
@@ -106,7 +107,7 @@ struct ChildView: View {
                                     }
                                 }
                             }
-                            .listRowBackground(Color.white.opacity(0.4)) // Background for each story row
+                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.2) : Color.white.opacity(0.4)) // Background for each story row
                         }
                         .onDelete { indexSet in
                             if let index = indexSet.first {

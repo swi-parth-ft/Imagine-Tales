@@ -61,7 +61,7 @@ struct StoryByGenreView: View {
                                     Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")1")
                                         .resizable()
                                         .scaledToFit()
-                                        .opacity(0.3) // Set opacity for background effect
+                                        .opacity(colorScheme == .dark ? 0.6 : 0.3) // Set opacity for background effect
                                         .frame(width: 300, height: 300) // Fixed size for the image
                                     
                                     Spacer() // Add space between images
@@ -70,7 +70,7 @@ struct StoryByGenreView: View {
                                     Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")2")
                                         .resizable()
                                         .scaledToFit()
-                                        .opacity(0.5) // Set opacity for a layered effect
+                                        .opacity(colorScheme == .dark ? 1 : 0.5) // Set opacity for a layered effect
                                         .frame(width: 70, height: 70) // Fixed size for the smaller image
                                     
                                     Spacer() // Add space between images
@@ -92,6 +92,7 @@ struct StoryByGenreView: View {
                             .padding(.vertical) // Vertical padding for the list item
                             .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4)) // Background with a white translucent effect
                             .cornerRadius(22) // Rounded corners for the list item
+                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 0)
                             .contentShape(Rectangle()) // Define the tappable area for the overall item
                         }
                         .buttonStyle(.plain) // Use a plain button style to remove default button styling

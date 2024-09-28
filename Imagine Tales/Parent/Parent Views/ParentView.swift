@@ -20,7 +20,7 @@ struct ParentView: View {
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass // Environment variable to check size class
     @State private var isCompact = false // State variable to track if the layout is compact
-
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         NavigationStack {
             ZStack {
@@ -43,7 +43,7 @@ struct ParentView: View {
                                     Spacer() // Spacer to push content to the right
                                 }
                             }
-                            .listRowBackground(Color.white.opacity(0.4)) // Background color for list row
+                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.2) : Color.white.opacity(0.4)) // Background color for list row
                         }
                         .onDelete(perform: viewModel.deleteChild) // Enable swipe-to-delete functionality
                         
@@ -51,7 +51,7 @@ struct ParentView: View {
                         Button("Add Child") {
                             isAddingNew = true // Trigger the add child form
                         }
-                        .listRowBackground(Color.white.opacity(0.4)) // Background color for button row
+                        .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.2) : Color.white.opacity(0.4)) // Background color for button row
                     }
                     .onAppear {
                         // Fetch children and parent data when the view appears
