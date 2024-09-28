@@ -19,7 +19,7 @@ struct StoryReviewView: View {
     var pets: [Pet]                     // Array of Pet objects
     var mood: String                    // The chosen mood of the story
     var moodEmoji: String               // Emoji representing the mood of the story
-    
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         VStack(spacing: 20) {
             // Title for the preview section
@@ -101,7 +101,7 @@ struct StoryReviewView: View {
             ZStack {
                 // Background for the story details
                 RoundedRectangle(cornerRadius: 22)
-                    .fill(Color(hex: "#F2F2DB"))
+                    .fill(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#F2F2DB"))
                     .frame(height: 600)
                 
                 VStack {
@@ -130,7 +130,7 @@ struct StoryReviewView: View {
                     // Theme section
                     ZStack {
                         RoundedRectangle(cornerRadius: 22)
-                            .fill(Color(hex: "#F8F8E4"))
+                            .fill(colorScheme == .dark ? Color(hex: "#B4B493").opacity(0.3) : Color(hex: "#F8F8E4"))
                             .frame(height: 100)
                         HStack {
                             VStack(alignment: .leading) {
@@ -154,7 +154,7 @@ struct StoryReviewView: View {
                     HStack {
                         ZStack {
                             RoundedRectangle(cornerRadius: 22)
-                                .fill(Color(hex: "#F8F8E4"))
+                                .fill(colorScheme == .dark ? Color(hex: "#B4B493").opacity(0.3) : Color(hex: "#F8F8E4"))
                                 .frame(height: 100)
                             HStack {
                                 VStack(alignment: .leading) {
@@ -175,7 +175,7 @@ struct StoryReviewView: View {
                         // Genre section
                         ZStack {
                             RoundedRectangle(cornerRadius: 22)
-                                .fill(Color(hex: "#F8F8E4"))
+                                .fill(colorScheme == .dark ? Color(hex: "#B4B493").opacity(0.3) : Color(hex: "#F8F8E4"))
                                 .frame(height: 100)
                             HStack {
                                 VStack(alignment: .leading) {
@@ -195,7 +195,7 @@ struct StoryReviewView: View {
                     // Characters and Pets section
                     ZStack {
                         RoundedRectangle(cornerRadius: 22)
-                            .fill(Color(hex: "#F8F8E4").opacity(0.5)) // Semi-transparent background for characters and pets
+                            .fill(colorScheme == .dark ? Color(hex: "#B4B493").opacity(0.3) : Color(hex: "#F8F8E4").opacity(0.5)) // Semi-transparent background for characters and pets
                             .frame(width: 500, height: 120)
                         
                         HStack {
@@ -213,14 +213,14 @@ struct StoryReviewView: View {
                                                 Text(character.name) // Character's name
                                                     .font(.system(size: 24))
                                                     .padding()
-                                                    .background(Color(hex: "#F2F2DB")) // Background color for character name
+                                                    .background(colorScheme == .dark ? Color(hex: "#9F9F74") : Color(hex: "#F2F2DB")) // Background color for character name
                                                     .cornerRadius(22) // Rounded corners
                                                 Image(character.gender) // Character's image based on gender
                                                     .resizable()
                                                     .scaledToFit()
                                                     .frame(width: 40, height: 40) // Frame size for character image
                                             }
-                                            .background(Color(hex: "#F2F2DB")) // Background color for the entire character item
+                                            .background(colorScheme == .dark ? Color(hex: "#9F9F74") : Color(hex: "#F2F2DB")) // Background color for the entire character item
                                             .cornerRadius(22) // Rounded corners for the character item
                                         }
                                         
@@ -230,14 +230,14 @@ struct StoryReviewView: View {
                                                 Text(pet.name) // Pet's name
                                                     .font(.system(size: 24))
                                                     .padding()
-                                                    .background(Color(hex: "#F2F2DB")) // Background color for pet name
+                                                    .background(colorScheme == .dark ? Color(hex: "#9F9F74") : Color(hex: "#F2F2DB")) // Background color for pet name
                                                     .cornerRadius(22) // Rounded corners
                                                 Image(pet.kind.filter { !$0.isWhitespace }) // Pet's image based on type
                                                     .resizable()
                                                     .scaledToFit()
                                                     .frame(width: 40, height: 40) // Frame size for pet image
                                             }
-                                            .background(Color(hex: "#F2F2DB")) // Background color for the entire pet item
+                                            .background(colorScheme == .dark ? Color(hex: "#9F9F74") : Color(hex: "#F2F2DB")) // Background color for the entire pet item
                                             .cornerRadius(22) // Rounded corners for the pet item
                                         }
                                     }

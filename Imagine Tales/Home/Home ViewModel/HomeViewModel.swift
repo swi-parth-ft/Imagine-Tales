@@ -80,6 +80,9 @@ final class HomeViewModel: ObservableObject {
                         self.stories.append(contentsOf: self.tempStories.filter { tempStory in
                             !self.stories.contains(where: { $0.id == tempStory.id })
                         })
+                        
+                        self.stories.sort(by: { $0.dateCreated! > $1.dateCreated! })
+                        
                         print(self.stories)
                     }
                 }
@@ -96,6 +99,8 @@ final class HomeViewModel: ObservableObject {
                 self.stories = querySnapshot?.documents.compactMap { document in
                     try? document.data(as: Story.self)
                 } ?? []
+                
+                self.stories.sort(by: { $0.dateCreated! > $1.dateCreated! })
                 print(self.stories)
             }
         }

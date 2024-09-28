@@ -32,7 +32,7 @@ struct StoryRowView: View {
     @State private var searchQuery = ""
     @State private var isShowingProfile = false
     @Binding var reload: Bool
-    
+    @Environment(\.colorScheme) var colorScheme
     // Filtered friends based on search query
     var filteredFriends: [UserChildren] {
         searchQuery.isEmpty ? viewModel.friends : viewModel.friends.filter { $0.username.localizedCaseInsensitiveContains(searchQuery) }
@@ -45,7 +45,7 @@ struct StoryRowView: View {
                     // User profile image
                     ZStack {
                         Circle()
-                            .fill(Color.white)
+                            .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white)
                             .frame(width: 60)
                         Image(imgUrl.removeJPGExtension())
                             .resizable()
@@ -79,6 +79,7 @@ struct StoryRowView: View {
                             .symbolEffect(.bounce, value: isSaved)
                             .font(.system(size: 24))
                     }
+                    .tint(.primary)
                 }
                 .padding(.horizontal)
 
@@ -197,18 +198,19 @@ struct StoryRowView: View {
     private func sharePopover() -> some View {
         
         ZStack {
-            Color(hex: "#8AC640").ignoresSafeArea()
+            
+            colorScheme == .dark ? Color(hex: "#5A6D2A").ignoresSafeArea() : Color(hex: "#8AC640").ignoresSafeArea()
             VStack {
                 
                 List {
                     Section("Share with Friends") {
                         TextField("Search Friends", text: $searchQuery)
-                            .listRowBackground(Color.white.opacity(0.4))
+                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.4) : Color.white.opacity(0.4))
                         ForEach(filteredFriends) { friend in
                             HStack {
                                 ZStack {
                                     Circle()
-                                        .fill(Color.white)
+                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white)
                                         .frame(width: 50)
                                     Image(friend.profileImage.removeJPGExtension())
                                         .resizable()
@@ -218,7 +220,7 @@ struct StoryRowView: View {
                                 }
                                 
                                 Text(friend.username)
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.primary)
                                 
                                 
                                 
@@ -232,7 +234,7 @@ struct StoryRowView: View {
                                 
                             }
                             
-                            .listRowBackground(Color.white.opacity(0.4))
+                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.4) : Color.white.opacity(0.4))
                             
                         }
                     }
@@ -246,23 +248,6 @@ struct StoryRowView: View {
                 }
             }
         }
-//        
-//        VStack {
-//            
-//            List(filteredFriends) { friend in
-//                
-//                HStack {
-//                    Image(friend.profileImage.removeJPGExtension())
-//                        .resizable()
-//                        .frame(width: 40, height: 40)
-//                    Text(friend.username)
-//                }
-//                .onTapGesture {
-//                    viewModel.addSharedStory(childId: friend.id, fromId: viewModel.child?.username ?? "", toId: friend.id, storyId: story.id)
-//                    Drops.show(Drop(title: "Shared with \(friend.username)"))
-//                }
-//            }
-//        }
-//        .onAppear { viewModel.fetchFriends(childId: childId) }
+
     }
 }

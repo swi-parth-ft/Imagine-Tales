@@ -5,6 +5,7 @@
 //  Created by Parth Antala on 9/27/24.
 //
 
+import Foundation
 
 // Struct for each story text item
 struct StoryTextItem: Codable, Hashable {
@@ -25,4 +26,5 @@ struct Story: Codable, Hashable, Identifiable {
     var likes: Int
     var theme: String?
     var summary: String?
+    var dateCreated: Date?
 }

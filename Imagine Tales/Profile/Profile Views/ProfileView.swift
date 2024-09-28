@@ -47,7 +47,7 @@ struct ProfileView: View {
     @State private var isNavigating = false
     @State private var openingStory: Story?
     @State private var isShowingSharedStories = false // Toggle for displaying shared stories
-
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         NavigationStack {
             ZStack {
@@ -58,7 +58,7 @@ struct ProfileView: View {
                             // Profile image and ripple effect
                             ZStack {
                                 Circle()
-                                    .fill(Color.white) // Background for the profile image
+                                    .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white) // Background for the profile image
                                     .frame(width: 250, height: 250)
                                 
                                 Image((viewModel.child?.profileImage.removeJPGExtension() ?? ""))
@@ -144,7 +144,7 @@ struct ProfileView: View {
                             }
                         }
                         .padding()
-                        .background(Color(hex: "#8AC640")) // Background color for the button
+                        .background(colorScheme == .dark ? Color(hex: "#5A6D2A") : Color(hex: "#8AC640")) // Background color for the button
                         .foregroundStyle(.white) // Text color
                         .cornerRadius(22) // Rounded corners
                     }
@@ -198,7 +198,7 @@ struct ProfileView: View {
                                             .contentShape(Rectangle()) // Expand tappable area
                                         }
                                         .padding(.vertical)
-                                        .background(.white.opacity(0.4)) // Background for story item
+                                        .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4)) // Background for story item
                                         .cornerRadius(22) // Rounded corners for story item
                                         .contentShape(Rectangle()) // Expand tappable area
                                     }
@@ -268,7 +268,7 @@ struct ProfileView: View {
                                             .contentShape(Rectangle()) // Expand tappable area
                                         }
                                         .padding(.vertical)
-                                        .background(.white.opacity(0.4)) // Background for shared story item
+                                        .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4)) // Background for shared story item
                                         .cornerRadius(22) // Rounded corners for shared story item
                                         .contentShape(Rectangle()) // Expand tappable area
                                     }

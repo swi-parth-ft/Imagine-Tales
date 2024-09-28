@@ -12,6 +12,7 @@ import FirebaseAuth
 
 // MARK: - Tabbar Appearance
 extension TabbarView {
+    
     // Custom tab item view with an icon and title
     func CustomTabItem(imageName: String, title: String, isActive: Bool) -> some View {
         HStack(spacing: 10) {
@@ -19,7 +20,7 @@ extension TabbarView {
             Image(systemName: isActive ? imageName + ".fill" : imageName) // Use filled icon if active
                 .resizable()
                 .renderingMode(.template)
-                .foregroundColor(isActive ? .white : .black) // Change color based on active state
+                .foregroundColor(isActive ? .white : colorScheme == .dark ? .white : .black) // Change color based on active state
                 .frame(width: 20, height: 20)
             if isActive {
                 Text(title)
@@ -29,7 +30,7 @@ extension TabbarView {
             Spacer()
         }
         .frame(width: isActive ? 140 : 120, height: 50) // Dynamic width based on active state
-        .background(isActive ? Color(hex: "#8AC640") : .clear) // Background color for active state
+        .background(isActive ? (colorScheme == .dark ? Color(hex: "#5A6D2A") : Color(hex: "#8AC640")) : .clear) // Background color for active state
         .cornerRadius(12) // Rounded corners
         .padding(.horizontal, 5)
     }

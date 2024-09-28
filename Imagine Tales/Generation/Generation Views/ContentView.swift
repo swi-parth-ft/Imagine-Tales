@@ -79,6 +79,8 @@ struct ContentView: View {
     @State private var isGeneratingCover = true
     @State private var preview = false
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -207,7 +209,7 @@ struct ContentView: View {
                                             }
                                             .padding()
                                             .frame(maxWidth: .infinity)
-                                            .background(Color(hex: "#F2F2DB"))
+                                            .background(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#F2F2DB"))
                                             .foregroundStyle(.black)
                                             .cornerRadius(16)
                                         }
@@ -234,7 +236,7 @@ struct ContentView: View {
                                             }
                                             .padding()
                                             .frame(maxWidth: .infinity)
-                                            .background(Color(hex: "#FF6F61"))
+                                            .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
                                             .foregroundColor(.white)
                                             .cornerRadius(16)
                                         }
@@ -341,7 +343,7 @@ struct ContentView: View {
                                             }
                                             .padding()
                                             .frame(width: UIScreen.main.bounds.width * 0.7)
-                                            .background(Color(hex: "#FF6F61"))
+                                            .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
                                             .foregroundColor(.white)  // Use .foregroundColor for text/icons
                                             .cornerRadius(12)
                                         }

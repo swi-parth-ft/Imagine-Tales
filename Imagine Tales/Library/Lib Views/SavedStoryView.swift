@@ -12,7 +12,7 @@ struct SavedStoryView: View {
     @ObservedObject var viewModel = SavedStoryViewModel() // ViewModel to manage the state and data of saved stories
     @AppStorage("childId") var childId: String = "Default Value" // Stores the child's ID in user defaults
     @Binding var reload: Bool // Binding to trigger view updates when the value changes
-    
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         NavigationStack {
             // Check if there are no saved stories
@@ -65,7 +65,7 @@ struct SavedStoryView: View {
                     }
                     // Padding and background for the list item
                     .padding(.vertical) // Vertical padding for the list item
-                    .background(.white.opacity(0.4)) // Semi-transparent white background
+                    .background(colorScheme == .dark ? Color.black.opacity(0.4) : .white.opacity(0.4)) // Semi-transparent white background
                     .cornerRadius(22) // Rounded corners for the list item
                     .contentShape(Rectangle()) // Define the tappable area for the overall item
                 }

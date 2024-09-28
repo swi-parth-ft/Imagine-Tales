@@ -45,7 +45,8 @@ struct TabbarView: View {
     @State private var isSearching = false  // Whether the search view is shown
     @State private var showingProfile = false  // Whether the profile is shown
     @AppStorage("dpurl") private var dpUrl = ""  // URL for the profile picture (from AppStorage)
-
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         // Navigation container for the app
         NavigationStack {
@@ -80,7 +81,7 @@ struct TabbarView: View {
                 }
                 .padding(6)
                 .frame(width: UIScreen.main.bounds.width * 0.95, height: 70)  // Set tab bar size
-                .background(Color(hex: "#FFFFF1"))  // Background color for tab bar
+                .background(colorScheme == .light ? Color(hex: "#FFFFF1") : Color(hex: "#3A3A3A"))  // Background color for tab bar
                 .cornerRadius(20)  // Rounded corners
                 .padding(.horizontal, 26)
                 .shadow(radius: 10)  // Shadow for a floating effect
@@ -90,7 +91,7 @@ struct TabbarView: View {
             // Toolbar item for the profile picture on the left side
             ToolbarItemGroup(placement: .navigationBarLeading) {
                 ZStack {
-                    Circle().fill(Color.white).frame(width: 45, height: 45)
+                    Circle().fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white).frame(width: 45, height: 45)
                     AsyncCircularImageView(urlString: dpUrl, size: 40).clipShape(Circle())  // Profile picture
                 }
                 .onTapGesture {
@@ -117,7 +118,7 @@ struct TabbarView: View {
                 }
             }
         }
-        .tint(.black)  // Set tint color for toolbar items
+        .tint(.primary)  // Set tint color for toolbar items
     }
 }
 

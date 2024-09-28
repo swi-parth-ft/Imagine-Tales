@@ -127,39 +127,22 @@ struct FriendProfileView: View {
     @State private var tiltAngle: Double = 0
     @StateObject var parentViewModel = ParentViewModel()
     @AppStorage("childId") var childId: String = "Default Value"
-    let bookBackgroundColors: [Color] = [
-        Color(red: 255/255, green: 235/255, blue: 190/255),  // More vivid Beige
-        Color(red: 220/255, green: 220/255, blue: 220/255),  // More vivid Light Gray
-        Color(red: 255/255, green: 230/255, blue: 240/255),  // More vivid Lavender Blush
-        Color(red: 255/255, green: 255/255, blue: 245/255),  // More vivid Mint Cream
-        Color(red: 230/255, green: 255/255, blue: 230/255),  // More vivid Honeydew
-        Color(red: 230/255, green: 248/255, blue: 255/255),  // More vivid Alice Blue
-        Color(red: 255/255, green: 250/255, blue: 230/255),  // More vivid Seashell
-        Color(red: 255/255, green: 250/255, blue: 215/255),  // More vivid Old Lace
-        Color(red: 255/255, green: 250/255, blue: 200/255)   // More vivid Cornsilk
-    ]
+    
     @State private var isRemoved = false
     @Environment(\.dismiss) var dismiss
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         NavigationStack {
             
             ZStack {
-                MeshGradient(
-                    width: 3,
-                    height: 3,
-                    points: [
-                        [0, 0], [0.5, 0], [1, 0],
-                        [0, 0.5], [0.5, 0.5], [1, 0.5],
-                        [0, 1], [0.5, 1], [1, 1]
-                    ],
-                    colors: bookBackgroundColors
-                ).ignoresSafeArea()
+                BackGroundMesh().ignoresSafeArea()
                 VStack {
                     
                     HStack {
                         ZStack {
                             Circle()
-                                .fill(Color.white)
+                                .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white)
                                 .frame(width: 250, height: 250)
                                 
                             Image(dp.removeJPGExtension())
@@ -311,7 +294,7 @@ struct FriendProfileView: View {
                                      
                                     
                                 }
-                                .listRowBackground(Color.white.opacity(0.5))
+                                .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.4) : Color.white.opacity(0.5))
                             }
                         }
                     }

@@ -12,7 +12,7 @@ struct HomeView: View {
     
     @StateObject var viewModel = HomeViewModel() // ViewModel for handling data fetching and state management
     @Binding var reload: Bool // Binding to trigger reloading of stories
-    
+    @Environment(\.colorScheme) var colorScheme
     // List of genres available for selection
     let genres = [
         "Following", "Adventure", "Fantasy", "Mystery", "Romance", "Science Fiction", "Horror", "Thriller",
@@ -44,13 +44,14 @@ struct HomeView: View {
                                 // Style the genre button based on selection
                                 Text(category)
                                     .padding()
-                                    .background(category == viewModel.genre ? Color.green : Color.clear)
-                                    .foregroundColor(category == viewModel.genre ? .white : .black)
+                                    .background(category == viewModel.genre ? (colorScheme == .dark ? Color(hex: "#4B8A1C") : .green) : Color.clear)
+                                    .foregroundColor(category == viewModel.genre ? .white : .primary)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
                                             .stroke(Color.green, lineWidth: category == viewModel.genre ? 0 : 1)
                                     )
                                     .cornerRadius(10)
+                               
                             }
                         }
                     }
@@ -68,6 +69,7 @@ struct HomeView: View {
                 } else {
                     // Display the list of stories if available
                     StoryListView(stories: viewModel.stories, reload: $reload, childId: childId)
+                        .padding(.bottom, 60)
                 }
             }
             .navigationTitle("Imagine Tales") // Title of the view

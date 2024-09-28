@@ -42,7 +42,7 @@ final class StoryByGenreViewModel: ObservableObject {
 struct StoryByGenreView: View {
     @StateObject var viewModel = StoryByGenreViewModel() // Instantiate the ViewModel
     var genre: String // The genre being displayed
-
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         NavigationStack {
             ZStack {
@@ -90,7 +90,7 @@ struct StoryByGenreView: View {
                                 .contentShape(Rectangle()) // Define the tappable area for the HStack
                             }
                             .padding(.vertical) // Vertical padding for the list item
-                            .background(.white.opacity(0.4)) // Background with a white translucent effect
+                            .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4)) // Background with a white translucent effect
                             .cornerRadius(22) // Rounded corners for the list item
                             .contentShape(Rectangle()) // Define the tappable area for the overall item
                         }

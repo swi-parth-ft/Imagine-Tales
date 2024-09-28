@@ -17,7 +17,8 @@ struct ExploreView: View {
     @State private var isFullHeight = false // State to determine if the view is in full height mode
     @State private var imageOffset = CGSize.zero // Track image offset for drag gestures
     @State private var currentIndex = 0 // Track the currently displayed story index
-
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -162,8 +163,9 @@ struct ExploreView: View {
                                     ForEach(viewModel.storiesByGenre[genre] ?? []) { story in
                                         NavigationLink(destination: StoryFromProfileView(story: story)) {
                                             ZStack(alignment: .top) {
+                                         
                                                 RoundedRectangle(cornerRadius: 22)
-                                                    .fill(LinearGradient(colors: [Color(hex: "#F4F4DA"), Color(hex: "#F4F4DA").opacity(0.3), .clear, .clear], startPoint: .bottomLeading, endPoint: .topTrailing))
+                                                    .fill(LinearGradient(colors: [colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#F4F4DA"), colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#F4F4DA").opacity(0.3), .clear, .clear], startPoint: .bottomLeading, endPoint: .topTrailing))
                                                     .frame(width: 300, height: 260)
                                                 
                                                 VStack(alignment: .center, spacing: 7) {
@@ -210,22 +212,26 @@ struct ExploreView: View {
                                                         HStack {
                                                             VStack(alignment: .leading, spacing: -18) {
                                                                 Text(story.title) // Story title
+                                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
                                                                     .font(.system(size: 18))
+                                                                    
                                                                 
                                                                 VStack(alignment: .leading) {
-                                                                    Text("By \(story.childUsername)") // Author username
+                                                                    Text("By \(story.childUsername)")
+                                                                        .foregroundStyle(colorScheme == .dark ? .white : .black)// Author username
                                                                     HStack {
                                                                         Text(story.theme ?? "") // Story theme
                                                                             .padding(7)
-                                                                            .background(.green)
+                                                                            .background(colorScheme == .dark ? Color(hex: "#4B8A1C") : .green)
                                                                             .foregroundStyle(.white)
                                                                             .cornerRadius(22)
                                                                         Text("\(story.likes) Likes") // Likes count
+                                                                            .foregroundStyle(colorScheme == .dark ? .white : .black)
                                                                     }
                                                                 }
                                                                 .padding(.bottom, 30) // Padding below
                                                             }
-                                                            .foregroundStyle(.black)
+                                                            .foregroundStyle(.primary)
                                                             
                                                             Spacer()
                                                         }
