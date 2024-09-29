@@ -7,7 +7,7 @@
 
 import SwiftUI
 import FirebaseFirestore // Import Firestore for database operations
-
+import Drops
 struct StoryFromProfileView: View {
     var story: Story // The story object passed to this view
     @State private var count = 0 // Index to track the current page of the story
@@ -43,11 +43,12 @@ struct StoryFromProfileView: View {
             }
         }
     }
-    
+    @State private var searchQuery = ""
     @State private var isExpanding = false
-
-    
-
+    @State private var showShareList = false
+    var filteredFriends: [UserChildren] {
+        searchQuery.isEmpty ? homeViewModel.friends : homeViewModel.friends.filter { $0.username.localizedCaseInsensitiveContains(searchQuery) }
+    }
     var body: some View {
         NavigationStack {
             ZStack {
@@ -208,6 +209,13 @@ struct StoryFromProfileView: View {
 //                                                }
                                                 
                                                 Spacer()
+                                                // Share button
+                                                Image(systemName: "paperplane")
+                                                    .symbolEffect(.rotate, value: showShareList)
+                                                    .font(.system(size: 30))
+                                                    .padding()
+                                                    .onTapGesture { showShareList.toggle() }
+                                                    .popover(isPresented: $showShareList) { sharePopover().frame(width: 300, height: 500) }
                                             }
                                             
                                          
@@ -311,5 +319,63 @@ struct StoryFromProfileView: View {
                 }
             }
         }
+    }
+    
+    // Share popover content
+    @ViewBuilder
+    private func sharePopover() -> some View {
+        
+        ZStack {
+            
+            colorScheme == .dark ? Color(hex: "#5A6D2A").ignoresSafeArea() : Color(hex: "#8AC640").ignoresSafeArea()
+            VStack {
+                
+                List {
+                    Section("Share with Friends") {
+                        TextField("Search Friends", text: $searchQuery)
+                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.2) : Color.white.opacity(0.4))
+                        ForEach(filteredFriends) { friend in
+                            HStack {
+                                ZStack {
+                                    Circle()
+                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white)
+                                        .frame(width: 50)
+                                    Image(friend.profileImage.removeJPGExtension())
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 40, height: 40)
+                                        .cornerRadius(50)
+                                }
+                                
+                                Text(friend.username)
+                                    .foregroundStyle(.primary)
+                                
+                                
+                                
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                homeViewModel.addSharedStory(childId: friend.id, fromId: homeViewModel.child?.username ?? "", toId: friend.id, storyId: story.id)
+                                let drop = Drop(title: "Shared Story with \(friend.username)")
+                                
+                                Drops.show(drop)
+                                
+                            }
+                            
+                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.2) : Color.white.opacity(0.4))
+                            
+                        }
+                    }
+                }
+                .searchable(text: $searchQuery, prompt: "Search Friends")
+                .scrollContentBackground(.hidden)
+                
+                .onAppear {
+                    homeViewModel.fetchChild(ChildId: childId)
+                    homeViewModel.fetchFriends(childId: childId)
+                }
+            }
+        }
+
     }
 }
