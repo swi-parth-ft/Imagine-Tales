@@ -54,8 +54,16 @@ struct GeneratingProcessView: View {
     var body: some View {
         ZStack {
             VStack {
-                Button("Reset") {
-                    resetValues()
+                HStack {
+                    Spacer()
+                    Button("Reset", systemImage: "bubbles.and.sparkles.fill") {
+                        resetValues()
+                    }
+                    .padding()
+                    .foregroundStyle(.white)
+                    .background(Color(hex: "#8AC640"))
+                    .cornerRadius(23)
+                    
                 }
                 ScrollView {
                  //   ForEach(0..<storyChunk.count, id: \.self) { index in
@@ -472,7 +480,7 @@ struct GeneratingProcessView: View {
         let petsText = petDescriptions.isEmpty ? "" : " along with their pet(s) \(petDescriptions.joined(separator: ", "))"
 
         if nextKey {
-            prompt = "Write the next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). The mood of the story is \(mood). Write in 100 words."
+            prompt = "Write the next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). The mood of the story is \(mood). Write in 80 words."
             
         } else if finishKey && !isGeneratingTitle {
             prompt = "Finish this story: \(continueStory) details: a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). Finish in 100 words."
@@ -481,7 +489,7 @@ struct GeneratingProcessView: View {
             prompt = "Give me a story title for this story \(continueStory) in 3 words only. The mood of the story is \(mood). Output should be only 3 words, nothing extra."
             
         } else {
-            prompt = "Write the first paragraph of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). The mood of the story is \(mood). Write in 100 words."
+            prompt = "Write the first paragraph of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). The mood of the story is \(mood). Write in 80 words."
         }
 
         print(prompt)
@@ -516,7 +524,7 @@ struct GeneratingProcessView: View {
                 • Pets: \(petsText)\(petLastSeparator)
                 • Mood: \(mood)  
 
-                Each character should have a toy-like, soft appearance with smooth features and expressive faces. The design should clearly reflect their age, gender, and personality. The background should be simple and minimal, allowing the focus to remain on the characters. Their poses and expressions should align with the overall mood of the story. and there should be no text in image
+                Each character should have a toy-like, soft appearance with smooth features and expressive faces. The design should clearly reflect their age, gender, and personality. The background should be simple and minimal, allowing the focus to remain on the characters. Their poses and expressions should align with the overall mood of the story, and there should be no text at all in the image nor any signboards or anything.
                 """
             print(promptForImage)
             isGeneratingCover = false
@@ -534,8 +542,7 @@ struct GeneratingProcessView: View {
                 • Characters: \(charactersText)\(lastSeparator)
                 • Pets: \(petsText)\(petLastSeparator)
 
-            The background should reflect \(theme), with elements like [insert any key features from the scene like glowing trees, fireflies, etc.]. Make sure the mood of the illustration reflects \(mood) and \(genre), based on the story. Keep the design toy-like, with smooth and rounded features to appeal to children. and there should be no text in image”
-
+            The background should reflect \(theme), with elements like [insert any key features from the scene like glowing trees, fireflies, etc.]. Make sure the mood of the illustration reflects \(mood) and \(genre), based on the story. Keep the design toy-like, with smooth and rounded features to appeal to children, and there should be no text at all in the image nor any signboards or anything.
             """
             generateImageUsingOpenAI()
             print(promptForImage)

@@ -153,6 +153,7 @@ struct StoryFromProfileView: View {
                                         
                                         // Display the story text
                                         Text(story.storyText[count].text)
+                                            .font(.system(size: 23))
                                             .padding()
                                         
                                         ZStack {

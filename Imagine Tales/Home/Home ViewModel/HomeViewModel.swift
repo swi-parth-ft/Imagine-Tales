@@ -21,6 +21,7 @@ final class HomeViewModel: ObservableObject {
     
     let db = Firestore.firestore()                     // Firestore instance for database interactions
     
+    
     // Fetch child profile by child ID from Firestore
     func fetchChild(ChildId: String) {
         let docRef = Firestore.firestore().collection("Children2").document(ChildId)
@@ -36,24 +37,40 @@ final class HomeViewModel: ObservableObject {
         }
     }
     
-    // Function to add a shared story between users
     func addSharedStory(childId: String, fromId: String, toId: String, storyId: String) {
         let sharedStoriesRef = db.collection("Children2").document(childId).collection("sharedStories")
-        let newSharedStory = sharedStoriesRef.document()
         
-        // Set the shared story data with fromId, toId, and storyId fields
-        newSharedStory.setData([
-            "id" : newSharedStory.documentID,
-            "fromid": fromId,
-            "toid": toId,
-            "storyid": storyId
-        ]) { error in
-            if let error = error {
-                print("Error adding shared story: \(error)")
-            } else {
-                print("Shared story successfully added!")
+        // Query to check if a document with the same fromId and storyId exists
+        sharedStoriesRef
+            .whereField("fromid", isEqualTo: fromId)
+            .whereField("storyid", isEqualTo: storyId)
+            .getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("Error checking for existing shared story: \(error)")
+                    return
+                }
+                
+                // If no matching document exists, proceed to add the new shared story
+                if querySnapshot?.documents.isEmpty == true {
+                    let newSharedStory = sharedStoriesRef.document()
+                    
+                    // Set the shared story data with fromId, toId, and storyId fields
+                    newSharedStory.setData([
+                        "id": newSharedStory.documentID,
+                        "fromid": fromId,
+                        "toid": toId,
+                        "storyid": storyId
+                    ]) { error in
+                        if let error = error {
+                            print("Error adding shared story: \(error)")
+                        } else {
+                            print("Shared story successfully added!")
+                        }
+                    }
+                } else {
+                    print("Shared story with the same fromId and storyId already exists.")
+                }
             }
-        }
     }
     
     // Fetch stories based on selected genre or 'Following' list
