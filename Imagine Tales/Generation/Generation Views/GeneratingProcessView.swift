@@ -8,6 +8,7 @@
 
 import SwiftUI
 import FirebaseVertexAI
+import Drops
 
 struct GeneratingProcessView: View {
     @Binding var isLoading: Bool
@@ -38,44 +39,244 @@ struct GeneratingProcessView: View {
     @Binding var selectedPets: [Pet]
     @Binding var isGeneratingCover: Bool
     @Binding var generatedImage: UIImage?
+    @Binding var isSelectingTheme : Bool
+    @Binding var preview: Bool
     
     let vertex = VertexAI.vertexAI()
     var shader = TransitionShader(name: "Crosswarp (→)", transition: .crosswarpLTR)
     @AppStorage("childId") var childId: String = "Default Value"
     @StateObject private var storyViewModel = StoryViewModel()
-    
+    @State private var count = 0
+    @State private var isTitleGenerated = false
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 22)
-                .fill(Color.white.opacity(0.5))
             VStack {
                 Button("Reset") {
                     resetValues()
                 }
                 ScrollView {
-                    ForEach(0..<storyChunk.count, id: \.self) { index in
-                        VStack {
-                            Image(uiImage: storyChunk[index].1)
+                 //   ForEach(0..<storyChunk.count, id: \.self) { index in
+                    if loaded && !isLoadingChunk {
+                        VStack(spacing: -80) {
+                            Image(uiImage: storyChunk[count].1)
                                 .resizable()
                                 .scaledToFill()
-                                .frame(height: 500)
+                                .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
                                 .clipped()
+                                .cornerRadius(23)
                                 .padding()
-                                .transition(shader.transition)
-
-                            Text(storyChunk[index].0)
+                                .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20) // Adds shadow at the bottom
+                            
+                            VStack(spacing: -20) {
+                                
+                                HStack(spacing: 8) {
+                                    ForEach(0..<storyChunk.count, id: \.self) { index in
+                                                Rectangle()
+                                            .fill(index == count ? Color.orange : Color.gray.opacity(0.3))
+                                                    .frame(height: 10)
+                                                    .cornerRadius(5)
+                                            }
+                                        }
+                                        .padding()
+                                
+                                
+                                Text(storyChunk[count].0)
+                                    .padding()
+                                ZStack {
+                                    HStack(spacing: 20) {
+                                        Button {
+                                            if count > 0 {
+                                                withAnimation {
+                                                    count -= 1
+                                                }
+                                            }
+                                        } label: {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(count == 0 ? .gray : Color(hex: "#8AC640"))
+                                                    .frame(width: 64, height: 64)
+                                                Image(systemName: "arrowtriangle.backward.fill")
+                                                    .font(.system(size: 30))
+                                                    .foregroundStyle(.white)
+                                            }
+                                        }
+                                        .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 10) // Adds shadow at the bottom
+                                        
+                                        Button {
+                                            if !finishKey {
+                                                if count == storyChunk.count - 1 {
+                                                    nextKey = true
+                                                    isLoadingChunk = true
+                                                    displayedText = ""
+                                                    Task {
+                                                        do {
+                                                            try await generateStoryWithGemini()
+                                                        } catch {
+                                                            print(error.localizedDescription)
+                                                        }
+                                                    }
+                                                } else {
+                                                    withAnimation {
+                                                        count += 1
+                                                    }
+                                                }
+                                            } else {
+                                                withAnimation {
+                                                    count += 1
+                                                }
+                                            }
+                                            
+                                        } label: {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(Color(hex: "#8AC640"))
+                                                    .frame(width: 64, height: 64)
+                                                Image(systemName: "arrowtriangle.forward.fill")
+                                                    .font(.system(size: 30))
+                                                    .foregroundStyle(.white)
+                                            }
+                                        }
+                                        .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 10) // Adds shadow at the bottom
+                                    }
+                                    HStack {
+                                        Spacer()
+                                        if count > 1 {
+                                            Button {
+                                                if !finishKey {
+                                                    nextKey = false
+                                                    finishKey = true
+                                                    isLoadingChunk = true
+                                                    Task {
+                                                        do {
+                                                            try await generateStoryWithGemini()
+                                                        } catch {
+                                                            print(error.localizedDescription)
+                                                        }
+                                                    }
+                                                } else if finishKey && !isTitleGenerated {
+                                                    isGeneratingTitle = true
+                                                    Task {
+                                                        do {
+                                                            try await generateStoryWithGemini()
+                                                            try await generateSummary()
+                                                            isTitleGenerated = true
+                                                        } catch {
+                                                            print(error.localizedDescription)
+                                                        }
+                                                    }
+                                                } else if isTitleGenerated {
+                                                    Task {
+                                                        do {
+                                                            try await storyViewModel.uploadStoryToFirestore(storyTextItem: storyTextItem, childId: childId, title: title, genre: genre, theme: theme, mood: mood, summary: summary)
+                                                   
+                                                            Drops.show(Drop(title: "Story Uploaded, Waiting for Approval", icon: UIImage(systemName: "square.and.arrow.up.fill")))
+                                                            preview = false
+                                                            loaded = false
+                                                            isLoading = false
+                                                            resetValues()
+                                                            isSelectingTheme = true
+                                                        
+                                                        } catch {
+                                                            print(error.localizedDescription)
+                                                        }
+                                                    }
+                                                }
+                                                    
+                                                } label: {
+                                                    ZStack {
+                                                        Text(finishKey ? (isTitleGenerated ? "Upload Story" : "Generate Title") : "Finish Story")
+                                                                    .font(.system(size: 23))
+                                                                    .padding()
+                                                                    .background(Color(hex: "#8AC640"))
+                                                                    .foregroundStyle(.white)
+                                                                    .cornerRadius(23)
+                                                    }
+                                                    .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 10)
+                                                }
+                                            
+                                        }
+                                        
+                                    }
+                                }
                                 .padding()
+                                .frame(width: UIScreen.main.bounds.width * 0.8)
+                            }
+                            .frame(width: UIScreen.main.bounds.width * 0.8)
+                            .background(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#FFFFF1"))
+                            .cornerRadius(23)
+                            .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20) // Adds shadow at the bottom
                         }
                         .padding()
                     }
+                 //   }
 
                     if isLoadingImage {
-                        VStack {
-                            GradientRectView(size: 500)
-                                .transition(shader.transition)
-
-                            Text(chunkOfText)
+                        VStack(spacing: -80) {
+                            ZStack {
+          
+                                // Background blur effect for the story container
+                                VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                                    .cornerRadius(23)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                    )
+                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                MagicView()
+                                    .frame(width: UIScreen.main.bounds.width * 0.8, height: 500)
+                            }
+                            
+                            VStack(spacing: -20) {
+                                HStack(spacing: 8) {
+                                    ForEach(0..<storyChunk.count + 1, id: \.self) { index in
+                                                Rectangle()
+                                            .fill(index == count ? Color.orange : Color.gray.opacity(0.3))
+                                                    .frame(height: 10)
+                                                    .cornerRadius(5)
+                                            }
+                                        }
+                                        .padding()
+                                
+                                Text(chunkOfText)
+                                    .padding()
+                                
+                                ZStack {
+                                    HStack(spacing: 20) {
+                                        Button {
+                                        } label: {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(.gray)
+                                                    .frame(width: 64, height: 64)
+                                                Image(systemName: "arrowtriangle.backward.fill")
+                                                    .font(.system(size: 30))
+                                                    .foregroundStyle(.white.opacity(0.5))
+                                            }
+                                        }
+                                        
+                                        Button {
+                                        } label: {
+                                            ZStack {
+                                                Circle()
+                                                    .fill(.gray)
+                                                    .frame(width: 64, height: 64)
+                                                Image(systemName: "arrowtriangle.forward.fill")
+                                                    .font(.system(size: 30))
+                                                    .foregroundStyle(.white.opacity(0.5))
+                                            }
+                                        }
+                                    }
+                                  
+                                }
                                 .padding()
+                                .frame(width: UIScreen.main.bounds.width * 0.8)
+                            }
+                            .frame(width: UIScreen.main.bounds.width * 0.8)
+                            .background(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#FFFFF1"))
+                            .cornerRadius(23)
+                            .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 10) // Adds shadow at the bottom
                         }
                         .padding()
                     }
@@ -85,9 +286,7 @@ struct GeneratingProcessView: View {
                             .frame(height: 55)
                     }
 
-                    if loaded && !isLoadingChunk {
-                        actionButtons()
-                    }
+               
                 }
             }
         }
@@ -115,66 +314,7 @@ struct GeneratingProcessView: View {
         storyTextItem = []
     }
 
-    @ViewBuilder
-    private func actionButtons() -> some View {
-        HStack {
-            Button("Clear") {
-                resetValues()
-            }
-            if !finishKey {
-                Button("Next") {
-                    nextKey = true
-                    isLoadingChunk = true
-                    displayedText = ""
-                    Task {
-                        do {
-                            try await generateStoryWithGemini()
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                    }
-                }
 
-                Button("Finish") {
-                    nextKey = false
-                    finishKey = true
-                    isLoadingChunk = true
-                    Task {
-                        do {
-                            try await generateStoryWithGemini()
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                    }
-                }
-            } else {
-                Button("Share") {
-                    Task {
-                        do {
-                            try await storyViewModel.uploadStoryToFirestore(storyTextItem: storyTextItem, childId: childId, title: title, genre: genre, theme: theme, mood: mood, summary: summary)
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                    }
-                }
-
-                Button("Generate Title") {
-                    isGeneratingTitle = true
-                    Task {
-                        do {
-                            try await generateStoryWithGemini()
-                            try await generateSummary()
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                    }
-                }
-            }
-        }
-        .onAppear {
-            storyViewModel.fetchChild(ChildId: childId)
-        }
-    }
     
     func extractWords(from input: String) -> [String] {
         // Split the string by commas and the word "and"
@@ -194,14 +334,14 @@ struct GeneratingProcessView: View {
     }
     
     func generateImageUsingOpenAI() {
-        withAnimation(.easeIn(duration: 1.5)) {
+        
             isLoadingImage = true
-        }
+        
         let prompt = promptForImage
         OpenAIService.shared.generateImage(from: prompt) { result in
-            withAnimation(.easeIn(duration: 1.5)) {
+           
                 isImageLoading = false
-            }
+            
             switch result {
             case .success(let image):
                 
@@ -213,10 +353,11 @@ struct GeneratingProcessView: View {
                     print(iURL)
                     self.storyTextItem.append(StoryTextItem(image: iURL, text: chunkOfText))
                 }
-                withAnimation(.easeIn(duration: 1.5)) {
+               
                     self.isLoadingImage = false
                     self.loaded = true
-                }
+                    self.count += 1
+                
                 self.isLoadingChunk = false
                 
             case .failure(let error):
@@ -242,9 +383,7 @@ struct GeneratingProcessView: View {
         
         isLoadingTextPart = true
         if !isGeneratingTitle {
-            withAnimation(.easeIn(duration: 1.5)) {
                 isLoadingImage = true
-            }
         }
         words = extractWords(from: characters)
         words.append(genre)
@@ -370,11 +509,11 @@ struct GeneratingProcessView: View {
             """
             generateImageUsingOpenAI()
             print(promptForImage)
-            withAnimation {
+            
                 self.isLoading = false
                 self.loaded = true
                 
-            }
+            
         }
     }
 }

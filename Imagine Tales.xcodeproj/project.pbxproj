@@ -59,6 +59,8 @@
 		076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C22992C7E8C3E001DAB3F /* HomeView.swift */; };
 		077BE2762C800A4A00760D5A /* GradientRectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077BE2752C800A4A00760D5A /* GradientRectView.swift */; };
 		077BE2872C810FF800760D5A /* SavedStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077BE2862C810FF800760D5A /* SavedStoryView.swift */; };
+		0788C4212CA8B9ED00FA5E65 /* Vortex in Frameworks */ = {isa = PBXBuildFile; productRef = 0788C4202CA8B9ED00FA5E65 /* Vortex */; };
+		0788C4232CA8BA5A00FA5E65 /* MagicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0788C4222CA8BA5A00FA5E65 /* MagicView.swift */; };
 		078DACD62C8CA44900F04A65 /* StoryByGenreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACD52C8CA44900F04A65 /* StoryByGenreView.swift */; };
 		078DACDA2C8D202500F04A65 /* BackGroundMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACD92C8D202500F04A65 /* BackGroundMesh.swift */; };
 		078DACDC2C8DFA3300F04A65 /* ScreenTimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */; };
@@ -152,6 +154,7 @@
 		076C22992C7E8C3E001DAB3F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		077BE2752C800A4A00760D5A /* GradientRectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientRectView.swift; sourceTree = "<group>"; };
 		077BE2862C810FF800760D5A /* SavedStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedStoryView.swift; sourceTree = "<group>"; };
+		0788C4222CA8BA5A00FA5E65 /* MagicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicView.swift; sourceTree = "<group>"; };
 		078DACD52C8CA44900F04A65 /* StoryByGenreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryByGenreView.swift; sourceTree = "<group>"; };
 		078DACD92C8D202500F04A65 /* BackGroundMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackGroundMesh.swift; sourceTree = "<group>"; };
 		078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTimeManager.swift; sourceTree = "<group>"; };
@@ -221,6 +224,7 @@
 				0711F38D2C6DB698006C86AA /* FloatingTabBar in Frameworks */,
 				0711F3642C6D6C6F006C86AA /* FirebaseAnalytics in Frameworks */,
 				0711F36B2C6D6E2B006C86AA /* GoogleSignIn in Frameworks */,
+				0788C4212CA8B9ED00FA5E65 /* Vortex in Frameworks */,
 				07D323422CA62F8B00846FA3 /* Drops in Frameworks */,
 				0711F3852C6DB62D006C86AA /* FirebaseAuth in Frameworks */,
 				076C22982C7E66B6001DAB3F /* FirebaseStorage in Frameworks */,
@@ -349,6 +353,7 @@
 			isa = PBXGroup;
 			children = (
 				07D323432CA6F25200846FA3 /* Extentions .swift */,
+				0788C4222CA8BA5A00FA5E65 /* MagicView.swift */,
 				0701FBB32C8695D0004BEE9F /* AsyncImage.swift */,
 				079E924F2C89250A00433869 /* CustomAlert.swift */,
 				0701FBAB2C83F194004BEE9F /* TransitionPreview.swift */,
@@ -648,6 +653,7 @@
 				0711F37D2C6D96EC006C86AA /* XCRemoteSwiftPackageReference "dotlottie-ios" */,
 				0793FBFE2CA23A63008A7CBB /* XCRemoteSwiftPackageReference "neumorphic" */,
 				07D323402CA62F8B00846FA3 /* XCRemoteSwiftPackageReference "Drops" */,
+				0788C41F2CA8B9ED00FA5E65 /* XCRemoteSwiftPackageReference "Vortex" */,
 			);
 			productRefGroup = 07FB38462C62BEAB0070EEFA /* Products */;
 			projectDirPath = "";
@@ -717,6 +723,7 @@
 				07D323A22CA7641700846FA3 /* FriendRequestView.swift in Sources */,
 				0711F3722C6D7244006C86AA /* SignInGoogleHelper.swift in Sources */,
 				0701FBAE2C861739004BEE9F /* SearchView.swift in Sources */,
+				0788C4232CA8BA5A00FA5E65 /* MagicView.swift in Sources */,
 				073F2CF42C6FA0A800BCF6F0 /* SignInWithEmailView.swift in Sources */,
 				07D323922CA7609700846FA3 /* ExploreViewModel.swift in Sources */,
 				0701FBBA2C87879F004BEE9F /* FriendProfileView.swift in Sources */,
@@ -1006,6 +1013,14 @@
 				kind = branch;
 			};
 		};
+		0788C41F2CA8B9ED00FA5E65 /* XCRemoteSwiftPackageReference "Vortex" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/Vortex";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
 		0793FBFE2CA23A63008A7CBB /* XCRemoteSwiftPackageReference "neumorphic" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/costachung/neumorphic/";
@@ -1098,6 +1113,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		0788C4202CA8B9ED00FA5E65 /* Vortex */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0788C41F2CA8B9ED00FA5E65 /* XCRemoteSwiftPackageReference "Vortex" */;
+			productName = Vortex;
 		};
 		0793FBFF2CA23A63008A7CBB /* Neumorphic */ = {
 			isa = XCSwiftPackageProductDependency;

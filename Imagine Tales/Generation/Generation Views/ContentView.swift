@@ -89,7 +89,7 @@ struct ContentView: View {
 
                     //MARK: Story Loaded
                     if loaded || isLoading {
-                        GeneratingProcessView(isLoading: $isLoading, words: $words, characters: $characters, genre: $genre, story: $story, theme: $theme, loaded: $loaded, isRandom: $isRandom, selectedChars: $selectedChars, storyChunk: $storyChunk, nextKey: $nextKey, finishKey: $finishKey, continueStory: $continueStory, chunkOfText: $chunkOfText, isLoadingChunk: $isLoadingChunk, isGeneratingTitle: $isGeneratingTitle, title: $title, displayedText: $displayedText, storyTextItem: $storyTextItem, isLoadingImage: $isLoadingImage, isLoadingTextPart: $isLoadingTextPart, mood: $mood, summary: $summary, promptForImage: $promptForImage, isImageLoading: $isImageLoading, selectedPets: $selectedPets, isGeneratingCover: $isGeneratingCover, generatedImage: $generatedImage)
+                        GeneratingProcessView(isLoading: $isLoading, words: $words, characters: $characters, genre: $genre, story: $story, theme: $theme, loaded: $loaded, isRandom: $isRandom, selectedChars: $selectedChars, storyChunk: $storyChunk, nextKey: $nextKey, finishKey: $finishKey, continueStory: $continueStory, chunkOfText: $chunkOfText, isLoadingChunk: $isLoadingChunk, isGeneratingTitle: $isGeneratingTitle, title: $title, displayedText: $displayedText, storyTextItem: $storyTextItem, isLoadingImage: $isLoadingImage, isLoadingTextPart: $isLoadingTextPart, mood: $mood, summary: $summary, promptForImage: $promptForImage, isImageLoading: $isImageLoading, selectedPets: $selectedPets, isGeneratingCover: $isGeneratingCover, generatedImage: $generatedImage, isSelectingTheme: $isSelectingTheme, preview: $preview)
                             .padding(.bottom, 50)
                     }
                     //MARK: Taking Input
@@ -188,61 +188,14 @@ struct ContentView: View {
                             //MARK: Preview
                             else if preview {
                                 VStack {
-                                    StoryReviewView(theme: theme, genre: genre, characters: formattedChars, petString: formattedPets, chars: selectedChars, pets: selectedPets, mood: mood, moodEmoji: selectedEmoji)
-                                        .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
-                                    
-                                    // Buttons
-                                    HStack {
-                                        Button(action: {
-                                            withAnimation {
-                                                preview = false
-                                                isAddingNames = true
-                                            }
-                                        }) {
-                                            
-                                            HStack(alignment: .center) {
-                                                
-                                                Text("Go Back and Edit")
-                                                Image(systemName: "arrowshape.turn.up.backward.fill")
-                                                    .font(.system(size: 18))
-                                                
-                                            }
-                                            .padding()
-                                            .frame(maxWidth: .infinity)
-                                            .background(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#F2F2DB"))
-                                            .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                            .cornerRadius(16)
-                                        }
-                                        
-                                        Button(action: {
-                                            generatedImage = nil
-                                            isLoading = true
-                                            isLoadingChunk = true
-                                            
-                                            Task {
-                                                do {
-                                                    try await generateStoryWithGemini()
-                                                } catch {
-                                                    print(error.localizedDescription)
-                                                }
-                                            }
-                                        }) {
-                                            HStack(alignment: .center) {
-                                                  
-                                                Text("Generate")
-                                                    .bold()
-                                                Image(systemName: "wand.and.stars")
-                                                    .font(.system(size: 18))
-                                            }
-                                            .padding()
-                                            .frame(maxWidth: .infinity)
-                                            .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
-                                            .foregroundColor(.white)
-                                            .cornerRadius(16)
-                                        }
-                                    }
-                                    .padding(.horizontal)
+                                    StoryReviewView(theme: theme, genre: genre, characters: characters, petString: pets, chars: selectedChars, pets: selectedPets, mood: mood, moodEmoji: selectedEmoji)
+                                        .opacity(preview ? 1.0 : 0.0)
+                                        .scaleEffect(preview ? 1.0 : 0.0) // Scale effect on the text when selected
+                                        .animation(.easeInOut(duration: 0.6), value: preview) // Animate the scaling
+      
                                 }
+                                
+                                .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
                                     
                             }
                             
@@ -268,44 +221,7 @@ struct ContentView: View {
                                         .cornerRadius(22)
                                         .shadow(radius: 10)
                                     }
-                                    if isSelectingGenre || isAddingNames || isSelectingMood {
-                                       
-                                            Button {
-                                                if isAddingNames {
-                                                    withAnimation {
-                                                        isSelectingMood = true
-                                                        isAddingNames = false
-                                                    }
-                                                } else if isSelectingGenre {
-                                                    withAnimation {
-                                                        isSelectingTheme = true
-                                                        isSelectingGenre = false
-                                                    }
-                                                } else if isSelectingMood {
-                                                    withAnimation {
-                                                        isSelectingMood = false
-                                                        isSelectingGenre = true
-                                                    }
-                                                } else {
-                                                    withAnimation {
-                                                        preview = false
-                                                        isAddingNames = true
-                                                    }
-                                                }
-                                            } label: {
-                                                ZStack {
-                                                    Circle()
-                                                        .fill(Color.Neumorphic.main).softOuterShadow()
-                                                        .frame(width: 75, height: 75)
-                                                     
-                                                    Image(systemName: "chevron.backward.circle.fill")
-                                                        .font(.system(size: 55))
-                                                    
-                                                }
-                                            }
-                                            .padding()
-                                      
-                                    }
+                                    
                                     
                                 }
                                 .padding()
@@ -313,43 +229,99 @@ struct ContentView: View {
                                 
                                 Spacer()
                                 //MARK: Buttons
-                                if !preview {
+                            
                                     VStack {
-                                        Button {
-                                            if isSelectingTheme {
-                                                withAnimation {
-                                                    isSelectingTheme = false
-                                                    isSelectingGenre = true
-                                                }
-                                            } else if isSelectingGenre {
-                                                withAnimation {
-                                                    isSelectingGenre = false
-                                                    isSelectingMood = true
-                                                }
-                                            } else if isSelectingMood {
-                                                withAnimation {
-                                                    isSelectingMood = false
-                                                    isAddingNames = true
-                                                }
-                                            } else if isAddingNames {
-                                                isAddingNames = false
-                                                preview = true
+                                        HStack {
+                                            if !isSelectingTheme {
+                                               
+                                                    Button {
+                                                        if isAddingNames {
+                                                            withAnimation {
+                                                                isSelectingMood = true
+                                                                isAddingNames = false
+                                                            }
+                                                        } else if isSelectingGenre {
+                                                            withAnimation {
+                                                                isSelectingTheme = true
+                                                                isSelectingGenre = false
+                                                            }
+                                                        } else if isSelectingMood {
+                                                            withAnimation {
+                                                                isSelectingMood = false
+                                                                isSelectingGenre = true
+                                                            }
+                                                        } else if preview {
+                                                            withAnimation {
+                                                                preview = false
+                                                                isSelectingTheme = true
+                                                            }
+                                                        }
+                                                    } label: {
+                                                        HStack(alignment: .center) {
+                                                            
+                                                            Text("Back")
+                                                                .font(.custom("ComicNeue-Bold", size: 24))
+                                                            Image(systemName: "arrowshape.turn.up.backward.fill")
+                                                                .font(.system(size: 24))
+                                                            
+                                                        }
+                                                        .padding()
+                                                        .frame(width: UIScreen.main.bounds.width * 0.2)
+                                                        .background(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#F2F2DB"))
+                                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                        .cornerRadius(16)
+                                                    }
+                                              
                                             }
-                                        } label: {
-                                            HStack {
-                                                Text("Next")
-                                                    .font(.custom("ComicNeue-Bold", size: 24))
-                                                Image(systemName: "arrowtriangle.right.fill")
+                                            
+                                            Button {
+                                                if isSelectingTheme {
+                                                    withAnimation {
+                                                        isSelectingTheme = false
+                                                        isSelectingGenre = true
+                                                    }
+                                                } else if isSelectingGenre {
+                                                    withAnimation {
+                                                        isSelectingGenre = false
+                                                        isSelectingMood = true
+                                                    }
+                                                } else if isSelectingMood {
+                                                    withAnimation {
+                                                        isSelectingMood = false
+                                                        isAddingNames = true
+                                                    }
+                                                } else if isAddingNames {
+                                                    isAddingNames = false
+                                                    preview = true
+                                                } else if preview {
+                                                    generatedImage = nil
+                                                    isLoading = true
+                                                    isLoadingChunk = true
+                                                    
+                                                    Task {
+                                                        do {
+                                                            try await generateStoryWithGemini()
+                                                        } catch {
+                                                            print(error.localizedDescription)
+                                                        }
+                                                    }
+                                                }
+                                            } label: {
+                                                HStack {
+                                                    Text(preview ? "Generate" : "Next")
+                                                        .font(.custom("ComicNeue-Bold", size: 24))
+                                                    Image(systemName: preview ? "wand.and.stars" : "arrowtriangle.right.fill")
+                                                }
+                                                .padding()
+                                                .frame(width: UIScreen.main.bounds.width * 0.6)
+                                                .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
+                                                .foregroundColor(.white)  // Use .foregroundColor for text/icons
+                                                .cornerRadius(16)
                                             }
-                                            .padding()
-                                            .frame(width: UIScreen.main.bounds.width * 0.7)
-                                            .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
-                                            .foregroundColor(.white)  // Use .foregroundColor for text/icons
-                                            .cornerRadius(12)
+                                            .contentShape(Rectangle())
                                         }
-                                        .contentShape(Rectangle())
                                     }
-                                }
+                                
                             }
                         }
                         .padding(.bottom, 50)
@@ -408,17 +380,17 @@ struct ContentView: View {
     // Function to generate an image using the OpenAI API
     func generateImageUsingOpenAI() {
         // Start an animation while the image is loading
-        withAnimation(.easeIn(duration: 1.5)) {
+        
             isLoadingImage = true
-        }
+        
         
         // Use the provided prompt to generate the image
         let prompt = promptForImage
         OpenAIService.shared.generateImage(from: prompt) { result in
             // End the animation once the image is no longer loading
-            withAnimation(.easeIn(duration: 1.5)) {
+            
                 isImageLoading = false
-            }
+            
             
             // Handle the result of the image generation
             switch result {
@@ -438,10 +410,10 @@ struct ContentView: View {
                 }
                 
                 // Update the state after successfully generating the image
-                withAnimation(.easeIn(duration: 1.5)) {
+                
                     self.isLoadingImage = false
                     self.loaded = true
-                }
+                
                 self.isLoadingChunk = false
                 
             case .failure(let error):
@@ -473,9 +445,9 @@ struct ContentView: View {
 
         // Start loading animation for the image if not generating the title
         if !isGeneratingTitle {
-            withAnimation(.easeIn(duration: 1.5)) {
+            
                 isLoadingImage = true
-            }
+            
         }
         
         // Extract key words from the characters, genre, and theme
@@ -600,10 +572,10 @@ struct ContentView: View {
             """
             generateImageUsingOpenAI()
             print(promptForImage)
-            withAnimation {
+            
                 self.isLoading = false
                 self.loaded = true
-            }
+            
         }
     }
     

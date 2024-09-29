@@ -32,7 +32,7 @@ struct ChildView: View {
                     HStack {
                         ZStack {
                             Circle()
-                                .fill(Color.white) // Background circle for profile image
+                                .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white) // Background circle for profile image
                                 .frame(width: isiPhone ? 250 / 2 : 250)
                             Image(child.profileImage.removeJPGExtension()) // Display profile image
                                 .resizable()

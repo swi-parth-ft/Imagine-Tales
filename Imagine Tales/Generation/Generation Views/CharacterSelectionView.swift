@@ -59,16 +59,31 @@ struct CharacterSelectionView: View {
             // If the character is not selected, add it to the selection
             selectedChars.append(character)
             withAnimation {
-                // Append character name to the list of selected names
-                characters += characters.isEmpty ? character.name : ", \(character.name)"
+                // Append character name and update the list format
+                characters = formatCharacterList(selectedChars.map { $0.name })
             }
         } else {
             // If the character is already selected, remove it
             selectedChars.removeAll { $0.id == character.id }
             withAnimation {
-                // Remove the character's name from the selected string
-                characters = characters.replacingOccurrences(of: character.name, with: "")
+                // Remove the character's name and update the list format
+                characters = formatCharacterList(selectedChars.map { $0.name })
             }
+        }
+    }
+    
+    // Function to format the list of character names with "and" for the last one
+    private func formatCharacterList(_ names: [String]) -> String {
+        switch names.count {
+        case 0:
+            return ""
+        case 1:
+            return names[0]
+        case 2:
+            return names.joined(separator: " and ")
+        default:
+            let allButLast = names.dropLast().joined(separator: ", ")
+            return "\(allButLast), and \(names.last!)"
         }
     }
 }
@@ -127,7 +142,8 @@ struct PetView: View {
             selectedPets.append(pet)
             withAnimation {
                 // Append pet name to the list of selected names
-                pets += pets.isEmpty ? pet.name : ", \(pet.name)"
+                pets += pets.isEmpty ? "\(pet.name)-\(pet.kind)" : ", \(pet.name)-\(pet.kind)"
+                print(pets)
             }
         } else {
             // If the pet is already selected, remove it

@@ -20,6 +20,7 @@ struct StoryReviewView: View {
     var mood: String                    // The chosen mood of the story
     var moodEmoji: String               // Emoji representing the mood of the story
     @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         VStack(spacing: 20) {
             // Title for the preview section
@@ -44,7 +45,7 @@ struct StoryReviewView: View {
                                 .font(.system(size: 24))
                                 .frame(width: 20, height: 20)
                         }
-                        .padding(.horizontal, 30) // Padding for the header
+                        .padding(.horizontal, 20) // Padding for the header
 
                         Divider() // Divider line for separation
                             .background(Color(hex: "#F2F2DB"))
@@ -74,23 +75,23 @@ struct StoryReviewView: View {
                                     .font(.system(size: 24))
                                     .foregroundColor(.primary)
                             }
-                            .padding(.leading, 30) // Padding for the text
+                            .padding(.horizontal, 20) // Padding for the text
 
                             HStack {
-                                Text(petString.isEmpty ? "" : " with ")
+                                Text(petString.isEmpty ? "" : " with pets ")
                                     .font(.system(size: 24))
                                     .foregroundColor(.primary) +
-                                Text(petString.isEmpty ? "" : petString)
+                                Text(petString.isEmpty ? "" : "\(petString).")
                                     .font(.system(size: 24, weight: .bold))
                                     .foregroundColor(.purple) + // Highlighting the pets
-                                Text(". The mood of your story will be ")
+                                Text(" The mood of your story will be ")
                                     .font(.system(size: 24))
                                     .foregroundColor(.primary) +
                                 Text("\(mood)!")
                                     .font(.system(size: 24, weight: .bold))
                                     .foregroundColor(.yellow) // Highlighting the mood
                             }
-                            .padding(.leading, 25) // Padding for the second line of text
+                            .padding(.horizontal, 20) // Padding for the second line of text
                         }
                     }
                     .padding() // Padding around the entire prompt area
@@ -255,5 +256,6 @@ struct StoryReviewView: View {
             }
         }
         .padding() // Padding for the outer view
+        .transition(.opacity.combined(with: .scale(scale: 0.0, anchor: .center)))
     }
 }

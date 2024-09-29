@@ -1,5 +1,5 @@
 {
-  "originHash" : "7a3e98144dbfdaa2fe3ca9972597d2a04d1b42d804d556427064643b51aa9d41",
+  "originHash" : "04e7d313c5c4851c3e809b2bdc13698ae3c785d827fe97dc3def457d7d8eb023",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -179,6 +179,15 @@
       "state" : {
         "revision" : "e17d61f26df0f0e06f58f6977ba05a097a720106",
         "version" : "1.27.1"
+      }
+    },
+    {
+      "identity" : "vortex",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/twostraws/Vortex",
+      "state" : {
+        "revision" : "bb48b128d3c13c68c68e83833c622eec9f6c701f",
+        "version" : "1.0.1"
       }
     }
   ],

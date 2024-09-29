@@ -13,6 +13,7 @@ struct ThemeSelectionView: View {
     @Binding var theme: String             // Binding to store the currently selected theme
     let themes: [String]                   // Array of available theme names
     let themeColors: [Color]               // Array of colors associated with each theme
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         // GeometryReader allows access to the size of the enclosing view, enabling responsive design
@@ -34,7 +35,7 @@ struct ThemeSelectionView: View {
                             ZStack {
                                 // Circle background for each theme
                                 Circle()
-                                    .fill(themes[index] == theme ? themeColors[index].opacity(0.5) : themeColors[index].opacity(0.2)) // Change opacity based on selection
+                                    .fill(themes[index] == theme ? (colorScheme == .dark ? themeColors[index].opacity(0.9) : themeColors[index].opacity(0.5)) : (colorScheme == .dark ? themeColors[index].opacity(0.5) : themeColors[index].opacity(0.2))) // Change opacity based on selection
                                     .frame(width: height, height: height) // Set size of the circle
                                     .shadow(radius: 5) // Add shadow for depth
                                     // Scale effect for the selected theme

@@ -52,29 +52,32 @@ struct StoryFromProfileView: View {
                     VStack {
                         VStack {
                             ZStack(alignment: .topTrailing) {
-                                // Background blur effect for the story container
-                                VisualEffectBlur(blurStyle: .systemThinMaterial)
-                                    .frame(width: UIScreen.main.bounds.width * 0.9)
-                                    .cornerRadius(20)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                                    )
-                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                 
-                                VStack {
+                                VStack(spacing: -80) {
                                     // Async image loading for the story's image
                                     AsyncImage(url: URL(string: story.storyText[count].image)) { phase in
                                         switch phase {
                                         case .empty:
-                                            GradientRectView(size: 500) // Placeholder while loading
+                                            ZStack {
+                                                VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                                                    .cornerRadius(20)
+                                                    .overlay(
+                                                        RoundedRectangle(cornerRadius: 20)
+                                                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                                    )
+                                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                MagicView()
+                                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                                            }
+                                                
                                         case .success(let image):
                                             image
                                                 .resizable()
                                                 .scaledToFill()
-                                                .frame(height: 500)
+                                                .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
                                                 .clipped()
-                                                .cornerRadius(30)
+                                                .cornerRadius(23)
                                                 .overlay(
                                                     ZStack {
                                                         Circle() // Profile image background
@@ -102,7 +105,7 @@ struct StoryFromProfileView: View {
                                                     }
                                                 }
                                                 .modifier(RippleEffect(at: self.origin, trigger: self.counter)) // Custom ripple effect
-                                                .shadow(radius: 3, y: 2)
+                                                .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20) // Adds shadow at the bottom
                                             
                                         case .failure(_):
                                             Image(systemName: "photo") // Placeholder for failed image load
@@ -115,13 +118,84 @@ struct StoryFromProfileView: View {
                                     }
                                     .id(imgUrl) // Unique ID for the image view
                                     .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
-                                    .cornerRadius(10)
+                                    .cornerRadius(23)
                                     .shadow(radius: 10)
                                     
-                                    // Display the story text
-                                    Text(story.storyText[count].text)
-                                        .frame(width: UIScreen.main.bounds.width * 0.8)
+                                    VStack(spacing: -20) {
+                                        
+                                        HStack(spacing: 8) {
+                                            ForEach(0..<story.storyText.count, id: \.self) { index in
+                                                        Rectangle()
+                                                    .fill(index == count ? Color.orange : Color.gray.opacity(0.3))
+                                                            .frame(height: 10)
+                                                            .cornerRadius(5)
+                                                    }
+                                                }
+                                                .padding()
+                                        
+                                        // Display the story text
+                                        Text(story.storyText[count].text)
+                                            .padding()
+                                        
+                                        ZStack {
+                                            HStack(spacing: 20) {
+                                                Button {
+                                                    if count > 0 {
+                                                        withAnimation {
+                                                            count -= 1
+                                                        }
+                                                    }
+                                                } label: {
+                                                    ZStack {
+                                                        Circle()
+                                                            .fill(count == 0 ? .gray : Color(hex: "#8AC640"))
+                                                            .frame(width: 64, height: 64)
+                                                        Image(systemName: "arrowtriangle.backward.fill")
+                                                            .font(.system(size: 30))
+                                                            .foregroundStyle(.white)
+                                                    }
+                                                }
+                                                .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 10) // Adds shadow at the bottom
+                                                
+                                                Button {
+                                                    if count < story.storyText.count - 1 {
+                                                        withAnimation {
+                                                            count += 1
+                                                        }
+                                                    }
+                                                
+                                                } label: {
+                                                    ZStack {
+                                                        Circle()
+                                                            .fill(count == story.storyText.count - 1 ? .gray : Color(hex: "#8AC640"))
+                                                            .frame(width: 64, height: 64)
+                                                        Image(systemName: "arrowtriangle.forward.fill")
+                                                            .font(.system(size: 30))
+                                                            .foregroundStyle(.white)
+                                                    }
+                                                }
+                                                .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 10) // Adds shadow at the bottom
+                                            }
+                                         
+                                        }
                                         .padding()
+                                        .frame(width: UIScreen.main.bounds.width * 0.8)
+                                    }
+                                    .frame(width: UIScreen.main.bounds.width * 0.8)
+                                    .background(
+                                        // Background blur effect for the story container
+                                        VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                            .frame(width: UIScreen.main.bounds.width * 0.9)
+                                            .cornerRadius(20)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                            )
+                                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+
+                                    )
+                                    .cornerRadius(23)
+                                    .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20) // Adds shadow at the bottom
                                 }
                                 .padding(.top)
                                 .id(count) // Unique ID for the count
@@ -138,57 +212,7 @@ struct StoryFromProfileView: View {
                             }
                         }
                         .padding()
-                        .safeAreaInset(edge: .bottom) {
-                            HStack {
-                                Spacer()
-                                ZStack {
-                                    HStack {
-                                        // Back button if not on the first page
-                                        if count != 0 {
-                                            ZStack {
-                                                VisualEffectBlur(blurStyle: .systemThinMaterial)
-                                                    .frame(width: 100, height: 100)
-                                                    .cornerRadius(50)
-                                                    .overlay(
-                                                        Circle() // Circular stroke
-                                                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                                                    )
-                                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                                    .onTapGesture {
-                                                        withAnimation(.easeIn(duration: 0.7)) {
-                                                            count -= 1 // Go to previous page
-                                                        }
-                                                    }
-                                                
-                                                Image(systemName: "arrowshape.backward.fill") // Backward arrow icon
-                                            }
-                                        }
-                                        Spacer()
-                                        // Next button if not on the last page
-                                        if count < story.storyText.count - 1 {
-                                            ZStack {
-                                                VisualEffectBlur(blurStyle: .systemThinMaterial)
-                                                    .frame(width: 100, height: 100)
-                                                    .cornerRadius(50)
-                                                    .overlay(
-                                                        Circle() // Circular stroke
-                                                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                                                    )
-                                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                                    .onTapGesture {
-                                                        withAnimation(.easeIn(duration: 0.7)) {
-                                                            count += 1 // Go to next page
-                                                        }
-                                                    }
-                                                Image(systemName: "arrowshape.bounce.right.fill") // Forward arrow icon
-                                            }
-                                        }
-                                    }
-                                }
-                                .padding()
-                                .padding(.bottom, 40) // Padding for safe area
-                            }
-                        }
+                        
                     }
                     .padding()
                     .navigationTitle(story.title) // Set the title of the navigation bar
