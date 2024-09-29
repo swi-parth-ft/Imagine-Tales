@@ -43,6 +43,9 @@ struct StoryFromProfileView: View {
             }
         }
     }
+    
+
+    
 
     var body: some View {
         NavigationStack {
@@ -176,6 +179,21 @@ struct StoryFromProfileView: View {
                                                 }
                                                 .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 10) // Adds shadow at the bottom
                                             }
+                                            HStack {
+//                                                Button("Speak") {
+//                                                    
+//                                                    let openAITTS = OpenAITTS()
+//
+//                                                    // Example text to be converted to speech
+//                                                    let textToSpeak = "Hello, welcome to Imagine Tools, your creative story assistant."
+//
+//                                                    // Call the speak function to send the request
+//                                                    openAITTS.speak(textToSpeak)
+//                                                }
+                                                
+                                                Spacer()
+                                            }
+                                            
                                          
                                         }
                                         .padding()

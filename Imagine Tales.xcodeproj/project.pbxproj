@@ -61,6 +61,8 @@
 		077BE2872C810FF800760D5A /* SavedStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077BE2862C810FF800760D5A /* SavedStoryView.swift */; };
 		0788C4212CA8B9ED00FA5E65 /* Vortex in Frameworks */ = {isa = PBXBuildFile; productRef = 0788C4202CA8B9ED00FA5E65 /* Vortex */; };
 		0788C4232CA8BA5A00FA5E65 /* MagicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0788C4222CA8BA5A00FA5E65 /* MagicView.swift */; };
+		0788C4252CA90B3900FA5E65 /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0788C4242CA90B3900FA5E65 /* SpeechManager.swift */; };
+		0788C4272CA90D8C00FA5E65 /* OpenAITTSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0788C4262CA90D8C00FA5E65 /* OpenAITTSManager.swift */; };
 		078DACD62C8CA44900F04A65 /* StoryByGenreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACD52C8CA44900F04A65 /* StoryByGenreView.swift */; };
 		078DACDA2C8D202500F04A65 /* BackGroundMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACD92C8D202500F04A65 /* BackGroundMesh.swift */; };
 		078DACDC2C8DFA3300F04A65 /* ScreenTimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */; };
@@ -155,6 +157,8 @@
 		077BE2752C800A4A00760D5A /* GradientRectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientRectView.swift; sourceTree = "<group>"; };
 		077BE2862C810FF800760D5A /* SavedStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedStoryView.swift; sourceTree = "<group>"; };
 		0788C4222CA8BA5A00FA5E65 /* MagicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicView.swift; sourceTree = "<group>"; };
+		0788C4242CA90B3900FA5E65 /* SpeechManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
+		0788C4262CA90D8C00FA5E65 /* OpenAITTSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAITTSManager.swift; sourceTree = "<group>"; };
 		078DACD52C8CA44900F04A65 /* StoryByGenreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryByGenreView.swift; sourceTree = "<group>"; };
 		078DACD92C8D202500F04A65 /* BackGroundMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackGroundMesh.swift; sourceTree = "<group>"; };
 		078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTimeManager.swift; sourceTree = "<group>"; };
@@ -514,7 +518,9 @@
 				07D323952CA7615700846FA3 /* PinView.swift */,
 				07D323932CA7614600846FA3 /* StoryFromProfileView.swift */,
 				0711F3752C6D7433006C86AA /* ProfileView.swift */,
+				0788C4262CA90D8C00FA5E65 /* OpenAITTSManager.swift */,
 				0701FB8C2C822816004BEE9F /* FriendsView.swift */,
+				0788C4242CA90B3900FA5E65 /* SpeechManager.swift */,
 				0701FBAF2C862845004BEE9F /* DpSelectionView.swift */,
 				07D323A12CA7641700846FA3 /* FriendRequestView.swift */,
 			);
@@ -695,6 +701,7 @@
 				07D323782CA72AC000846FA3 /* GenerationViewModel.swift in Sources */,
 				07D323792CA72AC000846FA3 /* ContentView.swift in Sources */,
 				07D3237A2CA72AC000846FA3 /* GeneratingProcessView.swift in Sources */,
+				0788C4272CA90D8C00FA5E65 /* OpenAITTSManager.swift in Sources */,
 				07D3237B2CA72AC000846FA3 /* StoryReviewView.swift in Sources */,
 				07D3239E2CA7629000846FA3 /* FriendsViewModel.swift in Sources */,
 				07D3237C2CA72AC000846FA3 /* MoodSelectionView.swift in Sources */,
@@ -712,6 +719,7 @@
 				07D323AE2CA765C400846FA3 /* DpSelection.swift in Sources */,
 				0792C1D62C76A20D000C42A7 /* OnBoardingView.swift in Sources */,
 				07D3238E2CA74C3F00846FA3 /* Charater.swift in Sources */,
+				0788C4252CA90B3900FA5E65 /* SpeechManager.swift in Sources */,
 				07D323442CA6F25200846FA3 /* Extentions .swift in Sources */,
 				07D323902CA75D4600846FA3 /* CharacterViewModel.swift in Sources */,
 				07D323942CA7614600846FA3 /* StoryFromProfileView.swift in Sources */,

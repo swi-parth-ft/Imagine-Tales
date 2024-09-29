@@ -14,6 +14,7 @@ final class FriendProfileViewModel: ObservableObject {
     @Published var numberOfFriends = 0
     @Published var story: [Story] = []
     @Published var profileImage = ""
+    @Published var isFriendRequest = false
     
     @Published var status = ""
     func getStory(childId: String) throws {
@@ -117,11 +118,31 @@ final class FriendProfileViewModel: ObservableObject {
               }
           }
       }
+    
+    func checkFriendRequest(childId: String, friendId: String) {
+            // Assuming currentUserId is the user's ID whose friend requests you are checking
+            let db = Firestore.firestore()
+            let docRef = db.collection("Children2")
+            .document(childId)
+                .collection("friendRequests")
+                .document(friendId)
+
+            docRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    // Document exists
+                    self.isFriendRequest = true
+                } else {
+                    // Document does not exist
+                    self.isFriendRequest = false
+                }
+            }
+        }
 }
 struct FriendProfileView: View {
     var friendId: String
     var dp: String
     @StateObject var viewModel = FriendProfileViewModel()
+    @StateObject var friendViewModel = FriendsViewModel()
     @State var counter: Int = 0
     @State var origin: CGPoint = .zero
     @State private var tiltAngle: Double = 0
@@ -178,43 +199,81 @@ struct FriendProfileView: View {
                                 Text("@\(viewModel.child?.username ?? "N/A")")
                                     .font(.title)
                                 
-                                
-                                
-                                
                                 Text("\(viewModel.numberOfFriends) Friends")
                                     .font(.title2)
                                 Spacer()
-                                if viewModel.status == "Friends" {
-                                    
-                                    
-                                    if !isRemoved {
-                                        Button("Remove", systemImage: "person.crop.circle.fill.badge.minus") {
-                                            viewModel.removeFriend(childId: childId, docID: friendId)
-                                            viewModel.removeFriend(childId: friendId, docID: childId)
-                                            viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
-                                            isRemoved = true
-                                            let drop = Drop(title: "Removed Friend", icon: UIImage(systemName: "person.crop.circle.fill.badge.minus"))
-                                            Drops.show(drop)
-                                            
+                                if childId != friendId {
+                                    if viewModel.isFriendRequest {
+                                        HStack {
+                                            // Button to accept the friend request
+                                            Button(action: {
+                                                var requestId = ""
+                                                if let request = friendViewModel.friendRequests.first(where: { $0.fromUserId == friendId }) {
+                                                    requestId = request.requestId
+                                                    print("Request ID: \(requestId)")
+                                                } else {
+                                                    print("No request found for the given user ID.")
+                                                }
+                                                friendViewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "accepted", friendUserId: friendId)
+                                                friendViewModel.deleteRequest(childId: childId, docID: friendId)
+                                                let drop = Drop(title: "You're now friends!", icon: UIImage(systemName: "figure.2.left.holdinghands"))
+                                                Drops.show(drop)
+                                                viewModel.checkFriendRequest(childId: childId, friendId: friendId)
+                                                viewModel.status = "Friends"
+                                                
+                                            }) {
+                                                Text("Accept")
+                                                 
+                                            }
+                                            Button(action: {
+                                                var requestId = ""
+                                                if let request = friendViewModel.friendRequests.first(where: { $0.fromUserId == friendId }) {
+                                                    requestId = request.requestId
+                                                    print("Request ID: \(requestId)")
+                                                } else {
+                                                    print("No request found for the given user ID.")
+                                                }
+                                                friendViewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "denied", friendUserId: friendId)
+                                                friendViewModel.deleteRequest(childId: childId, docID: friendId)
+                                                let drop = Drop(title: "Request Denied!", icon: UIImage(systemName: "person.fill.xmark"))
+                                                Drops.show(drop)
+                                                viewModel.checkFriendRequest(childId: childId, friendId: friendId)
+                                            }) {
+                                                Text("Deny")
+                                            }
                                         }
-                                        .foregroundStyle(.primary)
-                                    }
-                                }
-                                
-                                if viewModel.status != "Friends" && viewModel.status != "Pending" {
-                                    Button("Add Friend") {
+                                    } else {
+                                        if viewModel.status == "Friends" {
+                                            if !isRemoved {
+                                                Button("Remove", systemImage: "person.crop.circle.fill.badge.minus") {
+                                                    viewModel.removeFriend(childId: childId, docID: friendId)
+                                                    viewModel.removeFriend(childId: friendId, docID: childId)
+                                                    viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
+                                                    isRemoved = true
+                                                    let drop = Drop(title: "Removed Friend", icon: UIImage(systemName: "person.crop.circle.fill.badge.minus"))
+                                                    Drops.show(drop)
+                                                    
+                                                }
+                                                .foregroundStyle(.primary)
+                                            }
+                                        }
                                         
-                                        viewModel.sendFriendRequest(toChildId: friendId, fromChildId: childId)
-                                        viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
-                                        let drop = Drop(title: "Friend request sent.", icon: UIImage(systemName: "plus"))
-                                        Drops.show(drop)
+                                        if viewModel.status != "Friends" && viewModel.status != "Pending" {
+                                            Button("Add Friend") {
+                                                
+                                                viewModel.sendFriendRequest(toChildId: friendId, fromChildId: childId)
+                                                viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
+                                                let drop = Drop(title: "Friend request sent.", icon: UIImage(systemName: "plus"))
+                                                Drops.show(drop)
+                                            }
+                                            .foregroundStyle(.primary)
+                                        }
+                                        
+                                        if viewModel.status == "Pending" {
+                                            Text("Request Sent.")
+                                                .foregroundStyle(.primary)
+                                        }
                                     }
-                                    .foregroundStyle(.primary)
-                                }
-                                
-                                if viewModel.status == "Pending" {
-                                    Text("Request Sent.")
-                                        .foregroundStyle(.black)
                                 }
                             }
                             Spacer()
@@ -304,6 +363,7 @@ struct FriendProfileView: View {
                             viewModel.fetchChild(ChildId: friendId)
                             try viewModel.getStory(childId: friendId)
                             viewModel.getFriendsCount(childId: friendId)
+                            viewModel.checkFriendRequest(childId: childId, friendId: friendId)
                             
                         } catch {
                             print(error.localizedDescription)
@@ -328,6 +388,7 @@ struct FriendProfileView: View {
                 viewModel.fetchChild(ChildId: friendId)
                 viewModel.getFriendsCount(childId: friendId)
                 viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
+                friendViewModel.fetchFriendRequests(childId: childId) // Fetch friend requests when the view appears
             }
         }
     }
