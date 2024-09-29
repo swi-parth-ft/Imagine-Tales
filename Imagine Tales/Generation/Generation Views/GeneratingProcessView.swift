@@ -49,6 +49,8 @@ struct GeneratingProcessView: View {
     @State private var count = 0
     @State private var isTitleGenerated = false
     @Environment(\.colorScheme) var colorScheme
+    @State private var isExpanding = false
+    
     var body: some View {
         ZStack {
             VStack {
@@ -58,15 +60,29 @@ struct GeneratingProcessView: View {
                 ScrollView {
                  //   ForEach(0..<storyChunk.count, id: \.self) { index in
                     if loaded && !isLoadingChunk {
-                        VStack(spacing: -80) {
+                        VStack(spacing: isExpanding ? -30 : -80) {
                             Image(uiImage: storyChunk[count].1)
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                                .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
                                 .clipped()
                                 .cornerRadius(23)
                                 .padding()
                                 .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20) // Adds shadow at the bottom
+                                .onTapGesture {
+                                    withAnimation {
+                                        isExpanding.toggle()
+                                    }
+                                    // Schedule the second toggle after 5 seconds
+                                    if isExpanding {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                                            withAnimation {
+                                                isExpanding = false
+                                            }
+                                            
+                                        }
+                                    }
+                                }
                             
                             VStack(spacing: -20) {
                                 
@@ -212,12 +228,12 @@ struct GeneratingProcessView: View {
                  //   }
 
                     if isLoadingImage {
-                        VStack(spacing: -80) {
+                        VStack(spacing: isExpanding ? -30 : -80) {
                             ZStack {
           
                                 // Background blur effect for the story container
                                 VisualEffectBlur(blurStyle: .systemThinMaterial)
-                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
                                     .cornerRadius(23)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 20)
@@ -225,7 +241,21 @@ struct GeneratingProcessView: View {
                                     )
                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                 MagicView()
-                                    .frame(width: UIScreen.main.bounds.width * 0.8, height: 500)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
+                            }
+                            .onTapGesture {
+                                withAnimation {
+                                    isExpanding.toggle()
+                                }
+                                // Schedule the second toggle after 5 seconds
+                                if isExpanding {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                                        withAnimation {
+                                            isExpanding = false
+                                        }
+                                        
+                                    }
+                                }
                             }
                             
                             VStack(spacing: -20) {

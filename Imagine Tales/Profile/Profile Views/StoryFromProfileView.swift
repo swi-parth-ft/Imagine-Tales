@@ -44,6 +44,7 @@ struct StoryFromProfileView: View {
         }
     }
     
+    @State private var isExpanding = false
 
     
 
@@ -56,14 +57,14 @@ struct StoryFromProfileView: View {
                         VStack {
                             ZStack(alignment: .topTrailing) {
                                 
-                                VStack(spacing: -80) {
+                                VStack(spacing: isExpanding ? -30 : -80) {
                                     // Async image loading for the story's image
                                     AsyncImage(url: URL(string: story.storyText[count].image)) { phase in
                                         switch phase {
                                         case .empty:
                                             ZStack {
                                                 VisualEffectBlur(blurStyle: .systemThinMaterial)
-                                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
                                                     .cornerRadius(20)
                                                     .overlay(
                                                         RoundedRectangle(cornerRadius: 20)
@@ -71,14 +72,14 @@ struct StoryFromProfileView: View {
                                                     )
                                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                                 MagicView()
-                                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: 700)
                                             }
                                                 
                                         case .success(let image):
                                             image
                                                 .resizable()
                                                 .scaledToFill()
-                                                .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                                                .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
                                                 .clipped()
                                                 .cornerRadius(23)
                                                 .overlay(
@@ -120,9 +121,23 @@ struct StoryFromProfileView: View {
                                         }
                                     }
                                     .id(imgUrl) // Unique ID for the image view
-                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: 500)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
                                     .cornerRadius(23)
                                     .shadow(radius: 10)
+                                    .onTapGesture {
+                                        withAnimation {
+                                            isExpanding.toggle()
+                                        }
+                                        // Schedule the second toggle after 5 seconds
+                                        if isExpanding {
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                                                withAnimation {
+                                                    isExpanding = false
+                                                }
+                                                
+                                            }
+                                        }
+                                    }
                                     
                                     VStack(spacing: -20) {
                                         
