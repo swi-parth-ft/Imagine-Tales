@@ -106,7 +106,7 @@ struct TabbarView: View {
                     isSearching = true
                 }
                 .popover(isPresented: $isSearching) {
-                    SearchView().frame(width: 600, height: 700)  // Search popover view
+                    SearchView().frame(width: 800, height: 900)  // Search popover view
                 }
                 
                 // Button for notifications (friend requests)

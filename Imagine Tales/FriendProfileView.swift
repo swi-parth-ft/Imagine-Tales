@@ -277,23 +277,7 @@ struct FriendProfileView: View {
                                 }
                             }
                             Spacer()
-                            VStack {
-                                ZStack {
-                                    Circle()
-                                        .foregroundStyle(.white)
-                                        .frame(width: 75, height: 75)
-                                        .shadow(radius: 10)
-                                    
-                                    Image("arrow1")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 55, height: 55)
-                                }
-                                .onTapGesture {
-                                    dismiss()
-                                }
-                                Spacer()
-                            }
+                            
                         }
                         .padding()
                         Spacer()
@@ -389,6 +373,18 @@ struct FriendProfileView: View {
                 viewModel.getFriendsCount(childId: friendId)
                 viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
                 friendViewModel.fetchFriendRequests(childId: childId) // Fetch friend requests when the view appears
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                            Text("Back")
+                        }
+                    }
+                }
             }
         }
     }

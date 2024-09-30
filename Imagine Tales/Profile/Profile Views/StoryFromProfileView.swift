@@ -30,7 +30,8 @@ struct StoryFromProfileView: View {
     @State private var comment = "" // Comment from the parent
     @State private var isShowingCmt = false // Flag to show comment alert
     @Environment(\.colorScheme) var colorScheme
-    // Function to fetch story reviews from Firestore
+    @Environment(\.dismiss) var dismiss
+     // Function to fetch story reviews from Firestore
     func fetchStoryAndReview(storyID: String) {
         let db = Firestore.firestore()
         
@@ -260,40 +261,58 @@ struct StoryFromProfileView: View {
                     }
                     .padding()
                     .navigationTitle(story.title) // Set the title of the navigation bar
+                    .navigationBarBackButtonHidden(true)
                     .toolbar {
-                        HStack {
-                            // Button to save the story
-                            Button(action: {
-                                homeViewModel.toggleSaveStory(childId: childId, storyId: story.id)
-                                isSaved.toggle()
-                            }) {
-                                Image(systemName: isSaved ? "bookmark.fill" : "bookmark") // Toggle bookmark icon
-                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
-                            }
-                            
-                            // Button to like the story
-                            Button(action: {
-                                homeViewModel.likeStory(childId: childId, storyId: story.id)
-                                isLiked.toggle() // Toggle like status
-                            }) {
-                                Image(systemName: isLiked ? "heart.fill" : "heart") // Toggle heart icon
-                                    .foregroundStyle(
-                                        LinearGradient(gradient: Gradient(colors: [Color.red, Color.pink]),
-                                                       startPoint: .top,
-                                                       endPoint: .bottom)
-                                    )
-                                    .scaleEffect(isLiked ? 1.2 : 1) // Scale effect on like
-                                    .animation(.easeInOut, value: isLiked) // Animation for like toggle
-                            }
-                            
-                            // Show comment button if the user is the child's parent and there is a comment
-                            if childId == story.childId && comment != "" {
-                                Button("", systemImage: "message.fill") {
-                                    isShowingCmt.toggle() // Toggle comment alert
+                                    // Leading back button toolbar item
+                                    ToolbarItem(placement: .navigationBarLeading) {
+                                        Button(action: {
+                                            dismiss() // Dismiss the fullScreenCover
+                                        }) {
+                                            HStack {
+                                                Image(systemName: "chevron.left")
+                                                Text("Back")
+                                            }
+                                        }
+                                    }
+                                    
+                                    // Trailing toolbar items (like, bookmark, comment)
+                                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                                        HStack {
+                                            // Button to save the story
+                                            Button(action: {
+                                                homeViewModel.toggleSaveStory(childId: childId, storyId: story.id)
+                                                isSaved.toggle()
+                                            }) {
+                                                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                            }
+                                            
+                                            // Button to like the story
+                                            Button(action: {
+                                                homeViewModel.likeStory(childId: childId, storyId: story.id)
+                                                isLiked.toggle()
+                                            }) {
+                                                Image(systemName: isLiked ? "heart.fill" : "heart")
+                                                    .foregroundStyle(
+                                                        LinearGradient(gradient: Gradient(colors: [Color.red, Color.pink]),
+                                                                       startPoint: .top,
+                                                                       endPoint: .bottom)
+                                                    )
+                                                    .scaleEffect(isLiked ? 1.2 : 1)
+                                                    .animation(.easeInOut, value: isLiked)
+                                            }
+                                            
+                                            // Show comment button if the user is the child's parent and there is a comment
+                                            if childId == story.childId && !comment.isEmpty {
+                                                Button(action: {
+                                                    isShowingCmt.toggle()
+                                                }) {
+                                                    Image(systemName: "message.fill")
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    }
                 }
                 .alert("Parent's Comment", isPresented: $isShowingCmt) {
                     Button("OK", role: .cancel) { }
