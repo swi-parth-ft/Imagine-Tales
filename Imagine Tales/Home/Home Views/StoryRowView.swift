@@ -72,6 +72,7 @@ struct StoryRowView: View {
                     // Save button
                     Button(action: {
                         viewModel.toggleSaveStory(childId: childId, storyId: story.id)
+                        viewModel.sendLikeNotification(fromUserId: childId, toUserId: story.childId, storyId: story.id, storyTitle: story.title, type: isSaved ? "Unsaved" : "Saved")
                         Drops.show(Drop(title: isSaved ? "Story Unsaved" : "Story Saved", icon: UIImage(systemName: isSaved ? "bookmark" : "bookmark.fill")))
                         isSaved.toggle()
                     }) {
@@ -126,7 +127,7 @@ struct StoryRowView: View {
                         Button(action: {
                             viewModel.likeStory(childId: childId, storyId: story.id)
                             
-                            viewModel.sendLikeNotification(fromUserId: childId, toUserId: story.childId, storyId: story.id, storyTitle: story.title)
+                            viewModel.sendLikeNotification(fromUserId: childId, toUserId: story.childId, storyId: story.id, storyTitle: story.title, type: isLiked ? "Unliked" : "Liked")
                             Drops.show(Drop(title: isLiked ? "Unliked" : "Liked", icon: UIImage(systemName: isLiked ? "heart" : "heart.fill")))
                             isLiked.toggle()
                         }) {

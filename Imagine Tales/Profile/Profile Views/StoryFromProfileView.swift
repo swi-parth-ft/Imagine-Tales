@@ -281,6 +281,7 @@ struct StoryFromProfileView: View {
                                             // Button to save the story
                                             Button(action: {
                                                 homeViewModel.toggleSaveStory(childId: childId, storyId: story.id)
+                                                homeViewModel.sendLikeNotification(fromUserId: childId, toUserId: story.childId, storyId: story.id, storyTitle: story.title, type: isSaved ? "Unsaved" : "Saved")
                                                 isSaved.toggle()
                                             }) {
                                                 Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
@@ -290,6 +291,7 @@ struct StoryFromProfileView: View {
                                             // Button to like the story
                                             Button(action: {
                                                 homeViewModel.likeStory(childId: childId, storyId: story.id)
+                                                homeViewModel.sendLikeNotification(fromUserId: childId, toUserId: story.childId, storyId: story.id, storyTitle: story.title, type: isLiked ? "Unliked" : "Liked")
                                                 isLiked.toggle()
                                             }) {
                                                 Image(systemName: isLiked ? "heart.fill" : "heart")

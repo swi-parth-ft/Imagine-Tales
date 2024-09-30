@@ -46,7 +46,8 @@ struct TabbarView: View {
     @State private var showingProfile = false  // Whether the profile is shown
     @AppStorage("dpurl") private var dpUrl = ""  // URL for the profile picture (from AppStorage)
     @Environment(\.colorScheme) var colorScheme
-    
+    @StateObject var viewModel = FriendsViewModel()
+    @AppStorage("childId") var childId: String = "Default Value"
     var body: some View {
         // Navigation container for the app
         NavigationStack {
@@ -86,6 +87,10 @@ struct TabbarView: View {
                 .padding(.horizontal, 26)
                 .shadow(radius: 10)  // Shadow for a floating effect
             }
+            .onAppear {
+                viewModel.fetchFriendRequests(childId: childId)
+                viewModel.fetchNotifications(for: childId)
+            }
         }
         .toolbar {
             // Toolbar item for the profile picture on the left side
@@ -110,9 +115,12 @@ struct TabbarView: View {
                 }
                 
                 // Button for notifications (friend requests)
-                Button("Notifications", systemImage: "bell") {
+                Button("Notifications", systemImage: viewModel.friendRequests.isEmpty && viewModel.notifications.isEmpty ? "bell" : "bell.badge") {
                     isShowingFriendReq = true
                 }
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(viewModel.friendRequests.isEmpty && viewModel.notifications.isEmpty ? colorScheme == .dark ? .white : .black : .red, colorScheme == .dark ? .white : .black)
+                .font(.system(size: 20))
                 .popover(isPresented: $isShowingFriendReq) {
                     FriendRequestView().frame(width: 600, height: 700)  // Friend request popover view
                 }

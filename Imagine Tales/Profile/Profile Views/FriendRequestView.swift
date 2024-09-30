@@ -139,7 +139,24 @@ struct FriendRequestView: View {
                                                     .frame(width: 60, height: 60)
                                                     .cornerRadius(75)
                                             }
-                                            .padding(.trailing)
+                                            if noti.type == "Liked" {
+                                                Image(systemName: "heart.fill")
+                                                    .foregroundStyle(.red)
+                                                    .font(.system(size: 20))
+                                            } else if noti.type == "Unliked" {
+                                                Image(systemName: "heart")
+                                                    .foregroundStyle(.red)
+                                                    .font(.system(size: 20))
+                                            } else if noti.type == "Saved" {
+                                                Image(systemName: "bookmark.fill")
+                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                    .font(.system(size: 20))
+                                            } else if noti.type == "Unsaved" {
+                                                Image(systemName: "bookmark")
+                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                    .font(.system(size: 20))
+                                            }
+                                           
                                                 Text("\(noti.fromChildUsername) \(noti.type) your story, \(noti.storyTitle) \(formatDate(noti.timeStamp))")
                                             
                                             Spacer()
