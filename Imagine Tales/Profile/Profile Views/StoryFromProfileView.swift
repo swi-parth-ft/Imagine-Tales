@@ -210,12 +210,14 @@ struct StoryFromProfileView: View {
                                                 
                                                 Spacer()
                                                 // Share button
-                                                Image(systemName: "paperplane")
-                                                    .symbolEffect(.rotate, value: showShareList)
-                                                    .font(.system(size: 30))
-                                                    .padding()
-                                                    .onTapGesture { showShareList.toggle() }
-                                                    .popover(isPresented: $showShareList) { sharePopover().frame(width: 300, height: 500) }
+                                                if story.status == "Approve" {
+                                                    Image(systemName: "paperplane")
+                                                        .symbolEffect(.rotate, value: showShareList)
+                                                        .font(.system(size: 30))
+                                                        .padding()
+                                                        .onTapGesture { showShareList.toggle() }
+                                                        .popover(isPresented: $showShareList) { sharePopover().frame(width: 300, height: 500) }
+                                                }
                                             }
                                             
                                          
