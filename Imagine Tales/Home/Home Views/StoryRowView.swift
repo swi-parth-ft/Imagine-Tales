@@ -104,7 +104,8 @@ struct StoryRowView: View {
                                     .cornerRadius(10)
                                     .padding()
                             default:
-                                GradientRectView(size: 400)
+                                MagicView()
+                                    .frame(height: 400)
                             }
                         }
                         .frame(width: UIScreen.main.bounds.width * 0.95, height: 400)
@@ -124,6 +125,8 @@ struct StoryRowView: View {
                     HStack(spacing: 5) {
                         Button(action: {
                             viewModel.likeStory(childId: childId, storyId: story.id)
+                            
+                            viewModel.sendLikeNotification(fromUserId: childId, toUserId: story.childId, storyId: story.id, storyTitle: story.title)
                             Drops.show(Drop(title: isLiked ? "Unliked" : "Liked", icon: UIImage(systemName: isLiked ? "heart" : "heart.fill")))
                             isLiked.toggle()
                         }) {
@@ -150,7 +153,10 @@ struct StoryRowView: View {
                 }
                 .padding(.horizontal)
             }
-            .onAppear(perform: setupStoryDetails)
+            .onAppear {
+                setupStoryDetails()
+                viewModel.fetchChild(ChildId: childId)
+            }
             .fullScreenCover(isPresented: $isShowingProfile, onDismiss: { reload.toggle() }) {
                 FriendProfileView(friendId: story.childId, dp: imgUrl)
             }

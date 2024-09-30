@@ -63,6 +63,7 @@
 		0788C4232CA8BA5A00FA5E65 /* MagicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0788C4222CA8BA5A00FA5E65 /* MagicView.swift */; };
 		0788C4252CA90B3900FA5E65 /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0788C4242CA90B3900FA5E65 /* SpeechManager.swift */; };
 		0788C4272CA90D8C00FA5E65 /* OpenAITTSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0788C4262CA90D8C00FA5E65 /* OpenAITTSManager.swift */; };
+		0788C4452CAB20CF00FA5E65 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0788C4442CAB20CF00FA5E65 /* Notification.swift */; };
 		078DACD62C8CA44900F04A65 /* StoryByGenreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACD52C8CA44900F04A65 /* StoryByGenreView.swift */; };
 		078DACDA2C8D202500F04A65 /* BackGroundMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACD92C8D202500F04A65 /* BackGroundMesh.swift */; };
 		078DACDC2C8DFA3300F04A65 /* ScreenTimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */; };
@@ -159,6 +160,7 @@
 		0788C4222CA8BA5A00FA5E65 /* MagicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicView.swift; sourceTree = "<group>"; };
 		0788C4242CA90B3900FA5E65 /* SpeechManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
 		0788C4262CA90D8C00FA5E65 /* OpenAITTSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAITTSManager.swift; sourceTree = "<group>"; };
+		0788C4442CAB20CF00FA5E65 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		078DACD52C8CA44900F04A65 /* StoryByGenreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryByGenreView.swift; sourceTree = "<group>"; };
 		078DACD92C8D202500F04A65 /* BackGroundMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackGroundMesh.swift; sourceTree = "<group>"; };
 		078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTimeManager.swift; sourceTree = "<group>"; };
@@ -399,6 +401,7 @@
 			isa = PBXGroup;
 			children = (
 				07D323842CA7300000846FA3 /* StoryTextItem.swift */,
+				0788C4442CAB20CF00FA5E65 /* Notification.swift */,
 				07D323972CA761A700846FA3 /* SharedStory.swift */,
 				07D323892CA7304D00846FA3 /* UserChildren.swift */,
 				07D323872CA7302D00846FA3 /* UserModel.swift */,
@@ -773,6 +776,7 @@
 				0701FBB42C8695D0004BEE9F /* AsyncImage.swift in Sources */,
 				0701FBAA2C83F126004BEE9F /* TransitionShader.swift in Sources */,
 				07D323882CA7302D00846FA3 /* UserModel.swift in Sources */,
+				0788C4452CAB20CF00FA5E65 /* Notification.swift in Sources */,
 				07D323962CA7615700846FA3 /* PinView.swift in Sources */,
 				0792C1DA2C7BD95E000C42A7 /* ParentView.swift in Sources */,
 				07D3239C2CA7621600846FA3 /* ProfileViewModel.swift in Sources */,

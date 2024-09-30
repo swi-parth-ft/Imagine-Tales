@@ -89,7 +89,7 @@ struct SavedStoryView: View {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 0)
                                                 .fill(Color.white.opacity(0.8))
-                                                .frame(width: UIScreen.main.bounds.width * 0.40, height: 200)
+                                                .frame(width: UIScreen.main.bounds.width * 0.43, height: 200)
                                                 .cornerRadius(16)
                                             
                                             VStack(spacing: 0) {
@@ -101,8 +101,8 @@ struct SavedStoryView: View {
                                                     .padding(.top, -20)
                                                 HStack {
                                                     Image(systemName: "heart.fill")
-                                                       
-                                                    Text("Likes")
+                                                        .foregroundStyle(.red)
+                                                    Text("\(story.likes) Likes")
                                                         .padding(.trailing)
                                                     
                                                     Text(story.theme ?? "")
@@ -140,6 +140,7 @@ struct SavedStoryView: View {
                         }
                         .padding()
                     }
+            .padding(.bottom, 40)
             .fullScreenCover(item: $selectedStory) { story in
                     StoryFromProfileView(story: story)
             }

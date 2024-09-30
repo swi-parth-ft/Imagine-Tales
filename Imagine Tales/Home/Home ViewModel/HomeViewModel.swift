@@ -353,4 +353,16 @@ final class HomeViewModel: ObservableObject {
             }
         }
     }
+    
+    func sendLikeNotification(fromUserId: String, toUserId: String, storyId: String, storyTitle: String) {
+        let db = Firestore.firestore()
+        let notification = Notification(fromId: fromUserId, toId: toUserId, storyId: storyId, read: false, type: "Liked", fromChildUsername: child?.username ?? "", fromChildProfileImage: child?.profileImage ?? "", storyTitle: storyTitle)
+        
+        do {
+            try db.collection("Notifications").document(notification.id).setData(from: notification)
+            print("Notification sent successfully")
+        } catch let error {
+            print("Error sending notification: \(error)")
+        }
+    }
 }

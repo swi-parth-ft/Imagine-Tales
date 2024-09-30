@@ -34,7 +34,8 @@ struct ExploreView: View {
                                         switch phase {
                                         case .empty:
                                             // Placeholder for loading
-                                            GradientRectView(size: isFullHeight ? 600 : 300)
+                                            MagicView()
+                                                .frame(height: isFullHeight ? 600 : 300)
                                             
                                         case .success(let image):
                                             // Successfully loaded image
@@ -174,7 +175,8 @@ struct ExploreView: View {
                                                         switch phase {
                                                         case .empty:
                                                             // Placeholder for loading
-                                                            GradientRectView(size: 150)
+                                                            MagicView()
+                                                                .frame(width: 300, height: 150)
                                                             
                                                         case .success(let image):
                                                             // Successfully loaded image

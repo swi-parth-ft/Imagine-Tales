@@ -16,6 +16,65 @@ final class FriendsViewModel: ObservableObject {
     @Published var child: UserChildren?                   // Current child user information
     @Published var children: [UserChildren] = []          // List of children (friends) details
     @Published var friendReqIds = [String]()              // Array of friend request user IDs
+    @Published var notifications: [Notification] = []
+        
+    // Function to delete a document by ID
+        func deleteNotification(withId id: String) {
+            let db = Firestore.firestore()
+            
+            db.collection("Notifications").document(id).delete { error in
+                if let error = error {
+                    print("Error removing document: \(error)")
+                } else {
+                    print("Document successfully removed!")
+                    // Optionally, remove the item from the array if needed
+                    
+                }
+            }
+        }
+    
+        func fetchNotifications(for userId: String) {
+            let db = Firestore.firestore()
+            
+            db.collection("Notifications")
+                .whereField("toId", isEqualTo: userId)
+                .order(by: "timeStamp", descending: true)
+                .getDocuments { (snapshot, error) in
+                    if let error = error {
+                        print("Error fetching notifications: \(error)")
+                        return
+                    }
+                    
+                    guard let documents = snapshot?.documents else {
+                        print("No notifications found")
+                        return
+                    }
+                    
+                    self.notifications = documents.compactMap { doc -> Notification? in
+                        return try? doc.data(as: Notification.self)
+                    }
+                }
+        }
+    
+    func getStoryById(storyId: String, completion: @escaping (Story?, Error?) -> Void) {
+        let db = Firestore.firestore()
+        
+        db.collection("Story").document(storyId).getDocument { (document, error) in
+            if let error = error {
+                        completion(nil, error)
+                    } else if let document = document, document.exists {
+                        do {
+                            // Decode the document data into a Story instance
+                            let data = try document.data(as: Story.self)
+                            completion(data, nil)
+                        } catch {
+                            completion(nil, error)
+                        }
+                    } else {
+                        completion(nil, nil) // Document does not exist
+                    }
+        }
+    }
     
     // Fetch the list of friends for a specific child
     func fetchFriends(childId: String) {
