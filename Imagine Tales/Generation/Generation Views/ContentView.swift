@@ -133,39 +133,63 @@ struct ContentView: View {
                                     ScrollView {
                                         VStack {
                                             Section(header: Text("Persons").font(.custom("ComicNeue-Bold", size: 30))) {
-                                                LazyVGrid(columns: Array(repeating: GridItem(.fixed(width), spacing: 17), count: 4), spacing: 10) {
-                                                    ForEach(viewModel.characters.indices, id: \.self) { index in
-                                                        CharacterSelectionView(character: viewModel.characters[index], width: width, characters: $characters, selectedChars: $selectedChars)
-                                                            .contextMenu {
-                                                                Button(action: {
-                                                                    viewModel.deleteChar(char: viewModel.characters[index])
-                                                                    Task { do { try viewModel.getCharacters() } catch { print(error.localizedDescription) } }
-                                                                }) {
-                                                                    Label("Delete", systemImage: "trash")
-                                                                }
-                                                            }
-                                                            .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
+                                                if viewModel.characters.isEmpty {
+                                                    // Placeholder when no stories are available
+                                                    ContentUnavailableView {
+                                                        Label("No Characters Yet", systemImage: "person.fill")
+                                                    } description: {
+                                                        Text("Create your first character")
+                                                    } actions: {
                                                     }
+                                                    .frame(height: 300)
+                                                    .listRowBackground(Color.clear)
+                                                } else {
+                                                    LazyVGrid(columns: Array(repeating: GridItem(.fixed(width), spacing: 17), count: 4), spacing: 10) {
+                                                        ForEach(viewModel.characters.indices, id: \.self) { index in
+                                                            CharacterSelectionView(character: viewModel.characters[index], width: width, characters: $characters, selectedChars: $selectedChars)
+                                                                .contextMenu {
+                                                                    Button(action: {
+                                                                        viewModel.deleteChar(char: viewModel.characters[index])
+                                                                        Task { do { try viewModel.getCharacters() } catch { print(error.localizedDescription) } }
+                                                                    }) {
+                                                                        Label("Delete", systemImage: "trash")
+                                                                    }
+                                                                }
+                                                                .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
+                                                        }
+                                                    }
+                                                    .padding()
                                                 }
-                                                .padding()
                                             }
                                             
                                             Section(header: Text("Pets").font(.custom("ComicNeue-Bold", size: 30))) {
-                                                LazyVGrid(columns: Array(repeating: GridItem(.fixed(width), spacing: 17), count: 4), spacing: -10) {
-                                                    ForEach(viewModel.pets.indices, id: \.self) { index in
-                                                        PetView(pet: viewModel.pets[index], width: width, pets: $pets, selectedPets: $selectedPets)
-                                                            .contextMenu {
-                                                                Button(action: {
-                                                                    viewModel.deletePet(pet: viewModel.pets[index])
-                                                                    Task { do { try viewModel.getPets() } catch { print(error.localizedDescription) } }
-                                                                }) {
-                                                                    Label("Delete", systemImage: "trash")
-                                                                }
-                                                            }
-                                                            .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
+                                                if viewModel.pets.isEmpty {
+                                                    // Placeholder when no stories are available
+                                                    ContentUnavailableView {
+                                                        Label("No Pets Yet", systemImage: "pawprint.fill")
+                                                    } description: {
+                                                        Text("Create your first Pet")
+                                                    } actions: {
                                                     }
+                                                    .frame(height: 300)
+                                                    .listRowBackground(Color.clear)
+                                                } else {
+                                                    LazyVGrid(columns: Array(repeating: GridItem(.fixed(width), spacing: 17), count: 4), spacing: -10) {
+                                                        ForEach(viewModel.pets.indices, id: \.self) { index in
+                                                            PetView(pet: viewModel.pets[index], width: width, pets: $pets, selectedPets: $selectedPets)
+                                                                .contextMenu {
+                                                                    Button(action: {
+                                                                        viewModel.deletePet(pet: viewModel.pets[index])
+                                                                        Task { do { try viewModel.getPets() } catch { print(error.localizedDescription) } }
+                                                                    }) {
+                                                                        Label("Delete", systemImage: "trash")
+                                                                    }
+                                                                }
+                                                                .offset(x: (index / 4) % 2 == 0 ? 0 : width / 2)
+                                                        }
+                                                    }
+                                                    .padding()
                                                 }
-                                                .padding()
                                             }
                                         }
                                     }

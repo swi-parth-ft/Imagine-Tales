@@ -153,7 +153,7 @@ struct ProfileView: View {
                     // Display user's stories or shared stories based on selection
                     if !isShowingSharedStories {
                         List {
-                            Section("Your Stories") {
+                            Section("Your Stories (\(parentViewModel.story.count))") {
                                 if parentViewModel.story.isEmpty {
                                     // Placeholder when no stories are available
                                     ContentUnavailableView {
@@ -223,7 +223,7 @@ struct ProfileView: View {
                     } else {
                         // Display stories shared with the user
                         List {
-                            Section("Shared with you") {
+                            Section("Shared with you (\(viewModel.sharedStories.count))") {
                                 if viewModel.sharedStories.isEmpty {
                                     // Placeholder when no shared stories are available
                                     ContentUnavailableView {

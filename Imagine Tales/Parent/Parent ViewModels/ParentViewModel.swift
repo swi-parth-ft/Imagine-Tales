@@ -142,6 +142,7 @@ final class ParentViewModel: ObservableObject {
             self.story = querySnapshot?.documents.compactMap { document in
                 try? document.data(as: Story.self) // Map documents to Story model
             } ?? []
+            self.story.sort(by: { $0.dateCreated! > $1.dateCreated! })
             print(self.story) // Print fetched stories
         }
     }

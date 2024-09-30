@@ -184,6 +184,7 @@ struct GeneratingProcessView: View {
                                                         do {
                                                             try await generateStoryWithGemini()
                                                             try await generateSummary()
+                                                            storyViewModel.fetchChild(ChildId: childId)
                                                             isTitleGenerated = true
                                                         } catch {
                                                             print(error.localizedDescription)
@@ -192,6 +193,7 @@ struct GeneratingProcessView: View {
                                                 } else if isTitleGenerated {
                                                     Task {
                                                         do {
+                                                        
                                                             try await storyViewModel.uploadStoryToFirestore(storyTextItem: storyTextItem, childId: childId, title: title, genre: genre, theme: theme, mood: mood, summary: summary)
                                                    
                                                             Drops.show(Drop(title: "Story Uploaded, Waiting for Approval", icon: UIImage(systemName: "square.and.arrow.up.fill")))
