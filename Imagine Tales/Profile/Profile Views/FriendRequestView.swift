@@ -18,6 +18,9 @@ struct FriendRequestView: View {
         GridItem(.flexible())
     ]
     @Environment(\.colorScheme) var colorScheme
+    @State private var isShowingProfile = false
+    @State private var notificationFriendId = ""
+    @State private var notificationDp = ""
     
     func formatDate(_ date: Date) -> String {
             let dateFormatter = DateFormatter()
@@ -62,53 +65,57 @@ struct FriendRequestView: View {
                                                     .cornerRadius(75)
                                             }
                                             .padding(.trailing)
+                                            .onTapGesture {
+                                                selectedFriend = friend
+                                            }
                                             
                                             Text("\(friend.username)") // Display friend's username
                                                 .foregroundStyle(.primary)
                                             
                                             Spacer()
                                             // Button to accept the friend request
-                                            Button(action: {
-                                                var requestId = ""
-                                                if let request = viewModel.friendRequests.first(where: { $0.fromUserId == friend.id }) {
-                                                    requestId = request.requestId
-                                                    print("Request ID: \(requestId)")
-                                                } else {
-                                                    print("No request found for the given user ID.")
-                                                }
-                                                viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "accepted", friendUserId: friend.id)
-                                                viewModel.deleteRequest(childId: childId, docID: friend.id)
-                                                Drops.show(Drop(title: "You're now friends with \(friend.username)!"))
-                                                
-                                            }) {
+                                            
                                                 Text("Accept")
                                                     .foregroundStyle(.white)
                                                     .padding()
                                                     .frame(width: 120)
                                                     .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61")) // Button color
                                                     .cornerRadius(8)
-                                            }
+                                                    .onTapGesture {
+                                                        var requestId = ""
+                                                        if let request = viewModel.friendRequests.first(where: { $0.fromUserId == friend.id }) {
+                                                            requestId = request.requestId
+                                                            print("Request ID: \(requestId)")
+                                                        } else {
+                                                            print("No request found for the given user ID.")
+                                                        }
+                                                        viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "accepted", friendUserId: friend.id)
+                                                        viewModel.deleteRequest(childId: childId, docID: friend.id)
+                                                        Drops.show(Drop(title: "You're now friends with \(friend.username)!"))
+                                                    }
+                                            
                                             
                                             // Button to deny the friend request
-                                            Button(action: {
-                                                var requestId = ""
-                                                if let request = viewModel.friendRequests.first(where: { $0.fromUserId == friend.id }) {
-                                                    requestId = request.requestId
-                                                    print("Request ID: \(requestId)")
-                                                } else {
-                                                    print("No request found for the given user ID.")
-                                                }
-                                                viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "denied", friendUserId: friend.id)
-                                                viewModel.deleteRequest(childId: childId, docID: friend.id)
-                                                Drops.show(Drop(title: "Request from \(friend.username) denied!"))
-                                            }) {
+                                          
                                                 Text("Deny")
                                                     .foregroundStyle(colorScheme == .dark ? .white : .black)
                                                     .padding()
                                                     .frame(width: 120)
                                                     .background(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#D0FFD0")) // Button color
                                                     .cornerRadius(8)
-                                            }
+                                                    .onTapGesture {
+                                                        var requestId = ""
+                                                        if let request = viewModel.friendRequests.first(where: { $0.fromUserId == friend.id }) {
+                                                            requestId = request.requestId
+                                                            print("Request ID: \(requestId)")
+                                                        } else {
+                                                            print("No request found for the given user ID.")
+                                                        }
+                                                        viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "denied", friendUserId: friend.id)
+                                                        viewModel.deleteRequest(childId: childId, docID: friend.id)
+                                                        Drops.show(Drop(title: "Request from \(friend.username) denied!"))
+                                                    }
+                                            
                                         }
                                         .padding()
                                         .listRowBackground(Color.white.opacity(0))
@@ -126,6 +133,7 @@ struct FriendRequestView: View {
                                         .listRowBackground(Color.white.opacity(0))
                                     }
                                     ForEach(viewModel.notifications) { noti in
+                               
                                         HStack(alignment: .center) {
                                             ZStack {
                                                 Circle()
@@ -138,6 +146,11 @@ struct FriendRequestView: View {
                                                     .scaledToFit()
                                                     .frame(width: 60, height: 60)
                                                     .cornerRadius(75)
+                                            }
+                                            .onTapGesture {
+                                                let friend = UserChildren(id: noti.fromId, parentId: "", name: "", age: "", dateCreated: Date(), username: "", profileImage: noti.fromChildProfileImage)
+                                                    selectedFriend = friend
+                                                
                                             }
                                             if noti.type == "Liked" {
                                                 Image(systemName: "heart.fill")
