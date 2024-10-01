@@ -18,17 +18,17 @@ struct GenreSelectionView: View {
     
     // List of available genres to display
     let genres: [String]
-
+    
     var body: some View {
         GeometryReader { geometry in
             // Calculate the height for each genre circle based on the available screen space
-            let height = (geometry.size.height - 40) / 7
+            let height = (geometry.size.height - 40) / (UIDevice.current.orientation.isLandscape ? 5.5 : 7)
 
             // Horizontal scrollable view to display genres
             ScrollView(.horizontal) {
                 LazyHGrid(
                     // Define grid layout: fixed row height with spacing between the rows
-                    rows: Array(repeating: GridItem(.fixed(height), spacing: 70), count: 4),
+                    rows: Array(repeating: GridItem(.fixed(height), spacing: 70), count: UIDevice.current.orientation.isLandscape ? 3 : 4),
                     spacing: 60  // Adjust spacing between columns to bring them closer together
                 ) {
                     // Loop through each genre to create the selection circles
@@ -46,14 +46,14 @@ struct GenreSelectionView: View {
 
                                 // Display the genre text inside the circle
                                 Text(genres[index])
-                                    .font(.custom("ComicNeue-Bold", size: 24)) // Custom font for genre names
+                                    .font(.custom("ComicNeue-Bold", size: 22)) // Custom font for genre names
                                     .opacity(isSelectingGenre ? 1.0 : 0.0) // Fade in/out effect for the text
                                     .scaleEffect(isSelectingGenre ? (genres[index] == genre ? 1.2 : 1.0) : 0.0) // Scale effect on text
                                     .animation(.easeInOut(duration: genres[index] == genre ? 0.6 : 0.3), value: isSelectingGenre) // Animate scaling based on selection
                             }
                         }
                         // Offset the circle for every other column to create a hexagonal pattern effect
-                        .offset(y: (index / 4) % 2 == 0 ? 0 : height / 2)
+                        .offset(y: (index / (UIDevice.current.orientation.isLandscape ? 3 : 4)) % 2 == 0 ? 0 : height / 2)
                         .frame(width: height, height: height)
                         // Handle the tap gesture to update the selected genre
                         .onTapGesture {

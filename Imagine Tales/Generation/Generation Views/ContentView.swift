@@ -212,7 +212,7 @@ struct ContentView: View {
                             //MARK: Preview
                             else if preview {
                                 VStack {
-                                    StoryReviewView(theme: theme, genre: genre, characters: characters, petString: pets, chars: selectedChars, pets: selectedPets, mood: mood, moodEmoji: selectedEmoji)
+                                    StoryReviewView(theme: $theme, genre: $genre, characters: characters, petString: pets, chars: selectedChars, pets: selectedPets, mood: $mood, moodEmoji: $selectedEmoji)
                                         .opacity(preview ? 1.0 : 0.0)
                                         .scaleEffect(preview ? 1.0 : 0.0) // Scale effect on the text when selected
                                         .animation(.easeInOut(duration: 0.6), value: preview) // Animate the scaling
@@ -226,13 +226,7 @@ struct ContentView: View {
                             VStack {
                                 //MARK: Title Section
                                 HStack {
-                                    
-                                    //Selection Title
-                                    Text(isSelectingTheme ? "Select Theme" : isSelectingGenre ? "Select Genre" : isAddingNames ? "Select Characters" : isSelectingMood ? "Select Mood" : "")
-                                        .font(.custom("ComicNeue-Bold", size: 32))
-                                        .frame(height: 75)
-                                        .padding()
-                                    
+                                   
                                     Spacer()
                                     
                                     if isAddingNames {
@@ -362,7 +356,13 @@ struct ContentView: View {
                 
                 
             }
-            .navigationTitle(isGeneratingTitle ? "\(title)" : "Imagine a Story")
+            .navigationTitle(isGeneratingTitle ? "\(title)" : (isSelectingTheme ? "Select Theme" : (isSelectingGenre ? "Select Genre" : (isSelectingMood ? "Select Mood" : (preview ? "Preview" : "Select Characters")))))
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Imagine a Story! 🪄")
+                        .font(.headline)
+                }
+            }
             .sheet(isPresented: $isAddingChar, onDismiss: {
                 // This code will run when the sheet is dismissed
                 Task {
@@ -377,6 +377,8 @@ struct ContentView: View {
                 CharacterView()
             }
         }
+        .customNavBarStyle()
+        
     }
     
     

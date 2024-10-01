@@ -22,13 +22,13 @@ struct MoodSelectionView: View {
     var body: some View {
         GeometryReader { geometry in
             // Calculate the height of each mood circle based on available vertical space
-            let height = (geometry.size.height - 40) / 8
+            let height = (geometry.size.height - 40) / (UIDevice.current.orientation.isLandscape ? 5 : 8)
 
             // Scrollable horizontal view for mood selection
             ScrollView(.horizontal) {
                 LazyHGrid(
                     // Define grid layout: 4 rows with fixed height and spacing between them
-                    rows: Array(repeating: GridItem(.fixed(height), spacing: 70), count: 4),
+                    rows: Array(repeating: GridItem(.fixed(height), spacing: 70), count: UIDevice.current.orientation.isLandscape ? 3 : 4),
                     spacing: 60  // Adjust spacing between the columns to bring them closer together
                 ) {
                     // Loop through each mood to display a corresponding circle with an emoji and text
@@ -59,7 +59,7 @@ struct MoodSelectionView: View {
                             }
                         }
                         // Offset every other column to create a hexagonal shape pattern
-                        .offset(y: (index / 4) % 2 == 0 ? 0 : height / 2)
+                        .offset(y: (index / (UIDevice.current.orientation.isLandscape ? 3 : 4)) % 2 == 0 ? 0 : height / 2)
                         .frame(width: height, height: height)
                         // Handle the tap gesture to update the selected mood and corresponding emoji
                         .onTapGesture {

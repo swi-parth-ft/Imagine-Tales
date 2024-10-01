@@ -159,3 +159,28 @@ extension View {
         self.modifier(CustomBackgroundModifier())
     }
 }
+struct CustomNavBarAppearance: ViewModifier {
+    init() {
+        let appearance = UINavigationBarAppearance()
+        appearance.largeTitleTextAttributes = [
+            .font: UIFont(name: "ComicNeue-Bold", size: 34)!,
+        ]
+        appearance.titleTextAttributes = [
+            .font: UIFont(name: "ComicNeue-Regular", size: 18)!,
+        ]
+        appearance.configureWithTransparentBackground()
+        // Apply the appearance globally to all navigation bars
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+    }
+    
+    func body(content: Content) -> some View {
+        content
+    }
+}
+
+extension View {
+    func customNavBarStyle() -> some View {
+        self.modifier(CustomNavBarAppearance())
+    }
+}

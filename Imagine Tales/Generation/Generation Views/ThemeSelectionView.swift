@@ -19,13 +19,13 @@ struct ThemeSelectionView: View {
         // GeometryReader allows access to the size of the enclosing view, enabling responsive design
         GeometryReader { geometry in
             // Calculate the height for each theme circle based on the available height
-            let height = (geometry.size.height - 40) / 6
+            let height = (geometry.size.height - 40) / (UIDevice.current.orientation.isLandscape ? 4 : 6)
             
             // Horizontal scroll view for theme selection
             ScrollView(.horizontal) {
                 // LazyHGrid provides a horizontal grid layout for the themes
                 LazyHGrid(
-                    rows: Array(repeating: GridItem(.fixed(height), spacing: 70), count: 3), // Create 3 rows of fixed height
+                    rows: Array(repeating: GridItem(.fixed(height), spacing: 70), count: UIDevice.current.orientation.isLandscape ? 2 : 3), // Create 3 rows of fixed height
                     spacing: 60  // Space between each column of themes
                 ) {
                     // Loop through each theme index to create the UI
@@ -74,7 +74,7 @@ struct ThemeSelectionView: View {
                             }
                         }
                         // Apply offset for every other column to create a hexagonal shape effect
-                        .offset(y: (index / 3) % 2 == 0 ? 0 : height / 2) // Adjust Y position based on index
+                        .offset(y: (index / (UIDevice.current.orientation.isLandscape ? 2 : 3)) % 2 == 0 ? 0 : height / 2) // Adjust Y position based on index
                         .frame(width: height, height: height) // Set fixed frame for the theme item
                         // Tap gesture to select a theme
                         .onTapGesture {
