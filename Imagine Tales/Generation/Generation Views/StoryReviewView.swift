@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Vortex
 
 // The StoryReviewView presents a summary of a story's theme, genre, characters, pets, and mood.
 struct StoryReviewView: View {
@@ -26,6 +27,7 @@ struct StoryReviewView: View {
     
     let moods = ["Happy", "Sad", "Excited", "Scared", "Curious", "Brave", "Funny", "Surprised", "Angry", "Relaxed", "Adventurous", "Mysterious", "Silly", "Love", "Confused", "Proud", "Nervous", "Sleepy", "Joyful", "Shy"]
     let moodEmojis = ["😊", "😢", "😃", "😱", "🤔", "💪", "😄", "😮", "😠", "😌", "🧭", "🕵️‍♂️", "🤪", "❤️", "😕", "😎", "😬", "😴", "😁", "😳"]
+    @State private var shouldBurst: Bool = false // State to trigger the confetti burst
     
     func getRandom() {
         let totalDuration = 4.0 // Total duration for changing
@@ -47,6 +49,7 @@ struct StoryReviewView: View {
                 }
             }
         }
+        shouldBurst = true
     }
     var body: some View {
         VStack(spacing: 20) {
@@ -131,6 +134,32 @@ struct StoryReviewView: View {
                 RoundedRectangle(cornerRadius: 22)
                     .fill(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#F2F2DB"))
                     .frame(height: UIDevice.current.orientation.isLandscape ? 300 : 500)
+                
+                VortexViewReader { proxy in
+                    ZStack {
+                        VortexView(.confetti.makeUniqueCopy()) {
+                            Rectangle()
+                                .fill(.white)
+                                .frame(width: 16, height: 16)
+                                .tag("square")
+                            
+                            Circle()
+                                .fill(.white)
+                                .frame(width: 16)
+                                .tag("circle")
+                        }
+                        .onChange(of: shouldBurst) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { // Adjust delay based on animation duration
+                                proxy.burst() // Trigger the confetti burst
+                                                       }
+                                
+                                shouldBurst = false // Reset after bursting
+                            
+                        }
+                    }
+                }
+                .frame(height: UIDevice.current.orientation.isLandscape ? 300 : 500)
+                .ignoresSafeArea(edges: .top)
                 
                 VStack {
                     Spacer()
