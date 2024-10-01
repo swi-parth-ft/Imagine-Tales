@@ -238,6 +238,7 @@ struct StoryRowView: View {
                                 let drop = Drop(title: "Shared Story with \(friend.username)")
                                 
                                 Drops.show(drop)
+                                viewModel.sendShareNotification(fromId: childId, toUserId: friend.id, storyId: story.id, storyTitle: story.title, fromChildUsername: viewModel.child?.username ?? "", fromChildProfilePic: viewModel.child?.profileImage ?? "")
                                 
                             }
                             

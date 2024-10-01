@@ -66,7 +66,7 @@ struct StoryFromProfileView: View {
                                         case .empty:
                                             ZStack {
                                                 VisualEffectBlur(blurStyle: .systemThinMaterial)
-                                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
+                                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
                                                     .cornerRadius(20)
                                                     .overlay(
                                                         RoundedRectangle(cornerRadius: 20)
@@ -81,7 +81,7 @@ struct StoryFromProfileView: View {
                                             image
                                                 .resizable()
                                                 .scaledToFill()
-                                                .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
+                                                .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
                                                 .clipped()
                                                 .cornerRadius(23)
                                                 .overlay(
@@ -123,7 +123,7 @@ struct StoryFromProfileView: View {
                                         }
                                     }
                                     .id(imgUrl) // Unique ID for the image view
-                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
                                     .cornerRadius(23)
                                     .shadow(radius: 10)
                                     .onTapGesture {
@@ -155,7 +155,7 @@ struct StoryFromProfileView: View {
                                         
                                         // Display the story text
                                         Text(story.storyText[count].text)
-                                            .font(.system(size: 23))
+                                            .font(.system(size: 21))
                                             .padding()
                                         
                                         ZStack {
@@ -379,6 +379,7 @@ struct StoryFromProfileView: View {
                             .contentShape(Rectangle())
                             .onTapGesture {
                                 homeViewModel.addSharedStory(childId: friend.id, fromId: homeViewModel.child?.username ?? "", toId: friend.id, storyId: story.id)
+                                homeViewModel.sendShareNotification(fromId: childId, toUserId: friend.id, storyId: story.id, storyTitle: story.title, fromChildUsername: homeViewModel.child?.username ?? "", fromChildProfilePic: homeViewModel.child?.profileImage ?? "")
                                 let drop = Drop(title: "Shared Story with \(friend.username)")
                                 
                                 Drops.show(drop)

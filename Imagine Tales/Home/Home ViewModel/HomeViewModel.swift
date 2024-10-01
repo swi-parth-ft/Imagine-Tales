@@ -377,4 +377,16 @@ final class HomeViewModel: ObservableObject {
             print("Error sending notification: \(error)")
         }
     }
+    
+    func sendShareNotification(fromId: String, toUserId: String, storyId: String, storyTitle: String, fromChildUsername: String, fromChildProfilePic: String) {
+        let db = Firestore.firestore()
+        let notification = Notification(fromId: fromId, toId: toUserId, storyId: storyId, read: false, type: "share", fromChildUsername: fromChildUsername, fromChildProfileImage: fromChildProfilePic, storyTitle: storyTitle, storyStatus: "")
+        
+        do {
+            try db.collection("Notifications").document(notification.id).setData(from: notification)
+            print("Notification sent successfully")
+        } catch let error {
+            print("Error sending notification: \(error)")
+        }
+    }
 }

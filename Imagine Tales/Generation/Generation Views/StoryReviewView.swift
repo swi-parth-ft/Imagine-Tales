@@ -103,7 +103,7 @@ struct StoryReviewView: View {
                 // Background for the story details
                 RoundedRectangle(cornerRadius: 22)
                     .fill(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#F2F2DB"))
-                    .frame(height: 600)
+                    .frame(height: 500)
                 
                 VStack {
                     Spacer()
@@ -123,7 +123,7 @@ struct StoryReviewView: View {
                             .frame(width: 190)
                     }
                 }
-                .frame(height: 600) // Frame for the images
+                .frame(height: 500) // Frame for the images
                 
                 // Section displaying theme, mood, and genre details
                 VStack(alignment: .center) {

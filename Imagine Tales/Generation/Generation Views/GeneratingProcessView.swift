@@ -72,7 +72,7 @@ struct GeneratingProcessView: View {
                             Image(uiImage: storyChunk[count].1)
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
+                                .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
                                 .clipped()
                                 .cornerRadius(23)
                                 .padding()
@@ -106,6 +106,7 @@ struct GeneratingProcessView: View {
                                 
                                 
                                 Text(storyChunk[count].0)
+                                    .font(.system(size: 21))
                                     .padding()
                                 ZStack {
                                     HStack(spacing: 20) {
@@ -243,7 +244,7 @@ struct GeneratingProcessView: View {
           
                                 // Background blur effect for the story container
                                 VisualEffectBlur(blurStyle: .systemThinMaterial)
-                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
                                     .cornerRadius(23)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 20)
@@ -251,7 +252,7 @@ struct GeneratingProcessView: View {
                                     )
                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                 MagicView()
-                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 700)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
                             }
                             .onTapGesture {
                                 withAnimation {
@@ -280,6 +281,7 @@ struct GeneratingProcessView: View {
                                         .padding()
                                 
                                 Text(chunkOfText)
+                                    .font(.system(size: 21))
                                     .padding()
                                 
                                 ZStack {

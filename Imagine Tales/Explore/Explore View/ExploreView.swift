@@ -212,8 +212,8 @@ struct ExploreView: View {
                                                     // Stack for story details
                                                     ZStack {
                                                         HStack {
-                                                            VStack(alignment: .leading, spacing: -18) {
-                                                                Text(story.title) // Story title
+                                                            VStack(alignment: .leading) {
+                                                                Text(story.title.trimmingCharacters(in: .newlines)) // Story title
                                                                     .foregroundStyle(colorScheme == .dark ? .white : .black)
                                                                     .font(.system(size: 18))
                                                                     

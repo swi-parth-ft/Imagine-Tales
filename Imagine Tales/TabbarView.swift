@@ -58,7 +58,7 @@ struct TabbarView: View {
                 switch selectedTab {
                 case 0: HomeView(reload: $reload).padding()
                 case 1: ExploreView().padding().ignoresSafeArea(edges: .top)
-                case 2: ContentView().padding()
+                case 2: ContentView().padding().padding(.top, 60).ignoresSafeArea(edges: .top)
                 case 3: SavedStoryView(reload: $reload).padding()
                 case 4: ProfileView(showSignInView: $showSignInView, reload: $reload, showingProfile: $showingProfile).padding()
                 default: HomeView(reload: $reload).padding()
@@ -111,7 +111,7 @@ struct TabbarView: View {
                     isSearching = true
                 }
                 .popover(isPresented: $isSearching) {
-                    SearchView().frame(width: 800, height: 900)  // Search popover view
+                    SearchView().frame(width: UIScreen.main.bounds.width * 0.8, height: 850)  // Search popover view
                 }
                 
                 // Button for notifications (friend requests)

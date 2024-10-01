@@ -37,7 +37,7 @@ struct CharacterView: View {
     ]
     
     // Available pets for selection
-    let pets = ["Dog", "Cat", "Dragon", "Lion", "Monkey", "Wolf", "Tiger", "Unicorn", "Baby Dinosaur"]
+    let pets = ["Dog", "Cat", "Dragon", "Monkey", "Wolf", "Tiger", "Unicorn", "Baby Dinosaur"]
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {

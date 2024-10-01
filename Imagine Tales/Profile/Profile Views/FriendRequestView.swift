@@ -39,15 +39,16 @@ struct FriendRequestView: View {
                 VStack {
                     // Check if there are no friend requests
                     
-                            
-                            List {
+                    if viewModel.children.isEmpty && viewModel.notifications.isEmpty {
+                        ContentUnavailableView("No New Notifications",
+                                               systemImage: "bell",
+                                               description: Text("You currently don't have any new friend requests or notifications."))
+                        .listRowBackground(Color.white.opacity(0))
+                    }
+                        List {
+                            if !viewModel.children.isEmpty {
                                 Section("Friend Requests") {
-                                    if viewModel.children.isEmpty {
-                                        ContentUnavailableView("No New Friend Requests",
-                                                               systemImage: "person.crop.circle.badge.exclamationmark",
-                                                               description: Text("You currently don't have any new friend requests."))
-                                        .listRowBackground(Color.white.opacity(0))
-                                    }
+                                    
                                     ForEach(viewModel.children, id: \.id) { friend in
                                         
                                         
@@ -75,46 +76,46 @@ struct FriendRequestView: View {
                                             Spacer()
                                             // Button to accept the friend request
                                             
-                                                Text("Accept")
-                                                    .foregroundStyle(.white)
-                                                    .padding()
-                                                    .frame(width: 120)
-                                                    .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61")) // Button color
-                                                    .cornerRadius(8)
-                                                    .onTapGesture {
-                                                        var requestId = ""
-                                                        if let request = viewModel.friendRequests.first(where: { $0.fromUserId == friend.id }) {
-                                                            requestId = request.requestId
-                                                            print("Request ID: \(requestId)")
-                                                        } else {
-                                                            print("No request found for the given user ID.")
-                                                        }
-                                                        viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "accepted", friendUserId: friend.id)
-                                                        viewModel.deleteRequest(childId: childId, docID: friend.id)
-                                                        Drops.show(Drop(title: "You're now friends with \(friend.username)!"))
+                                            Text("Accept")
+                                                .foregroundStyle(.white)
+                                                .padding()
+                                                .frame(width: 120)
+                                                .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61")) // Button color
+                                                .cornerRadius(8)
+                                                .onTapGesture {
+                                                    var requestId = ""
+                                                    if let request = viewModel.friendRequests.first(where: { $0.fromUserId == friend.id }) {
+                                                        requestId = request.requestId
+                                                        print("Request ID: \(requestId)")
+                                                    } else {
+                                                        print("No request found for the given user ID.")
                                                     }
+                                                    viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "accepted", friendUserId: friend.id)
+                                                    viewModel.deleteRequest(childId: childId, docID: friend.id)
+                                                    Drops.show(Drop(title: "You're now friends with \(friend.username)!"))
+                                                }
                                             
                                             
                                             // Button to deny the friend request
-                                          
-                                                Text("Deny")
-                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                                    .padding()
-                                                    .frame(width: 120)
-                                                    .background(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#D0FFD0")) // Button color
-                                                    .cornerRadius(8)
-                                                    .onTapGesture {
-                                                        var requestId = ""
-                                                        if let request = viewModel.friendRequests.first(where: { $0.fromUserId == friend.id }) {
-                                                            requestId = request.requestId
-                                                            print("Request ID: \(requestId)")
-                                                        } else {
-                                                            print("No request found for the given user ID.")
-                                                        }
-                                                        viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "denied", friendUserId: friend.id)
-                                                        viewModel.deleteRequest(childId: childId, docID: friend.id)
-                                                        Drops.show(Drop(title: "Request from \(friend.username) denied!"))
+                                            
+                                            Text("Deny")
+                                                .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                .padding()
+                                                .frame(width: 120)
+                                                .background(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#D0FFD0")) // Button color
+                                                .cornerRadius(8)
+                                                .onTapGesture {
+                                                    var requestId = ""
+                                                    if let request = viewModel.friendRequests.first(where: { $0.fromUserId == friend.id }) {
+                                                        requestId = request.requestId
+                                                        print("Request ID: \(requestId)")
+                                                    } else {
+                                                        print("No request found for the given user ID.")
                                                     }
+                                                    viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "denied", friendUserId: friend.id)
+                                                    viewModel.deleteRequest(childId: childId, docID: friend.id)
+                                                    Drops.show(Drop(title: "Request from \(friend.username) denied!"))
+                                                }
                                             
                                         }
                                         .padding()
@@ -124,19 +125,16 @@ struct FriendRequestView: View {
                                         .cornerRadius(16)
                                     }
                                 }
-                                
+                            }
+                            
+                            if !viewModel.notifications.isEmpty {
                                 Section("Notifications") {
-                                    if viewModel.notifications.isEmpty {
-                                        ContentUnavailableView("No New Notifications",
-                                                               systemImage: "bell.fill",
-                                                               description: Text("You currently don't have any new Notifications."))
-                                        .listRowBackground(Color.white.opacity(0))
-                                    }
+                                    
                                     ForEach(viewModel.notifications) { noti in
                                         
                                         if noti.type == "status" {
                                             HStack(alignment: .center) {
-                                            
+                                                
                                                 Image(systemName: noti.storyStatus == "Approved" ? "checkmark.circle.fill" : "xmark.circle.fill" )
                                                     .font(.system(size: 50))
                                                     .foregroundStyle(noti.storyStatus == "Approved" ? .green : .red )
@@ -184,7 +182,77 @@ struct FriendRequestView: View {
                                                 .foregroundColor(.white)
                                                 
                                             }
-                                        } else {
+                                        }
+                                        else if noti.type == "share" {
+                                            HStack(alignment: .center) {
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white)
+                                                        .frame(width: 70)
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                    // Assuming there's an AsyncDp for async loading of images
+                                                    Image(noti.fromChildProfileImage.removeJPGExtension())
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 60, height: 60)
+                                                        .cornerRadius(75)
+                                                }
+                                                .onTapGesture {
+                                                    let friend = UserChildren(id: noti.fromId, parentId: "", name: "", age: "", dateCreated: Date(), username: "", profileImage: noti.fromChildProfileImage)
+                                                    selectedFriend = friend
+                                                    
+                                                }
+                                                
+                                                Image(systemName: "paperplane")
+                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                    .font(.system(size: 20))
+                                                
+                                                
+                                                Text("\(noti.fromChildUsername) shared \(noti.storyTitle.trimmingCharacters(in: .newlines)). \(formatDate(noti.timeStamp))")
+                                                
+                                                Spacer()
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white)
+                                                        .frame(width: 50)
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                    Image(systemName: "book.pages")
+                                                        .font(.system(size: 16))
+                                                }
+                                                .onTapGesture {
+                                                    viewModel.getStoryById(storyId: noti.storyId) { story, error in
+                                                        if let error = error {
+                                                            print("Error fetching document: \(error.localizedDescription)")
+                                                        } else if let story = story {
+                                                            selectedStory = story
+                                                        } else {
+                                                            print("Document does not exist")
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                
+                                            }
+                                            .padding()
+                                            .listRowBackground(Color.white.opacity(0))
+                                            .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4))
+                                            .listRowSeparator(.hidden) // Hide row separator
+                                            .cornerRadius(16)
+                                            .swipeActions {
+                                                
+                                                Button(role: .destructive) {
+                                                    viewModel.deleteNotification(withId: noti.id)
+                                                    viewModel.fetchNotifications(for: childId)
+                                                } label: {
+                                                    Label("Delete", systemImage: "trash")
+                                                    
+                                                }
+                                                .tint(.red)
+                                                .foregroundColor(.white)
+                                                
+                                            }
+                                        }
+                                        else {
                                             HStack(alignment: .center) {
                                                 ZStack {
                                                     Circle()
@@ -221,7 +289,7 @@ struct FriendRequestView: View {
                                                         .font(.system(size: 20))
                                                 }
                                                 
-                                                Text("\(noti.fromChildUsername) \(noti.type) your story, \(noti.storyTitle) \(formatDate(noti.timeStamp))")
+                                                Text("\(noti.fromChildUsername) \(noti.type) your story, \(noti.storyTitle.trimmingCharacters(in: .newlines)) \(formatDate(noti.timeStamp))")
                                                 
                                                 Spacer()
                                                 ZStack {
@@ -267,13 +335,15 @@ struct FriendRequestView: View {
                                         }
                                     }
                                 }
-                            
-                                
                             }
-                            .scrollContentBackground(.hidden)
-                           
                             
-
+                            
+                            
+                        }
+                        .scrollContentBackground(.hidden)
+                        
+                        
+                        
                         
                         .fullScreenCover(item: $selectedFriend) { friend in
                             FriendProfileView(friendId: friend.id, dp: friend.profileImage) // Show friend's profile in full screen

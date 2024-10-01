@@ -37,7 +37,7 @@ struct ContentView: View {
     
     let genres = ["Adventure", "Fantasy", "Mystery", "Romance", "Science Fiction", "Horror", "Thriller","Historical", "Comedy", "Drama", "Detective", "Dystopian", "Fairy Tale", "Magical Realism", "Biography", "Coming-of-Age", "Action", "Paranormal", "Supernatural", "Western"]
 
-    let themes = ["Magical Adventures", "Underwater Mysteries", "Dinosaur Discoveries", "Space Explorers", "Fairy Tale Kingdoms", "Superhero Chronicles", "Enchanted Forests", "Pirate Quests", "Animal Friends", "Time Traveling", "Monster Mischief", "Robot Wonders", "Mystical Creatures", "Lost Worlds", "Magical School Days", "Jungle Safari", "Winter Wonderland", "Desert Dunes", "Alien Encounter", "Wizard’s Secrets"]
+    let themes = ["Magical Adventures", "Underwater Mysteries", "Dinosaur Discoveries", "Space Explorers", "FairyTale Kingdoms", "Superhero Chronicles", "Enchanted Forests", "Pirate Quests", "Animal Friends", "Time Traveling", "Monster Mischief", "Robot Wonders", "Mystical Creatures", "Lost Worlds", "Magical SchoolDays", "Jungle Safari", "Winter Wonderland", "Desert Dunes", "Alien Encounter", "Wizard’s Secrets"]
 
     let themeColors: [Color] = [.purple, .teal, .green, .blue, .pink, .red, .green, .brown, .orange, .indigo, .purple, .gray, .purple, .green, .yellow, .green, .blue, .orange, .yellow, .gray]
     
@@ -249,7 +249,6 @@ struct ContentView: View {
                                     
                                 }
                                 .padding()
-                                .padding(.bottom, 20)
                                 
                                 Spacer()
                                 //MARK: Buttons
@@ -359,7 +358,7 @@ struct ContentView: View {
                     
                     storyViewModel.fetchChild(ChildId: childId)
                 }
-                .padding()
+                .padding([.leading, .bottom])
                 
                 
             }

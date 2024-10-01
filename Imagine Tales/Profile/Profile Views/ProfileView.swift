@@ -84,7 +84,7 @@ struct ProfileView: View {
                             HStack {
                                 // Username editing or display
                                 if isEditingUsername {
-                                    TextField("\(viewModel.child?.username ?? "N/A")", text: $newUsername)
+                                    TextField("\(viewModel.child?.username ?? "Loading...")", text: $newUsername)
                                         .font(.title)
                                         .frame(width: 200)
                                         .focused($isTextFieldFocused)
@@ -92,7 +92,7 @@ struct ProfileView: View {
                                             isTextFieldFocused = true // Focus the text field on appearance
                                         }
                                 } else {
-                                    Text("@\(viewModel.child?.username ?? "N/A")")
+                                    Text("@\(viewModel.child?.username ?? "Loading...")")
                                         .font(.title)
                                 }
                                 // Username edit and cancel buttons
@@ -333,7 +333,7 @@ struct ProfileView: View {
                     }
                 })
             }
-            .navigationTitle("Hey, \(viewModel.child?.name ?? "N/A")") // Navigation title
+            .navigationTitle("Hey, \(viewModel.child?.name ?? "Loading...")") // Navigation title
             .onAppear {
                 // Load user data and stories on appear
                 try? viewModel.loadUser()

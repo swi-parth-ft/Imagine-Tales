@@ -79,7 +79,7 @@ struct StoryView: View {
                                     .onTapGesture {
                                         do {
                                             try viewModel.reviewStory(status: "Approve", id: story.id)
-                                            homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title, type: "status", status: "Approved")
+                                            homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title.trimmingCharacters(in: .newlines), type: "status", status: "Approved")
                                             withAnimation {
                                                 status = "Approve" // Update status to approved
                                             }
@@ -104,7 +104,7 @@ struct StoryView: View {
                                 Button(status == "Approve" ? "Approved" : "Approve?") {
                                     do {
                                         try viewModel.reviewStory(status: "Approve", id: story.id)
-                                        
+                                        homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title.trimmingCharacters(in: .newlines), type: "status", status: "Approved")
                                         withAnimation {
                                             status = "Approve" // Update status to approved
                                         }
@@ -165,7 +165,7 @@ struct StoryView: View {
                     Button("Reject") {
                         do {
                             try viewModel.reviewStory(status: "Reject", id: story.id) // Reject the story
-                            homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title, type: "status", status: "Rejected")
+                            homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title.trimmingCharacters(in: .newlines), type: "status", status: "Rejected")
                             withAnimation {
                                 status = "Reject" // Update status to rejected
                             }

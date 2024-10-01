@@ -19,7 +19,7 @@ struct ThemeSelectionView: View {
         // GeometryReader allows access to the size of the enclosing view, enabling responsive design
         GeometryReader { geometry in
             // Calculate the height for each theme circle based on the available height
-            let height = (geometry.size.height - 40) / 5
+            let height = (geometry.size.height - 40) / 6
             
             // Horizontal scroll view for theme selection
             ScrollView(.horizontal) {
@@ -42,7 +42,7 @@ struct ThemeSelectionView: View {
                                     .scaleEffect(isSelectingTheme ? (themes[index] == theme ? 1.4 : 1.2) : 0.0)
                                     .animation(.easeInOut(duration: themes[index] == theme ? 0.6 : 0.3), value: isSelectingTheme) // Animation effect
 
-                                VStack {
+                                VStack(spacing: themes[index] == theme ? -5 : -10) {
                                     // Image associated with the theme
                                     Image("\(themes[index].filter { !$0.isWhitespace })") // Filter out whitespaces from theme names for image loading
                                         .resizable() // Allow image to be resized
@@ -60,7 +60,7 @@ struct ThemeSelectionView: View {
                                         // Loop through each word in the theme string
                                         ForEach(words, id: \.self) { word in
                                             Text(String(word)) // Convert Substring to String for display
-                                                .font(.custom("ComicNeue-Bold", size: 24)) // Custom font for theme name
+                                                .font(.custom("ComicNeue-Bold", size: 22)) // Custom font for theme name
                                                 .multilineTextAlignment(.center) // Center align the text
                                                 .opacity(isSelectingTheme ? 1.0 : 0.0) // Control visibility based on selection
                                                 // Scale effect for the text based on selection
@@ -68,6 +68,7 @@ struct ThemeSelectionView: View {
                                                 .animation(.easeInOut(duration: themes[index] == theme ? 0.6 : 0.3), value: isSelectingTheme) // Animation effect
                                         }
                                     }
+                                    
                                 }
                                 .padding() // Padding around the VStack for spacing
                             }
