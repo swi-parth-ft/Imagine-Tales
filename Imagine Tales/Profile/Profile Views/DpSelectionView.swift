@@ -30,7 +30,7 @@ struct DpSelectionView: View {
     var body: some View {
         ZStack {
             // Set the background color of the view
-            colorScheme == .dark ? Color(hex: "#5A6D2A").ignoresSafeArea() : Color(hex: "#8AC640").ignoresSafeArea()
+            BackGroundMesh().ignoresSafeArea()
             VStack(alignment: .leading) {
                 // Title for the selection screen
                 Text("Select Profile Image")

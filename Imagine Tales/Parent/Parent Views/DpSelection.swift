@@ -27,9 +27,7 @@ struct DpSelection: View {
     var body: some View {
         ZStack {
             // Background blur effect
-            VisualEffectBlur(blurStyle: .systemThinMaterial)
-                .cornerRadius(20) // Rounded corners for the blur effect
-                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10) // Shadow for depth
+            BackGroundMesh().ignoresSafeArea()
             
             VStack(alignment: .leading) {
                 // Title for the image selection

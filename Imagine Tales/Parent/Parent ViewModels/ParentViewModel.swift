@@ -194,4 +194,20 @@ final class ParentViewModel: ObservableObject {
             }
         }
     }
+    
+    func updateNameInFirestore(userId: String, newName: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let db = Firestore.firestore()
+        
+        // Reference to the specific document
+        let documentRef = db.collection("users").document(userId)
+        
+        // Update the name field
+        documentRef.updateData(["name": newName]) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
 }

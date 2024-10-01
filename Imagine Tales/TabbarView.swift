@@ -37,6 +37,7 @@ enum TabItems: Int, CaseIterable {
 
 // The main view that handles the tab navigation
 struct TabbarView: View {
+    @EnvironmentObject var appState: AppState
     @Binding var showSignInView: Bool  // Whether to show the sign-in view
     @Binding var reload: Bool  // Whether to reload views
     
@@ -88,8 +89,10 @@ struct TabbarView: View {
                 .shadow(radius: 10)  // Shadow for a floating effect
             }
             .onAppear {
+                
                 viewModel.fetchFriendRequests(childId: childId)
                 viewModel.fetchNotifications(for: childId)
+                
             }
         }
         .toolbar {

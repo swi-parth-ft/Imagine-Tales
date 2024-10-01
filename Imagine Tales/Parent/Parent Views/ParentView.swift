@@ -91,7 +91,14 @@ struct ParentView: View {
                     AddChildForm(isCompact: isCompact) // Present the AddChildForm
                 }
                 // Sheet for parent settings
-                .sheet(isPresented: $isShowingSetting) {
+                .sheet(isPresented: $isShowingSetting, onDismiss: {
+                    do {
+                        try viewModel.fetchParent()
+                        
+                    } catch {
+                        
+                    }
+                }) {
                     parentSettings(showSigninView: $showSigninView) // Present the settings view
                 }
                 .onAppear {

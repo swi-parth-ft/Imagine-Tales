@@ -10,6 +10,7 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
 
+
 // MARK: - Tabbar Appearance
 extension TabbarView {
     
@@ -91,9 +92,9 @@ struct CustomTextFieldModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding() // Padding around the text field
-            .background(Color.white) // Background color
+            
             .frame(width: UIScreen.main.bounds.width * 0.7) // Set width relative to screen size
-            .cornerRadius(12) // Rounded corners
+            
     }
 }
 
@@ -102,14 +103,15 @@ struct CustomTextFieldModifierCompact: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding() // Padding around the text field
-            .background(Color.white) // Background color
+            
             .frame(width: UIScreen.main.bounds.width * 0.8, height: 30) // Set width and height
-            .cornerRadius(6) // Rounded corners
+            
             .font(.system(size: 12)) // Font size for compact text fields
     }
 }
 
 extension View {
+    
     // Apply custom text field style based on compact flag
     func customTextFieldStyle(isCompact: Bool) -> some View {
         if isCompact {
@@ -182,5 +184,20 @@ struct CustomNavBarAppearance: ViewModifier {
 extension View {
     func customNavBarStyle() -> some View {
         self.modifier(CustomNavBarAppearance())
+    }
+}
+
+extension UIViewController {
+    func topViewController() -> UIViewController? {
+        if let presented = self.presentedViewController {
+            return presented.topViewController()
+        }
+        if let nav = self as? UINavigationController {
+            return nav.visibleViewController?.topViewController()
+        }
+        if let tab = self as? UITabBarController {
+            return tab.selectedViewController?.topViewController()
+        }
+        return self
     }
 }

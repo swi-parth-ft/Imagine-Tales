@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Drops
 
 // View to add a new child with their details and an optional profile image
 struct AddChildForm: View {
@@ -66,6 +67,9 @@ struct AddChildForm: View {
 
                 // Button to add the child
                 Button("Add Child") {
+                    if viewModel.name.isEmpty || viewModel.username.isEmpty || viewModel.age.isEmpty {
+                        Drops.show("Please fill all details.")
+                    }
                     Task {
                         do {
                             try await viewModel.addChild() // Attempt to add the child using the view model

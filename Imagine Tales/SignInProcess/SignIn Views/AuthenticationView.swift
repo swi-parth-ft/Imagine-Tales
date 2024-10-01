@@ -16,13 +16,12 @@ struct AuthenticationView: View {
     
     @AppStorage("isOnboarding") var isOnboarding: Bool = true // Persistent storage for onboarding status
     @Environment(\.horizontalSizeClass) var horizontalSizeClass // Get the current horizontal size class
-
+    @Environment(\.colorScheme) var colorScheme
     @Binding var isParentFlow: Bool // Determines the flow for parents
-
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "#F5F5DC").ignoresSafeArea() // Background color
+                BackGroundMesh().ignoresSafeArea() // Background color
 
                 // Background images
                 VStack {
@@ -30,12 +29,16 @@ struct AuthenticationView: View {
                     HStack {
                         VStack {
                             Spacer()
-                            Image("backgroundShade2") // Left background image
+                            Image(colorScheme == .dark ? "bg2dark" : "backgroundShade2") // Left background image
+                                .resizable()
+                                .scaledToFit()
                         }
                         Spacer()
                         VStack {
                             Spacer()
-                            Image("backgroundShade1") // Right background image
+                            Image(colorScheme == .dark ? "bg1dark" : "backgroundShade1") // Right background image
+                                .resizable()
+                                .scaledToFit()
                         }
                     }
                 }
@@ -56,10 +59,11 @@ struct AuthenticationView: View {
                                 
                         // Rounded rectangle for welcome message and buttons
                         ZStack(alignment: .center) {
-                            RoundedRectangle(cornerRadius: 50)
-                                .fill(Color(hex: "#8AC640"))
+                         
+                            BackGroundMesh()
                                 .frame(width: UIScreen.main.bounds.width * (isiPhone ? 0.9 : 0.7), height: UIScreen.main.bounds.height * 0.5)
-
+                                .cornerRadius(horizontalSizeClass == .compact ?  25 : 50)
+                                .shadow(radius: 10)
                             VStack(alignment: .center) {
                                 // Welcome title
                                 Text("Welcome to Imagine Tales")
@@ -93,7 +97,7 @@ struct AuthenticationView: View {
                                         .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
                                         .frame(height: isiPhone ? 35 : 55)
                                         .frame(maxWidth: .infinity)
-                                        .background(Color(hex: "#FF6F61")) // Sign Up button color
+                                        .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61")) // Sign Up button color
                                         .cornerRadius(isiPhone ? 6 : 12) // Button corners
                                         .foregroundStyle(.black) // Button text color
                                 }
@@ -114,7 +118,7 @@ struct AuthenticationView: View {
                                         .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
                                         .frame(height: isiPhone ? 35 : 55)
                                         .frame(maxWidth: .infinity)
-                                        .background(Color(hex: "#DFFFDF")) // Continue button color
+                                        .background(colorScheme == .dark ? Color(hex: "#A6A6A6") : Color(hex: "#DFFFDF")) // Continue button color
                                         .cornerRadius(isiPhone ? 6 : 12)
                                         .foregroundStyle(.black) // Button text color
                                 }
@@ -136,7 +140,7 @@ struct AuthenticationView: View {
                                             .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
                                             .frame(height: isiPhone ? 35 : 55)
                                             .frame(maxWidth: .infinity)
-                                            .background(Color(hex: "#DFFFDF")) // Setup button color
+                                            .background(colorScheme == .dark ? Color(hex: "#A6A6A6") : Color(hex: "#DFFFDF")) // Setup button color
                                             .cornerRadius(isiPhone ? 6 : 12)
                                             .foregroundStyle(.black) // Button text color
                                     }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Drops
 
 
 struct SignInWithEmailView: View {
@@ -27,7 +28,7 @@ struct SignInWithEmailView: View {
     @AppStorage("ipf") private var ipf: Bool = false
     
     @AppStorage("dpurl") private var dpUrl = ""
-    
+    @EnvironmentObject var appState: AppState
     let isNewGoogleUser = AuthenticationManager.shared.isNewUser
     var continueAsChild: Bool
     var signedInWithGoogle: Bool
@@ -63,23 +64,33 @@ struct SignInWithEmailView: View {
     @EnvironmentObject var screenTimeViewModel: ScreenTimeManager
     @State private var isSelectingImage = false
     @State private var selectedImageName = ""
+    @Environment(\.colorScheme) var colorScheme
+    @State private var isResettingPassword = false
+    
+    let emailPattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+    
+    
     
     var body: some View {
         NavigationStack {
             ZStack {
                 //MARK: Background
-                Color(hex: "#F5F5DC").ignoresSafeArea()
+                BackGroundMesh().ignoresSafeArea()
                 VStack {
                     Spacer()
                     HStack {
                         VStack {
                             Spacer()
-                            Image("backgroundShade2")
+                            Image(colorScheme == .dark ? "bg2dark" : "backgroundShade2") // Left background image
+                                .resizable()
+                                .scaledToFit()
                         }
                         Spacer()
                         VStack {
                             Spacer()
-                            Image("backgroundShade1")
+                            Image(colorScheme == .dark ? "bg1dark" : "backgroundShade1") // Right background image
+                                .resizable()
+                                .scaledToFit()
                         }
                     }
                 }
@@ -153,9 +164,9 @@ struct SignInWithEmailView: View {
                     
                     //MARK: Form
                     ZStack {
-                        RoundedRectangle(cornerRadius: isCompact ?  25 : 50)
-                            .fill(Color(hex: "#8AC640"))
-                        
+                        BackGroundMesh()
+                            .cornerRadius(isCompact ?  25 : 50)
+                            .shadow(radius: 10)
                         VStack {
                             //MARK: title
                             VStack(alignment: .leading) {
@@ -288,7 +299,7 @@ struct SignInWithEmailView: View {
                                                                 ZStack {
                                                                     
                                                                     Circle()
-                                                                        .fill(Color(hex: "#DFFFDF"))
+                                                                        .fill(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#DFFFDF"))
                                                                         .frame(width: 100, height: 100)
                                                                     
                                                                     
@@ -328,6 +339,7 @@ struct SignInWithEmailView: View {
                                                                     viewModel.fetchProfileImage(dp: child.profileImage)
                                                                     
                                                                     screenTimeViewModel.startScreenTime(for: childId)
+                                                                    appState.isInSignInView = false
                                                                 }
                                                             }
                                                         }
@@ -356,9 +368,15 @@ struct SignInWithEmailView: View {
                                             
                                             TextField("Name", text: $viewModel.name)
                                                 .customTextFieldStyle(isCompact: isCompact)
+                                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                                                .cornerRadius(isCompact ? 6 : 12)
+                                                
                                             
                                             TextField("Phone", text: $viewModel.number)
                                                 .customTextFieldStyle(isCompact: isCompact)
+                                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                                                .cornerRadius(isCompact ? 6 : 12)
+                                                
                                             
                                             VStack {
                                                 Picker("Gender", selection: $viewModel.gender) {
@@ -369,23 +387,31 @@ struct SignInWithEmailView: View {
                                                 
                                             }
                                             .customTextFieldStyle(isCompact: isCompact)
+                                            .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                                            .cornerRadius(isCompact ? 6 : 12)
                                             
                                             
                                             TextField("country", text: $viewModel.country)
                                                 .customTextFieldStyle(isCompact: isCompact)
+                                            .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                                            .cornerRadius(isCompact ? 6 : 12)
                                             
                                             Spacer()
                                             Button("Continue") {
-                                                Task {
-                                                    do {
-                                                        try await viewModel.createGoogleUserProfile(isParent: isParent)
-                                                        isSignedUp = true
-                                                        settingPassword = false
-                                                        isSettingPin = true
-                                                        isShowingButtons = true
-                                                        try viewModel.getChildren()
-                                                    } catch {
-                                                        print(error.localizedDescription)
+                                                if viewModel.name.isEmpty || viewModel.number.isEmpty || viewModel.country.isEmpty {
+                                                    Drops.show("Please fill all details.")
+                                                } else {
+                                                    Task {
+                                                        do {
+                                                            try await viewModel.createGoogleUserProfile(isParent: isParent)
+                                                            isSignedUp = true
+                                                            settingPassword = false
+                                                            isSettingPin = true
+                                                            isShowingButtons = true
+                                                            try viewModel.getChildren()
+                                                        } catch {
+                                                            print(error.localizedDescription)
+                                                        }
                                                     }
                                                 }
                                             }
@@ -411,6 +437,9 @@ struct SignInWithEmailView: View {
                                             // MARK: Main Button
                                             Button(action: {
                                                 if settingPassword {
+                                                    if viewModel.password.isEmpty || confirmPassword.isEmpty {
+                                                        Drops.show("Passwords can't be empty")
+                                                    }
                                                     if viewModel.password == confirmPassword {
                                                         Task {
                                                             do {
@@ -428,7 +457,7 @@ struct SignInWithEmailView: View {
                                                             }
                                                         }
                                                     } else {
-                                                        err = "passwords don't match, Try again."
+                                                        Drops.show("Passwords don't match, Try again.")
                                                     }
                                                 } else if isSignedUp {
                                                     withAnimation {
@@ -437,8 +466,17 @@ struct SignInWithEmailView: View {
                                                         isAddingChild = true
                                                     }
                                                 } else {
-                                                    withAnimation {
-                                                        settingPassword = true
+                                                    let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailPattern)
+                                                    var isValidEmail = emailPredicate.evaluate(with: viewModel.email)  // Evaluate email first
+
+                                                    if viewModel.name.isEmpty || viewModel.email.isEmpty || viewModel.number.isEmpty || viewModel.country.isEmpty {
+                                                        Drops.show("Please fill all details to continue.")
+                                                    } else if !isValidEmail {
+                                                        Drops.show("This email is not valid.")  // Now it will correctly show if the email is invalid
+                                                    } else {
+                                                        withAnimation {
+                                                            settingPassword = true
+                                                        }
                                                     }
                                                 }
                                             }) {
@@ -448,7 +486,7 @@ struct SignInWithEmailView: View {
                                             }
                                             .padding()
                                             .frame(width: UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
-                                            .background(Color(hex: "#FF6F61"))
+                                            .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
                                             .cornerRadius(isCompact ? 6 : 12)
                                             
                                             // MARK: Add Later Button
@@ -457,6 +495,7 @@ struct SignInWithEmailView: View {
                                                     withAnimation {
                                                         ipf = true
                                                         showSignInView = false
+                                                        appState.isInSignInView = false
                                                     }
                                                 }) {
                                                     Text("Add Later")
@@ -465,7 +504,8 @@ struct SignInWithEmailView: View {
                                                 }
                                                 .padding()
                                                 .frame(width: UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
-                                                .background(Color(hex: "#DFFFDF"))
+                                                .background(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#DFFFDF"))
+                                                
                                                 .cornerRadius(isCompact ? 6 : 12)
                                             }
                                         }
@@ -478,41 +518,86 @@ struct SignInWithEmailView: View {
                                     VStack {
                                         TextField("Email", text: $viewModel.email)
                                             .customTextFieldStyle(isCompact: isCompact)
-                                        SecureField("Password", text: $viewModel.password)
-                                            .customTextFieldStyle(isCompact: isCompact)
-                                        HStack {
-                                            Spacer()
-                                            Button("Forgot password?") {
-                                                Task {
-                                                    do {
-                                                        try await viewModel.resetPassword()
-                                                        print("Pasword reset")
-                                                        
-                                                    } catch {
-                                                        print(error.localizedDescription)
+                                            .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                                            .cornerRadius(isCompact ? 6 : 12)
+                                        
+                                        if !isResettingPassword {
+                                            
+                                            SecureField("Password", text: $viewModel.password)
+                                                .customTextFieldStyle(isCompact: isCompact)
+                                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                                                .cornerRadius(isCompact ? 6 : 12)
+                                        }
+                                        
+                                        if !isResettingPassword {
+                                            
+                                            HStack {
+                                                Spacer()
+                                                Button("Forgot password?") {
+                                                    isResettingPassword = true
+                                                
+                                                    Task {
+                                                        do {
+                                                            try await viewModel.resetPassword()
+                                                            print("Pasword reset")
+                                                            
+                                                        } catch {
+                                                            print(error.localizedDescription)
+                                                        }
                                                     }
                                                 }
+                                                .font(.system(size: isCompact ?  10 : 14))
+                                                .foregroundStyle(colorScheme == .dark ? .white : .black)
                                             }
-                                            .font(.system(size: isCompact ?  10 : 14))
-                                            .foregroundStyle(.black)
+                                            .frame(width: UIScreen.main.bounds.width * (isCompact ? 0.8 : 0.7))
+                                            .padding(.top, isCompact ? 2 : 5)
+                                        } else {
+                                            HStack {
+                                                Spacer()
+                                                
+                                                Button("Send reset link") {
+                                                    if viewModel.email.isEmpty {
+                                                        Drops.show("Please enter you email.")
+                                                    } else {
+                                                        Task {
+                                                            do {
+                                                                try await viewModel.resetPassword()
+                                                                print("Pasword reset")
+                                                                isResettingPassword.toggle()
+                                                                Drops.show("Check you email for reset link.")
+                                                            } catch {
+                                                                Drops.show("Please enter valid email.")
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                .font(.system(size: isCompact ?  10 : 14))
+                                                .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                            }
+                                            .frame(width: UIScreen.main.bounds.width * (isCompact ? 0.8 : 0.7))
+                                            .padding(.top, isCompact ? 2 : 5)
                                         }
-                                        .frame(width: UIScreen.main.bounds.width * (isCompact ? 0.8 : 0.7))
-                                        .padding(.top, isCompact ? 2 : 5)
                                         Spacer()
                                         
                                         Button(action: {
-                                            Task {
-                                                do {
-                                                    if let _ = try await viewModel.signInWithEmail() {
-                                                        if isiPhone || isParentFlow {
-                                                            showSignInView = false
+                                            if viewModel.email.isEmpty || viewModel.password.isEmpty {
+                                                Drops.show("Please enter email and password.")
+                                            } else {
+                                                
+                                                
+                                                Task {
+                                                    do {
+                                                        if let _ = try await viewModel.signInWithEmail() {
+                                                            if isiPhone || isParentFlow {
+                                                                showSignInView = false
+                                                            }
+                                                            isSignedUp = true
+                                                            settingPassword = false
+                                                            newUser = true
                                                         }
-                                                        isSignedUp = true
-                                                        settingPassword = false
-                                                        newUser = true
+                                                    } catch {
+                                                        Drops.show("Invalid email or password.")
                                                     }
-                                                } catch {
-                                                    print(error.localizedDescription)
                                                 }
                                             }
                                         }) {
@@ -524,6 +609,7 @@ struct SignInWithEmailView: View {
                                         .frame(width: UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
                                         .background(Color(hex: "#FF6F61"))
                                         .cornerRadius(isCompact ? 6 : 12)
+                                        
                                     }
                                 }
                             }
@@ -534,19 +620,20 @@ struct SignInWithEmailView: View {
                                         VStack {
                                             TextField("Name", text: $viewModel.name)
                                                 .padding()
-                                                .background(Color.white)
+                                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                                                 .frame(width: UIScreen.main.bounds.width * 0.55)
                                                 .cornerRadius(12)
+                                                
                                             
                                             TextField("username", text: $viewModel.username)
                                                 .padding()
-                                                .background(Color.white)
+                                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                                                 .frame(width: UIScreen.main.bounds.width * 0.55)
                                                 .cornerRadius(12)
                                         }
                                         ZStack {
                                             Circle()
-                                                .fill(Color.white)
+                                                .fill(colorScheme == .dark ? .black.opacity(0.4) : Color.white)
                                                 .frame(width: 150, height: 130)
                                             
                                             if selectedImageName == "" {
@@ -585,16 +672,20 @@ struct SignInWithEmailView: View {
                                         
                                         //Main Button
                                         Button("Add Child") {
-                                            Task {
-                                                do {
-                                                    try await viewModel.addChild(age: selectedAgeRange?.rawValue ?? "n/a", dpUrl: "\(selectedImageName).jpg")
-                                                    settingPassword = false
-                                                    isSignedUp = true
-                                                    isAddingChild = false
-                                                    try viewModel.getChildren()
-                                                    
-                                                } catch {
-                                                    print(error.localizedDescription)
+                                            if viewModel.name.isEmpty || viewModel.username.isEmpty || selectedAgeRange == nil {
+                                                Drops.show("Please fill all details.")
+                                            } else {
+                                                Task {
+                                                    do {
+                                                        try await viewModel.addChild(age: selectedAgeRange?.rawValue ?? "n/a", dpUrl: "\(selectedImageName).jpg")
+                                                        settingPassword = false
+                                                        isSignedUp = true
+                                                        isAddingChild = false
+                                                        try viewModel.getChildren()
+                                                        
+                                                    } catch {
+                                                        print(error.localizedDescription)
+                                                    }
                                                 }
                                             }
                                             
@@ -612,7 +703,7 @@ struct SignInWithEmailView: View {
                                         }
                                         .padding()
                                         .frame(width:  UIScreen.main.bounds.width * 0.7)
-                                        .background(Color(hex: "#DFFFDF"))
+                                        .background(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#DFFFDF"))
                                         .foregroundStyle(.black)
                                         .cornerRadius(12)
                                         
@@ -667,7 +758,7 @@ struct SignInWithEmailView: View {
             .onAppear {
                 
                 
-                
+                appState.isInSignInView = true
                 isChildFlow = isParentFlow
                 ipf = isParentFlow
                 
@@ -694,6 +785,7 @@ struct SignInWithEmailView: View {
                     isiPhone = true
                 }
             }
+            
             .navigationBarBackButtonHidden(true)
         }
     }
@@ -703,7 +795,7 @@ struct SignInWithEmailView: View {
 struct AgeRangeButton: View {
     let ageRange: SignInWithEmailView.AgeRange
     @Binding var selectedAgeRange: SignInWithEmailView.AgeRange?
-    
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         Button(action: {
             selectedAgeRange = ageRange
@@ -711,12 +803,12 @@ struct AgeRangeButton: View {
             Text(ageRange.rawValue)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(selectedAgeRange != ageRange ? Color.clear : Color(hex: "#DFFFDF"))
-                .foregroundColor(.black)
+                .background(selectedAgeRange != ageRange ? Color.clear : colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#DFFFDF"))
+                
                 .cornerRadius(10)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color(hex: "#DFFFDF"), lineWidth: 2)
+                        .stroke(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#DFFFDF"), lineWidth: 2)
                 )
         }
         

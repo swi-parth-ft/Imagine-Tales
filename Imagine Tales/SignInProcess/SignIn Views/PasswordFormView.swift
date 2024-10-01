@@ -13,14 +13,18 @@ struct PasswordFormView: View {
     @Binding var confirmPassword: String
     @Binding var errorMessage: String
     let isCompact: Bool
-
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         VStack {
             SecureField("Password", text: $password)
                 .customTextFieldStyle(isCompact: isCompact)
+                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                .cornerRadius(isCompact ? 6 : 12)
             
             SecureField("Confirm Password", text: $confirmPassword)
                 .customTextFieldStyle(isCompact: isCompact)
+                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                .cornerRadius(isCompact ? 6 : 12)
             
             Text(errorMessage)
                 .foregroundColor(.red) // Customize error message color

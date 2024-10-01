@@ -25,7 +25,7 @@ struct PinView: View {
     
     var body: some View {
         ZStack {
-            colorScheme == .dark ? Color(hex: "#5A6D2A").ignoresSafeArea() : Color(hex: "#8AC640").ignoresSafeArea() // Background color for the view
+            BackGroundMesh().ignoresSafeArea() // Background color for the view
             VStack {
                 // Display the appropriate title based on the state
                 Text(reAuthModel.reAuthenticated ? "Enter New PIN" : (isResetting ? "Sign in to reset PIN" : "Enter Parent PIN"))
@@ -123,7 +123,7 @@ struct PinView: View {
                                         .scaledToFit()
                                         .frame(width: 22, height: 22)
                                     Text("Continue with Google")
-                                        .foregroundStyle(.black)
+                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
                                 }
                             }
                         }
@@ -132,12 +132,12 @@ struct PinView: View {
                         TextField("email", text: $reAuthModel.email)
                             .padding()
                             .frame(width: UIScreen.main.bounds.width * 0.5)
-                            .background(Color(hex: "#D0FFD0"))
+                            .background(colorScheme == .dark ? .black.opacity(0.2) : Color(hex: "#D0FFD0"))
                             .cornerRadius(12)
                         SecureField("Password", text: $reAuthModel.password)
                             .padding()
                             .frame(width: UIScreen.main.bounds.width * 0.5)
-                            .background(Color(hex: "#D0FFD0"))
+                            .background(colorScheme == .dark ? .black.opacity(0.2) : Color(hex: "#D0FFD0"))
                             .cornerRadius(12)
                     }
                 }

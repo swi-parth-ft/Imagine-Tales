@@ -7,6 +7,12 @@
 
 import SwiftUI
 import FirebaseCore
+import FirebaseAuth
+
+class AppState: ObservableObject {
+    static let shared = AppState()
+    @Published var isInSignInView: Bool = false
+}
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
@@ -14,6 +20,22 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     FirebaseApp.configure()
     return true
   }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        // Handle app termination
+        logoutUserIfInSignInView()
+    }
+
+    private func logoutUserIfInSignInView() {
+            if AppState.shared.isInSignInView {
+                do {
+                    try Auth.auth().signOut()
+                    print("User logged out successfully.")
+                } catch {
+                    print("Error signing out: \(error.localizedDescription)")
+                }
+            }
+        }
     
     
 }
@@ -32,7 +54,10 @@ struct Imagine_TalesApp: App {
             } else {
                 RootView()
                     .environmentObject(screenTimeManager)
+                    .environmentObject(AppState.shared)
             }
         }
     }
 }
+
+

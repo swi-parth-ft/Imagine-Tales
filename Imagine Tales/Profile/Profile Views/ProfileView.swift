@@ -88,6 +88,7 @@ struct ProfileView: View {
                                         .font(.title)
                                         .frame(width: 200)
                                         .focused($isTextFieldFocused)
+                                        .keyboardType(.numberPad)
                                         .onAppear {
                                             isTextFieldFocused = true // Focus the text field on appearance
                                         }
@@ -102,7 +103,10 @@ struct ProfileView: View {
                                         .onTapGesture {
                                             if isEditingUsername {
                                                 // Update username and toggle editing mode
-                                                viewModel.updateUsername(childId: childId, username: newUsername)
+                                                if !newUsername.isEmpty {
+                                                    let un = newUsername.replacingOccurrences(of: " ", with: "_")
+                                                    viewModel.updateUsername(childId: childId, username: un)
+                                                }
                                                 reload.toggle()
                                                 withAnimation {
                                                     isEditingUsername = false
