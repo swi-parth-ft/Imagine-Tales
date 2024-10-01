@@ -37,8 +37,8 @@ struct SearchView: View {
                     Text("Search Result for \(searchText):")
                         .font(.system(size: 22))
                         .padding()
-                    if children.isEmpty {
-                        ContentUnavailableView("No Results", systemImage: "person.crop.badge.magnifyingglass.fill", description: Text("Try searching with username."))
+                    if children.isEmpty && stories.isEmpty {
+                        ContentUnavailableView("No Results", systemImage: "person.crop.badge.magnifyingglass.fill", description: Text("Try searching with username or story title."))
                     }
                     ScrollView {
                         if !children.isEmpty {

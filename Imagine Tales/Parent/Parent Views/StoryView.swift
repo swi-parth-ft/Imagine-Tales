@@ -11,11 +11,12 @@ import SwiftUI
 struct StoryView: View {
     var story: Story // The story object containing story details
     @StateObject var viewModel = ParentViewModel() // State object for managing parent-related data
+    @StateObject var homeViewModel = HomeViewModel()
     @State private var status = "" // Current review status of the story (Approve/Reject)
     @State private var comment = "" // Comment for the review
     @State private var isAddingCmt = false // State for showing comment input
     @State private var isRejecting = false // State for confirming rejection
-    
+    var child: UserChildren
     var body: some View {
         NavigationStack {
             ZStack {
@@ -78,6 +79,7 @@ struct StoryView: View {
                                     .onTapGesture {
                                         do {
                                             try viewModel.reviewStory(status: "Approve", id: story.id)
+                                            homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title, type: "status", status: "Approved")
                                             withAnimation {
                                                 status = "Approve" // Update status to approved
                                             }
@@ -102,6 +104,7 @@ struct StoryView: View {
                                 Button(status == "Approve" ? "Approved" : "Approve?") {
                                     do {
                                         try viewModel.reviewStory(status: "Approve", id: story.id)
+                                        
                                         withAnimation {
                                             status = "Approve" // Update status to approved
                                         }
@@ -162,6 +165,7 @@ struct StoryView: View {
                     Button("Reject") {
                         do {
                             try viewModel.reviewStory(status: "Reject", id: story.id) // Reject the story
+                            homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title, type: "status", status: "Rejected")
                             withAnimation {
                                 status = "Reject" // Update status to rejected
                             }

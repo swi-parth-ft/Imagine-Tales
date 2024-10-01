@@ -19,8 +19,9 @@ struct Notification: Codable, Hashable, Identifiable {
     var fromChildUsername: String
     var fromChildProfileImage: String
     var storyTitle: String
+    var storyStatus: String?
     
-    init(id: String = UUID().uuidString, fromId: String, toId: String, storyId: String, timeStamp: Date = Date(), read: Bool, type: String, fromChildUsername: String, fromChildProfileImage: String, storyTitle: String) {
+    init(id: String = UUID().uuidString, fromId: String, toId: String, storyId: String, timeStamp: Date = Date(), read: Bool, type: String, fromChildUsername: String, fromChildProfileImage: String, storyTitle: String, storyStatus: String?) {
         self.id = id
         self.fromId = fromId
         self.toId = toId
@@ -31,6 +32,7 @@ struct Notification: Codable, Hashable, Identifiable {
         self.fromChildUsername = fromChildUsername
         self.fromChildProfileImage = fromChildProfileImage
         self.storyTitle = storyTitle
+        self.storyStatus = storyStatus
     }
     
 }

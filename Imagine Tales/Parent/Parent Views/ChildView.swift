@@ -93,7 +93,7 @@ struct ChildView: View {
                         
                         // List all the stories associated with the child
                         ForEach(viewModel.story, id: \.id) { story in
-                            NavigationLink(destination: StoryView(story: story)) {
+                            NavigationLink(destination: StoryView(story: story, child: child)) {
                                 ZStack {
                                     HStack {
                                         VStack {

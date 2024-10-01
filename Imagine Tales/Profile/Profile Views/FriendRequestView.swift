@@ -133,85 +133,137 @@ struct FriendRequestView: View {
                                         .listRowBackground(Color.white.opacity(0))
                                     }
                                     ForEach(viewModel.notifications) { noti in
-                               
-                                        HStack(alignment: .center) {
-                                            ZStack {
-                                                Circle()
-                                                    .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white)
-                                                    .frame(width: 70)
-                                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                                // Assuming there's an AsyncDp for async loading of images
-                                                Image(noti.fromChildProfileImage.removeJPGExtension())
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 60, height: 60)
-                                                    .cornerRadius(75)
-                                            }
-                                            .onTapGesture {
-                                                let friend = UserChildren(id: noti.fromId, parentId: "", name: "", age: "", dateCreated: Date(), username: "", profileImage: noti.fromChildProfileImage)
-                                                    selectedFriend = friend
-                                                
-                                            }
-                                            if noti.type == "Liked" {
-                                                Image(systemName: "heart.fill")
-                                                    .foregroundStyle(.red)
-                                                    .font(.system(size: 20))
-                                            } else if noti.type == "Unliked" {
-                                                Image(systemName: "heart")
-                                                    .foregroundStyle(.red)
-                                                    .font(.system(size: 20))
-                                            } else if noti.type == "Saved" {
-                                                Image(systemName: "bookmark.fill")
-                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                                    .font(.system(size: 20))
-                                            } else if noti.type == "Unsaved" {
-                                                Image(systemName: "bookmark")
-                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                                    .font(.system(size: 20))
-                                            }
-                                           
-                                                Text("\(noti.fromChildUsername) \(noti.type) your story, \(noti.storyTitle) \(formatDate(noti.timeStamp))")
+                                        
+                                        if noti.type == "status" {
+                                            HStack(alignment: .center) {
                                             
-                                            Spacer()
-                                            ZStack {
-                                                Circle()
-                                                    .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white)
-                                                    .frame(width: 50)
-                                                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                                Image(systemName: "book.pages")
-                                                    .font(.system(size: 16))
-                                            }
-                                            .onTapGesture {
-                                                viewModel.getStoryById(storyId: noti.storyId) { story, error in
-                                                    if let error = error {
+                                                Image(systemName: noti.storyStatus == "Approved" ? "checkmark.circle.fill" : "xmark.circle.fill" )
+                                                    .font(.system(size: 50))
+                                                    .foregroundStyle(noti.storyStatus == "Approved" ? .green : .red )
+                                                
+                                                Text("Your story \(noti.storyTitle) is \(noti.storyStatus ?? "")")
+                                                
+                                                Spacer()
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white)
+                                                        .frame(width: 50)
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                    Image(systemName: "book.pages")
+                                                        .font(.system(size: 16))
+                                                }
+                                                .onTapGesture {
+                                                    viewModel.getStoryById(storyId: noti.storyId) { story, error in
+                                                        if let error = error {
                                                             print("Error fetching document: \(error.localizedDescription)")
                                                         } else if let story = story {
                                                             selectedStory = story
                                                         } else {
                                                             print("Document does not exist")
                                                         }
+                                                    }
                                                 }
-                                            }
                                                 
-                                            
-                                        }
-                                        .padding()
-                                        .listRowBackground(Color.white.opacity(0))
-                                        .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4))
-                                        .listRowSeparator(.hidden) // Hide row separator
-                                        .cornerRadius(16)
-                                        .swipeActions {
-                                           
-                                            Button(role: .destructive) {
-                                                viewModel.deleteNotification(withId: noti.id)
-                                                viewModel.fetchNotifications(for: childId)
-                                            } label: {
-                                                Label("Delete", systemImage: "trash")
-
+                                                
                                             }
-                                            .tint(.red)
-                                            .foregroundColor(.white)
-                                            
+                                            .padding()
+                                            .listRowBackground(Color.white.opacity(0))
+                                            .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4))
+                                            .listRowSeparator(.hidden) // Hide row separator
+                                            .cornerRadius(16)
+                                            .swipeActions {
+                                                
+                                                Button(role: .destructive) {
+                                                    viewModel.deleteNotification(withId: noti.id)
+                                                    viewModel.fetchNotifications(for: childId)
+                                                } label: {
+                                                    Label("Delete", systemImage: "trash")
+                                                    
+                                                }
+                                                .tint(.red)
+                                                .foregroundColor(.white)
+                                                
+                                            }
+                                        } else {
+                                            HStack(alignment: .center) {
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white)
+                                                        .frame(width: 70)
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                    // Assuming there's an AsyncDp for async loading of images
+                                                    Image(noti.fromChildProfileImage.removeJPGExtension())
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 60, height: 60)
+                                                        .cornerRadius(75)
+                                                }
+                                                .onTapGesture {
+                                                    let friend = UserChildren(id: noti.fromId, parentId: "", name: "", age: "", dateCreated: Date(), username: "", profileImage: noti.fromChildProfileImage)
+                                                    selectedFriend = friend
+                                                    
+                                                }
+                                                if noti.type == "Liked" {
+                                                    Image(systemName: "heart.fill")
+                                                        .foregroundStyle(.red)
+                                                        .font(.system(size: 20))
+                                                } else if noti.type == "Unliked" {
+                                                    Image(systemName: "heart")
+                                                        .foregroundStyle(.red)
+                                                        .font(.system(size: 20))
+                                                } else if noti.type == "Saved" {
+                                                    Image(systemName: "bookmark.fill")
+                                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                        .font(.system(size: 20))
+                                                } else if noti.type == "Unsaved" {
+                                                    Image(systemName: "bookmark")
+                                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                        .font(.system(size: 20))
+                                                }
+                                                
+                                                Text("\(noti.fromChildUsername) \(noti.type) your story, \(noti.storyTitle) \(formatDate(noti.timeStamp))")
+                                                
+                                                Spacer()
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white)
+                                                        .frame(width: 50)
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                    Image(systemName: "book.pages")
+                                                        .font(.system(size: 16))
+                                                }
+                                                .onTapGesture {
+                                                    viewModel.getStoryById(storyId: noti.storyId) { story, error in
+                                                        if let error = error {
+                                                            print("Error fetching document: \(error.localizedDescription)")
+                                                        } else if let story = story {
+                                                            selectedStory = story
+                                                        } else {
+                                                            print("Document does not exist")
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                
+                                            }
+                                            .padding()
+                                            .listRowBackground(Color.white.opacity(0))
+                                            .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4))
+                                            .listRowSeparator(.hidden) // Hide row separator
+                                            .cornerRadius(16)
+                                            .swipeActions {
+                                                
+                                                Button(role: .destructive) {
+                                                    viewModel.deleteNotification(withId: noti.id)
+                                                    viewModel.fetchNotifications(for: childId)
+                                                } label: {
+                                                    Label("Delete", systemImage: "trash")
+                                                    
+                                                }
+                                                .tint(.red)
+                                                .foregroundColor(.white)
+                                                
+                                            }
                                         }
                                     }
                                 }
