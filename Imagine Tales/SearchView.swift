@@ -43,11 +43,10 @@ struct SearchView: View {
                     ScrollView {
                         if !children.isEmpty {
                             HStack {
-                                Text("Friends")
+                                Text("Creators")
                                     .font(.system(size: 20))
                                 Spacer()
-                                Text("View All")
-                                    .font(.system(size: 20))
+                                
                             }
                             .padding()
                         }
@@ -88,8 +87,7 @@ struct SearchView: View {
                                 Text("Stories")
                                     .font(.system(size: 20))
                                 Spacer()
-                                Text("View All")
-                                    .font(.system(size: 20))
+                                
                             }
                             .padding()
                         }
@@ -104,7 +102,8 @@ struct SearchView: View {
                                                 switch phase {
                                                 case .empty:
                                                     // Placeholder for loading
-                                                    GradientRectView(size: 300)
+                                                    MagicView()
+                                                        .frame(width: 300, height: 300)
                                                     
                                                 case .success(let image):
                                                     // Successfully loaded image

@@ -21,7 +21,7 @@ struct DpSelectionView: View {
         GridItem(.flexible())
     ]
     // Array of image names to display
-    let images: [String] = ["dp2", "dp1", "dp3", "dp4", "dp5", "dp6", "dp7", "dp8", "dp9", "dp10", "dp11", "dp12"]
+    let images: [String] = ["dp2", "dp1", "dp3", "dp4", "dp5", "dp6", "dp7", "dp8", "dp9", "dp10", "dp11", "dp12", "dp13", "dp14", "dp15", "dp16", "dp17", "dp18", "dp19", "dp20", "dp21", "dp22", "dp23"]
     @State private var selectedImage = "" // State variable to keep track of the currently selected image
     @AppStorage("dpurl") private var dpUrl = "" // AppStorage to persist the selected profile image URL
     @Environment(\.dismiss) var dismiss // Environment variable to dismiss the view
