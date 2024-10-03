@@ -237,8 +237,9 @@ struct FriendProfileView: View {
                             ZStack {
                                 VStack {
                                     Spacer()
-                                    VStack {
-                                        if childId != friendId {
+                                    if childId != friendId {
+                                        VStack {
+                                            
                                             if viewModel.isFriendRequest {
                                                 HStack {
                                                     // Button to accept the friend request
@@ -308,13 +309,15 @@ struct FriendProfileView: View {
                                                 }
                                             }
                                         }
+                                        
+                                        
+                                        .padding()
+                                        .frame(width: UIScreen.main.bounds.width * 0.3)
+                                        .background(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#FFFFF1"))
+                                        .cornerRadius(23)
+                                        .shadow(radius: 10)
                                     }
-                                    
-                                    .padding()
-                                    .frame(width: UIScreen.main.bounds.width * 0.3)
-                                    .background(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#FFFFF1"))
-                                    .cornerRadius(23)
-                                    .shadow(radius: 10)
+                                
                                 }
                             }
                             .frame(height: UIScreen.main.bounds.height * 0.42)
