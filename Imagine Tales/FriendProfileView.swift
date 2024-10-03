@@ -153,195 +153,285 @@ struct FriendProfileView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
     
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    @State private var retryCount = 0 // Count for retry attempts when loading images
+    @State private var maxRetryAttempts = 3 // Maximum number of retry attempts
+    @State private var retryDelay = 2.0 // Delay between retries
+    @State private var selectedStory: Story? // The currently selected story for navigation
     var body: some View {
         NavigationStack {
             
-            ZStack {
+            ZStack(alignment: .center) {
                 BackGroundMesh().ignoresSafeArea()
                 VStack {
-                    
-                    HStack {
-                        ZStack {
-                            Circle()
-                                .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white)
-                                .frame(width: 250, height: 250)
-                                
-                            Image(dp.removeJPGExtension())
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 200, height: 200)
-                                .cornerRadius(100)
-                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                               
-                            
-                        }
-                        .onPressingChanged { point in
-                            if let point {
-                                self.origin = point
-                                self.counter += 1
-                            }
-                        }
-                        .modifier(RippleEffect(at: self.origin, trigger: self.counter))
-                        .shadow(radius: 3, y: 2)
-                        .rotation3DEffect(
-                                    .degrees(tiltAngle),
-                                    axis: (x: 0, y: 1, z: 0)
-                                )
-                        .onAppear {
-                                withAnimation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
-                                    tiltAngle = 10 // Adjust this value to control the tilt range
-                                }
-                            }
-                        HStack {
-                            VStack(alignment: .leading) {
-                                
-                                
-                                Text("@\(viewModel.child?.username ?? "N/A")")
-                                    .font(.title)
-                                
-                                Text("\(viewModel.numberOfFriends) Friends")
-                                    .font(.title2)
-                                Spacer()
-                                if childId != friendId {
-                                    if viewModel.isFriendRequest {
-                                        HStack {
-                                            // Button to accept the friend request
-                                            Button(action: {
-                                                var requestId = ""
-                                                if let request = friendViewModel.friendRequests.first(where: { $0.fromUserId == friendId }) {
-                                                    requestId = request.requestId
-                                                    print("Request ID: \(requestId)")
-                                                } else {
-                                                    print("No request found for the given user ID.")
-                                                }
-                                                friendViewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "accepted", friendUserId: friendId)
-                                                friendViewModel.deleteRequest(childId: childId, docID: friendId)
-                                                let drop = Drop(title: "You're now friends!", icon: UIImage(systemName: "figure.2.left.holdinghands"))
-                                                Drops.show(drop)
-                                                viewModel.checkFriendRequest(childId: childId, friendId: friendId)
-                                                viewModel.status = "Friends"
-                                                
-                                            }) {
-                                                Text("Accept")
-                                                 
-                                            }
-                                            Button(action: {
-                                                var requestId = ""
-                                                if let request = friendViewModel.friendRequests.first(where: { $0.fromUserId == friendId }) {
-                                                    requestId = request.requestId
-                                                    print("Request ID: \(requestId)")
-                                                } else {
-                                                    print("No request found for the given user ID.")
-                                                }
-                                                friendViewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "denied", friendUserId: friendId)
-                                                friendViewModel.deleteRequest(childId: childId, docID: friendId)
-                                                let drop = Drop(title: "Request Denied!", icon: UIImage(systemName: "person.fill.xmark"))
-                                                Drops.show(drop)
-                                                viewModel.checkFriendRequest(childId: childId, friendId: friendId)
-                                            }) {
-                                                Text("Deny")
+                    VStack {
+                        ZStack(alignment: .top) {
+                            ZStack {
+                                BackGroundMesh()
+                                    .cornerRadius(50)
+                                    .shadow(radius: 10)
+                                VStack {
+                                    HStack {
+                                        ZStack {
+                                            Circle()
+                                                .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white)
+                                                .frame(width: 250, height: 250)
+                                            
+                                            Image(dp.removeJPGExtension())
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 200, height: 200)
+                                                .cornerRadius(100)
+                                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                            
+                                            
+                                        }
+                                        .onPressingChanged { point in
+                                            if let point {
+                                                self.origin = point
+                                                self.counter += 1
                                             }
                                         }
-                                    } else {
-                                        if viewModel.status == "Friends" {
-                                            if !isRemoved {
-                                                Button("Remove", systemImage: "person.crop.circle.fill.badge.minus") {
-                                                    viewModel.removeFriend(childId: childId, docID: friendId)
-                                                    viewModel.removeFriend(childId: friendId, docID: childId)
-                                                    viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
-                                                    isRemoved = true
-                                                    let drop = Drop(title: "Removed Friend", icon: UIImage(systemName: "person.crop.circle.fill.badge.minus"))
-                                                    Drops.show(drop)
+                                        .modifier(RippleEffect(at: self.origin, trigger: self.counter))
+                                        .shadow(radius: 3, y: 2)
+                                        .rotation3DEffect(
+                                            .degrees(tiltAngle),
+                                            axis: (x: 0, y: 1, z: 0)
+                                        )
+                                        .onAppear {
+                                            withAnimation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                                                tiltAngle = 10 // Adjust this value to control the tilt range
+                                            }
+                                        }
+                                    }
+                                    
+                                    HStack {
+                                        VStack {
+                                            
+                                            
+                                            Text("\(viewModel.child?.name ?? "Loading...")")
+                                                .font(.title)
+                                            
+                                            Text("@\(viewModel.child?.username ?? "Loading...")")
+                                                .font(.title2)
+                                                .foregroundStyle(.secondary)
+                                            
+                                            Text("\(viewModel.numberOfFriends) Friends")
+                                                .font(.title2)
+                                                .foregroundStyle(.secondary)
+                                            
+                                        }
+                                        
+                                        
+                                    }
+                                    .padding()
+                                    
+                                    
+                                }
+                                .padding(.top)
+                            }
+                            .frame(height: UIScreen.main.bounds.height * 0.4)
+                            ZStack {
+                                VStack {
+                                    Spacer()
+                                    VStack {
+                                        if childId != friendId {
+                                            if viewModel.isFriendRequest {
+                                                HStack {
+                                                    // Button to accept the friend request
+                                                    Button(action: {
+                                                        var requestId = ""
+                                                        if let request = friendViewModel.friendRequests.first(where: { $0.fromUserId == friendId }) {
+                                                            requestId = request.requestId
+                                                            print("Request ID: \(requestId)")
+                                                        } else {
+                                                            print("No request found for the given user ID.")
+                                                        }
+                                                        friendViewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "accepted", friendUserId: friendId)
+                                                        friendViewModel.deleteRequest(childId: childId, docID: friendId)
+                                                        let drop = Drop(title: "You're now friends!", icon: UIImage(systemName: "figure.2.left.holdinghands"))
+                                                        Drops.show(drop)
+                                                        viewModel.checkFriendRequest(childId: childId, friendId: friendId)
+                                                        viewModel.status = "Friends"
+                                                        
+                                                    }) {
+                                                        Text("Accept")
+                                                        
+                                                    }
+                                                    Button(action: {
+                                                        var requestId = ""
+                                                        if let request = friendViewModel.friendRequests.first(where: { $0.fromUserId == friendId }) {
+                                                            requestId = request.requestId
+                                                            print("Request ID: \(requestId)")
+                                                        } else {
+                                                            print("No request found for the given user ID.")
+                                                        }
+                                                        friendViewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "denied", friendUserId: friendId)
+                                                        friendViewModel.deleteRequest(childId: childId, docID: friendId)
+                                                        let drop = Drop(title: "Request Denied!", icon: UIImage(systemName: "person.fill.xmark"))
+                                                        Drops.show(drop)
+                                                        viewModel.checkFriendRequest(childId: childId, friendId: friendId)
+                                                    }) {
+                                                        Text("Deny")
+                                                    }
+                                                }
+                                            } else {
+                                                if viewModel.status == "Friends" {
+                                                    if !isRemoved {
+                                                        Button("Remove", systemImage: "person.crop.circle.fill.badge.minus") {
+                                                            viewModel.removeFriend(childId: childId, docID: friendId)
+                                                            viewModel.removeFriend(childId: friendId, docID: childId)
+                                                            viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
+                                                            isRemoved = true
+                                                            let drop = Drop(title: "Removed Friend", icon: UIImage(systemName: "person.crop.circle.fill.badge.minus"))
+                                                            Drops.show(drop)
+                                                            
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                if viewModel.status != "Friends" && viewModel.status != "Pending" {
+                                                    Button("Add Friend") {
+                                                        
+                                                        viewModel.sendFriendRequest(toChildId: friendId, fromChildId: childId)
+                                                        viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
+                                                        let drop = Drop(title: "Friend request sent.", icon: UIImage(systemName: "plus"))
+                                                        Drops.show(drop)
+                                                    }
+                                                }
+                                                
+                                                if viewModel.status == "Pending" {
+                                                    Text("Request Sent.")
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    .padding()
+                                    .frame(width: UIScreen.main.bounds.width * 0.3)
+                                    .background(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#FFFFF1"))
+                                    .cornerRadius(23)
+                                    .shadow(radius: 10)
+                                }
+                            }
+                            .frame(height: UIScreen.main.bounds.height * 0.42)
+                        }
+                        .padding(.bottom)
+                    }
+                    
+                    Text("\(viewModel.child?.name ?? "Loading...")'s Stories")
+                        .font(.title2)
+                    if viewModel.story.isEmpty {
+                        ContentUnavailableView {
+                            Label("No Stories Yet", systemImage: "book.fill")
+                        } description: {
+                            Text("It looks like there's no stories posted yet.")
+                        } actions: {
+                        }
+                        .listRowBackground(Color.clear)
+                    }
+                    ScrollView {
+                                LazyVGrid(columns: columns, spacing: 23) {
+                                    ForEach(viewModel.story, id: \.id) { story in
+                                        ZStack {
+                                            // Load the story image asynchronously
+                                            AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
+                                                switch phase {
+                                                case .empty:
+                                                    MagicView()
+                                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: 500)
+                                                    
+                                                case .success(let image):
+                                                    // Successfully loaded image
+                                                    image
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: 500)
+                                                        .clipped()
+                                                        .cornerRadius(16)
+                                                    
+                                                case .failure(_):
+                                                    // Placeholder for failed load
+                                                    Image(systemName: "photo")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: 500)
+                                                        .cornerRadius(16)
+                                                        .padding()
+                                                        .onAppear {
+                                                            // Retry loading logic
+                                                            if retryCount < maxRetryAttempts {
+                                                                DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+                                                                    retryCount += 1
+                                                                }
+                                                            }
+                                                        }
+                                                @unknown default:
+                                                    EmptyView()
+                                                }
+                                            }
+                                            .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 5) // Add shadow to the image
+                                            
+                                            VStack {
+                                                Spacer()
+                                                
+                                                ZStack {
+                                                    RoundedRectangle(cornerRadius: 0)
+                                                        .fill(Color.white.opacity(0.8))
+                                                        .frame(width: UIScreen.main.bounds.width * 0.43, height: 200)
+                                                        .cornerRadius(16)
+                                                    
+                                                    VStack(spacing: 0) {
+                                                        
+                                                        Text(story.title.trimmingCharacters(in: .newlines))
+                                                            .font(.system(size: 18))
+                                                        
+                                                        HStack {
+                                                            Image(systemName: "heart.fill")
+                                                                .foregroundStyle(.red)
+                                                            Text("\(story.likes) Likes")
+                                                                .padding(.trailing)
+                                                            
+                                                            Text(story.theme ?? "")
+                                                                .padding(7)
+                                                                .background(colorScheme == .dark ? Color(hex: "#4B8A1C") : .green)
+                                                                .foregroundStyle(.white)
+                                                                .cornerRadius(22)
+                                                                
+                                                        }
+                                                        .font(.system(size: 16))
+                                                        .padding(.top)
+                                                        Button {
+                                                            selectedStory = story
+                                                        } label: {
+                                                            HStack {
+                                                                Text("Read Now")
+                                                                Image(systemName: "book.pages")
+                                                            }
+                                                            .frame(width: UIScreen.main.bounds.width * 0.35)
+                                                        }
+                                                        .padding()
+                                                        .font(.system(size: 16))
+                                                        .background(Color(hex: "#FF6F61"))
+                                                        .foregroundStyle(.white)
+                                                        .cornerRadius(16)
+                                                        .padding(.top)
+                                                    }
+                                                    .foregroundStyle(.black)
                                                     
                                                 }
-                                                .foregroundStyle(.primary)
                                             }
-                                        }
-                                        
-                                        if viewModel.status != "Friends" && viewModel.status != "Pending" {
-                                            Button("Add Friend") {
-                                                
-                                                viewModel.sendFriendRequest(toChildId: friendId, fromChildId: childId)
-                                                viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
-                                                let drop = Drop(title: "Friend request sent.", icon: UIImage(systemName: "plus"))
-                                                Drops.show(drop)
-                                            }
-                                            .foregroundStyle(.primary)
-                                        }
-                                        
-                                        if viewModel.status == "Pending" {
-                                            Text("Request Sent.")
-                                                .foregroundStyle(.primary)
                                         }
                                     }
                                 }
+                                .padding()
                             }
-                            Spacer()
-                            
-                        }
-                        .padding()
-                        Spacer()
+                    .fullScreenCover(item: $selectedStory) { story in
+                            StoryFromProfileView(story: story)
                     }
-                    .frame(height: 250)
-                    .padding(.leading)
-                    
-                    List {
-                        Section("\(viewModel.child?.name ?? "")'s Stories") {
-                            if viewModel.story.isEmpty {
-                                ContentUnavailableView {
-                                    Label("No Stories Yet", systemImage: "book.fill")
-                                } description: {
-                                    Text("It looks like there's no stories posted yet.")
-                                } actions: {
-                                }
-                                .listRowBackground(Color.clear)
-                            }
-                            ForEach(viewModel.story, id: \.id) { story in
-                                NavigationLink(destination: StoryFromProfileView(story: story)) {
-                                    ZStack {
-                                        HStack {
-                                            Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")1")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .opacity(0.3)
-                                                .frame(width: 300, height: 300)
-                                            Spacer()
-                                            Image("\(story.theme?.filter { !$0.isWhitespace } ?? "")2")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .opacity(0.5)
-                                                .frame(width: 70, height: 70)
-                                            Spacer()
-                                        }
-                                        .frame(height: 100)
-                                        HStack {
-                                            VStack {
-                                                
-                                                Text("\(story.title)")
-                                                    .font(.custom("ComicNeue-Bold", size: 32))
-                                                    .padding([.leading, .bottom])
-                                                
-                                                
-                                            }
-                                            Spacer()
-                                            
-                                           
-                                        }
-                                        .contentShape(Rectangle())
-                                    }
-                                    .padding(.vertical)
-                                        .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4)) // Background for story item
-                                        .cornerRadius(22) // Rounded corners for story item
-                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 0)
-                                        .contentShape(Rectangle()) // Expand tappable area
-                                    }
-                                    .buttonStyle(.plain)
-                                    .listRowBackground(Color.white.opacity(0)) // Transparent row background
-                                    .listRowSeparator(.hidden) // Hide row separator
-                            }
-                        }
-                    }
-                    .scrollContentBackground(.hidden)
                     .onAppear {
                         do {
                             viewModel.fetchChild(ChildId: friendId)
@@ -353,20 +443,14 @@ struct FriendProfileView: View {
                             print(error.localizedDescription)
                         }
                     }
-                   
-                    
                 }
-                .padding([.trailing, .leading])
-                .padding(.bottom, 50)
                 .onAppear {
                     viewModel.fetchChild(ChildId: friendId)
                 }
-     
-                
-                
             }
             .navigationBarBackButtonHidden(true)
             .navigationTitle("\(viewModel.child?.name ?? "N/A")")
+            .ignoresSafeArea(edges: .top)
             .onAppear {
                
                 viewModel.fetchChild(ChildId: friendId)

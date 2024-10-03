@@ -2232,7 +2232,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "D2DAFB58-CE1F-48B3-AA2F-AC8BFD01216E"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/SignInProcess/SignIn Views/SignInWithEmailView.swift"
@@ -2328,7 +2328,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "7654771E-A996-4C1F-A78B-48DDDC766835"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/SignInProcess/SignIn Views/SignInWithEmailView.swift"

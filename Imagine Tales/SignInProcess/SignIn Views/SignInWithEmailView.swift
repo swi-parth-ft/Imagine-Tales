@@ -123,7 +123,7 @@ struct SignInWithEmailView: View {
                                 } label: {
                                     ZStack {
                                         Circle()
-                                            .foregroundStyle(.white)
+                                            .foregroundStyle(colorScheme == .dark ? .gray : .white)
                                             .frame(width: isCompact ? 50 : 75, height: isCompact ? 50 : 75)
                                             .shadow(radius: 10)
                                         
