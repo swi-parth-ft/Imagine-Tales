@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Drops
 
 // View for displaying a child's story and allowing the parent to review it
 struct StoryView: View {
@@ -15,8 +16,11 @@ struct StoryView: View {
     @State private var status = "" // Current review status of the story (Approve/Reject)
     @State private var comment = "" // Comment for the review
     @State private var isAddingCmt = false // State for showing comment input
-    @State private var isRejecting = false // State for confirming rejection
+    @State private var isExpanding = false
     var child: UserChildren
+    @Environment(\.colorScheme) var colorScheme
+    @State var counter: Int = 0 // Counter for ripple effect on the profile image
+    @State var origin: CGPoint = .zero // Origin point for the ripple effect
     var body: some View {
         NavigationStack {
             ZStack {
@@ -38,9 +42,18 @@ struct StoryView: View {
                                         image
                                             .resizable()
                                             .scaledToFill()
-                                            .frame(height: 300)
+                                            .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 300)
                                             .clipped()
                                             .cornerRadius(30)
+                                            .onPressingChanged { point in
+                                                if let point {
+                                                    self.origin = point
+                                                    self.counter += 1
+                                                }
+                                            }
+                                            .modifier(RippleEffect(at: self.origin, trigger: self.counter)) // Custom ripple effect
+                                            .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20) // Adds shadow at the bottom
+                                            
                                     case .failure(_):
                                         // Show a placeholder image on failure
                                         Image(systemName: "photo")
@@ -51,8 +64,14 @@ struct StoryView: View {
                                         EmptyView() // Handle any unknown states
                                     }
                                 }
-                                .frame(width: UIScreen.main.bounds.width * 0.9, height: 300)
+                                .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : 300)
                                 .cornerRadius(10)
+                                .onTapGesture {
+                                    withAnimation {
+                                        isExpanding.toggle()
+                                    }
+                               
+                                }
                             }
                             
                             // Display the story text
@@ -65,73 +84,70 @@ struct StoryView: View {
                         .padding()
                     }
                     
-                    // Review status and action buttons
                     HStack {
-                        Spacer()
-                        // Check if the story is rejected
-                        if status == "Reject" {
-                            HStack {
-                                // Button to approve the story
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(.black)
-                                    .font(.title)
-                                    .padding(.leading)
-                                    .onTapGesture {
-                                        do {
-                                            try viewModel.reviewStory(status: "Approve", id: story.id)
-                                            homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title.trimmingCharacters(in: .newlines), type: "status", status: "Approved")
-                                            withAnimation {
-                                                status = "Approve" // Update status to approved
-                                            }
-                                        } catch {
-                                            print(error.localizedDescription) // Handle errors
-                                        }
-                                    }
-                                
-                                // Show rejection label
-                                Text("Rejected")
-                                    .padding()
-                                    .background(.red.opacity(0.4))
-                                    .foregroundStyle(.black)
-                                    .cornerRadius(22)
-                            }
-                            .background(.white)
-                            .cornerRadius(22)
-                            .padding()
-                        } else {
-                            // Buttons for approving or rejecting the story
-                            HStack {
-                                Button(status == "Approve" ? "Approved" : "Approve?") {
-                                    do {
-                                        try viewModel.reviewStory(status: "Approve", id: story.id)
-                                        homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title.trimmingCharacters(in: .newlines), type: "status", status: "Approved")
-                                        withAnimation {
-                                            status = "Approve" // Update status to approved
-                                        }
-                                    } catch {
-                                        print(error.localizedDescription) // Handle errors
-                                    }
+                        
+                        Button {
+                            do {
+                                try viewModel.reviewStory(status: "Approve", id: story.id)
+                                homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title.trimmingCharacters(in: .newlines), type: "status", status: "Approved")
+                                Drops.show("Story Approved")
+                                withAnimation {
+                                    status = "Approve" // Update status to approved
                                 }
-                                .padding()
-                                .background(.white)
-                                .foregroundStyle(.black)
-                                .cornerRadius(22)
-                                
-                                // Button to initiate rejection
-                                Image(systemName: "x.circle.fill")
-                                    .foregroundStyle(.red)
-                                    .font(.title)
-                                    .padding(.trailing)
-                                    .onTapGesture {
-                                        isRejecting.toggle() // Toggle rejection confirmation
-                                    }
+                            } catch {
+                                print(error.localizedDescription) // Handle errors
                             }
-                            .background(.red.opacity(0.4))
-                            .cornerRadius(22)
-                            .padding()
+                        } label: {
+                            if status != "Reject" {
+                                Text(status == "Approve" ? "Approved" : "Approve")
+                                    .padding()
+                                    .frame(width: 200)
+                                    .background(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#F2F2DB"))
+                                    .foregroundStyle(colorScheme == .dark ? .white : .black )
+                                    .cornerRadius(12)
+                            } else {
+                                Image(systemName: "checkmark.seal.fill")
+                                    .font(.title)
+                                    .foregroundColor(.green)
+                                    .padding()
+                                    .frame(width: 50)
+                            }
+                            
+                                
                         }
+                        
+                        Button {
+                            do {
+                                try viewModel.reviewStory(status: "Reject", id: story.id) // Reject the story
+                                homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title.trimmingCharacters(in: .newlines), type: "status", status: "Rejected")
+                                Drops.show("Story Rejected")
+                                withAnimation {
+                                    status = "Reject" // Update status to rejected
+                                }
+                            } catch {
+                                print(error.localizedDescription) // Handle errors
+                            }
+                        } label: {
+                            if status != "Approve" {
+                                Text(status == "Reject" ? "Rejected" : "Reject")
+                                    .padding()
+                                    .frame(width: 200)
+                                    .background(Color(hex: "#FF6F61"))
+                                    .foregroundStyle(.white)
+                                    .cornerRadius(12)
+                            } else {
+                                Image(systemName: "xmark.seal.fill")
+                                    .font(.title)
+                                    .foregroundColor(.red)
+                                    .padding()
+                                    .frame(width: 50)
+                            }
+                            
+                            
+                        }
+                        
                     }
-                    .padding()
+                   
                 }
                 .padding()
                 .navigationTitle(story.title) // Set the navigation title to the story title
@@ -152,6 +168,7 @@ struct StoryView: View {
                     TextField("Enter your review here", text: $comment) // Text field for review input
                     Button("Submit") {
                         viewModel.addReview(storyID: story.id, reviewNotes: comment) // Submit review
+                        homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title.trimmingCharacters(in: .newlines), type: "Comment", status: "")
                     }
                     Button("Cancel", role: .cancel, action: {}) // Cancel action
                 }, message: {
@@ -160,23 +177,7 @@ struct StoryView: View {
                             comment = viewModel.comment // Populate comment field if necessary
                         }
                 })
-                // Alert for confirming story rejection
-                .alert("Reject Story", isPresented: $isRejecting, actions: {
-                    Button("Reject") {
-                        do {
-                            try viewModel.reviewStory(status: "Reject", id: story.id) // Reject the story
-                            homeViewModel.sendStatusNotification(toUserId: child.id, storyId: story.id, storyTitle: story.title.trimmingCharacters(in: .newlines), type: "status", status: "Rejected")
-                            withAnimation {
-                                status = "Reject" // Update status to rejected
-                            }
-                        } catch {
-                            print(error.localizedDescription) // Handle errors
-                        }
-                    }
-                    Button("Cancel", role: .cancel, action: {}) // Cancel action
-                }, message: {
-                    Text("Are you sure you want to reject this story?")
-                })
+             
             }
         }
     }

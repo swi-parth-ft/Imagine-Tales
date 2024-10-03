@@ -145,7 +145,7 @@ struct ProfileView: View {
                                     .font(.title2)
                             }
                         }
-//                        .padding()
+                        .padding()
                         Spacer()
                     }
                     

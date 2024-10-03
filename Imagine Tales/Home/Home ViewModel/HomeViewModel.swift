@@ -368,7 +368,7 @@ final class HomeViewModel: ObservableObject {
     
     func sendStatusNotification(toUserId: String, storyId: String, storyTitle: String, type: String, status: String) {
         let db = Firestore.firestore()
-        let notification = Notification(fromId: "", toId: toUserId, storyId: storyId, read: false, type: "status", fromChildUsername: "", fromChildProfileImage: "", storyTitle: storyTitle, storyStatus: status)
+        let notification = Notification(fromId: "", toId: toUserId, storyId: storyId, read: false, type: type, fromChildUsername: "", fromChildProfileImage: "", storyTitle: storyTitle, storyStatus: status)
         
         do {
             try db.collection("Notifications").document(notification.id).setData(from: notification)

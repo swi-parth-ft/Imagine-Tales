@@ -252,6 +252,57 @@ struct FriendRequestView: View {
                                                 
                                             }
                                         }
+                                        else if noti.type == "Comment" {
+                                            HStack(alignment: .center) {
+                                                
+                                                Image(systemName: "message.badge.filled.fill" )
+                                                    .font(.system(size: 40))
+                                                    .foregroundStyle(.blue)
+                                                
+                                                Text("Your story \(noti.storyTitle) has a new Comment.")
+                                                
+                                                Spacer()
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white)
+                                                        .frame(width: 50)
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                    Image(systemName: "book.pages")
+                                                        .font(.system(size: 16))
+                                                }
+                                                .onTapGesture {
+                                                    viewModel.getStoryById(storyId: noti.storyId) { story, error in
+                                                        if let error = error {
+                                                            print("Error fetching document: \(error.localizedDescription)")
+                                                        } else if let story = story {
+                                                            selectedStory = story
+                                                        } else {
+                                                            print("Document does not exist")
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                
+                                            }
+                                            .padding()
+                                            .listRowBackground(Color.white.opacity(0))
+                                            .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4))
+                                            .listRowSeparator(.hidden) // Hide row separator
+                                            .cornerRadius(16)
+                                            .swipeActions {
+                                                
+                                                Button(role: .destructive) {
+                                                    viewModel.deleteNotification(withId: noti.id)
+                                                    viewModel.fetchNotifications(for: childId)
+                                                } label: {
+                                                    Label("Delete", systemImage: "trash")
+                                                    
+                                                }
+                                                .tint(.red)
+                                                .foregroundColor(.white)
+                                                
+                                            }
+                                        }
                                         else {
                                             HStack(alignment: .center) {
                                                 ZStack {
