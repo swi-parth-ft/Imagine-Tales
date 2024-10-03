@@ -60,7 +60,7 @@ final class SavedStoryViewModel: ObservableObject {
                 // Convert dictionary values to an array of saved stories
                 self.savedStories = Array(storyDictionary.values)
                 // Sort saved stories alphabetically by title
-                self.savedStories.sort(by: { $0.title < $1.title })  // Example sorting, modify as needed
+                self.savedStories.sort(by: { $0.dateCreated! > $1.dateCreated! })  // Example sorting, modify as needed
             }
         }
     }

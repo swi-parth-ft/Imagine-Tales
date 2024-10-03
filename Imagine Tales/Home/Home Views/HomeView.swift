@@ -22,7 +22,7 @@ struct HomeView: View {
     
     // Retrieve the childId stored in AppStorage (used for identifying the user)
     @AppStorage("childId") var childId: String = "Default Value"
-    
+    @State private var cat = "Following"
     var body: some View {
         NavigationStack {
             VStack {
@@ -32,23 +32,31 @@ struct HomeView: View {
                         // Loop through genres and create a button for each
                         ForEach(genres, id: \.self) { category in
                             Button(action: {
+                                cat = category
                                 // When a genre is selected, update the genre in ViewModel and fetch stories
-                                withAnimation {
-                                    viewModel.genre = category
+                                if category == "Following" {
                                     Task {
-                                        try? await viewModel.getStories(childId: childId) // Fetch stories for the selected genre
+                                        await viewModel.getFollowingStories(genre: category, childId: childId) // Fetch stories for the selected genre
+                                        reload.toggle() // Toggle reload to refresh the view
+                                    }
+                                } else {
+                                    
+                                    // viewModel.genre = category
+                                    Task {
+                                        await viewModel.getStorie(genre: category) // Fetch stories for the selected genre
                                         reload.toggle() // Toggle reload to refresh the view
                                     }
                                 }
+                                
                             }) {
                                 // Style the genre button based on selection
                                 Text(category)
                                     .padding()
-                                    .background(category == viewModel.genre ? (colorScheme == .dark ? Color(hex: "#4B8A1C") : .green) : Color.clear)
-                                    .foregroundColor(category == viewModel.genre ? .white : .primary)
+                                    .background(category == cat ? (colorScheme == .dark ? Color(hex: "#4B8A1C") : .green) : Color.clear)
+                                    .foregroundColor(category == cat ? .white : .primary)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.green, lineWidth: category == viewModel.genre ? 0 : 1)
+                                            .stroke(Color.green, lineWidth: category == cat ? 0 : 1)
                                     )
                                     .cornerRadius(10)
                                
@@ -60,16 +68,49 @@ struct HomeView: View {
                 .padding()
                 
                 // Display message if there are no stories available
-                if viewModel.stories.isEmpty {
+                if viewModel.newStories.isEmpty {
                     ContentUnavailableView {
                         Label("No Stories Yet", systemImage: "book.fill")
                     } description: {
                         Text("It looks like there's no stories posted yet.")
                     }
                 } else {
-                    // Display the list of stories if available
-                    StoryListView(stories: viewModel.stories, reload: $reload, childId: childId)
-                        .padding(.bottom, 60)
+                    
+                    ScrollView {
+                        LazyVStack {
+                            if cat == "Following" {
+                                ForEach(viewModel.newStories, id: \.id) { story in
+                                    StoryRowView(story: story, childId: childId, reload: $reload)
+                                    
+                                    if story == viewModel.newStories.last {
+                                        ProgressView()
+                                            .onAppear {
+                                                Task {
+                                                    await viewModel.getFollowingStories(isLoadMore: true, genre: cat, childId: childId)
+                                                }
+                                            }
+                                    }
+                                }
+                            } else {
+                                ForEach(viewModel.newStories, id: \.id) { story in
+                                    StoryRowView(story: story, childId: childId, reload: $reload)
+                                    
+                                    if story == viewModel.newStories.last {
+                                        ProgressView()
+                                            .onAppear {
+                                                Task {
+                                                    await viewModel.getStorie(isLoadMore: true, genre: cat)
+                                                }
+                                            }
+                                    }
+                                }
+                            }
+                            
+                            
+                         
+                        }
+                    }
+                    .padding(.bottom, 60)
                 }
             }
             .navigationTitle("Imagine Tales") // Title of the view
@@ -77,18 +118,13 @@ struct HomeView: View {
             // Fetch stories and child-related data when the view appears
             .onAppear {
                 Task {
-                    try? await viewModel.getStories(childId: childId) // Fetch initial set of stories
+                    
                     viewModel.fetchChild(ChildId: childId) // Fetch child information
                     viewModel.fetchFriends(childId: childId) // Fetch friend information
                 }
             }
             
-            // Reload the stories when the reload flag changes
-            .onChange(of: reload) {
-                Task {
-                    try? await viewModel.getStories(childId: childId) // Fetch updated stories
-                }
-            }
+         
         }
     }
 }

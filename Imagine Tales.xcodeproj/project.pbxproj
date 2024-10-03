@@ -59,6 +59,8 @@
 		076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C22992C7E8C3E001DAB3F /* HomeView.swift */; };
 		07774ED22CAC4D4B0056E5BE /* StoryByGenreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07774ED12CAC4D4A0056E5BE /* StoryByGenreViewModel.swift */; };
 		07774ED42CAE3BF70056E5BE /* parentSettingiPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07774ED32CAE3BF70056E5BE /* parentSettingiPhone.swift */; };
+		07774ED62CAF36D00056E5BE /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07774ED52CAF36D00056E5BE /* File.swift */; };
+		07774ED82CAF3E280056E5BE /* StoriesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07774ED72CAF3E280056E5BE /* StoriesManager.swift */; };
 		077BE2762C800A4A00760D5A /* GradientRectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077BE2752C800A4A00760D5A /* GradientRectView.swift */; };
 		077BE2872C810FF800760D5A /* SavedStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077BE2862C810FF800760D5A /* SavedStoryView.swift */; };
 		0788C4212CA8B9ED00FA5E65 /* Vortex in Frameworks */ = {isa = PBXBuildFile; productRef = 0788C4202CA8B9ED00FA5E65 /* Vortex */; };
@@ -159,6 +161,8 @@
 		076C22992C7E8C3E001DAB3F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		07774ED12CAC4D4A0056E5BE /* StoryByGenreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryByGenreViewModel.swift; sourceTree = "<group>"; };
 		07774ED32CAE3BF70056E5BE /* parentSettingiPhone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parentSettingiPhone.swift; sourceTree = "<group>"; };
+		07774ED52CAF36D00056E5BE /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		07774ED72CAF3E280056E5BE /* StoriesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesManager.swift; sourceTree = "<group>"; };
 		077BE2752C800A4A00760D5A /* GradientRectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientRectView.swift; sourceTree = "<group>"; };
 		077BE2862C810FF800760D5A /* SavedStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedStoryView.swift; sourceTree = "<group>"; };
 		0788C4222CA8BA5A00FA5E65 /* MagicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicView.swift; sourceTree = "<group>"; };
@@ -438,6 +442,8 @@
 			isa = PBXGroup;
 			children = (
 				07D323822CA72FC000846FA3 /* HomeViewModel.swift */,
+				07774ED72CAF3E280056E5BE /* StoriesManager.swift */,
+				07774ED52CAF36D00056E5BE /* File.swift */,
 			);
 			path = "Home ViewModel";
 			sourceTree = "<group>";
@@ -713,6 +719,7 @@
 				07D3237A2CA72AC000846FA3 /* GeneratingProcessView.swift in Sources */,
 				0788C4272CA90D8C00FA5E65 /* OpenAITTSManager.swift in Sources */,
 				07D3237B2CA72AC000846FA3 /* StoryReviewView.swift in Sources */,
+				07774ED82CAF3E280056E5BE /* StoriesManager.swift in Sources */,
 				07D3239E2CA7629000846FA3 /* FriendsViewModel.swift in Sources */,
 				07D3237C2CA72AC000846FA3 /* MoodSelectionView.swift in Sources */,
 				07D3237D2CA72AC000846FA3 /* ThemeSelectionView.swift in Sources */,
@@ -736,6 +743,7 @@
 				07D323942CA7614600846FA3 /* StoryFromProfileView.swift in Sources */,
 				073F2CF22C6F9C1F00BCF6F0 /* UserManager.swift in Sources */,
 				07FB38642C63B3720070EEFA /* Environment.swift in Sources */,
+				07774ED62CAF36D00056E5BE /* File.swift in Sources */,
 				0701FB8D2C822816004BEE9F /* FriendsView.swift in Sources */,
 				0701FBB02C862845004BEE9F /* DpSelectionView.swift in Sources */,
 				07D323852CA7300000846FA3 /* StoryTextItem.swift in Sources */,

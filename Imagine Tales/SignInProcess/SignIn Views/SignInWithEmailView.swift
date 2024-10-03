@@ -69,6 +69,7 @@ struct SignInWithEmailView: View {
     
     let emailPattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
     
+    @FocusState private var isTextFieldFocused: Bool
     
     
     var body: some View {
@@ -520,6 +521,10 @@ struct SignInWithEmailView: View {
                                             .customTextFieldStyle(isCompact: isCompact)
                                             .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                                             .cornerRadius(isCompact ? 6 : 12)
+                                            .focused($isTextFieldFocused)
+                                            .onAppear {
+                                                isTextFieldFocused = true
+                                            }
                                         
                                         if !isResettingPassword {
                                             
@@ -623,6 +628,10 @@ struct SignInWithEmailView: View {
                                                 .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                                                 .frame(width: UIScreen.main.bounds.width * 0.55)
                                                 .cornerRadius(12)
+                                                .focused($isTextFieldFocused)
+                                                .onAppear {
+                                                    isTextFieldFocused = true
+                                                }
                                                 
                                             
                                             TextField("username", text: $viewModel.username)

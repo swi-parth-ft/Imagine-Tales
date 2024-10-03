@@ -73,55 +73,6 @@ final class HomeViewModel: ObservableObject {
             }
     }
     
-    // Fetch stories based on selected genre or 'Following' list
-    @MainActor
-    func getStories(childId: String) async throws {
-        if genre == "Following" {
-            stories = []  // Clear current stories
-            do {
-                // Fetch friends of the child
-                let friendDocuments = try await Firestore.firestore().collection("Children2").document(childId).collection("friends").getDocuments().documents
-                let friendIds = friendDocuments.map { $0.documentID }
-                
-                // Fetch stories from friends
-                for friendId in friendIds {
-                    Firestore.firestore().collection("Story").whereField("childId", isEqualTo: friendId).getDocuments() { (querySnapshot, error) in
-                        if let error = error {
-                            print("Error getting documents: \(error)")
-                            return
-                        }
-                        // Filter and append unique stories
-                        self.tempStories = querySnapshot?.documents.compactMap { document in
-                            try? document.data(as: Story.self)
-                        } ?? []
-                        self.stories.append(contentsOf: self.tempStories.filter { tempStory in
-                            !self.stories.contains(where: { $0.id == tempStory.id })
-                        })
-                        
-                        self.stories.sort(by: { $0.dateCreated! > $1.dateCreated! })
-                        
-                        print(self.stories)
-                    }
-                }
-            } catch {
-                print("Error fetching data: \(error.localizedDescription)")
-            }
-        } else {
-            // Fetch stories based on genre and approval status
-            Firestore.firestore().collection("Story").whereField("status", isEqualTo: "Approve").whereField("genre", isEqualTo: genre).getDocuments() { (querySnapshot, error) in
-                if let error = error {
-                    print("Error getting documents: \(error)")
-                    return
-                }
-                self.stories = querySnapshot?.documents.compactMap { document in
-                    try? document.data(as: Story.self)
-                } ?? []
-                
-                self.stories.sort(by: { $0.dateCreated! > $1.dateCreated! })
-                print(self.stories)
-            }
-        }
-    }
     
     // Function to like or dislike a story
     func likeStory(childId: String, storyId: String) {
@@ -387,6 +338,62 @@ final class HomeViewModel: ObservableObject {
             print("Notification sent successfully")
         } catch let error {
             print("Error sending notification: \(error)")
+        }
+    }
+    
+    
+  //  @Published var stories: [Story] = []
+    private var lastDocument: DocumentSnapshot? = nil
+    private let limit = 3  // Set a limit of 10 stories per batch
+    
+    @Published var newStories: [Story] = []
+    // Function to load stories with pagination
+    @MainActor
+    func getStorie(isLoadMore: Bool = false, genre: String) async {
+        // Reset the stories and pagination if not loading more
+        if !isLoadMore {
+            newStories = []
+            lastDocument = nil
+        }
+        
+        do {
+            // Fetch a batch of stories from Firestore
+            let (newStories, lastDoc) = try await StoriesManager.shared.getAllStories(count: limit, genre: genre, lastDocument: lastDocument)
+            
+            // Update UI in main thread
+            DispatchQueue.main.async {
+                self.newStories.append(contentsOf: newStories)
+                self.lastDocument = lastDoc // Update last document for pagination
+            }
+        } catch {
+            print("Error fetching stories: \(error.localizedDescription)")
+        }
+    }
+    
+    @MainActor
+    func getFollowingStories(isLoadMore: Bool = false, genre: String, childId: String) async {
+        // Reset the stories and pagination if not loading more
+        if !isLoadMore {
+            newStories = []
+            lastDocument = nil
+        }
+        
+        do {
+            
+            let friendDocuments = try await Firestore.firestore().collection("Children2").document(childId).collection("friends").getDocuments().documents
+            let friendIds = friendDocuments.map { $0.documentID }
+            
+            // Fetch a batch of stories from Firestore
+            let (newStories, lastDoc) = try await StoriesManager.shared.getAllFollowing(count: limit, genre: genre, ids: friendIds, lastDocument: lastDocument)
+            
+            // Update UI in main thread
+            DispatchQueue.main.async {
+                self.newStories.append(contentsOf: newStories)
+                
+                self.lastDocument = lastDoc // Update last document for pagination
+            }
+        } catch {
+            print("Error fetching stories: \(error.localizedDescription)")
         }
     }
 }

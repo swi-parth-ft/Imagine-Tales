@@ -234,7 +234,7 @@ struct FriendProfileView: View {
                                 }
                                 .padding(.top)
                             }
-                            .frame(height: UIScreen.main.bounds.height * 0.4)
+                            .frame(height: UIScreen.main.bounds.height * 0.33)
                             ZStack {
                                 VStack {
                                     Spacer()
@@ -321,7 +321,7 @@ struct FriendProfileView: View {
                                 
                                 }
                             }
-                            .frame(height: UIScreen.main.bounds.height * 0.42)
+                            .frame(height: UIScreen.main.bounds.height * 0.35)
                         }
                         .padding(.bottom)
                     }

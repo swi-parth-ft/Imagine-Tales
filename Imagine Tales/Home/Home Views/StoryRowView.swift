@@ -1,24 +1,7 @@
 import SwiftUI
 import Drops
 
-// Main list view for displaying stories
-struct StoryListView: View {
-    var stories: [Story]
-    @Binding var reload: Bool
-    var childId: String
 
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                LazyVStack {
-                    ForEach(stories, id: \.id) { story in
-                        StoryRowView(story: story, childId: childId, reload: $reload)
-                    }
-                }
-            }
-        }
-    }
-}
 
 // Single row view for displaying individual story
 struct StoryRowView: View {

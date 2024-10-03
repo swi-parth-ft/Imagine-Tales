@@ -16,12 +16,17 @@ struct UserInfoFormView: View {
     @Binding var country: String
     let isCompact: Bool
     @Environment(\.colorScheme) var colorScheme
+    @FocusState private var isTextFieldFocused: Bool
     var body: some View {
         VStack {
             TextField("Name", text: $name)
                 .customTextFieldStyle(isCompact: isCompact)
                 .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                 .cornerRadius(isCompact ? 6 : 12)
+                .focused($isTextFieldFocused)
+                .onAppear {
+                    isTextFieldFocused = true
+                }
                 
             
             TextField("Email", text: $email)

@@ -48,7 +48,14 @@ struct StoryFromProfileView: View {
     @State private var isExpanding = false
     @State private var showShareList = false
     var filteredFriends: [UserChildren] {
-        searchQuery.isEmpty ? homeViewModel.friends : homeViewModel.friends.filter { $0.username.localizedCaseInsensitiveContains(searchQuery) }
+        let friends = searchQuery.isEmpty ? homeViewModel.friends : homeViewModel.friends.filter { $0.username.localizedCaseInsensitiveContains(searchQuery) }
+        
+        // Remove duplicates by username
+        let uniqueFriends = Array(Set(friends.map { $0.username }).map { username in
+            friends.first { $0.username == username }!
+        })
+
+        return uniqueFriends
     }
     var body: some View {
         NavigationStack {

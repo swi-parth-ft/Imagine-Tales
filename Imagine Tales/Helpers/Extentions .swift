@@ -221,3 +221,10 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+extension Array where Element: Identifiable {
+    // Helper method to check if the item is the last in the array
+    func isLastItem(_ item: Element) -> Bool {
+        guard let last = self.last else { return false }
+        return last.id == item.id
+    }
+}
