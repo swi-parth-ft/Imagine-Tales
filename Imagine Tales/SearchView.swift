@@ -21,7 +21,7 @@ struct SearchView: View {
     @State private var retryCount = 0 // Count for retry attempts when loading images
     @State private var maxRetryAttempts = 3 // Maximum number of retry attempts
     @State private var retryDelay = 2.0 // Delay between retries
-    
+    @FocusState private var isTextFieldFocused: Bool
     var body: some View {
         NavigationStack {
             ZStack {
@@ -30,6 +30,7 @@ struct SearchView: View {
                 VStack(alignment: .leading) {
                     
                     TextField("Search...", text: $searchText)
+                        .focused($isTextFieldFocused)
                         .padding()
                         .background(Color.gray.opacity(0.1))
                         .cornerRadius(22)
@@ -188,6 +189,9 @@ struct SearchView: View {
                     }
                 }
                 .padding()
+            }
+            .onAppear {
+                isTextFieldFocused = true
             }
         }
     }

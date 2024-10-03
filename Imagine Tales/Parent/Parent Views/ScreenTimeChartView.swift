@@ -38,10 +38,11 @@ struct ScreenTimeChartView: View {
         ZStack {
             VStack {
                 // Display the month label if there's screen time data
+                
                 if !screenTimeData.isEmpty {
                     Text(monthLabel())
                         .font(.title2)
-                        .padding()
+                        .padding(.bottom)
                 }
                 
                 // Show a placeholder view if there's no screen time data
@@ -104,14 +105,17 @@ struct ScreenTimeChartView: View {
                             // Change month based on swipe direction
                             if value.translation.width < 0 {
                                 // Swiped left, go to the next month
-                                changeMonth(by: 1)
+                                withAnimation {
+                                    changeMonth(by: 1)
+                                }
                             } else if value.translation.width > 0 {
                                 // Swiped right, go to the previous month
-                                changeMonth(by: -1)
+                                withAnimation {
+                                    changeMonth(by: -1)
+                                }
                             }
                         }
                 )
-                .padding()
                 
                 // Display label for screen time if data exists
                 if !screenTimeData.isEmpty {

@@ -152,7 +152,7 @@ struct ProfileView: View {
                     .padding([.trailing, .leading])
                     // Button to toggle between "Your Stories" and "Shared with you"
                     HStack(alignment: .bottom) {
-                        Text(isShowingSharedStories ? "Shared with you" : "Your Stories")
+                        Text(isShowingSharedStories ? "Shared with you (\(viewModel.sharedStories.count))" : "Your Stories (\(parentViewModel.story.count))")
                             .font(.title2)
                         Spacer()
                         Button(isShowingSharedStories ? "Your Stories" : "Shared with you", systemImage: isShowingSharedStories ? "book.fill" : "paperplane.fill") {

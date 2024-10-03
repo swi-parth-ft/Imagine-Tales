@@ -171,7 +171,7 @@ struct FriendProfileView: View {
                         ZStack(alignment: .top) {
                             ZStack {
                                 BackGroundMesh()
-                                    .cornerRadius(50)
+                                    .clipShape(RoundedCorners(radius: 50, corners: [.bottomLeft, .bottomRight]))
                                     .shadow(radius: 10)
                                 VStack {
                                     HStack {

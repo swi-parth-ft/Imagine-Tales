@@ -24,6 +24,7 @@ struct parentSettings: View {
     }
     
     @Environment(\.colorScheme) var colorScheme
+    @FocusState private var isTextFieldFocused: Bool
     
     var body: some View {
         NavigationStack {
@@ -37,12 +38,14 @@ struct parentSettings: View {
                             Button {
                                 withAnimation {
                                     isEditingName.toggle()
+                                    isTextFieldFocused = true
                                 }
                             } label: {
                                 Image(systemName: "pencil.line")
                             }
                         } else {
                             TextField("\(viewModel.parent?.name ?? "Loading...")", text: $newName)
+                                .focused($isTextFieldFocused)
                             HStack {
                                 Button {
                                     viewModel.updateNameInFirestore(userId: viewModel.parent?.userId ?? "", newName: newName) { result in
@@ -127,7 +130,7 @@ struct parentSettings: View {
                                     if !enteredEmail.isEmpty {
                                         Drops.show("Please enter a valid email.")
                                     } else {
-                                        Drops.show("Please enter a your email.")
+                                        Drops.show("Please enter your email.")
                                     }
                                 }
                                 
