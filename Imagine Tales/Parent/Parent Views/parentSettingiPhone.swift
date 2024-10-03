@@ -9,7 +9,7 @@ import SwiftUI
 import Drops
 
 // View for the parent settings, including options for logging out
-struct parentSettings: View {
+struct parentSettingsiPhone: View {
     
     @Environment(\.dismiss) var dismiss // Environment variable to dismiss the view
     @StateObject var viewModel = ParentViewModel() // State object for managing parent-related data
@@ -80,7 +80,7 @@ struct parentSettings: View {
                         }
                     }
                     .padding()
-                    .frame(width: UIScreen.main.bounds.width * 0.5)
+                    .frame(width: UIScreen.main.bounds.width * 0.9)
                     .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                     .cornerRadius(12)
                     
@@ -93,7 +93,7 @@ struct parentSettings: View {
                         } label: {
                             Text("Reset Passowrd")
                                 .padding()
-                                .frame(width: UIScreen.main.bounds.width * 0.5)
+                                .frame(width: UIScreen.main.bounds.width * 0.9)
                                 .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                                 .cornerRadius(12)
                         }
@@ -102,7 +102,7 @@ struct parentSettings: View {
                         
                         TextField("Enter your email", text: $enteredEmail)
                             .padding()
-                            .frame(width: UIScreen.main.bounds.width * 0.5)
+                            .frame(width: UIScreen.main.bounds.width * 0.9)
                             .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                             .cornerRadius(12)
                         
@@ -136,7 +136,7 @@ struct parentSettings: View {
                             } label: {
                                 Text("Reset Password")
                                     .padding()
-                                    .frame(width: UIScreen.main.bounds.width * 0.3)
+                                    .frame(width: UIScreen.main.bounds.width * 0.5)
                                     .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                                     .cornerRadius(12)
                                 
@@ -149,7 +149,7 @@ struct parentSettings: View {
                             } label: {
                                 Text("Cancel")
                                     .padding()
-                                    .frame(width: UIScreen.main.bounds.width * 0.17)
+                                    .frame(width: UIScreen.main.bounds.width * 0.3)
                                     .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                                     .foregroundStyle(.red)
                                     .cornerRadius(12)
@@ -178,7 +178,7 @@ struct parentSettings: View {
                     } label: {
                         Text("Log Out")
                             .padding()
-                            .frame(width: UIScreen.main.bounds.width * 0.5)
+                            .frame(width: UIScreen.main.bounds.width * 0.9)
                             .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                             .foregroundStyle(.red)
                             .cornerRadius(12)

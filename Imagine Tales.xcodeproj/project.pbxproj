@@ -58,6 +58,7 @@
 		076C22982C7E66B6001DAB3F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 076C22972C7E66B6001DAB3F /* FirebaseStorage */; };
 		076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C22992C7E8C3E001DAB3F /* HomeView.swift */; };
 		07774ED22CAC4D4B0056E5BE /* StoryByGenreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07774ED12CAC4D4A0056E5BE /* StoryByGenreViewModel.swift */; };
+		07774ED42CAE3BF70056E5BE /* parentSettingiPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07774ED32CAE3BF70056E5BE /* parentSettingiPhone.swift */; };
 		077BE2762C800A4A00760D5A /* GradientRectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077BE2752C800A4A00760D5A /* GradientRectView.swift */; };
 		077BE2872C810FF800760D5A /* SavedStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077BE2862C810FF800760D5A /* SavedStoryView.swift */; };
 		0788C4212CA8B9ED00FA5E65 /* Vortex in Frameworks */ = {isa = PBXBuildFile; productRef = 0788C4202CA8B9ED00FA5E65 /* Vortex */; };
@@ -157,6 +158,7 @@
 		073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ComicNeue-Regular.ttf"; sourceTree = "<group>"; };
 		076C22992C7E8C3E001DAB3F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		07774ED12CAC4D4A0056E5BE /* StoryByGenreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryByGenreViewModel.swift; sourceTree = "<group>"; };
+		07774ED32CAE3BF70056E5BE /* parentSettingiPhone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parentSettingiPhone.swift; sourceTree = "<group>"; };
 		077BE2752C800A4A00760D5A /* GradientRectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientRectView.swift; sourceTree = "<group>"; };
 		077BE2862C810FF800760D5A /* SavedStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedStoryView.swift; sourceTree = "<group>"; };
 		0788C4222CA8BA5A00FA5E65 /* MagicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicView.swift; sourceTree = "<group>"; };
@@ -550,6 +552,7 @@
 				0792C1D92C7BD95E000C42A7 /* ParentView.swift */,
 				07D323AD2CA765C400846FA3 /* DpSelection.swift */,
 				07D323AB2CA765B300846FA3 /* parentSettings.swift */,
+				07774ED32CAE3BF70056E5BE /* parentSettingiPhone.swift */,
 				07D323A72CA7659500846FA3 /* StoryView.swift */,
 				07D323A52CA7657900846FA3 /* ChildView.swift */,
 			);
@@ -718,6 +721,7 @@
 				0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */,
 				0711F3702C6D71EC006C86AA /* AuthenticationManager.swift in Sources */,
 				078DACDE2C8E054200F04A65 /* ScreenTimeChartView.swift in Sources */,
+				07774ED42CAE3BF70056E5BE /* parentSettingiPhone.swift in Sources */,
 				07D323622CA7246900846FA3 /* AuthenticationViewModel.swift in Sources */,
 				07D3238A2CA7304D00846FA3 /* UserChildren.swift in Sources */,
 				0711F37A2C6D8BEB006C86AA /* OpenAIService.swift in Sources */,

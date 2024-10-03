@@ -17,7 +17,6 @@ struct ParentView: View {
     @Binding var isiPhone: Bool // Binding to check if the device is an iPhone
     @AppStorage("ipf") private var ipf: Bool = true // AppStorage to persist a value across launches
     @AppStorage("childId") var childId: String = "Default Value" // AppStorage to persist the current child ID
-    
     @Environment(\.horizontalSizeClass) var horizontalSizeClass // Environment variable to check size class
     @State private var isCompact = false // State variable to track if the layout is compact
     @Environment(\.colorScheme) var colorScheme
@@ -93,13 +92,18 @@ struct ParentView: View {
                 // Sheet for parent settings
                 .sheet(isPresented: $isShowingSetting, onDismiss: {
                     do {
+                       
                         try viewModel.fetchParent()
                         
                     } catch {
                         
                     }
                 }) {
-                    parentSettings(showSigninView: $showSigninView) // Present the settings view
+                    if isCompact {
+                        parentSettingsiPhone(showSigninView: $showSigninView)
+                    } else {
+                        parentSettings(showSigninView: $showSigninView) // Present the settings view
+                    }
                 }
                 .onAppear {
                     // Check the horizontal size class and set the isCompact state
