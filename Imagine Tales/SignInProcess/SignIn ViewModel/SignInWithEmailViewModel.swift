@@ -107,7 +107,7 @@ final class SignInWithEmailViewModel: ObservableObject {
     
     func addChild(age: String, dpUrl: String) async throws {
         let _ = try await UserManager.shared.addChild(userId: userId, name: name, age: age)
-        let _ = try await UserManager.shared.addChild2(userId: userId, name: name, age: age, username: username, imageUrl: dpUrl)
+        let _ = try await UserManager.shared.addChild2(userId: userId, name: name, age: age, username: username.replacingOccurrences(of: " ", with: "_"), imageUrl: dpUrl)
     }
     
     func setPin(pin: String) throws {

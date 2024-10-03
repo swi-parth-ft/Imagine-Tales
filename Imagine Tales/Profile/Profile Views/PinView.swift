@@ -115,7 +115,7 @@ struct PinView: View {
                         } label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 22)
-                                    .fill(.white)
+                                    .fill(colorScheme == .dark ? .gray : .white)
                                     .frame(width: 250, height: 55)
                                 HStack {
                                     Image("googleIcon")
@@ -129,7 +129,7 @@ struct PinView: View {
                         }
                     } else {
                         // Text fields for email and password if not using Google
-                        TextField("email", text: $reAuthModel.email)
+                        Text(reAuthModel.email)
                             .padding()
                             .frame(width: UIScreen.main.bounds.width * 0.5)
                             .background(colorScheme == .dark ? .black.opacity(0.2) : Color(hex: "#D0FFD0"))

@@ -14,14 +14,15 @@ struct CustomAlert: View {
     let message1: String
     let message2: String
     let onConfirm: () -> Void
-    
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         ZStack {
             if isShowing {
                 // Background overlay
-                RoundedRectangle(cornerRadius: 32)
-                    .fill(Color(hex: "#8AC640"))
+                BackGroundMesh()
                     .frame(width: 612, height: 321)
+                    .cornerRadius(23)
+                    .shadow(radius: 10)
                 
                 // Alert box
                 VStack(spacing: 16) {
@@ -31,7 +32,6 @@ struct CustomAlert: View {
                     
                     Text(message1)
                         .font(.system(size: 24))
-                        .padding(.top)
                     
                     Text(message2)
                         .font(.system(size: 24))
@@ -41,11 +41,11 @@ struct CustomAlert: View {
                             isShowing = false
                         }) {
                             Text("Stay and Play!")
-                                .foregroundColor(.black)
-                                .font(.system(size: 24))
+                                .foregroundColor(colorScheme == .dark ? .white : .black)
+                                .font(.custom("ComicNeue-Bold", size: 24))
                                 .padding()
                                 .frame(width: 266, height: 70)
-                                .background(Color(hex: "#D0FFD0"))
+                                .background(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#F2F2DB"))
                                 .cornerRadius(16)
                         }
                         
@@ -55,7 +55,7 @@ struct CustomAlert: View {
                         }) {
                             Text("Yes, Log Me Out")
                                 .foregroundColor(.white)
-                                .font(.system(size: 24))
+                                .font(.custom("ComicNeue-Bold", size: 24))
                                 .padding()
                                 .frame(width: 266, height: 70)
                                 .background(Color(hex: "#FF6F61"))

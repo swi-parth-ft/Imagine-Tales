@@ -54,6 +54,7 @@ final class ReAuthentication: ObservableObject {
                 print("Reauthentication failed: \(error.localizedDescription)") // Log the error
             } else {
                 // Reauthentication was successful
+                
                 print("Reauthentication successful.") // Log success
                 self.reAuthenticated = true // Update reAuthenticated status
             }

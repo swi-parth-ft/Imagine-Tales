@@ -11,7 +11,7 @@ import SwiftUI
 struct DpSelection: View {
     @Binding var selectedImageName: String // Binding to keep track of the selected image
     // Array of image names representing available profile pictures
-    let images: [String] = ["dp2", "dp1", "dp3", "dp4", "dp5", "dp6", "dp7", "dp8", "dp9", "dp10", "dp11", "dp12"]
+    let images: [String] = ["dp2", "dp1", "dp3", "dp4", "dp5", "dp6", "dp7", "dp8", "dp9", "dp10", "dp11", "dp12", "dp13", "dp14", "dp15", "dp16", "dp17", "dp18", "dp19", "dp20", "dp21", "dp22", "dp23"]
     
     // Define a flexible grid layout with 3 columns
     let columns = [
