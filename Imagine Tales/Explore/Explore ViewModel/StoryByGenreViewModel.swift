@@ -31,6 +31,7 @@ final class StoryByGenreViewModel: ObservableObject {
                     try? document.data(as: Story.self) // Decode each document into a Story object
                 } ?? [] // Default to an empty array if parsing fails
                 
+                self.stories.sort { $0.dateCreated! > $1.dateCreated!}
                 // Debug print to check the fetched stories
                 print(self.stories)
             }

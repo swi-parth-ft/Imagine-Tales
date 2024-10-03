@@ -28,7 +28,8 @@ final class FriendProfileViewModel: ObservableObject {
             self.story = querySnapshot?.documents.compactMap { document in
                 try? document.data(as: Story.self)
             } ?? []
-            print(self.story)
+            
+            self.story.sort(by: { $0.dateCreated! > $1.dateCreated! })
             
         }
     }
@@ -325,7 +326,7 @@ struct FriendProfileView: View {
                         .padding(.bottom)
                     }
                     
-                    Text("\(viewModel.child?.name ?? "Loading...")'s Stories")
+                    Text("\(viewModel.child?.name ?? "Loading...")'s Stories (\(viewModel.story.count))")
                         .font(.title2)
                     if viewModel.story.isEmpty {
                         ContentUnavailableView {

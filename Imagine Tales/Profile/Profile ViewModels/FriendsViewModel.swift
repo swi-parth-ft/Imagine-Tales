@@ -192,6 +192,7 @@ final class FriendsViewModel: ObservableObject {
                 switch result {
                 case .success(let document):
                     self.children.append(document) // Append the fetched document to the children array
+                    self.children.sort { $0.username < $1.username }
                 case .failure(let error):
                     print(error.localizedDescription) // Handle errors
                 }

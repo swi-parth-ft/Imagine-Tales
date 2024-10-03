@@ -16,6 +16,7 @@ struct FriendsView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         NavigationStack {
@@ -35,14 +36,15 @@ struct FriendsView: View {
                                         VStack {
                                             ZStack {
                                                 Circle()
-                                                    .fill(Color.white)
+                                                    .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white)
                                                     .frame(width: 170)
                                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                                 AsyncDp(urlString: friend.profileImage, size: 150) // Asynchronous loading of friend's profile image
                                             }
                                             .padding()
                                             Text(friend.username) // Displaying the friend's username
-                                                .foregroundStyle(.black)
+                                                .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                
                                         }
                                         .padding()
                                     }

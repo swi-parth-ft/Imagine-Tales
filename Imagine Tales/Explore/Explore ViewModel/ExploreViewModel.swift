@@ -72,7 +72,11 @@ final class ExploreViewModel: ObservableObject {
             
             // Decode stories and group them by genre
             let stories = documents.compactMap { try? $0.data(as: Story.self) }
-            self?.storiesByGenre = Dictionary(grouping: stories, by: { $0.genre })
+         //   self?.storiesByGenre = Dictionary(grouping: stories, by: { $0.genre })
+          
+            // Group stories by genre and sort them by timeStamp
+                    self?.storiesByGenre = Dictionary(grouping: stories, by: { $0.genre })
+                .mapValues { $0.sorted(by: { $0.dateCreated! > $1.dateCreated! }) }
         }
     }
 }
