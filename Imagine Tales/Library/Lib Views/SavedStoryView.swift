@@ -33,7 +33,7 @@ struct SavedStoryView: View {
     var body: some View {
         NavigationStack {
             // Check if there are no saved stories
-            if viewModel.savedStories.isEmpty {
+            if viewModel.stories.isEmpty {
                 // Display a view indicating that no stories are saved
                 ContentUnavailableView {
                     Label("No Saved Stories Yet", systemImage: "book.fill") // Title with an icon
@@ -46,14 +46,16 @@ struct SavedStoryView: View {
                 .listRowBackground(Color.clear) // Clear background for the unavailable content view
                 .onAppear {
                     // Fetch saved stories when the view appears
-                    viewModel.getSavedStories(forChild: childId)
+                    Task {
+                        await viewModel.getMySavedStories(childId: childId)
+                    }
                 }
             }
                 
             
             ScrollView {
                 LazyVGrid(columns: orientation.isLandscape ? columnsLandscape : columns, spacing: 23) {
-                            ForEach(viewModel.savedStories, id: \.id) { story in
+                    ForEach(viewModel.stories, id: \.id) { story in
                                 ZStack {
                                     // Load the story image asynchronously
                                     AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
@@ -146,6 +148,14 @@ struct SavedStoryView: View {
                                         .padding(.bottom, 10)
                                     }
                                 }
+                        if story == viewModel.stories.last {
+                            ProgressView()
+                                .onAppear {
+                                    Task {
+                                        await viewModel.getMySavedStories(isLoadMore: true, childId: childId)
+                                    }
+                                }
+                        }
                             }
                         }
                         .padding()
@@ -157,12 +167,13 @@ struct SavedStoryView: View {
             .navigationTitle("Saved Stories") // Set the title of the navigation bar
             .onAppear {
                 // Fetch saved stories when the view appears
-                viewModel.getSavedStories(forChild: childId)
+               // viewModel.getSavedStories(forChild: childId)
+                Task {
+                    await viewModel.getMySavedStories(childId: childId)
+                }
+                
             }
-            .onChange(of: reload) { // Observe changes to the reload binding
-                // Fetch saved stories again when reload is triggered
-                viewModel.getSavedStories(forChild: childId)
-            }
+      
           
 
         }
