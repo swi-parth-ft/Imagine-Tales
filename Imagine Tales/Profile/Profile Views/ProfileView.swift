@@ -159,12 +159,18 @@ struct ProfileView: View {
                     .padding([.trailing, .leading])
                     // Button to toggle between "Your Stories" and "Shared with you"
                     HStack(alignment: .bottom) {
-                        Text(isShowingSharedStories ? "Shared with you (\(viewModel.sharedStories.count))" : "Your Stories (\(parentViewModel.story.count))")
+                        Text(isShowingSharedStories ? "Shared with you (\(viewModel.sharedStories.count))" : "Your Stories (\(parentViewModel.storyCount))")
                             .font(.title2)
                         Spacer()
                         Button(isShowingSharedStories ? "Your Stories" : "Shared with you", systemImage: isShowingSharedStories ? "book.fill" : "paperplane.fill") {
                             withAnimation {
                                 isShowingSharedStories.toggle() // Toggle shared stories view
+                                if !isShowingSharedStories {
+                                    parentViewModel.story = []
+                                    Task {
+                                        await parentViewModel.getStorie(isLoadMore: false, childId: childId)
+                                    }
+                                }
                             }
                         }
                         .padding()
@@ -285,6 +291,15 @@ struct ProfileView: View {
                                                     .padding(.bottom, 10)
                                                 }
                                             }
+                                            
+                                            if story == parentViewModel.story.last {
+                                                ProgressView()
+                                                    .onAppear {
+                                                        Task {
+                                                            await parentViewModel.getStorie(isLoadMore: true, childId: childId)
+                                                        }
+                                                    }
+                                            }
                                         }
                                     }
                                     .padding()
@@ -295,12 +310,14 @@ struct ProfileView: View {
                         }
                         .onAppear {
                             // Fetch user's stories and friend count on appear
-                            do {
-                                try parentViewModel.getStory(childId: childId)
-                                viewModel.getFriendsCount(childId: childId)
-                            } catch {
-                                print(error.localizedDescription)
+                            Task {
+                                await parentViewModel.getStorie(isLoadMore: false, childId: childId)
                             }
+                            
+//                                try parentViewModel.getStory(childId: childId)
+                                
+                                viewModel.getFriendsCount(childId: childId)
+                          
                         }
                         
                     } else {
@@ -386,9 +403,12 @@ struct ProfileView: View {
                     viewModel.fetchChild(ChildId: childId)
                     viewModel.getFriendsCount(childId: childId)
                     try? viewModel.getPin()
-                    
+//                    Task {
+//                        await parentViewModel.getStorie(isLoadMore: true, childId: childId)
+//                    }
                     do {
-                        try parentViewModel.getStory(childId: childId)
+                        
+                       // try parentViewModel.getStory(childId: childId)
                     } catch {
                         print(error.localizedDescription)
                     }
@@ -420,6 +440,8 @@ struct ProfileView: View {
             .navigationTitle("Hey, \(viewModel.child?.name ?? "Loading...")") // Navigation title
             .onAppear {
                 // Load user data and stories on appear
+                parentViewModel.countDocumentsWithChildId(childId: childId)
+                
                 try? viewModel.loadUser()
                 viewModel.fetchChild(ChildId: childId)
                 viewModel.getFriendsCount(childId: childId)

@@ -23,7 +23,7 @@ final class ParentViewModel: ObservableObject {
     @Published var numberOfFriends = 0 // Count of friends for the selected child
     @Published var imageUrl = "" // URL for the child's image
     @Published var comment = "" // Parent's review comment
-
+    @Published var storyCount: Int = 0
     // Fetch reviews and comments for a specific story
     func fetchStoryAndReview(storyID: String) {
         let db = Firestore.firestore()
@@ -146,6 +146,50 @@ final class ParentViewModel: ObservableObject {
             print(self.story) // Print fetched stories
         }
     }
+    private var lastDocument: DocumentSnapshot? = nil
+    private let limit = 10  // Set a limit of 10 stories per batch
+    
+    // Function to load stories with pagination
+    @MainActor
+    func getStorie(isLoadMore: Bool = false, childId: String) async {
+        // Reset the stories and pagination if not loading more
+        if !isLoadMore {
+            story = []
+            lastDocument = nil
+        }
+        
+        do {
+            // Fetch a batch of stories from Firestore
+            let (newStories, lastDoc) = try await StoriesManager.shared.getAllMyStories(count: limit, childId: childId, lastDocument: lastDocument)
+            
+            // Update UI in main thread
+            DispatchQueue.main.async {
+                self.story.append(contentsOf: newStories)
+                self.lastDocument = lastDoc // Update last document for pagination
+            }
+        } catch {
+            print("Error fetching stories: \(error.localizedDescription)")
+        }
+    }
+    
+    func countDocumentsWithChildId(childId: String) {
+            let db = Firestore.firestore()
+            let collectionRef = db.collection("Story")
+
+            // Perform a filtered aggregation query based on childId
+            collectionRef.whereField("childId", isEqualTo: childId)
+                .count
+                .getAggregation(source: .server) { (snapshot, error) in
+                    if let error = error {
+                        print("Error fetching document count: \(error.localizedDescription)")
+                        return
+                    }
+
+                    if let snapshot = snapshot {
+                        self.storyCount = Int(truncating: snapshot.count)
+                    }
+                }
+        }
     
     // Fetch parent details from Firestore
     func fetchParent() throws {

@@ -136,6 +136,7 @@ final class ProfileViewModel: ObservableObject {
             }
         }
     }
+  
 
     /// Fetch the entire story details for a given story ID
     func fetchWholeStory(storyId: String, fromId: String, id: String) {

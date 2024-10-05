@@ -15,8 +15,11 @@ final class FriendProfileViewModel: ObservableObject {
     @Published var story: [Story] = []
     @Published var profileImage = ""
     @Published var isFriendRequest = false
-    
+    @Published var storyCount: Int = 0
     @Published var status = ""
+    private var lastDocument: DocumentSnapshot? = nil
+    private let limit = 10  // Set a limit of 10 stories per batch
+    
     func getStory(childId: String) throws {
        
         Firestore.firestore().collection("Story").whereField("childId", isEqualTo: childId).whereField("status", isEqualTo: "Approve").getDocuments() { (querySnapshot, error) in
@@ -33,6 +36,50 @@ final class FriendProfileViewModel: ObservableObject {
             
         }
     }
+    
+    func getStoryCount(childId: String) {
+            let db = Firestore.firestore()
+            let collectionRef = db.collection("Story")
+
+            // Perform a filtered aggregation query based on childId
+            collectionRef.whereField("childId", isEqualTo: childId).whereField("status", isEqualTo: "Approve")
+                .count
+                .getAggregation(source: .server) { (snapshot, error) in
+                    if let error = error {
+                        print("Error fetching document count: \(error.localizedDescription)")
+                        return
+                    }
+
+                    if let snapshot = snapshot {
+                        self.storyCount = Int(truncating: snapshot.count)
+                    }
+                }
+        }
+
+    
+    // Function to load stories with pagination
+    @MainActor
+    func getStorie(isLoadMore: Bool = false, childId: String) async {
+        // Reset the stories and pagination if not loading more
+        if !isLoadMore {
+            story = []
+            lastDocument = nil
+        }
+        
+        do {
+            // Fetch a batch of stories from Firestore
+            let (newStories, lastDoc) = try await StoriesManager.shared.getAllMyFriendsStories(count: limit, childId: childId, lastDocument: lastDocument)
+            
+            // Update UI in main thread
+            DispatchQueue.main.async {
+                self.story.append(contentsOf: newStories)
+                self.lastDocument = lastDoc // Update last document for pagination
+            }
+        } catch {
+            print("Error fetching stories: \(error.localizedDescription)")
+        }
+    }
+
     
     func fetchChild(ChildId: String) {
         let docRef = Firestore.firestore().collection("Children2").document(ChildId)
@@ -173,7 +220,7 @@ struct FriendProfileView: View {
                     ScrollView {
                         Spacer()
                             .frame(height: orientation.isLandscape ? UIScreen.main.bounds.height * 0.35 : UIScreen.main.bounds.height * 0.31)
-                        Text("\(viewModel.child?.name ?? "Loading...")'s Stories (\(viewModel.story.count))")
+                        Text("\(viewModel.child?.name ?? "Loading...")'s Stories (\(viewModel.storyCount))")
                             .font(.title2)
                         
                         if viewModel.story.isEmpty {
@@ -278,6 +325,15 @@ struct FriendProfileView: View {
                                                 }
                                             }
                                         }
+                                        
+                                        if story == viewModel.story.last {
+                                            ProgressView()
+                                                .onAppear {
+                                                    Task {
+                                                        await viewModel.getStorie(isLoadMore: true, childId: friendId)
+                                                    }
+                                                }
+                                        }
                                     }
                                 }
                                 .padding()
@@ -286,15 +342,18 @@ struct FriendProfileView: View {
                             StoryFromProfileView(story: story)
                     }
                     .onAppear {
-                        do {
+                        viewModel.getStoryCount(childId: friendId)
+                        Task {
+                            
+                            await viewModel.getStorie(childId: friendId)
+                        }
+                
                             viewModel.fetchChild(ChildId: friendId)
-                            try viewModel.getStory(childId: friendId)
+                          //  try viewModel.getStory(childId: friendId)
                             viewModel.getFriendsCount(childId: friendId)
                             viewModel.checkFriendRequest(childId: childId, friendId: friendId)
                             
-                        } catch {
-                            print(error.localizedDescription)
-                        }
+                       
                     }
                     VStack {
                         ZStack(alignment: .top) {

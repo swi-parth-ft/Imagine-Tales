@@ -357,7 +357,7 @@ struct StoryFromProfileView: View {
         
         ZStack {
             
-            colorScheme == .dark ? Color(hex: "#5A6D2A").ignoresSafeArea() : Color(hex: "#8AC640").ignoresSafeArea()
+            BackGroundMesh().ignoresSafeArea()
             VStack {
                 
                 List {

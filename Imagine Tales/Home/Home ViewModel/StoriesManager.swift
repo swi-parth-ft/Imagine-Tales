@@ -51,4 +51,41 @@ class StoriesManager {
         let stories = try snapshot.documents.map { try $0.data(as: Story.self) }
         return (stories, snapshot.documents.last) // Return last document for pagination
     }
+    
+    func getAllMyStories(count: Int, childId: String, lastDocument: DocumentSnapshot?) async throws -> (stories: [Story], lastDocument: DocumentSnapshot?) {
+        
+        var query: Query = storiesCollection
+            .whereField("childId", isEqualTo: childId)
+            .order(by: "dateCreated", descending: true)  // Order by date
+        
+        // Start query after last document if pagination exists
+        if let lastDoc = lastDocument {
+            query = query.start(afterDocument: lastDoc)
+        }
+        
+        // Limit the results
+        let snapshot = try await query.limit(to: count).getDocuments()
+        
+        let stories = try snapshot.documents.map { try $0.data(as: Story.self) }
+        return (stories, snapshot.documents.last) // Return last document for pagination
+    }
+    
+    func getAllMyFriendsStories(count: Int, childId: String, lastDocument: DocumentSnapshot?) async throws -> (stories: [Story], lastDocument: DocumentSnapshot?) {
+        
+        var query: Query = storiesCollection
+            .whereField("status", isEqualTo: "Approve")
+            .whereField("childId", isEqualTo: childId)
+            .order(by: "dateCreated", descending: true)  // Order by date
+        
+        // Start query after last document if pagination exists
+        if let lastDoc = lastDocument {
+            query = query.start(afterDocument: lastDoc)
+        }
+        
+        // Limit the results
+        let snapshot = try await query.limit(to: count).getDocuments()
+        
+        let stories = try snapshot.documents.map { try $0.data(as: Story.self) }
+        return (stories, snapshot.documents.last) // Return last document for pagination
+    }
 }

@@ -18,16 +18,18 @@ struct ExploreView: View {
     @State private var imageOffset = CGSize.zero // Track image offset for drag gestures
     @State private var currentIndex = 0 // Track the currently displayed story index
     @Environment(\.colorScheme) var colorScheme
-    
+    @State var counter: Int = 0 // Counter for gesture effects
+    @State var origin: CGPoint = .zero // Origin point for ripple effect
+    @State private var offset = CGSize.zero // Offset for any animation (unused)
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(alignment: .leading) {
                 ZStack {
                     // TabView for displaying a carousel of stories
                     TabView(selection: $currentIndex) {
                         ForEach(0..<min(viewModel.topStories.count, 3), id: \.self) { index in
                             let story = viewModel.topStories[index] // Get the current story
-                            NavigationLink(destination: StoryFromProfileView(story: story)) {
+                            
                                 ZStack {
                                     // Load the story image asynchronously
                                     AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
@@ -46,6 +48,7 @@ struct ExploreView: View {
                                                 .clipped()
                                                 .cornerRadius(30)
                                                 .shadow(radius: 5)
+                                                
                                             
                                         case .failure(_):
                                             // Placeholder for failed load
@@ -79,66 +82,81 @@ struct ExploreView: View {
                                     // Display story title and genre
                                     VStack {
                                         Spacer()
-                                        ZStack {
-                                            Text(story.title)
+                                        VStack {
+                                            Text(story.title.trimmingCharacters(in: .newlines))
                                                 .font(.system(size: 46))
                                                 .foregroundStyle(.white)
                                                 .padding()
                                             
-                                            HStack {
-                                                Text(story.genre)
-                                                    .font(.system(size: 32))
-                                                    .foregroundStyle(.white)
-                                                Circle()
-                                                    .foregroundStyle(.white)
-                                                    .frame(width: 15)
-                                                    .padding(.horizontal)
-                                                Text("\(story.likes) Likes")
-                                                    .font(.system(size: 32))
-                                                    .foregroundStyle(.white)
+                                            if isFullHeight {
+                                                Spacer()
+                                                VStack {
+                                                    
+                                                    HStack(alignment: .center) {
+                                                        Text(story.genre)
+                                                            .font(.system(size: 32))
+                                                            .foregroundStyle(.white)
+                                                        Circle()
+                                                            .foregroundStyle(.white)
+                                                            .frame(width: 15)
+                                                            .padding(.horizontal)
+                                                        Text("\(story.likes) Likes")
+                                                            .font(.system(size: 32))
+                                                            .foregroundStyle(.white)
+                                                        
+                                                        
+                                                    }
+                                                    
+                                                    NavigationLink(destination: StoryFromProfileView(story: story)) {
+                                                        Text("Read")
+                                                            .frame(width: UIScreen.main.bounds.width * 0.35)
+                                                        .padding()
+                                                        .font(.system(size: 16))
+                                                        .background(Color(hex: "#FF6F61"))
+                                                        .foregroundStyle(.white)
+                                                        .cornerRadius(16)
+                                                    }
+                                                }
+                                                .padding(.bottom)
                                             }
-                                            .padding(.top, 30)
-                                        }
+                                            
+                                            
+                                        }.padding()
                                     }
+                                    .padding(.bottom)
                                     .frame(height: isFullHeight ? 600 : 300)
                                     .ignoresSafeArea()
                                 }
+                                .clipShape(RoundedCorners(radius: 50, corners: [.bottomLeft, .bottomRight]))
+                                .onPressingChanged { point in
+                                    if let point {
+                                        self.origin = point
+                                        self.counter += 1
+                                    }
+                                }
+                                .modifier(RippleEffect(at: self.origin, trigger: self.counter)) // Custom ripple effect
+                                .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20) // Adds shadow at the bottom
+                              //  .shadow(radius: 20)
+                                .ignoresSafeArea()
+                                .onTapGesture {
+                                    withAnimation {
+                                        isFullHeight.toggle()
+                                    }
+                                }
                                 .tag(index) // Tag for identifying the current story
-                            }
+                            
                         }
                     }
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic)) // Enable pagination indicators
-                    .shadow(radius: 20)
-                    .ignoresSafeArea()
-                    .gesture(
-                        // Drag gesture for expanding and collapsing the image view
-                        DragGesture()
-                            .onChanged { value in
-                                imageOffset = value.translation // Update image offset during drag
-                            }
-                            .onEnded { value in
-                                let verticalAmount = value.translation.height
-                                // Expand or collapse based on drag direction
-                                if verticalAmount > 15 {
-                                    withAnimation {
-                                        isFullHeight = true // Expand
-                                    }
-                                } else if verticalAmount < -15 {
-                                    withAnimation {
-                                        isFullHeight = false // Collapse
-                                    }
-                                } else {
-                                    withAnimation {
-                                        imageOffset = .zero // Reset offset
-                                    }
-                                }
-                            }
-                    )
+                    
                 }
                 .frame(width: UIScreen.main.bounds.width + 30, height: isFullHeight ? 600 : 300)
                 .ignoresSafeArea()
                 
                 Spacer()
+                Text("Stories By Genre")
+                    .font(.custom("ComicNeue-Bold", size: 32))
+                    .padding(.leading, 30)
                 // List to display stories grouped by genre
                 List {
                     ForEach(viewModel.storiesByGenre.keys.sorted(), id: \.self) { genre in
@@ -256,7 +274,7 @@ struct ExploreView: View {
                 }
                 .ignoresSafeArea()
                 .scrollContentBackground(.hidden)
-                .navigationTitle("Stories by Genre") // Set navigation title
+                //.navigationTitle("Stories by Genre") // Set navigation title
                 .padding(.bottom)
                 .onAppear {
                     viewModel.fetchStories() // Fetch stories on appear

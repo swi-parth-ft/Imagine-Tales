@@ -22,17 +22,24 @@ struct StoryByGenreView: View {
             GridItem(.flexible())
         ]
     
+    let columnsLandscape = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     @State private var retryCount = 0 // Count for retry attempts when loading images
     @State private var maxRetryAttempts = 3 // Maximum number of retry attempts
     @State private var retryDelay = 2.0 // Delay between retries
     @State private var selectedStory: Story? = nil
+    @EnvironmentObject var orientation: OrientationManager
     var body: some View {
         NavigationStack {
             ZStack {
                 BackGroundMesh() // Background view for the interface
                 
                 ScrollView {
-                            LazyVGrid(columns: columns, spacing: 23) {
+                    LazyVGrid(columns: orientation.isLandscape ? columnsLandscape : columns, spacing: 23) {
                                 ForEach(viewModel.stories, id: \.id) { story in
                                     ZStack {
                                         // Load the story image asynchronously
@@ -40,14 +47,14 @@ struct StoryByGenreView: View {
                                             switch phase {
                                             case .empty:
                                                 MagicView()
-                                                    .frame(width: UIScreen.main.bounds.width * 0.45, height: 500)
+                                                    .frame(width: orientation.isLandscape ? UIScreen.main.bounds.width * 0.30 : UIScreen.main.bounds.width * 0.45, height: 500)
                                                 
                                             case .success(let image):
                                                 // Successfully loaded image
                                                 image
                                                     .resizable()
                                                     .scaledToFill()
-                                                    .frame(width: UIScreen.main.bounds.width * 0.45, height: 500)
+                                                    .frame(width: orientation.isLandscape ? UIScreen.main.bounds.width * 0.30 : UIScreen.main.bounds.width * 0.45, height: 500)
                                                     .clipped()
                                                     .cornerRadius(16)
                                                 
@@ -56,7 +63,7 @@ struct StoryByGenreView: View {
                                                 Image(systemName: "photo")
                                                     .resizable()
                                                     .scaledToFit()
-                                                    .frame(width: UIScreen.main.bounds.width * 0.45, height: 500)
+                                                    .frame(width: orientation.isLandscape ? UIScreen.main.bounds.width * 0.30 : UIScreen.main.bounds.width * 0.45, height: 500)
                                                     .cornerRadius(16)
                                                     .padding()
                                                     .onAppear {
@@ -79,7 +86,7 @@ struct StoryByGenreView: View {
                                             ZStack {
                                                 RoundedRectangle(cornerRadius: 0)
                                                     .fill(Color.white.opacity(0.8))
-                                                    .frame(width: UIScreen.main.bounds.width * 0.43, height: 200)
+                                                    .frame(width: orientation.isLandscape ? UIScreen.main.bounds.width * 0.28 : UIScreen.main.bounds.width * 0.43, height: 200)
                                                     .cornerRadius(16)
                                                 
                                                 VStack(spacing: 0) {
@@ -111,7 +118,7 @@ struct StoryByGenreView: View {
                                                             Text("Read Now")
                                                             Image(systemName: "book.pages")
                                                         }
-                                                        .frame(width: UIScreen.main.bounds.width * 0.35)
+                                                        .frame(width: orientation.isLandscape ? UIScreen.main.bounds.width * 0.12 : UIScreen.main.bounds.width * 0.35)
                                                     }
                                                     .padding()
                                                     .font(.system(size: 16))
@@ -126,6 +133,15 @@ struct StoryByGenreView: View {
                                             .padding(.bottom, 10)
                                         }
                                     }
+                                    
+                                    if story == viewModel.stories.last {
+                                        ProgressView()
+                                            .onAppear {
+                                                Task {
+                                                    await viewModel.getStorie(isLoadMore: true, genre: genre)
+                                                }
+                                            }
+                                    }
                                 }
                             }
                             .padding()
@@ -136,7 +152,9 @@ struct StoryByGenreView: View {
                 }
                 .onAppear {
                     // Fetch stories for the selected genre when the view appears
-                    viewModel.fetchStories(genre: genre)
+                    Task {
+                        await viewModel.getStorie(genre: genre)
+                    }
                 }
             
                 

@@ -36,4 +36,29 @@ final class StoryByGenreViewModel: ObservableObject {
                 print(self.stories)
             }
     }
+    
+    private var lastDocument: DocumentSnapshot? = nil
+    private let limit = 10  // Set a limit of 10 stories per batch
+    
+    @MainActor
+    func getStorie(isLoadMore: Bool = false, genre: String) async {
+        // Reset the stories and pagination if not loading more
+        if !isLoadMore {
+            stories = []
+            lastDocument = nil
+        }
+        
+        do {
+            // Fetch a batch of stories from Firestore
+            let (newStories, lastDoc) = try await StoriesManager.shared.getAllStories(count: limit, genre: genre, lastDocument: lastDocument)
+            
+            // Update UI in main thread
+            DispatchQueue.main.async {
+                self.stories.append(contentsOf: newStories)
+                self.lastDocument = lastDoc // Update last document for pagination
+            }
+        } catch {
+            print("Error fetching stories: \(error.localizedDescription)")
+        }
+    }
 }
