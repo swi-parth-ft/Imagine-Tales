@@ -362,7 +362,12 @@ final class HomeViewModel: ObservableObject {
             
             // Update UI in main thread
             DispatchQueue.main.async {
-                self.newStories.append(contentsOf: newStories)
+                for newStory in newStories {
+                    if !self.newStories.contains(where: { $0.id == newStory.id }) {
+                        self.newStories.append(newStory)
+                    }
+                }
+             //   self.newStories.append(contentsOf: newStories)
                 self.lastDocument = lastDoc // Update last document for pagination
             }
         } catch {
@@ -388,7 +393,12 @@ final class HomeViewModel: ObservableObject {
             
             // Update UI in main thread
             DispatchQueue.main.async {
-                self.newStories.append(contentsOf: newStories)
+                for newStory in newStories {
+                    if !self.newStories.contains(where: { $0.id == newStory.id }) {
+                        self.newStories.append(newStory)
+                    }
+                }
+               // self.newStories.append(contentsOf: newStories)
                 
                 self.lastDocument = lastDoc // Update last document for pagination
             }

@@ -164,7 +164,12 @@ final class ParentViewModel: ObservableObject {
             
             // Update UI in main thread
             DispatchQueue.main.async {
-                self.story.append(contentsOf: newStories)
+                for newStory in newStories {
+                    if !self.story.contains(where: { $0.id == newStory.id }) {
+                        self.story.append(newStory)
+                        }
+                    }
+               // self.story.append(contentsOf: newStories)
                 self.lastDocument = lastDoc // Update last document for pagination
             }
         } catch {

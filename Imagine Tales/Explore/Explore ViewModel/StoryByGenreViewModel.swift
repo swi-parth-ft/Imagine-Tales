@@ -54,9 +54,17 @@ final class StoryByGenreViewModel: ObservableObject {
             
             // Update UI in main thread
             DispatchQueue.main.async {
-                self.stories.append(contentsOf: newStories)
-                self.lastDocument = lastDoc // Update last document for pagination
+                for newStory in newStories {
+                    if !self.stories.contains(where: { $0.id == newStory.id }) {
+                        self.stories.append(newStory)
+                    }
+                }
             }
+            
+            // self.stories.append(contentsOf: newStories)
+            self.lastDocument = lastDoc // Update last document for pagination
+        
+            
         } catch {
             print("Error fetching stories: \(error.localizedDescription)")
         }
