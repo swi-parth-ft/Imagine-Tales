@@ -2112,7 +2112,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "310"
             endingLineNumber = "310"
-            landmarkName = "fetchChildren()"
+            landmarkName = "sendLikeNotification(fromUserId:toUserId:storyId:storyTitle:type:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2152,7 +2152,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "F76D45D0-4D68-4B2D-81BE-297A71AB7111"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/Imagine_TalesApp.swift"
@@ -2168,7 +2168,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "41C70F01-B23D-47BF-95A2-EE03A8CE2DC2"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/Imagine_TalesApp.swift"
@@ -2280,7 +2280,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "BFEF6975-E311-42C7-8F89-2394D041052C"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/Imagine_TalesApp.swift"
@@ -2296,7 +2296,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "83D80337-2F7C-4A33-BDD5-F77EBCB254D0"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/Imagine_TalesApp.swift"
@@ -2416,7 +2416,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "369"
             endingLineNumber = "369"
-            landmarkName = "sendStatusNotification(toUserId:storyId:storyTitle:type:status:)"
+            landmarkName = "getStorie(isLoadMore:genre:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2432,7 +2432,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "365"
             endingLineNumber = "365"
-            landmarkName = "sendLikeNotification(fromUserId:toUserId:storyId:storyTitle:type:)"
+            landmarkName = "getStorie(isLoadMore:genre:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2446,8 +2446,8 @@
             filePath = "Imagine Tales/Home/Home Views/HomeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2462,8 +2462,8 @@
             filePath = "Imagine Tales/Home/Home Views/HomeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2478,8 +2478,8 @@
             filePath = "Imagine Tales/Home/Home Views/HomeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2496,8 +2496,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "396"
             endingLineNumber = "396"
-            landmarkName = "HomeViewModel"
-            landmarkType = "3">
+            landmarkName = "getFollowingStories(isLoadMore:genre:childId:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2512,7 +2512,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "387"
             endingLineNumber = "387"
-            landmarkName = "sendShareNotification(fromId:toUserId:storyId:storyTitle:fromChildUsername:fromChildProfilePic:)"
+            landmarkName = "getFollowingStories(isLoadMore:genre:childId:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2526,8 +2526,8 @@
             filePath = "Imagine Tales/Home/Home Views/HomeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2544,7 +2544,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "391"
             endingLineNumber = "391"
-            landmarkName = "sendShareNotification(fromId:toUserId:storyId:storyTitle:fromChildUsername:fromChildProfilePic:)"
+            landmarkName = "getFollowingStories(isLoadMore:genre:childId:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2562,36 +2562,6 @@
             endingLineNumber = "51"
             landmarkName = "getAllFollowing(count:genre:ids:lastDocument:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "9C914D5D-E823-48D0-A3E6-BEE3E51E75F2 - 8f5fb9405a7ea607"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Imagine_Tales.StoriesManager.getAllFollowing(count: Swift.Int, genre: Swift.String, ids: Swift.Array&lt;Swift.String&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;) async throws -&gt; (stories: Swift.Array&lt;Imagine_Tales.Story&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;)"
-                  moduleName = "Imagine Tales.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Home/Home%20ViewModel/StoriesManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "51"
-                  endingLineNumber = "51">
-               </Location>
-               <Location
-                  uuid = "9C914D5D-E823-48D0-A3E6-BEE3E51E75F2 - e88a4f91607e35d6"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (__C.FIRQueryDocumentSnapshot) throws -&gt; Imagine_Tales.Story in Imagine_Tales.StoriesManager.getAllFollowing(count: Swift.Int, genre: Swift.String, ids: Swift.Array&lt;Swift.String&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;) async throws -&gt; (stories: Swift.Array&lt;Imagine_Tales.Story&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;)"
-                  moduleName = "Imagine Tales.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Home/Home%20ViewModel/StoriesManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "51"
-                  endingLineNumber = "51">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2624,64 +2594,6 @@
             endingLineNumber = "49"
             landmarkName = "getAllFollowing(count:genre:ids:lastDocument:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B0ABDE9B-60A9-4705-870B-72D77436926C - 7ef438f1bb7f638f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for Imagine_Tales.StoriesManager.getAllFollowing(count: Swift.Int, genre: Swift.String, ids: Swift.Array&lt;Swift.String&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;) async throws -&gt; (stories: Swift.Array&lt;Imagine_Tales.Story&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;)"
-                  moduleName = "Imagine Tales.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Home/Home%20ViewModel/StoriesManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "49"
-                  endingLineNumber = "49">
-               </Location>
-               <Location
-                  uuid = "B0ABDE9B-60A9-4705-870B-72D77436926C - 1531cfa13389a666"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for Imagine_Tales.StoriesManager.getAllFollowing(count: Swift.Int, genre: Swift.String, ids: Swift.Array&lt;Swift.String&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;) async throws -&gt; (stories: Swift.Array&lt;Imagine_Tales.Story&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;)"
-                  moduleName = "Imagine Tales.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Home/Home%20ViewModel/StoriesManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "49"
-                  endingLineNumber = "49">
-               </Location>
-               <Location
-                  uuid = "B0ABDE9B-60A9-4705-870B-72D77436926C - 8f5fb9405a7ea641"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Imagine_Tales.StoriesManager.getAllFollowing(count: Swift.Int, genre: Swift.String, ids: Swift.Array&lt;Swift.String&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;) async throws -&gt; (stories: Swift.Array&lt;Imagine_Tales.Story&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;)"
-                  moduleName = "Imagine Tales.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Home/Home%20ViewModel/StoriesManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "49"
-                  endingLineNumber = "49">
-               </Location>
-               <Location
-                  uuid = "B0ABDE9B-60A9-4705-870B-72D77436926C - 34ebf98789fd8820"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for Imagine_Tales.StoriesManager.getAllFollowing(count: Swift.Int, genre: Swift.String, ids: Swift.Array&lt;Swift.String&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;) async throws -&gt; (stories: Swift.Array&lt;Imagine_Tales.Story&gt;, lastDocument: Swift.Optional&lt;__C.FIRDocumentSnapshot&gt;)"
-                  moduleName = "Imagine Tales.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Home/Home%20ViewModel/StoriesManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "49"
-                  endingLineNumber = "49">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

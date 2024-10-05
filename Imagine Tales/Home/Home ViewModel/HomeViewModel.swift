@@ -344,7 +344,7 @@ final class HomeViewModel: ObservableObject {
     
   //  @Published var stories: [Story] = []
     private var lastDocument: DocumentSnapshot? = nil
-    private let limit = 3  // Set a limit of 10 stories per batch
+    private let limit = 10  // Set a limit of 10 stories per batch
     
     @Published var newStories: [Story] = []
     // Function to load stories with pagination

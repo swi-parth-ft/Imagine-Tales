@@ -25,149 +25,17 @@ struct ChildView: View {
     @State private var isShowingFriends = false
     @StateObject private var friendsViewModel = FriendsViewModel()
     @State private var isShowingScreenTime = false
-    
+    @State private var isLandscape = UIDevice.current.orientation.isLandscape
+
     var body: some View {
         NavigationStack {
             ZStack {
                 BackGroundMesh().ignoresSafeArea() // Custom background for the view
-                VStack(alignment: .center) {
-                    ZStack {
-                        VisualEffectBlur(blurStyle: .systemThinMaterial)
-                            .clipShape(RoundedCorners(radius: 50, corners: [.bottomLeft, .bottomRight]))
-                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                        VStack {
-                            if isiPhone {
-                                Spacer()
-                            }
-                            HStack {
-                                Spacer()
-                                VStack {
-                                    ZStack {
-                                        Circle()
-                                            .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white) // Background circle for profile image
-                                            .frame(width: isiPhone ? 250 / 2 : 250)
-                                        Image(child.profileImage.removeJPGExtension()) // Display profile image
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: isiPhone ? 100 : 200)
-                                            .cornerRadius(isiPhone ? 50 : 100)
-                                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                    }
-                                    .onPressingChanged { point in // Detect tapping on the profile image
-                                        if let point {
-                                            self.origin = point // Capture tap location
-                                            self.counter += 1 // Increment counter on tap
-                                        }
-                                    }
-                                    .modifier(RippleEffect(at: self.origin, trigger: self.counter)) // Add ripple effect on tap
-                                    .shadow(radius: 3, y: 2)
-                                    .rotation3DEffect(
-                                        .degrees(tiltAngle), // 3D tilt effect
-                                        axis: (x: 0, y: 1, z: 0)
-                                    )
-                                    .onAppear {
-                                        withAnimation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
-                                            tiltAngle = 10 // Control the tilt range
-                                        }
-                                    }
-                                    
-                                    Text("\(child.name)")
-                                        .font(.title)
-                                    
-                                    Text("@\(child.username)")
-                                        .font(.title2)
-                                        .foregroundStyle(.secondary)
-                                }
-                                
-                                HStack {
-                                    VStack {
-                                        HStack {
-                                            // Display child's username and stats
-                                            VStack {
-                                                Text("\(viewModel.numberOfFriends)") // Friends count
-                                                    .font(.system(size: 28))
-                                                Text("Friends")
-                                            }
-                                            .onTapGesture {
-                                                isShowingFriends.toggle()
-                                            }
-                                            .popover(isPresented: $isShowingFriends) {
-                                                List {
-                                                    ForEach(friendsViewModel.children) { child in
-                                                        Text(child.name)
-                                                    }
-                                                }
-                                                .scrollContentBackground(.hidden)
-                                                .frame(width: 200, height: 200)
-                                            }
-                                            Spacer()
-                                                .frame(width: !isiPhone ? 50 : 10)
-                                            VStack {
-                                                Text("\(viewModel.story.count)") // Stories count
-                                                    .font(.system(size: 28))
-                                                Text("Stories Posted")
-                                            }
-                                        }
-                                        .padding()
-                                        if !isiPhone {
-                                            Button {
-                                                childId = child.id // Set the selected child's ID
-                                                ipf = false // Update profile view state
-                                                viewModel.fetchProfileImage(dp: child.profileImage) // Fetch profile image
-                                                screenTimeViewModel.startScreenTime(for: childId) // Start tracking screen time
-                                                dismiss() // Dismiss the view
-                                            } label: {
-                                                HStack {
-                                                    Image(systemName: "lasso.sparkles")
-                                                    Text("Go to \(child.name)'s Playground!")
-                                                }
-                                                .font(.title2)
-                                                .padding()
-                                                .background(BackGroundMesh())
-                                                .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                                .cornerRadius(16)
-                                                .shadow(radius: 5)
-                                            }
-                                            
-                                        }
-                                    }
-                                }
-                                .padding()
-                                Spacer()
-                            }
-                            // .padding(.top, isiPhone ? 90 : 0)
-                            
-                            .padding(.leading)
-                        }
-                        .padding(.bottom, isiPhone ? 20 : 0)
-                        
-                    }
-                    
-                    .frame(width: UIScreen.main.bounds.width, height: isiPhone ? 350 : 450)
-                    
-                    if isiPhone {
-                        HStack {
-                            Text(isShowingScreenTime ? "Close" : "Show Screen Time")
-                                .padding()
-                                .frame(width: isShowingScreenTime ? 100 : UIScreen.main.bounds.width * 0.9)
-                                .background(VisualEffectBlur(blurStyle: .systemThinMaterial))
-                                .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                .cornerRadius(22)
-                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                .onTapGesture {
-                                    withAnimation {
-                                        isShowingScreenTime.toggle()
-                                    }
-                                }
-                            
-                            if isShowingScreenTime {
-                                Spacer()
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                    
+                ZStack(alignment: .center) {
                     List {
+                        Spacer()
+                            .frame(height: isiPhone ? 350 : 460)
+                            .listRowBackground(Color.white.opacity(0))
                         if isShowingScreenTime {
                             // Show the screen time chart for the child
                             ScreenTimeChartView(selectedChildId: child.id)
@@ -207,11 +75,195 @@ struct ChildView: View {
                     }
                     .padding(.top, -20)
                     .scrollContentBackground(.hidden) // Hide default background of the list
+                    VStack {
+                        ZStack {
+                            VStack {
+                                ZStack {
+                                    VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                        .clipShape(RoundedCorners(radius: 50, corners: [.bottomLeft, .bottomRight]))
+                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                    VStack {
+                                        if isiPhone {
+                                            Spacer()
+                                        }
+                                        HStack(alignment: .center) {
+                                            Spacer()
+                                            VStack {
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white) // Background circle for profile image
+                                                        .frame(width: isiPhone ? 250 / 2 : 250 * 0.8)
+                                                    Image(child.profileImage.removeJPGExtension()) // Display profile image
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: isiPhone ? 100 : 200 * 0.8)
+                                                        .cornerRadius(isiPhone ? 50 : 100)
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                }
+                                                .onPressingChanged { point in // Detect tapping on the profile image
+                                                    if let point {
+                                                        self.origin = point // Capture tap location
+                                                        self.counter += 1 // Increment counter on tap
+                                                    }
+                                                }
+                                                .modifier(RippleEffect(at: self.origin, trigger: self.counter)) // Add ripple effect on tap
+                                                .shadow(radius: 3, y: 2)
+                                                .rotation3DEffect(
+                                                    .degrees(tiltAngle), // 3D tilt effect
+                                                    axis: (x: 0, y: 1, z: 0)
+                                                )
+                                                .onAppear {
+                                                    withAnimation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                                                        tiltAngle = 10 // Control the tilt range
+                                                    }
+                                                }
+                                                
+                                                if isiPhone {
+                                                    Text("\(child.name)")
+                                                        .font(.title)
+                                                    
+                                                    Text("@\(child.username)")
+                                                        .font(.title2)
+                                                        .foregroundStyle(.secondary)
+                                                }
+                                                
+                                                
+                                            }
+                                            
+                                            HStack {
+                                                VStack {
+                                                    if !isiPhone {
+                                                        Text("\(child.name)")
+                                                            .font(.title)
+                                                        
+                                                        Text("@\(child.username)")
+                                                            .font(.title2)
+                                                            .foregroundStyle(.secondary)
+                                                    }
+                                                    HStack {
+                                                        // Display child's username and stats
+                                                        VStack {
+                                                            Text("\(viewModel.numberOfFriends)") // Friends count
+                                                                .font(.system(size: 28))
+                                                            Text("Friends")
+                                                        }
+                                                        .onTapGesture {
+                                                            isShowingFriends.toggle()
+                                                        }
+                                                        .popover(isPresented: $isShowingFriends) {
+                                                            List {
+                                                                ForEach(friendsViewModel.children) { child in
+                                                                    Text(child.name)
+                                                                }
+                                                            }
+                                                            .scrollContentBackground(.hidden)
+                                                            .frame(width: 200, height: 200)
+                                                        }
+                                                        Spacer()
+                                                            .frame(width: !isiPhone ? 50 : 10)
+                                                        VStack {
+                                                            Text("\(viewModel.story.count)") // Stories count
+                                                                .font(.system(size: 28))
+                                                            Text("Stories Posted")
+                                                        }
+                                                    }
+                                                    .padding()
+                                                    
+                                                }
+                                            }
+                                            .padding()
+                                            Spacer()
+                                        }
+                                        // .padding(.top, isiPhone ? 90 : 0)
+                                        
+                                        .padding(.leading)
+                                        
+                                        
+                                        
+                                    }
+                                    .padding(.bottom, isiPhone ? 20 : 0)
+                                    
+                                }
+                                .frame(width: UIScreen.main.bounds.width, height: isiPhone ? 300 : 350)
+                                if isiPhone || isLandscape {
+                                    HStack {
+                                        Text(isShowingScreenTime ? "Close" : "Show Screen Time")
+                                            .padding()
+                                            .frame(width: isShowingScreenTime ? 100 : isiPhone ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.3)
+                                            .background(VisualEffectBlur(blurStyle: .systemThinMaterial))
+                                            .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                            .cornerRadius(22)
+                                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                            .onTapGesture {
+                                                withAnimation {
+                                                    isShowingScreenTime.toggle()
+                                                }
+                                            }
+                                        
+                                        if isShowingScreenTime {
+                                            Spacer()
+                                        }
+                                        
+                                        if !isiPhone {
+                                            Spacer()
+                                        }
+                                    }
+                                    .padding(.horizontal)
+                                }
+                            }
+                            if !isiPhone {
+                                ZStack {
+                                    VStack {
+                                        Spacer()
+                                            Button {
+                                                childId = child.id // Set the selected child's ID
+                                                ipf = false // Update profile view state
+                                                viewModel.fetchProfileImage(dp: child.profileImage) // Fetch profile image
+                                                screenTimeViewModel.startScreenTime(for: childId) // Start tracking screen time
+                                                dismiss() // Dismiss the view
+                                            } label: {
+                                                HStack {
+                                                    Image(systemName: "lasso.sparkles")
+                                                    Text("Go to \(child.name)'s Playground!")
+                                                }
+                                                .font(.title2)
+                                                .padding()
+                                                .background(BackGroundMesh())
+                                                .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                .cornerRadius(16)
+                                                .shadow(radius: 10)
+                                            }
+                                            
+                                        
+                                    }
+                                }
+                                .frame(height: isLandscape ? 370 : 410)
+                        
+                            }
+                        }
+                        Spacer()
+                    }
+                    
+                    
+                    
                 }
                 .ignoresSafeArea(edges: .top)
                 .onAppear {
+                    // Add observer to listen for orientation changes
+                    NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: .main) { _ in
+                        // Update the state when the orientation changes
+                        isLandscape = UIDevice.current.orientation.isLandscape
+                        if isLandscape {
+                            isShowingScreenTime = false
+                        } else {
+                            isShowingScreenTime = true
+                        }
+                    }
                     if !isiPhone {
                         isShowingScreenTime = true
+                    }
+                    if isLandscape {
+                        isShowingScreenTime = false
                     }
                     friendsViewModel.fetchFriends(childId: childId)
                     // Fetch stories and friends count when the view appears
@@ -222,8 +274,12 @@ struct ChildView: View {
                     }
                     viewModel.getFriendsCount(childId: child.id) // Get friends count for the selected child
                 }
+                .onDisappear {
+                            // Remove observer when view disappears to prevent memory leaks
+                            NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
+                        }
             }
-            .navigationTitle(child.name) // Set the navigation title to the child's name
+            //.navigationTitle(child.name) // Set the navigation title to the child's name
             
         }
     }

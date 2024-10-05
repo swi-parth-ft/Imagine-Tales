@@ -23,6 +23,7 @@ struct HomeView: View {
     // Retrieve the childId stored in AppStorage (used for identifying the user)
     @AppStorage("childId") var childId: String = "Default Value"
     @State private var cat = "Following"
+    @EnvironmentObject var oriantation: OrientationManager
     var body: some View {
         NavigationStack {
             VStack {
@@ -118,6 +119,8 @@ struct HomeView: View {
             // Fetch stories and child-related data when the view appears
             .onAppear {
                 Task {
+                 
+                        await viewModel.getFollowingStories(genre: cat, childId: childId) // Fetch stories for the selected genre
                     
                     viewModel.fetchChild(ChildId: childId) // Fetch child information
                     viewModel.fetchFriends(childId: childId) // Fetch friend information

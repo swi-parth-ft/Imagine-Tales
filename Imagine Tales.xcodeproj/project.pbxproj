@@ -49,6 +49,7 @@
 		0711F3892C6DB68B006C86AA /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3882C6DB68B006C86AA /* GoogleSignIn */; };
 		0711F38B2C6DB68B006C86AA /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F38A2C6DB68B006C86AA /* GoogleSignInSwift */; };
 		0711F38D2C6DB698006C86AA /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F38C2C6DB698006C86AA /* FloatingTabBar */; };
+		073EFE842CB0C8E2004BC6AC /* OrientationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073EFE832CB0C8E2004BC6AC /* OrientationManager.swift */; };
 		073F2CEA2C6EC85200BCF6F0 /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 073F2CE92C6EC85200BCF6F0 /* FirebaseVertexAI-Preview */; };
 		073F2CED2C6F98D500BCF6F0 /* StoryLoading.json in Resources */ = {isa = PBXBuildFile; fileRef = 073F2CEC2C6F98D500BCF6F0 /* StoryLoading.json */; };
 		073F2CF02C6F9B4600BCF6F0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 073F2CEF2C6F9B4600BCF6F0 /* FirebaseFirestore */; };
@@ -154,6 +155,7 @@
 		0711F3772C6D7CDA006C86AA /* SignInAppleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInAppleHelper.swift; sourceTree = "<group>"; };
 		0711F3792C6D8BEB006C86AA /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		0711F37B2C6D96C5006C86AA /* imageLoading.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = imageLoading.json; sourceTree = "<group>"; };
+		073EFE832CB0C8E2004BC6AC /* OrientationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationManager.swift; sourceTree = "<group>"; };
 		073F2CEC2C6F98D500BCF6F0 /* StoryLoading.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StoryLoading.json; sourceTree = "<group>"; };
 		073F2CF12C6F9C1F00BCF6F0 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithEmailView.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 			isa = PBXGroup;
 			children = (
 				07D323432CA6F25200846FA3 /* Extentions .swift */,
+				073EFE832CB0C8E2004BC6AC /* OrientationManager.swift */,
 				0788C4222CA8BA5A00FA5E65 /* MagicView.swift */,
 				0701FBB32C8695D0004BEE9F /* AsyncImage.swift */,
 				079E924F2C89250A00433869 /* CustomAlert.swift */,
@@ -747,6 +750,7 @@
 				0701FB8D2C822816004BEE9F /* FriendsView.swift in Sources */,
 				0701FBB02C862845004BEE9F /* DpSelectionView.swift in Sources */,
 				07D323852CA7300000846FA3 /* StoryTextItem.swift in Sources */,
+				073EFE842CB0C8E2004BC6AC /* OrientationManager.swift in Sources */,
 				07D323A22CA7641700846FA3 /* FriendRequestView.swift in Sources */,
 				0711F3722C6D7244006C86AA /* SignInGoogleHelper.swift in Sources */,
 				0701FBAE2C861739004BEE9F /* SearchView.swift in Sources */,
@@ -938,8 +942,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -969,8 +973,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

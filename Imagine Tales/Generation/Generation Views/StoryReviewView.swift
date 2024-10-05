@@ -28,7 +28,7 @@ struct StoryReviewView: View {
     let moods = ["Happy", "Sad", "Excited", "Scared", "Curious", "Brave", "Funny", "Surprised", "Angry", "Relaxed", "Adventurous", "Mysterious", "Silly", "Love", "Confused", "Proud", "Nervous", "Sleepy", "Joyful", "Shy"]
     let moodEmojis = ["😊", "😢", "😃", "😱", "🤔", "💪", "😄", "😮", "😠", "😌", "🧭", "🕵️‍♂️", "🤪", "❤️", "😕", "😎", "😬", "😴", "😁", "😳"]
     @State private var shouldBurst: Bool = false // State to trigger the confetti burst
-    
+    @EnvironmentObject var orientation: OrientationManager
     func getRandom() {
         let totalDuration = 4.0 // Total duration for changing
         let interval = 0.7 // Change interval

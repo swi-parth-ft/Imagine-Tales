@@ -53,9 +53,16 @@ struct ProfileView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
+    
+    let columnsLandscape = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     @State private var retryCount = 0 // Count for retry attempts when loading images
     @State private var maxRetryAttempts = 3 // Maximum number of retry attempts
     @State private var retryDelay = 2.0 // Delay between retries
+    @EnvironmentObject var orientation: OrientationManager
     
     var body: some View {
         NavigationStack {
@@ -301,7 +308,7 @@ struct ProfileView: View {
                         
                         // Display stories shared with the user
                         List {
-                            Section("Shared with you (\(viewModel.sharedStories.count))") {
+                            
                                 if viewModel.sharedStories.isEmpty {
                                     // Placeholder when no shared stories are available
                                     ContentUnavailableView {
@@ -363,7 +370,7 @@ struct ProfileView: View {
                                         viewModel.fetchSharedStories(childId: childId) // Refresh shared stories after deletion
                                     }
                                 }
-                            }
+                            
                         }
                         .scrollContentBackground(.hidden)
                         .onAppear {

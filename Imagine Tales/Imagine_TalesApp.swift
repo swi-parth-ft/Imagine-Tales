@@ -46,6 +46,8 @@ struct Imagine_TalesApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @AppStorage("isOnboarding") var isOnboarding: Bool = true
     @StateObject var screenTimeManager = ScreenTimeManager()
+    @StateObject private var orientationManager = OrientationManager()
+
     
     var body: some Scene {
         WindowGroup {
@@ -55,6 +57,8 @@ struct Imagine_TalesApp: App {
                 RootView()
                     .environmentObject(screenTimeManager)
                     .environmentObject(AppState.shared)
+                    .environmentObject(orientationManager) // Inject globally
+                
             }
         }
     }
