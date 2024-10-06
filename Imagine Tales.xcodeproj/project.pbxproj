@@ -50,6 +50,10 @@
 		0711F38B2C6DB68B006C86AA /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F38A2C6DB68B006C86AA /* GoogleSignInSwift */; };
 		0711F38D2C6DB698006C86AA /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F38C2C6DB698006C86AA /* FloatingTabBar */; };
 		073EFE842CB0C8E2004BC6AC /* OrientationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073EFE832CB0C8E2004BC6AC /* OrientationManager.swift */; };
+		073EFE872CB2C9BA004BC6AC /* FriendProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073EFE862CB2C9BA004BC6AC /* FriendProfileViewModel.swift */; };
+		073EFE892CB2C9F3004BC6AC /* AgeRangeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073EFE882CB2C9F3004BC6AC /* AgeRangeButton.swift */; };
+		073EFE8D2CB2CA6C004BC6AC /* SignInBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073EFE8C2CB2CA6C004BC6AC /* SignInBG.swift */; };
+		073EFE8F2CB2CBC8004BC6AC /* FriendsShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073EFE8E2CB2CBC8004BC6AC /* FriendsShareView.swift */; };
 		073F2CEA2C6EC85200BCF6F0 /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 073F2CE92C6EC85200BCF6F0 /* FirebaseVertexAI-Preview */; };
 		073F2CED2C6F98D500BCF6F0 /* StoryLoading.json in Resources */ = {isa = PBXBuildFile; fileRef = 073F2CEC2C6F98D500BCF6F0 /* StoryLoading.json */; };
 		073F2CF02C6F9B4600BCF6F0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 073F2CEF2C6F9B4600BCF6F0 /* FirebaseFirestore */; };
@@ -156,6 +160,10 @@
 		0711F3792C6D8BEB006C86AA /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		0711F37B2C6D96C5006C86AA /* imageLoading.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = imageLoading.json; sourceTree = "<group>"; };
 		073EFE832CB0C8E2004BC6AC /* OrientationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationManager.swift; sourceTree = "<group>"; };
+		073EFE862CB2C9BA004BC6AC /* FriendProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendProfileViewModel.swift; sourceTree = "<group>"; };
+		073EFE882CB2C9F3004BC6AC /* AgeRangeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeRangeButton.swift; sourceTree = "<group>"; };
+		073EFE8C2CB2CA6C004BC6AC /* SignInBG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInBG.swift; sourceTree = "<group>"; };
+		073EFE8E2CB2CBC8004BC6AC /* FriendsShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsShareView.swift; sourceTree = "<group>"; };
 		073F2CEC2C6F98D500BCF6F0 /* StoryLoading.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StoryLoading.json; sourceTree = "<group>"; };
 		073F2CF12C6F9C1F00BCF6F0 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithEmailView.swift; sourceTree = "<group>"; };
@@ -286,6 +294,15 @@
 			path = Authentication;
 			sourceTree = "<group>";
 		};
+		073EFE852CB2C9A1004BC6AC /* Friend Profile */ = {
+			isa = PBXGroup;
+			children = (
+				0701FBB92C87879F004BEE9F /* FriendProfileView.swift */,
+				073EFE862CB2C9BA004BC6AC /* FriendProfileViewModel.swift */,
+			);
+			path = "Friend Profile";
+			sourceTree = "<group>";
+		};
 		073F2CE82C6EC85200BCF6F0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -369,6 +386,7 @@
 			isa = PBXGroup;
 			children = (
 				07D323432CA6F25200846FA3 /* Extentions .swift */,
+				073EFE8C2CB2CA6C004BC6AC /* SignInBG.swift */,
 				073EFE832CB0C8E2004BC6AC /* OrientationManager.swift */,
 				0788C4222CA8BA5A00FA5E65 /* MagicView.swift */,
 				0701FBB32C8695D0004BEE9F /* AsyncImage.swift */,
@@ -436,6 +454,7 @@
 				0711F3572C6D63F1006C86AA /* AuthenticationView.swift */,
 				073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */,
 				07D323652CA7280F00846FA3 /* UserInfoFormView.swift */,
+				073EFE882CB2C9F3004BC6AC /* AgeRangeButton.swift */,
 				07D323672CA7286600846FA3 /* PasswordFormView.swift */,
 			);
 			path = "SignIn Views";
@@ -455,6 +474,7 @@
 			isa = PBXGroup;
 			children = (
 				076C22992C7E8C3E001DAB3F /* HomeView.swift */,
+				073EFE8E2CB2CBC8004BC6AC /* FriendsShareView.swift */,
 				07D3238B2CA7492E00846FA3 /* StoryRowView.swift */,
 			);
 			path = "Home Views";
@@ -603,7 +623,7 @@
 				07D323602CA71A7A00846FA3 /* Helpers */,
 				07D3235F2CA71A3200846FA3 /* Background */,
 				0701FBAD2C861739004BEE9F /* SearchView.swift */,
-				0701FBB92C87879F004BEE9F /* FriendProfileView.swift */,
+				073EFE852CB2C9A1004BC6AC /* Friend Profile */,
 				0701FB9A2C83E49E004BEE9F /* Transition */,
 				073F2CEB2C6F981300BCF6F0 /* AIService */,
 				0711F36E2C6D7046006C86AA /* Authentication */,
@@ -723,6 +743,7 @@
 				0788C4272CA90D8C00FA5E65 /* OpenAITTSManager.swift in Sources */,
 				07D3237B2CA72AC000846FA3 /* StoryReviewView.swift in Sources */,
 				07774ED82CAF3E280056E5BE /* StoriesManager.swift in Sources */,
+				073EFE872CB2C9BA004BC6AC /* FriendProfileViewModel.swift in Sources */,
 				07D3239E2CA7629000846FA3 /* FriendsViewModel.swift in Sources */,
 				07D3237C2CA72AC000846FA3 /* MoodSelectionView.swift in Sources */,
 				07D3237D2CA72AC000846FA3 /* ThemeSelectionView.swift in Sources */,
@@ -738,6 +759,7 @@
 				07D323AC2CA765B300846FA3 /* parentSettings.swift in Sources */,
 				07D323642CA724B500846FA3 /* SignInWithEmailViewModel.swift in Sources */,
 				07D323AE2CA765C400846FA3 /* DpSelection.swift in Sources */,
+				073EFE8F2CB2CBC8004BC6AC /* FriendsShareView.swift in Sources */,
 				0792C1D62C76A20D000C42A7 /* OnBoardingView.swift in Sources */,
 				07D3238E2CA74C3F00846FA3 /* Charater.swift in Sources */,
 				0788C4252CA90B3900FA5E65 /* SpeechManager.swift in Sources */,
@@ -760,10 +782,12 @@
 				0701FBBA2C87879F004BEE9F /* FriendProfileView.swift in Sources */,
 				076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */,
 				07D323A02CA762A800846FA3 /* DpSelectionViewModel.swift in Sources */,
+				073EFE8D2CB2CA6C004BC6AC /* SignInBG.swift in Sources */,
 				0701FB9B2C83E49E004BEE9F /* Pixellate.metal in Sources */,
 				0701FB9C2C83E49E004BEE9F /* Wind.metal in Sources */,
 				078DACD62C8CA44900F04A65 /* StoryByGenreView.swift in Sources */,
 				07D323AA2CA765A500846FA3 /* AddChildForm.swift in Sources */,
+				073EFE892CB2C9F3004BC6AC /* AgeRangeButton.swift in Sources */,
 				0701FB9D2C83E49E004BEE9F /* Genie.metal in Sources */,
 				0701FB9E2C83E49E004BEE9F /* CircleWave.metal in Sources */,
 				0701FB9F2C83E49E004BEE9F /* DiamondWave.metal in Sources */,

@@ -18,7 +18,7 @@ struct StoryFromProfileView: View {
     @State var counter: Int = 0 // Counter for gesture effects
     @State var origin: CGPoint = .zero // Origin point for ripple effect
     @State private var offset = CGSize.zero // Offset for any animation (unused)
-  
+    
     @State private var imgUrl = "" // URL for the user's profile image
     @State private var showFriendProfile = false // Flag to show friend's profile
     
@@ -31,7 +31,7 @@ struct StoryFromProfileView: View {
     @State private var isShowingCmt = false // Flag to show comment alert
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
-     // Function to fetch story reviews from Firestore
+    // Function to fetch story reviews from Firestore
     func fetchStoryAndReview(storyID: String) {
         let db = Firestore.firestore()
         
@@ -54,7 +54,7 @@ struct StoryFromProfileView: View {
         let uniqueFriends = Array(Set(friends.map { $0.username }).map { username in
             friends.first { $0.username == username }!
         })
-
+        
         return uniqueFriends
     }
     var body: some View {
@@ -83,7 +83,7 @@ struct StoryFromProfileView: View {
                                                 MagicView()
                                                     .frame(width: UIScreen.main.bounds.width * 0.9, height: 700)
                                             }
-                                                
+                                            
                                         case .success(let image):
                                             image
                                                 .resizable()
@@ -104,10 +104,10 @@ struct StoryFromProfileView: View {
                                                             .cornerRadius(50)
                                                             .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                                     }
-                                                    .padding()
-                                                    .onTapGesture {
-                                                        showFriendProfile = true // Show friend's profile on tap
-                                                    },
+                                                        .padding()
+                                                        .onTapGesture {
+                                                            showFriendProfile = true // Show friend's profile on tap
+                                                        },
                                                     alignment: .topLeading
                                                 )
                                                 .padding()
@@ -152,13 +152,13 @@ struct StoryFromProfileView: View {
                                         
                                         HStack(spacing: 8) {
                                             ForEach(0..<story.storyText.count, id: \.self) { index in
-                                                        Rectangle()
+                                                Rectangle()
                                                     .fill(index == count ? Color.orange : Color.gray.opacity(0.3))
-                                                            .frame(height: 10)
-                                                            .cornerRadius(5)
-                                                    }
-                                                }
-                                                .padding()
+                                                    .frame(height: 10)
+                                                    .cornerRadius(5)
+                                            }
+                                        }
+                                        .padding()
                                         
                                         // Display the story text
                                         Text(story.storyText[count].text)
@@ -191,7 +191,7 @@ struct StoryFromProfileView: View {
                                                             count += 1
                                                         }
                                                     }
-                                                
+                                                    
                                                 } label: {
                                                     ZStack {
                                                         Circle()
@@ -205,16 +205,16 @@ struct StoryFromProfileView: View {
                                                 .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 10) // Adds shadow at the bottom
                                             }
                                             HStack {
-//                                                Button("Speak") {
-//                                                    
-//                                                    let openAITTS = OpenAITTS()
-//
-//                                                    // Example text to be converted to speech
-//                                                    let textToSpeak = "Hello, welcome to Imagine Tools, your creative story assistant."
-//
-//                                                    // Call the speak function to send the request
-//                                                    openAITTS.speak(textToSpeak)
-//                                                }
+                                                //                                                Button("Speak") {
+                                                //
+                                                //                                                    let openAITTS = OpenAITTS()
+                                                //
+                                                //                                                    // Example text to be converted to speech
+                                                //                                                    let textToSpeak = "Hello, welcome to Imagine Tools, your creative story assistant."
+                                                //
+                                                //                                                    // Call the speak function to send the request
+                                                //                                                    openAITTS.speak(textToSpeak)
+                                                //                                                }
                                                 
                                                 Spacer()
                                                 // Share button
@@ -224,11 +224,11 @@ struct StoryFromProfileView: View {
                                                         .font(.system(size: 30))
                                                         .padding()
                                                         .onTapGesture { showShareList.toggle() }
-                                                        .popover(isPresented: $showShareList) { sharePopover().frame(width: 300, height: 500) }
+                                                        .popover(isPresented: $showShareList) { FriendsShareView(viewModel: homeViewModel, childId: childId, story: story).frame(width: 300, height: 500) }
                                                 }
                                             }
                                             
-                                         
+                                            
                                         }
                                         .padding()
                                         .frame(width: UIScreen.main.bounds.width * 0.8)
@@ -244,7 +244,7 @@ struct StoryFromProfileView: View {
                                                     .stroke(Color.white.opacity(0.2), lineWidth: 1)
                                             )
                                             .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-
+                                        
                                     )
                                     .cornerRadius(23)
                                     .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20) // Adds shadow at the bottom
@@ -270,58 +270,58 @@ struct StoryFromProfileView: View {
                     .navigationTitle(story.title) // Set the title of the navigation bar
                     .navigationBarBackButtonHidden(true)
                     .toolbar {
-                                    // Leading back button toolbar item
-                                    ToolbarItem(placement: .navigationBarLeading) {
-                                        Button(action: {
-                                            dismiss() // Dismiss the fullScreenCover
-                                        }) {
-                                            HStack {
-                                                Image(systemName: "chevron.left")
-                                                Text("Back")
-                                            }
-                                        }
-                                    }
-                                    
-                                    // Trailing toolbar items (like, bookmark, comment)
-                                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                                        HStack {
-                                            // Button to save the story
-                                            Button(action: {
-                                                homeViewModel.toggleSaveStory(childId: childId, storyId: story.id)
-                                                homeViewModel.sendLikeNotification(fromUserId: childId, toUserId: story.childId, storyId: story.id, storyTitle: story.title, type: isSaved ? "Unsaved" : "Saved")
-                                                isSaved.toggle()
-                                            }) {
-                                                Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
-                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                            }
-                                            
-                                            // Button to like the story
-                                            Button(action: {
-                                                homeViewModel.likeStory(childId: childId, storyId: story.id)
-                                                homeViewModel.sendLikeNotification(fromUserId: childId, toUserId: story.childId, storyId: story.id, storyTitle: story.title, type: isLiked ? "Unliked" : "Liked")
-                                                isLiked.toggle()
-                                            }) {
-                                                Image(systemName: isLiked ? "heart.fill" : "heart")
-                                                    .foregroundStyle(
-                                                        LinearGradient(gradient: Gradient(colors: [Color.red, Color.pink]),
-                                                                       startPoint: .top,
-                                                                       endPoint: .bottom)
-                                                    )
-                                                    .scaleEffect(isLiked ? 1.2 : 1)
-                                                    .animation(.easeInOut, value: isLiked)
-                                            }
-                                            
-                                            // Show comment button if the user is the child's parent and there is a comment
-                                            if childId == story.childId && !comment.isEmpty {
-                                                Button(action: {
-                                                    isShowingCmt.toggle()
-                                                }) {
-                                                    Image(systemName: "message.fill")
-                                                }
-                                            }
-                                        }
+                        // Leading back button toolbar item
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(action: {
+                                dismiss() // Dismiss the fullScreenCover
+                            }) {
+                                HStack {
+                                    Image(systemName: "chevron.left")
+                                    Text("Back")
+                                }
+                            }
+                        }
+                        
+                        // Trailing toolbar items (like, bookmark, comment)
+                        ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            HStack {
+                                // Button to save the story
+                                Button(action: {
+                                    homeViewModel.toggleSaveStory(childId: childId, storyId: story.id)
+                                    homeViewModel.sendLikeNotification(fromUserId: childId, toUserId: story.childId, storyId: story.id, storyTitle: story.title, type: isSaved ? "Unsaved" : "Saved")
+                                    isSaved.toggle()
+                                }) {
+                                    Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                }
+                                
+                                // Button to like the story
+                                Button(action: {
+                                    homeViewModel.likeStory(childId: childId, storyId: story.id)
+                                    homeViewModel.sendLikeNotification(fromUserId: childId, toUserId: story.childId, storyId: story.id, storyTitle: story.title, type: isLiked ? "Unliked" : "Liked")
+                                    isLiked.toggle()
+                                }) {
+                                    Image(systemName: isLiked ? "heart.fill" : "heart")
+                                        .foregroundStyle(
+                                            LinearGradient(gradient: Gradient(colors: [Color.red, Color.pink]),
+                                                           startPoint: .top,
+                                                           endPoint: .bottom)
+                                        )
+                                        .scaleEffect(isLiked ? 1.2 : 1)
+                                        .animation(.easeInOut, value: isLiked)
+                                }
+                                
+                                // Show comment button if the user is the child's parent and there is a comment
+                                if childId == story.childId && !comment.isEmpty {
+                                    Button(action: {
+                                        isShowingCmt.toggle()
+                                    }) {
+                                        Image(systemName: "message.fill")
                                     }
                                 }
+                            }
+                        }
+                    }
                 }
                 .alert("Parent's Comment", isPresented: $isShowingCmt) {
                     Button("OK", role: .cancel) { }
@@ -349,64 +349,5 @@ struct StoryFromProfileView: View {
                 }
             }
         }
-    }
-    
-    // Share popover content
-    @ViewBuilder
-    private func sharePopover() -> some View {
-        
-        ZStack {
-            
-            BackGroundMesh().ignoresSafeArea()
-            VStack {
-                
-                List {
-                    Section("Share with Friends") {
-                        TextField("Search Friends", text: $searchQuery)
-                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.2) : Color.white.opacity(0.4))
-                        ForEach(filteredFriends) { friend in
-                            HStack {
-                                ZStack {
-                                    Circle()
-                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white)
-                                        .frame(width: 50)
-                                    Image(friend.profileImage.removeJPGExtension())
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 40, height: 40)
-                                        .cornerRadius(50)
-                                }
-                                
-                                Text(friend.username)
-                                    .foregroundStyle(.primary)
-                                
-                                
-                                
-                            }
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                homeViewModel.addSharedStory(childId: friend.id, fromId: homeViewModel.child?.username ?? "", toId: friend.id, storyId: story.id)
-                                homeViewModel.sendShareNotification(fromId: childId, toUserId: friend.id, storyId: story.id, storyTitle: story.title, fromChildUsername: homeViewModel.child?.username ?? "", fromChildProfilePic: homeViewModel.child?.profileImage ?? "")
-                                let drop = Drop(title: "Shared Story with \(friend.username)")
-                                
-                                Drops.show(drop)
-                                
-                            }
-                            
-                            .listRowBackground(colorScheme == .dark ? Color.black.opacity(0.2) : Color.white.opacity(0.4))
-                            
-                        }
-                    }
-                }
-                .searchable(text: $searchQuery, prompt: "Search Friends")
-                .scrollContentBackground(.hidden)
-                
-                .onAppear {
-                    homeViewModel.fetchChild(ChildId: childId)
-                    homeViewModel.fetchFriends(childId: childId)
-                }
-            }
-        }
-
     }
 }

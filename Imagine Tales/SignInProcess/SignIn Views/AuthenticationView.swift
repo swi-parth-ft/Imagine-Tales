@@ -49,32 +49,7 @@ struct AuthenticationView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                BackGroundMesh().ignoresSafeArea() // Mesh background that covers the entire screen
-                
-                // Background Images
-                VStack {
-                    Spacer()
-                    HStack {
-                        // Left side background image, changes based on light or dark mode
-                        VStack {
-                            Spacer()
-                            Image(colorScheme == .dark ? "bg2dark" : "backgroundShade2")
-                                .resizable()
-                                .scaledToFit()
-                        }
-                        Spacer()
-                        
-                        // Right side background image, changes based on light or dark mode
-                        VStack {
-                            Spacer()
-                            Image(colorScheme == .dark ? "bg1dark" : "backgroundShade1")
-                                .resizable()
-                                .scaledToFit()
-                        }
-                    }
-                }
-                .edgesIgnoringSafeArea(.all) // Ensures background images extend to the screen edges
-               
+                SignInBG()
                 // Main Content Area
                 VStack {
                     VStack(spacing: isiPhone ? -45 : -10) {

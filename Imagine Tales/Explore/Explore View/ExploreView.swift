@@ -21,6 +21,7 @@ struct ExploreView: View {
     @State var counter: Int = 0 // Counter for gesture effects
     @State var origin: CGPoint = .zero // Origin point for ripple effect
     @State private var offset = CGSize.zero // Offset for any animation (unused)
+    @EnvironmentObject var orientation: OrientationManager
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
@@ -107,8 +108,6 @@ struct ExploreView: View {
                                                         
                                                     }
                                                     VStack {
-                                                        Text(story.summary ?? "").multilineTextAlignment(.center)
-                                                            .font(.custom("ComicNeue-Bold", size: 24))
                                                         Text("@\(story.childUsername)")
                                                             .font(.custom("ComicNeue-Bold", size: 26))
                                                     }
@@ -152,7 +151,8 @@ struct ExploreView: View {
                                 .ignoresSafeArea()
                                 .onTapGesture {
                                     withAnimation {
-                                        isFullHeight.toggle()
+                                            isFullHeight.toggle()
+                                        
                                     }
                                 }
                                 .tag(index) // Tag for identifying the current story
@@ -287,19 +287,24 @@ struct ExploreView: View {
                         .listRowBackground(Color.white.opacity(0.0)) // Transparent background for list row
                         .listRowSeparator(.hidden) // Hide list row separator
                         .onAppear {
-                                    if index == 3 {
-                                        // Do something when the 4th genre appears on screen
-                                        withAnimation {
-                                            isFullHeight = false
-                                        }
-                                        // Call a function or trigger an action here
+                            if !orientation.isLandscape {
+                                
+                                if index == 3 {
+                                    // Do something when the 4th genre appears on screen
+                                    withAnimation {
+                                        isFullHeight = false
                                     }
-                            if index == 1 {
-                                // Do something when the 4th genre appears on screen
-                                withAnimation {
-                                    isFullHeight = true
+                                    // Call a function or trigger an action here
                                 }
-                                // Call a function or trigger an action here
+                                if index == 1 {
+                                    // Do something when the 4th genre appears on screen
+                                    withAnimation {
+                                        isFullHeight = true
+                                    }
+                                    // Call a function or trigger an action here
+                                }
+                            } else {
+                                isFullHeight = false
                             }
                                 }
                     }
