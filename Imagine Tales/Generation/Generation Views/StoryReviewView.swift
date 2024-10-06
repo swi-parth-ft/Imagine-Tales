@@ -29,6 +29,7 @@ struct StoryReviewView: View {
     let moodEmojis = ["😊", "😢", "😃", "😱", "🤔", "💪", "😄", "😮", "😠", "😌", "🧭", "🕵️‍♂️", "🤪", "❤️", "😕", "😎", "😬", "😴", "😁", "😳"]
     @State private var shouldBurst: Bool = false // State to trigger the confetti burst
     @EnvironmentObject var orientation: OrientationManager
+    @Binding var isAddingSuperhero: Bool
     func getRandom() {
         let totalDuration = 4.0 // Total duration for changing
         let interval = 0.7 // Change interval
@@ -57,76 +58,81 @@ struct StoryReviewView: View {
             // Prompt section displaying a sentence summarizing the user's choices
             ZStack {
                 // Create a rounded rectangle border for the prompt area
-                RoundedRectangle(cornerRadius: 22)
-                    .stroke(Color(hex: "#F2F2DB"), lineWidth: 2)
-                    .frame(height: 200)
-                
-                VStack(alignment: .leading, spacing: 10) {
-                    VStack(alignment: .leading) {
-                        // Header with "Prompt" label and shuffle icon
-                        HStack {
-                            Text("Prompt")
-                                .font(.system(size: 28))
-                            Spacer()
-                            Image(systemName: "shuffle") // Icon to shuffle or randomize selections
-                                .font(.system(size: 24))
-                                .frame(width: 20, height: 20)
-                                .onTapGesture {
-                                    getRandom()
-                                }
-                        }
-                        .padding(.horizontal, 20) // Padding for the header
-
-                        Divider() // Divider line for separation
-                            .background(Color(hex: "#F2F2DB"))
-
-                        // Descriptive text summarizing the user's choices for theme, genre, characters, and pets
+               
+                    
+                    
+                    RoundedRectangle(cornerRadius: 22)
+                        .stroke(Color(hex: "#F2F2DB"), lineWidth: 2)
+                        .frame(height: 200)
+                    
+                    VStack(alignment: .leading, spacing: 10) {
                         VStack(alignment: .leading) {
+                            // Header with "Prompt" label and shuffle icon
                             HStack {
-                                Text("Awesome! You've chosen to create a ")
+                                Text("Prompt")
+                                    .font(.system(size: 28))
+                                Spacer()
+                                Image(systemName: "shuffle") // Icon to shuffle or randomize selections
                                     .font(.system(size: 24))
-                                    .foregroundColor(.primary) +
-                                Text(theme)
-                                    .font(.system(size: 24, weight: .bold))
-                                    .foregroundColor(Color(hex: "#FF6F61")) + // Highlighting the theme
-                                Text(" story with genre of ")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(.primary) +
-                                Text(genre)
-                                    .font(.system(size: 24, weight: .bold))
-                                    .foregroundColor(.cyan) + // Highlighting the genre
-                                Text(" with ")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(.primary) +
-                                Text(characters.isEmpty ? "no" : characters)
-                                    .font(.system(size: 24, weight: .bold))
-                                    .foregroundColor(.purple) + // Highlighting the characters
-                                Text(characters.isEmpty ? " characters " : " as characters ")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(.primary)
+                                    .frame(width: 20, height: 20)
+                                    .onTapGesture {
+                                        getRandom()
+                                    }
                             }
-                            .padding(.horizontal, 20) // Padding for the text
-
-                            HStack {
-                                Text(petString.isEmpty ? "" : " with pets ")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(.primary) +
-                                Text(petString.isEmpty ? "" : "\(petString).")
-                                    .font(.system(size: 24, weight: .bold))
-                                    .foregroundColor(.purple) + // Highlighting the pets
-                                Text(" The mood of your story will be ")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(.primary) +
-                                Text("\(mood)!")
-                                    .font(.system(size: 24, weight: .bold))
-                                    .foregroundColor(.yellow) // Highlighting the mood
+                            .padding(.horizontal, 20) // Padding for the header
+                            
+                            Divider() // Divider line for separation
+                                .background(Color(hex: "#F2F2DB"))
+                            
+                            // Descriptive text summarizing the user's choices for theme, genre, characters, and pets
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text("Awesome! You've chosen to create a ")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(.primary) +
+                                    Text(theme)
+                                        .font(.system(size: 24, weight: .bold))
+                                        .foregroundColor(Color(hex: "#FF6F61")) + // Highlighting the theme
+                                    Text(" story with genre of ")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(.primary) +
+                                    Text(genre)
+                                        .font(.system(size: 24, weight: .bold))
+                                        .foregroundColor(.cyan) + // Highlighting the genre
+                                    Text(" with ")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(.primary) +
+                                    Text(characters.isEmpty ? "no" : characters)
+                                        .font(.system(size: 24, weight: .bold))
+                                        .foregroundColor(.purple) + // Highlighting the characters
+                                    Text(characters.isEmpty ? " characters " : " as characters ")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(.primary)
+                                }
+                                .padding(.horizontal, 20) // Padding for the text
+                                
+                                HStack {
+                                    Text(petString.isEmpty ? "" : " with pets ")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(.primary) +
+                                    Text(petString.isEmpty ? "" : "\(petString).")
+                                        .font(.system(size: 24, weight: .bold))
+                                        .foregroundColor(.purple) + // Highlighting the pets
+                                    Text(" The mood of your story will be ")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(.primary) +
+                                    Text("\(mood)!")
+                                        .font(.system(size: 24, weight: .bold))
+                                        .foregroundColor(.yellow) // Highlighting the mood
+                                }
+                                .padding(.horizontal, 20) // Padding for the second line of text
                             }
-                            .padding(.horizontal, 20) // Padding for the second line of text
                         }
+                        .padding() // Padding around the entire prompt area
                     }
-                    .padding() // Padding around the entire prompt area
-                }
+                
             }
+                
             
             // Story details section displaying the theme, mood, genre, characters, and pets
             ZStack {

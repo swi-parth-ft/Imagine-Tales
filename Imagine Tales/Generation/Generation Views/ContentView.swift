@@ -193,32 +193,7 @@ struct ContentView: View {
                                                 }
                                             }
                                             
-                                            ZStack(alignment: .bottom) {
-                                                
-                                                Button {
-                                                    withAnimation {
-                                                        isAddingSuperHero.toggle()
-                                                    }
-                                                } label: {
-                                                    Text(isAddingSuperHero ? "Remove" : "Add Super Hero")
-                                                        .padding()
-                                                        .padding(.leading, 50)
-                                                        .frame(width: 230)
-                                                        .background(Color.blue)
-                                                        .foregroundStyle(.white)
-                                                        .cornerRadius(23)
-                                                        .shadow(radius: 5)
-                                                }
-                                                HStack {
-                                                    Image("superHero")
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(width: isAddingSuperHero ? 150 : 70)
-                                                    Spacer()
-                                                }
-                                                .frame(width: 230)
-                                                
-                                            }
+                                            
                                         }
                                     }
                                     .padding(.top, 90)
@@ -240,7 +215,7 @@ struct ContentView: View {
                             //MARK: Preview
                             else if preview {
                                 VStack {
-                                    StoryReviewView(theme: $theme, genre: $genre, characters: characters, petString: pets, chars: selectedChars, pets: selectedPets, mood: $mood, moodEmoji: $selectedEmoji)
+                                    StoryReviewView(theme: $theme, genre: $genre, characters: characters, petString: pets, chars: selectedChars, pets: selectedPets, mood: $mood, moodEmoji: $selectedEmoji, isAddingSuperhero: $isAddingSuperHero)
                                         .opacity(preview ? 1.0 : 0.0)
                                         .scaleEffect(preview ? 1.0 : 0.0) // Scale effect on the text when selected
                                         .animation(.easeInOut(duration: 0.6), value: preview) // Animate the scaling
@@ -572,15 +547,15 @@ struct ContentView: View {
         let petsText = petDescriptions.isEmpty ? "" : " along with their pet(s) \(petDescriptions.joined(separator: ", "))"
 
         // Generate a prompt based on the current state of the story
-        if nextKey {
-            prompt = "Write the next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). \(isAddingSuperHero ? "With a super hero" : ""). The mood of the story is \(mood). Write in 80 words."
-        } else if finishKey && !isGeneratingTitle {
-            prompt = "Finish this story: \(continueStory) details: a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). \(isAddingSuperHero ? "With a super hero" : ""). Finish in 100 words."
-        } else if isGeneratingTitle {
-            prompt = "Give me a story title for this story \(continueStory) in 3 words only. The mood of the story is \(mood). Output should be only 3 words, nothing extra."
-        } else {
-            prompt = "Write the first paragraph of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). \(isAddingSuperHero ? "With a super hero" : ""). The mood of the story is \(mood). Write in 80 words."
-        }
+                if nextKey {
+                    prompt = "Write the next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). The mood of the story is \(mood). Write in 80 words."
+                } else if finishKey && !isGeneratingTitle {
+                    prompt = "Finish this story: \(continueStory) details: a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). Finish in 100 words."
+                } else if isGeneratingTitle {
+                    prompt = "Give me a story title for this story \(continueStory) in 3 words only. The mood of the story is \(mood). Output should be only 3 words, nothing extra."
+                } else {
+                    prompt = "Write the first paragraph of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). The mood of the story is \(mood). Write in 80 words."
+                }
         
        
 
@@ -613,7 +588,6 @@ struct ContentView: View {
                 • Genre: \(genre)
                 • Characters: \(charactersText)\(lastSeparator)
                 • Pets: \(petsText)\(petLastSeparator)
-                \(isAddingSuperHero ? "• Superhero: A young boy superhero with a cheerful expression, wearing a bright red and blue costume. The costume features a circular emblem on the chest, a red cape, and matching boots. His hair is styled in a playful, tousled manner." : "")
                 • Mood: \(mood)
 
                 Each character should have a toy-like, soft appearance with smooth features and expressive faces. The design should clearly reflect their age, gender, and personality. The background should be simple and minimal, allowing the focus to remain on the characters. Their poses and expressions should align with the overall mood of the story, and there should be no text at all in the image.
@@ -631,8 +605,6 @@ struct ContentView: View {
 
                 • Characters: \(charactersText)\(lastSeparator)
                 • Pets: \(petsText)\(petLastSeparator)
-                                \(isAddingSuperHero ? "• Superhero: A young boy superhero with a cheerful expression, wearing a bright red and blue costume. The costume features a circular emblem on the chest, a red cape, and matching boots. His hair is styled in a playful, tousled manner." : "")
-            
 
             The background should reflect \(theme), with elements like [insert any key features from the scene like glowing trees, fireflies, etc.]. Make sure the mood of the illustration reflects \(mood) and \(genre), based on the story. Keep the design toy-like, with smooth and rounded features to appeal to children, and there should be no text at all in the image.
             """
