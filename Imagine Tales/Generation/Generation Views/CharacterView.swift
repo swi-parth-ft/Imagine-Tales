@@ -45,7 +45,7 @@ struct CharacterView: View {
             ZStack {
                 // Background color for the entire screen
 //                Color(hex: "#FFFFF1").ignoresSafeArea()
-                colorScheme == .dark ? Color(hex: "#5A6D2A").ignoresSafeArea() : Color(hex: "#8AC640").ignoresSafeArea()
+                BackGroundMesh().ignoresSafeArea()
                 
                 // Check if in pet creation mode or character creation mode
                 if !isSelectionPet {
@@ -209,7 +209,6 @@ struct CharacterView: View {
                                                         // Pet name below the image
                                                         Text(pet)
                                                             .font(.custom("ComicNeue-Bold", size: 16)) // Custom font for pet names
-                                                            .foregroundColor(.black) // Text color
                                                             .multilineTextAlignment(.center) // Center align the text
                                                     }
                                                 )

@@ -14,7 +14,7 @@ struct ExploreView: View {
     @State private var retryDelay = 2.0 // Delay between retries
     @State private var themes: [String] = [] // Array for themes (not used in the current code)
   
-    @State private var isFullHeight = false // State to determine if the view is in full height mode
+    @State private var isFullHeight = true // State to determine if the view is in full height mode
     @State private var imageOffset = CGSize.zero // Track image offset for drag gestures
     @State private var currentIndex = 0 // Track the currently displayed story index
     @Environment(\.colorScheme) var colorScheme
@@ -84,8 +84,8 @@ struct ExploreView: View {
                                         Spacer()
                                         VStack {
                                             Text(story.title.trimmingCharacters(in: .newlines))
-                                                .font(.system(size: 46))
-                                                .foregroundStyle(.white)
+                                                .font(.custom("ComicNeue-Bold", size: 46))
+                                                .foregroundStyle(colorScheme == .dark ? .white : (isFullHeight ? .black : .white))
                                                 .padding()
                                             
                                             if isFullHeight {
@@ -94,21 +94,33 @@ struct ExploreView: View {
                                                     
                                                     HStack(alignment: .center) {
                                                         Text(story.genre)
-                                                            .font(.system(size: 32))
+                                                            .font(.custom("ComicNeue-Bold", size: 32))
                                                             .foregroundStyle(.white)
                                                         Circle()
                                                             .foregroundStyle(.white)
                                                             .frame(width: 15)
                                                             .padding(.horizontal)
                                                         Text("\(story.likes) Likes")
-                                                            .font(.system(size: 32))
+                                                            .font(.custom("ComicNeue-Bold", size: 32))
                                                             .foregroundStyle(.white)
                                                         
                                                         
                                                     }
+                                                    VStack {
+                                                        Text(story.summary ?? "").multilineTextAlignment(.center)
+                                                            .font(.custom("ComicNeue-Bold", size: 24))
+                                                        Text("@\(story.childUsername)")
+                                                            .font(.custom("ComicNeue-Bold", size: 26))
+                                                    }
+                                                    
+                                                    .foregroundStyle(.white)
+                                                    .frame(width: UIScreen.main.bounds.width * 0.5)
                                                     
                                                     NavigationLink(destination: StoryFromProfileView(story: story)) {
-                                                        Text("Read")
+                                                        HStack {
+                                                            Text("Read")
+                                                            Image(systemName: "book.pages")
+                                                        }
                                                             .frame(width: UIScreen.main.bounds.width * 0.35)
                                                         .padding()
                                                         .font(.system(size: 16))
@@ -159,7 +171,7 @@ struct ExploreView: View {
                     .padding(.leading, 30)
                 // List to display stories grouped by genre
                 List {
-                    ForEach(viewModel.storiesByGenre.keys.sorted(), id: \.self) { genre in
+                    ForEach(Array(viewModel.storiesByGenre.keys.sorted().enumerated()), id: \.element) { index, genre in
                         LazyVStack(alignment: .leading) {
                             HStack {
                                 Text(genre)
@@ -264,12 +276,32 @@ struct ExploreView: View {
                                                 }
                                             }
                                         }
+                                        
+                                       
                                     }
                                 }
                             }
+                            
+                            
                         }
                         .listRowBackground(Color.white.opacity(0.0)) // Transparent background for list row
                         .listRowSeparator(.hidden) // Hide list row separator
+                        .onAppear {
+                                    if index == 3 {
+                                        // Do something when the 4th genre appears on screen
+                                        withAnimation {
+                                            isFullHeight = false
+                                        }
+                                        // Call a function or trigger an action here
+                                    }
+                            if index == 1 {
+                                // Do something when the 4th genre appears on screen
+                                withAnimation {
+                                    isFullHeight = true
+                                }
+                                // Call a function or trigger an action here
+                            }
+                                }
                     }
                 }
                 .ignoresSafeArea()

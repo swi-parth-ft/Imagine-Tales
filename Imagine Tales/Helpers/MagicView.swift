@@ -70,6 +70,8 @@ struct ConfettiView: View {
                 }
                 .padding(.bottom, 40)
             }
+            
+            
         }
     }
 }

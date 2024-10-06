@@ -5,63 +5,87 @@
 //  Created by Parth Antala on 8/6/24.
 //
 
-import SwiftUI
-import FirebaseCore
-import FirebaseAuth
+/**
+ The main app file for Imagine Tales.
+ 
+ - Handles the initialization of Firebase, manages app state, and sets up onboarding and root views.
+ - Utilizes `@UIApplicationDelegateAdaptor` to configure Firebase during app launch.
+ - Integrates an app-wide state management system using `@EnvironmentObject` to track sign-in views, manage screen time, and handle device orientation.
+ - Displays either the `OnBoardingView` or `RootView` based on whether the user is still in the onboarding process.
+*/
 
+import SwiftUI
+import FirebaseCore  // For initializing Firebase
+import FirebaseAuth  // For handling user authentication
+
+// MARK: - AppState Class
+
+/// A shared, observable object to manage app-level state, particularly for tracking if the user is in the sign-in view.
 class AppState: ObservableObject {
-    static let shared = AppState()
-    @Published var isInSignInView: Bool = false
+    static let shared = AppState()  // Singleton instance of the app state
+    @Published var isInSignInView: Bool = false  // Tracks if the user is currently in the sign-in view
 }
 
+// MARK: - AppDelegate Class
+
+/// AppDelegate class responsible for configuring Firebase when the app launches and handling app termination events.
 class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
-    return true
-  }
     
+    /// Called when the app finishes launching. Initializes Firebase.
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FirebaseApp.configure()  // Initializes Firebase SDK
+        return true
+    }
+    
+    /// Called when the app is about to terminate. Logs out the user if they are in the sign-in view.
     func applicationWillTerminate(_ application: UIApplication) {
-        // Handle app termination
-        logoutUserIfInSignInView()
+        logoutUserIfInSignInView()  // Logs out user if they are on the sign-in screen
     }
 
+    /// Logs out the current user if they are in the sign-in view to ensure session integrity.
     private func logoutUserIfInSignInView() {
-            if AppState.shared.isInSignInView {
-                do {
-                    try Auth.auth().signOut()
-                    print("User logged out successfully.")
-                } catch {
-                    print("Error signing out: \(error.localizedDescription)")
-                }
+        if AppState.shared.isInSignInView {
+            do {
+                try Auth.auth().signOut()  // Firebase sign out method
+                print("User logged out successfully.")  // Confirmation of logout
+            } catch {
+                print("Error signing out: \(error.localizedDescription)")  // Error handling in case sign out fails
             }
         }
-    
-    
+    }
 }
+
+// MARK: - Main App Structure
 
 @main
 struct Imagine_TalesApp: App {
     
+    /// Connects the `AppDelegate` to the SwiftUI lifecycle to handle Firebase initialization and other app-wide services.
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @AppStorage("isOnboarding") var isOnboarding: Bool = true
-    @StateObject var screenTimeManager = ScreenTimeManager()
-    @StateObject private var orientationManager = OrientationManager()
-
     
+    /// Tracks whether the user has completed onboarding, using `@AppStorage` for persistence.
+    @AppStorage("isOnboarding") var isOnboarding: Bool = true
+    
+    /// Manages screen time-related functionalities for the app.
+    @StateObject var screenTimeManager = ScreenTimeManager()
+    
+    /// Manages device orientation, injected as a global environment object.
+    @StateObject private var orientationManager = OrientationManager()
+    
+    // MARK: - Body View
+    
+    /// Main scene for the app, deciding whether to show the onboarding flow or the root app experience.
     var body: some Scene {
         WindowGroup {
             if isOnboarding {
-                OnBoardingView()
+                OnBoardingView()  // Shows the onboarding view if the user hasn't completed onboarding
             } else {
-                RootView()
-                    .environmentObject(screenTimeManager)
-                    .environmentObject(AppState.shared)
-                    .environmentObject(orientationManager) // Inject globally
-                
+                RootView()  // Main view of the app if onboarding is completed
+                    .environmentObject(screenTimeManager)  // Passes screen time manager as an environment object
+                    .environmentObject(AppState.shared)  // Passes app-wide state as an environment object
+                    .environmentObject(orientationManager)  // Passes device orientation manager as an environment object
             }
         }
     }
 }
-
-

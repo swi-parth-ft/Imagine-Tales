@@ -41,6 +41,7 @@ struct GeneratingProcessView: View {
     @Binding var generatedImage: UIImage?
     @Binding var isSelectingTheme : Bool
     @Binding var preview: Bool
+    @Binding var isAddingSuperHero: Bool
     
     let vertex = VertexAI.vertexAI()
     var shader = TransitionShader(name: "Crosswarp (→)", transition: .crosswarpLTR)
@@ -404,6 +405,7 @@ struct GeneratingProcessView: View {
                 
             case .failure(let error):
                 print("Error generating image: \(error.localizedDescription)")
+                generateImageUsingOpenAI()
             }
         }
     }
@@ -484,16 +486,13 @@ struct GeneratingProcessView: View {
         let petsText = petDescriptions.isEmpty ? "" : " along with their pet(s) \(petDescriptions.joined(separator: ", "))"
 
         if nextKey {
-            prompt = "Write the next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). The mood of the story is \(mood). Write in 80 words."
-            
+            prompt = "Write the next paragraph of \(continueStory), details: \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). \(isAddingSuperHero ? "With a super hero" : ""). The mood of the story is \(mood). Write in 80 words."
         } else if finishKey && !isGeneratingTitle {
-            prompt = "Finish this story: \(continueStory) details: a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). Finish in 100 words."
-            
+            prompt = "Finish this story: \(continueStory) details: a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). \(isAddingSuperHero ? "With a super hero" : ""). Finish in 100 words."
         } else if isGeneratingTitle {
             prompt = "Give me a story title for this story \(continueStory) in 3 words only. The mood of the story is \(mood). Output should be only 3 words, nothing extra."
-            
         } else {
-            prompt = "Write the first paragraph of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). The mood of the story is \(mood). Write in 80 words."
+            prompt = "Write the first paragraph of a \(genre) story where \(charactersText)\(lastSeparator)go on a \(theme) adventure together\(petsText). \(isAddingSuperHero ? "With a super hero" : ""). The mood of the story is \(mood). Write in 80 words."
         }
 
         print(prompt)
@@ -526,9 +525,10 @@ struct GeneratingProcessView: View {
                 • Genre: \(genre)
                 • Characters: \(charactersText)\(lastSeparator)
                 • Pets: \(petsText)\(petLastSeparator)
+                                \(isAddingSuperHero ? "• Superhero: A young boy superhero with a cheerful expression, wearing a bright red and blue costume. The costume features a circular emblem on the chest, a red cape, and matching boots. His hair is styled in a playful, tousled manner." : "")
                 • Mood: \(mood)  
 
-                Each character should have a toy-like, soft appearance with smooth features and expressive faces. The design should clearly reflect their age, gender, and personality. The background should be simple and minimal, allowing the focus to remain on the characters. Their poses and expressions should align with the overall mood of the story, and there should be no text at all in the image nor any signboards or anything.
+                Each character should have a toy-like, soft appearance with smooth features and expressive faces. The design should clearly reflect their age, gender, and personality. The background should be simple and minimal, allowing the focus to remain on the characters. Their poses and expressions should align with the overall mood of the story, and there should be no text at all in the image.
                 """
             print(promptForImage)
             isGeneratingCover = false
@@ -545,8 +545,9 @@ struct GeneratingProcessView: View {
 
                 • Characters: \(charactersText)\(lastSeparator)
                 • Pets: \(petsText)\(petLastSeparator)
+                                \(isAddingSuperHero ? "• Superhero: A young boy superhero with a cheerful expression, wearing a bright red and blue costume. The costume features a circular emblem on the chest, a red cape, and matching boots. His hair is styled in a playful, tousled manner." : "")
 
-            The background should reflect \(theme), with elements like [insert any key features from the scene like glowing trees, fireflies, etc.]. Make sure the mood of the illustration reflects \(mood) and \(genre), based on the story. Keep the design toy-like, with smooth and rounded features to appeal to children, and there should be no text at all in the image nor any signboards or anything.
+            The background should reflect \(theme), with elements like [insert any key features from the scene like glowing trees, fireflies, etc.]. Make sure the mood of the illustration reflects \(mood) and \(genre), based on the story. Keep the design toy-like, with smooth and rounded features to appeal to children, and there should be no text at all in the image.
             """
             generateImageUsingOpenAI()
             print(promptForImage)
