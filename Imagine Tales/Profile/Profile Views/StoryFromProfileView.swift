@@ -31,6 +31,8 @@ struct StoryFromProfileView: View {
     @State private var isShowingCmt = false // Flag to show comment alert
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var oriantation: OrientationManager
+    
     // Function to fetch story reviews from Firestore
     func fetchStoryAndReview(storyID: String) {
         let db = Firestore.firestore()
@@ -73,7 +75,7 @@ struct StoryFromProfileView: View {
                                         case .empty:
                                             ZStack {
                                                 VisualEffectBlur(blurStyle: .systemThinMaterial)
-                                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
+                                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.9 : UIScreen.main.bounds.width * 0.9) : (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.5 : UIScreen.main.bounds.width * 0.7))
                                                     .cornerRadius(20)
                                                     .overlay(
                                                         RoundedRectangle(cornerRadius: 20)
@@ -88,7 +90,7 @@ struct StoryFromProfileView: View {
                                             image
                                                 .resizable()
                                                 .scaledToFill()
-                                                .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
+                                                .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.9 : UIScreen.main.bounds.width * 0.9) : (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.5 : UIScreen.main.bounds.width * 0.7))
                                                 .clipped()
                                                 .cornerRadius(23)
                                                 .overlay(
@@ -130,12 +132,15 @@ struct StoryFromProfileView: View {
                                         }
                                     }
                                     .id(imgUrl) // Unique ID for the image view
-                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.9 : UIScreen.main.bounds.width * 0.9) : (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.5 : UIScreen.main.bounds.width * 0.7))
                                     .cornerRadius(23)
                                     .shadow(radius: 10)
                                     .onTapGesture {
+                                        if oriantation.isLandscape {
                                         withAnimation {
-                                            isExpanding.toggle()
+                                            
+                                                isExpanding.toggle()
+                                            }
                                         }
                                         // Schedule the second toggle after 5 seconds
                                         if isExpanding {
