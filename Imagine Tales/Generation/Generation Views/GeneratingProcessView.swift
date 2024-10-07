@@ -51,6 +51,7 @@ struct GeneratingProcessView: View {
     @State private var isTitleGenerated = false
     @Environment(\.colorScheme) var colorScheme
     @State private var isExpanding = false
+    @EnvironmentObject var oriantation: OrientationManager
     
     var body: some View {
         ZStack {
@@ -73,7 +74,7 @@ struct GeneratingProcessView: View {
                             Image(uiImage: storyChunk[count].1)
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
+                                .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.9 : UIScreen.main.bounds.width * 0.9) : (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.5 : UIScreen.main.bounds.width * 0.7))
                                 .clipped()
                                 .cornerRadius(23)
                                 .padding()
@@ -245,7 +246,7 @@ struct GeneratingProcessView: View {
           
                                 // Background blur effect for the story container
                                 VisualEffectBlur(blurStyle: .systemThinMaterial)
-                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.9 : UIScreen.main.bounds.width * 0.9) : (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.5 : UIScreen.main.bounds.width * 0.7))
                                     .cornerRadius(23)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 20)
@@ -253,7 +254,7 @@ struct GeneratingProcessView: View {
                                     )
                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                                 MagicView()
-                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? UIScreen.main.bounds.width * 0.9 : UIScreen.main.bounds.width * 0.7)
+                                    .frame(width: UIScreen.main.bounds.width * 0.9, height: isExpanding ? (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.9 : UIScreen.main.bounds.width * 0.9) : (oriantation.isLandscape ? UIScreen.main.bounds.height * 0.5 : UIScreen.main.bounds.width * 0.7))
                             }
                             .onTapGesture {
                                 withAnimation {

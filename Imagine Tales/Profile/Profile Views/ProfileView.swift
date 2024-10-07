@@ -63,6 +63,7 @@ struct ProfileView: View {
     @State private var maxRetryAttempts = 3 // Maximum number of retry attempts
     @State private var retryDelay = 2.0 // Delay between retries
     @EnvironmentObject var orientation: OrientationManager
+    @State private var isExpanding = true
     
     var body: some View {
         NavigationStack {
@@ -75,12 +76,12 @@ struct ProfileView: View {
                             ZStack {
                                 Circle()
                                     .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white) // Background for the profile image
-                                    .frame(width: 250, height: 250)
+                                    .frame(width: isExpanding ? 250 : 70, height: isExpanding ? 250 : 70)
                                 
                                 Image((viewModel.child?.profileImage.removeJPGExtension() ?? ""))
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 200, height: 200)
+                                    .frame(width: isExpanding ? 200 : 50, height: isExpanding ? 200 : 50)
                                     .cornerRadius(100) // Circular profile image
                                     .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10) // Shadow effect
                                     .onTapGesture {
@@ -155,6 +156,7 @@ struct ProfileView: View {
                         .padding()
                         Spacer()
                     }
+                    
                     
                     .padding([.trailing, .leading])
                     // Button to toggle between "Your Stories" and "Shared with you"
@@ -291,7 +293,23 @@ struct ProfileView: View {
                                                     .padding(.bottom, 10)
                                                 }
                                             }
+                                            .onAppear {
+                                                if !orientation.isLandscape {
+                                                    if story.id == parentViewModel.story[6].id {
+                                                        withAnimation {
+                                                            isExpanding = false
+                                                        }
+                                                    } else if story.id == parentViewModel.story[1].id {
+                                                        withAnimation {
+                                                            isExpanding = true
+                                                        }
+                                                    }
+                                                } else {
+                                                    
+                                                }
+                                            }
                                             
+
                                             if story == parentViewModel.story.last {
                                                 ProgressView()
                                                     .onAppear {
@@ -439,6 +457,10 @@ struct ProfileView: View {
             }
             .navigationTitle("Hey, \(viewModel.child?.name ?? "Loading...")") // Navigation title
             .onAppear {
+                    if orientation.isLandscape {
+                        isExpanding = false
+                    }
+                
                 // Load user data and stories on appear
                 parentViewModel.countDocumentsWithChildId(childId: childId)
                 

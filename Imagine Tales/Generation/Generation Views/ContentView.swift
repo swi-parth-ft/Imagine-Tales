@@ -11,6 +11,7 @@ import FirebaseVertexAI
 import FirebaseFirestore
 import FirebaseStorage
 import Neumorphic
+import Drops
 
 struct ContentView: View {
     
@@ -320,16 +321,20 @@ struct ContentView: View {
                                                     isAddingNames = false
                                                     preview = true
                                                 } else if preview {
-                                                    generatedImage = nil
-                                                    isLoading = true
-                                                    isLoadingChunk = true
-                                                    
-                                                    Task {
-                                                        do {
-                                                            try await generateStoryWithGemini()
-                                                        } catch {
-                                                            print(error.localizedDescription)
+                                                    if !selectedChars.isEmpty {
+                                                        generatedImage = nil
+                                                        isLoading = true
+                                                        isLoadingChunk = true
+                                                        
+                                                        Task {
+                                                            do {
+                                                                try await generateStoryWithGemini()
+                                                            } catch {
+                                                                print(error.localizedDescription)
+                                                            }
                                                         }
+                                                    } else {
+                                                        Drops.show("Please select atleast one character.")
                                                     }
                                                 }
                                             } label: {

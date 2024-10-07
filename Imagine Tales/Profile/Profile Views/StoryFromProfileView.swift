@@ -136,12 +136,12 @@ struct StoryFromProfileView: View {
                                     .cornerRadius(23)
                                     .shadow(radius: 10)
                                     .onTapGesture {
-                                        if oriantation.isLandscape {
+                                       
                                         withAnimation {
                                             
                                                 isExpanding.toggle()
                                             }
-                                        }
+                                        
                                         // Schedule the second toggle after 5 seconds
                                         if isExpanding {
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
