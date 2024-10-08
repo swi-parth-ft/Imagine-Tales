@@ -54,6 +54,8 @@
 		073EFE892CB2C9F3004BC6AC /* AgeRangeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073EFE882CB2C9F3004BC6AC /* AgeRangeButton.swift */; };
 		073EFE8D2CB2CA6C004BC6AC /* SignInBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073EFE8C2CB2CA6C004BC6AC /* SignInBG.swift */; };
 		073EFE8F2CB2CBC8004BC6AC /* FriendsShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073EFE8E2CB2CBC8004BC6AC /* FriendsShareView.swift */; };
+		073EFE922CB44F8A004BC6AC /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 073EFE912CB44F8A004BC6AC /* GoogleMobileAds */; };
+		073EFE942CB4515C004BC6AC /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073EFE932CB4515C004BC6AC /* BannerView.swift */; };
 		073F2CEA2C6EC85200BCF6F0 /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 073F2CE92C6EC85200BCF6F0 /* FirebaseVertexAI-Preview */; };
 		073F2CED2C6F98D500BCF6F0 /* StoryLoading.json in Resources */ = {isa = PBXBuildFile; fileRef = 073F2CEC2C6F98D500BCF6F0 /* StoryLoading.json */; };
 		073F2CF02C6F9B4600BCF6F0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 073F2CEF2C6F9B4600BCF6F0 /* FirebaseFirestore */; };
@@ -164,6 +166,7 @@
 		073EFE882CB2C9F3004BC6AC /* AgeRangeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeRangeButton.swift; sourceTree = "<group>"; };
 		073EFE8C2CB2CA6C004BC6AC /* SignInBG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInBG.swift; sourceTree = "<group>"; };
 		073EFE8E2CB2CBC8004BC6AC /* FriendsShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsShareView.swift; sourceTree = "<group>"; };
+		073EFE932CB4515C004BC6AC /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
 		073F2CEC2C6F98D500BCF6F0 /* StoryLoading.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StoryLoading.json; sourceTree = "<group>"; };
 		073F2CF12C6F9C1F00BCF6F0 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithEmailView.swift; sourceTree = "<group>"; };
@@ -226,6 +229,7 @@
 		07D323A92CA765A500846FA3 /* AddChildForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddChildForm.swift; sourceTree = "<group>"; };
 		07D323AB2CA765B300846FA3 /* parentSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parentSettings.swift; sourceTree = "<group>"; };
 		07D323AD2CA765C400846FA3 /* DpSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DpSelection.swift; sourceTree = "<group>"; };
+		07DD158A2CB57114002E9410 /* Imagine Tales.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Imagine Tales.entitlements"; sourceTree = "<group>"; };
 		07FB38452C62BEAB0070EEFA /* Imagine Tales.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Imagine Tales.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imagine_TalesApp.swift; sourceTree = "<group>"; };
 		07FB384C2C62BEAC0070EEFA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -241,6 +245,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0711F3812C6DB62D006C86AA /* FirebaseAnalytics in Frameworks */,
+				073EFE922CB44F8A004BC6AC /* GoogleMobileAds in Frameworks */,
 				0711F36D2C6D6E2B006C86AA /* GoogleSignInSwift in Frameworks */,
 				0711F3892C6DB68B006C86AA /* GoogleSignIn in Frameworks */,
 				0711F38B2C6DB68B006C86AA /* GoogleSignInSwift in Frameworks */,
@@ -386,6 +391,7 @@
 			isa = PBXGroup;
 			children = (
 				07D323432CA6F25200846FA3 /* Extentions .swift */,
+				073EFE932CB4515C004BC6AC /* BannerView.swift */,
 				073EFE8C2CB2CA6C004BC6AC /* SignInBG.swift */,
 				073EFE832CB0C8E2004BC6AC /* OrientationManager.swift */,
 				0788C4222CA8BA5A00FA5E65 /* MagicView.swift */,
@@ -608,6 +614,7 @@
 		07FB38472C62BEAB0070EEFA /* Imagine Tales */ = {
 			isa = PBXGroup;
 			children = (
+				07DD158A2CB57114002E9410 /* Imagine Tales.entitlements */,
 				07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */,
 				0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */,
 				0711F34E2C6D5D79006C86AA /* RootView.swift */,
@@ -698,6 +705,7 @@
 				0793FBFE2CA23A63008A7CBB /* XCRemoteSwiftPackageReference "neumorphic" */,
 				07D323402CA62F8B00846FA3 /* XCRemoteSwiftPackageReference "Drops" */,
 				0788C41F2CA8B9ED00FA5E65 /* XCRemoteSwiftPackageReference "Vortex" */,
+				073EFE902CB44F8A004BC6AC /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			productRefGroup = 07FB38462C62BEAB0070EEFA /* Products */;
 			projectDirPath = "";
@@ -771,6 +779,7 @@
 				07774ED62CAF36D00056E5BE /* File.swift in Sources */,
 				0701FB8D2C822816004BEE9F /* FriendsView.swift in Sources */,
 				0701FBB02C862845004BEE9F /* DpSelectionView.swift in Sources */,
+				073EFE942CB4515C004BC6AC /* BannerView.swift in Sources */,
 				07D323852CA7300000846FA3 /* StoryTextItem.swift in Sources */,
 				073EFE842CB0C8E2004BC6AC /* OrientationManager.swift in Sources */,
 				07D323A22CA7641700846FA3 /* FriendRequestView.swift in Sources */,
@@ -956,6 +965,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Imagine Tales/Imagine Tales.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Imagine Tales/Preview Content\"";
@@ -963,6 +973,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Imagine-Tales-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -987,6 +998,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Imagine Tales/Imagine Tales.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Imagine Tales/Preview Content\"";
@@ -994,6 +1006,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Imagine-Tales-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1067,6 +1080,14 @@
 			requirement = {
 				branch = main;
 				kind = branch;
+			};
+		};
+		073EFE902CB44F8A004BC6AC /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.10.0;
 			};
 		};
 		0788C41F2CA8B9ED00FA5E65 /* XCRemoteSwiftPackageReference "Vortex" */ = {
@@ -1154,6 +1175,11 @@
 		0711F38C2C6DB698006C86AA /* FloatingTabBar */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FloatingTabBar;
+		};
+		073EFE912CB44F8A004BC6AC /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 073EFE902CB44F8A004BC6AC /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
 		};
 		073F2CE92C6EC85200BCF6F0 /* FirebaseVertexAI-Preview */ = {
 			isa = XCSwiftPackageProductDependency;

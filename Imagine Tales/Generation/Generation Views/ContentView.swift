@@ -12,6 +12,7 @@ import FirebaseFirestore
 import FirebaseStorage
 import Neumorphic
 import Drops
+import GoogleMobileAds
 
 struct ContentView: View {
     
@@ -82,6 +83,7 @@ struct ContentView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @State private var isAddingSuperHero = false
+    private var adViewModel = InterstitialViewModel()
     
     var body: some View {
         NavigationStack {
@@ -306,6 +308,8 @@ struct ContentView: View {
                                                     withAnimation {
                                                         isSelectingTheme = false
                                                         isSelectingGenre = true
+                                                    
+                                                       // adViewModel.showAd()
                                                     }
                                                 } else if isSelectingGenre {
                                                     withAnimation {
@@ -318,10 +322,14 @@ struct ContentView: View {
                                                         isAddingNames = true
                                                     }
                                                 } else if isAddingNames {
+                                                    if !selectedChars.isEmpty {
                                                     isAddingNames = false
                                                     preview = true
+                                                    } else {
+                                                        Drops.show("Please select atleast one character.")
+                                                    }
                                                 } else if preview {
-                                                    if !selectedChars.isEmpty {
+                                                    
                                                         generatedImage = nil
                                                         isLoading = true
                                                         isLoadingChunk = true
@@ -333,9 +341,7 @@ struct ContentView: View {
                                                                 print(error.localizedDescription)
                                                             }
                                                         }
-                                                    } else {
-                                                        Drops.show("Please select atleast one character.")
-                                                    }
+                                                    
                                                 }
                                             } label: {
                                                 HStack {
@@ -360,6 +366,9 @@ struct ContentView: View {
                         
                 }
                 .onAppear {
+                    Task {
+                        await adViewModel.loadAd()
+                    }
                     withAnimation {
                         scale = 1.1
                     }
@@ -624,7 +633,5 @@ struct ContentView: View {
     
 }
 
-#Preview {
-    ContentView(shader: .example)
-}
+
 

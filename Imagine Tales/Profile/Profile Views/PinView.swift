@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Drops
 
 /// View for entering and resetting the user's PIN.
 struct PinView: View {
@@ -84,21 +85,20 @@ struct PinView: View {
                                 print(error.localizedDescription) // Log any errors
                             }
                         } else {
-                            // Check if the entered PIN matches the stored PIN
-                            if otp.joined() == viewModel.pin {
+                            if otp.joined().isEmpty {
+                                Drops.show("Please enter a PIN.")
+                            } else if otp.joined() == viewModel.pin {
                                 screenTimeViewModel.stopScreenTime() // Stop screen time management
                                 ipf = true // Set the app storage flag to true
                             } else {
                                 isPinWrong = true // Set incorrect PIN flag
-                                error = "Incorrect PIN, Try again!" // Set error message
+                                Drops.show("Incorrect PIN.")
                                 otp = Array(repeating: "", count: otpLength) // Clear PIN fields
                             }
                         }
                     }
                 }
 
-                // Display any error messages in red
-                Text(error).foregroundStyle(.red)
                 
                 // Handle reauthentication process if resetting the PIN
                 if isResetting && !reAuthModel.reAuthenticated {
@@ -108,6 +108,7 @@ struct PinView: View {
                             Task {
                                 do {
                                     try await reAuthModel.reAuthWithGoogle() // Attempt reauthentication with Google
+                                    Drops.show("Signed in Successfully")
                                 } catch {
                                     print(error.localizedDescription) // Log any errors
                                 }
@@ -124,6 +125,30 @@ struct PinView: View {
                                         .frame(width: 22, height: 22)
                                     Text("Continue with Google")
                                         .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                }
+                            }
+                        }
+                    } else if reAuthModel.signedInWithApple {
+                        Button {
+                            Task {
+                                do {
+                                    try await reAuthModel.reAuthWithApple() // Attempt reauthentication with Apple
+                                    Drops.show("Signed in Successfully")
+                                } catch {
+                                    print(error.localizedDescription) // Log any errors
+                                }
+                            }
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 22)
+                                    .fill(colorScheme == .dark ? .white : .black)
+                                    .frame(width: 250, height: 55)
+                                HStack {
+                                    Image(systemName: "apple.logo")
+                                        .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                        .font(.system(size: 22))
+                                    Text("Continue with Apple")
+                                        .foregroundStyle(colorScheme == .dark ? .black : .white)
                                 }
                             }
                         }
@@ -144,9 +169,12 @@ struct PinView: View {
                 
                 // If reauthentication failed, provide a button for sign-in or forgotten PIN
                 if !reAuthModel.reAuthenticated && isPinWrong {
-                    Button(isResetting ? (reAuthModel.signedInWithGoogle ? "" : "Sign in") : "forgot PIN?") {
+                    Button(isResetting ? (reAuthModel.signedInWithGoogle || reAuthModel.signedInWithApple ? "" : "Sign in") : "forgot PIN?") {
                         if isResetting {
-                            reAuthModel.reAuthWithEmail() // Attempt reauthentication with email
+                            let reAuth = reAuthModel.reAuthWithEmail() // Attempt reauthentication with email
+                            if reAuth {
+                                Drops.show("Signed In Succesful.")
+                            }
                         }
                         isResetting = true // Set to resetting state
                         error = "" // Clear any existing error messages
@@ -160,6 +188,13 @@ struct PinView: View {
             try? viewModel.getPin() // Fetch the current PIN
             focusedIndex = 0 // Set focus to the first input field
             reAuthModel.checkIfGoogle() // Check if the user signed in with Google
+        }
+        .onChange(of: reAuthModel.reAuthenticated) {
+            if reAuthModel.reAuthenticated {
+                Drops.show("Signed In Succesfully.")
+            } else {
+                Drops.show("Incorrect Details")
+            }
         }
     }
 }

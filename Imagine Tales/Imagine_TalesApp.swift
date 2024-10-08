@@ -17,6 +17,7 @@
 import SwiftUI
 import FirebaseCore  // For initializing Firebase
 import FirebaseAuth  // For handling user authentication
+import GoogleMobileAds
 
 // MARK: - AppState Class
 
@@ -35,6 +36,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()  // Initializes Firebase SDK
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
         return true
     }
     

@@ -60,7 +60,7 @@ struct ProfileView: View {
         GridItem(.flexible())
     ]
     @State private var retryCount = 0 // Count for retry attempts when loading images
-    @State private var maxRetryAttempts = 3 // Maximum number of retry attempts
+    @State private var maxRetryAttempts = 6 // Maximum number of retry attempts
     @State private var retryDelay = 2.0 // Delay between retries
     @EnvironmentObject var orientation: OrientationManager
     @State private var isExpanding = true
@@ -105,7 +105,6 @@ struct ProfileView: View {
                                         .font(.title)
                                         .frame(width: 200)
                                         .focused($isTextFieldFocused)
-                                        .keyboardType(.numberPad)
                                         .onAppear {
                                             isTextFieldFocused = true // Focus the text field on appearance
                                         }
@@ -304,8 +303,6 @@ struct ProfileView: View {
                                                             isExpanding = true
                                                         }
                                                     }
-                                                } else {
-                                                    
                                                 }
                                             }
                                             

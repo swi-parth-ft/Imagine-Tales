@@ -118,7 +118,7 @@ final class AuthenticationManager {
     /// Signs in a user with Apple credentials.
     /// - Throws: An error if sign-in fails.
     func signInWithApple(tokens: SignInWithAppleResult) async throws -> AuthDataResultModel {
-        let credential = OAuthProvider.credential(providerID: AuthProviderID(rawValue: "apple.com")!, idToken: tokens.token, accessToken: tokens.nonce)
+        let credential = OAuthProvider.credential(providerID: AuthProviderID(rawValue: "apple.com")!, idToken: tokens.token, rawNonce: tokens.nonce)
         return try await signIn(credential: credential)
     }
 }

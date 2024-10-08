@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Drops
+import GoogleMobileAds
 
 // HomeView displays the home screen of Imagine Tales app, allowing users to view stories filtered by genres or followed accounts.
 struct HomeView: View {
@@ -45,6 +46,9 @@ struct HomeView: View {
         NavigationStack {
             
             VStack {
+                
+                
+                  
                 // Horizontal scroll view for selecting different genres.
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
@@ -98,9 +102,24 @@ struct HomeView: View {
                         LazyVStack {
                             // If the selected category is "Following", display stories from followed users.
                             if cat == "Following" {
-                                ForEach(viewModel.newStories, id: \.id) { story in
+                                ForEach(Array(viewModel.newStories.enumerated()), id: \.element.id) { index, story in
                                     // Display each story using a custom StoryRowView.
                                     StoryRowView(story: story, childId: childId, reload: $reload)
+                                    
+                                    // Check if the index is divisible by 2, and display something after every 2 items.
+                                    if (index + 1) % 2 == 0 {
+                                        // Display ad after every 2 items.
+                                        GeometryReader { geometry in
+                                            let adSize = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(geometry.size.width)
+                                            
+                                            VStack {
+                                                
+                                                BannerView(adSize)
+                                                    .frame(height: adSize.size.height / 4)
+                                            }
+                                            
+                                        }.frame(height: 100)
+                                    }
                                     
                                     // If the current story is the last one, show a progress view and load more stories.
                                     if story == viewModel.newStories.last {

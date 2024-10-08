@@ -8,8 +8,10 @@
 import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
+import Drops
 
 /// ViewModel responsible for handling reauthentication processes for users.
+@MainActor
 final class ReAuthentication: ObservableObject {
     
     // Published properties to trigger UI updates when values change
@@ -17,8 +19,9 @@ final class ReAuthentication: ObservableObject {
     @Published var email = "" // User's email for reauthentication
     @Published var password = "" // User's password for reauthentication
     @Published var signedInWithGoogle = false // Flag to check if the user signed in with Google
-    
-    /// Checks if the current user signed in with Google
+    @Published var signedInWithApple = false
+    let signInAppleHelper = SignInAppleHelper()
+    /// Checks if the current user signed in with Google or Apple
     func checkIfGoogle() {
         if let user = Auth.auth().currentUser { // Get the current user
             // Loop through the user's provider data
@@ -28,6 +31,10 @@ final class ReAuthentication: ObservableObject {
                     signedInWithGoogle = true // Set flag if signed in with Google
                     // Perform actions specific to Google-signed-in users here
                     break
+                } else if userInfo.providerID == "apple.com" {
+                    signedInWithApple = true // Set flag if signed in with Apple
+                    // Perform actions specific to Apple-signed-in users here
+                    break
                 }
                 // Get the user's email
                 self.email = user.email!
@@ -36,6 +43,8 @@ final class ReAuthentication: ObservableObject {
             print("No user is signed in.") // Log if no user is signed in
         }
     }
+    
+
     
     /// Reauthenticate user with Google credentials
     func reAuthWithGoogle() async throws {
@@ -61,8 +70,10 @@ final class ReAuthentication: ObservableObject {
         }
     }
     
+    
+    
     /// Reauthenticate user with email and password
-    func reAuthWithEmail() {
+    func reAuthWithEmail() -> Bool {
         if let user = Auth.auth().currentUser { // Check if a user is signed in
             
             let email = email  // Obtain these from the user input
@@ -77,13 +88,48 @@ final class ReAuthentication: ObservableObject {
                     // An error occurred while trying to reauthenticate
                     print("Reauthentication failed: \(error.localizedDescription)") // Log the error
                     self.reAuthenticated = false // Update reAuthenticated status to false
+                   
                 } else {
                     // Reauthentication was successful
                     print("Reauthentication successful.") // Log success
                     self.reAuthenticated = true // Update reAuthenticated status to true
+                    
+                    
                 }
             }
         }
+        return self.reAuthenticated
+    }
+    
+    func reAuthWithApple() async throws {
+        guard let user = Auth.auth().currentUser else {
+            throw URLError(.userAuthenticationRequired) // Safely handle nil user
+        }
+
+        
+        signInAppleHelper.startSignInWithAppleFlow { result in
+            switch result {
+            case .success(let signInAppleResult):
+                Task {
+                    let credential = OAuthProvider.credential(
+                        providerID: AuthProviderID(rawValue: "apple.com")!,
+                        idToken: signInAppleResult.token,
+                        rawNonce: signInAppleResult.nonce
+                    )
+                    
+                    // Reauthenticate with the obtained credential
+                    user.reauthenticate(with: credential)
+                    print("Reauthentication successful.")
+                    self.reAuthenticated = true
+                    Drops.show("Signed in successfully")
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+                self.reAuthenticated = false
+            }
+        }
+        
+        
     }
     
     /// Set a new PIN for the user

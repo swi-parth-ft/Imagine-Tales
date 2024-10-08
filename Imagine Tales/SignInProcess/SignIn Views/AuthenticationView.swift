@@ -207,7 +207,7 @@ struct AuthenticationView: View {
                                     Button {
                                         Task {
                                             do {
-                                                try await viewModel.signInApple() // Attempt Apple sign-in
+                                                try await viewModel.signInApple()
                                             } catch {
                                                 print(error.localizedDescription) // Log any errors
                                             }
@@ -219,11 +219,22 @@ struct AuthenticationView: View {
                                             .frame(width: 55, height: 55) // Apple icon size
                                             .cornerRadius(22) // Rounded corners
                                     }
-                                    .onChange(of: viewModel.didSignInWithApple) { newValue in
-                                        if newValue {
-                                            showSignInView = false // Dismiss view after Apple sign-in
-                                        }
+                                    .navigationDestination(isPresented: $viewModel.didSignInWithApple) {
+                                        SignInWithEmailView(
+                                            showSignInView: $showSignInView,
+                                            isiPhone: $isiPhone,
+                                            isParent: true,
+                                            continueAsChild: false,
+                                            signedInWithGoogle: true,
+                                            isParentFlow: true,
+                                            isChildFlow: $isParentFlow
+                                        ) // Navigate after Google sign-in
                                     }
+//                                    .onChange(of: viewModel.didSignInWithApple) { newValue in
+//                                        if newValue {
+//                                            showSignInView = false // Dismiss view after Apple sign-in
+//                                        }
+//                                    }
                                 }
                             }
                             .frame(width: UIScreen.main.bounds.width * (isiPhone ? 0.8 : 0.6), height: UIScreen.main.bounds.height * 0.4)

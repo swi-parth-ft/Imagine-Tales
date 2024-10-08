@@ -36,7 +36,7 @@ final class AuthenticationViewModel: ObservableObject {
                         let _ = try await AuthenticationManager.shared.signInWithApple(tokens: signInAppleResult)
                         self.didSignInWithApple = true
                     } catch {
-                        
+                        print(error.localizedDescription)
                     }
                 }
                 
