@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Drops
+import FirebaseAuth
 
 // View for the parent settings, including options for logging out
 struct parentSettings: View {
@@ -25,6 +26,10 @@ struct parentSettings: View {
     
     @Environment(\.colorScheme) var colorScheme
     @FocusState private var isTextFieldFocused: Bool
+    @StateObject private var reAuthModel = ReAuthentication()
+    @State private var reAuthed = false
+    @State private var isDeletingAccount = false
+    
     
     var body: some View {
         NavigationStack {
@@ -165,6 +170,7 @@ struct parentSettings: View {
                         
                     }
                 
+                    Spacer()
                     
                     // Button to log out the parent
                     Button {
@@ -186,17 +192,46 @@ struct parentSettings: View {
                             .foregroundStyle(.red)
                             .cornerRadius(12)
                     }
+                   
+                        Button {
+                            isDeletingAccount.toggle()
+                            
+                        } label: {
+                            Text("Delete Account")
+                                .foregroundStyle(.red)
+                                
+                        }
+                        
+                        .alert("Delete Account", isPresented: $isDeletingAccount) {
+                            Button("Cancel", role: .cancel) {}
+                            Button("Delete", role: .destructive) {
+                                reAuthModel.deleteAccount { error in
+                                    if let error = error {
+                                        print("Error deleting account: \(error.localizedDescription)")
+                                        Drops.show("Something went wrong, Try again!.")
+                                    } else {
+                                        print("Account deleted successfully.")
+                                        showSigninView = true // Set binding to show sign-in view
+                                        dismiss() // Dismiss the settings view
+                                        Drops.show("Account deleted successfully.")
+                                    }
+                                }
+                            }
+                        } message: {
+                            Text("Are you sure you want to delete your account and all associated data? This action cannot be undone.")
+                        }
                     
-                    Spacer()
                 }
                 .padding()
                 .onAppear {
+                    reAuthModel.checkIfGoogle()
                     do {
                         try viewModel.fetchParent()
                     } catch {
                         print(error.localizedDescription)
                     }
                 }
+                
             }
             .navigationTitle("Settings") // Set the navigation title
         }

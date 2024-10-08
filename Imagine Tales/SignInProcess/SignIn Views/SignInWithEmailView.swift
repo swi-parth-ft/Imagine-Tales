@@ -788,3 +788,6 @@ struct SignInWithEmailView: View {
 #Preview {
     SignInWithEmailView(showSignInView: .constant(false), isiPhone: .constant(false), isParent: true, continueAsChild: false, signedInWithGoogle: false, isParentFlow: false, isChildFlow: .constant(false))
 }
+
+
+

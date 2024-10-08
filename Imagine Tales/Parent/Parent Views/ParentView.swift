@@ -20,6 +20,8 @@ struct ParentView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass // Environment variable to check size class
     @State private var isCompact = false // State variable to track if the layout is compact
     @Environment(\.colorScheme) var colorScheme
+    
+    
     var body: some View {
         NavigationStack {
             ZStack {

@@ -15,7 +15,19 @@ struct AddChildForm: View {
     @State private var isSelectingImage = false // State variable to track if image selection is in progress
     @State private var selectedImageName = "" // State variable to hold the name of the selected image
     var isCompact: Bool // A boolean to determine layout behavior
-
+    @Environment(\.colorScheme) var colorScheme
+    enum AgeRange: String, CaseIterable {
+        case sixToEight = "6-8"
+        case eightToTen = "8-10"
+        case tenToTwelve = "10-12"
+        case twelveToFourteen = "12-14"
+    }
+    
+    
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     var body: some View {
         ZStack {
             // Background mesh view for aesthetics
@@ -23,16 +35,17 @@ struct AddChildForm: View {
 
             VStack {
                 VStack {
+                    
                     // Circle for displaying the profile image or image selection icon
                     ZStack {
                         Circle()
-                            .fill(Color.white) // Background circle color
-                            .frame(width: 250, height: 250) // Size of the circle
+                            .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color.white) // Background circle color
+                            .frame(width: 200, height: 200) // Size of the circle
 
                         // Display an icon if no image has been selected
                         if selectedImageName == "" {
                             Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 200)) // Size of the icon
+                                .font(.system(size: 170)) // Size of the icon
                                 .foregroundStyle(.gray.opacity(0.4)) // Icon color
                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10) // Shadow effect
                         } else {
@@ -40,7 +53,7 @@ struct AddChildForm: View {
                             Image(selectedImageName)
                                 .resizable() // Enable resizing of the image
                                 .scaledToFill() // Scale the image to fill the circle
-                                .frame(width: 200, height: 200) // Size of the image
+                                .frame(width: 170, height: 170) // Size of the image
                                 .clipShape(Circle()) // Clip the image to a circle
                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10) // Shadow effect
                         }
@@ -55,13 +68,34 @@ struct AddChildForm: View {
                     VStack {
                         TextField("Name", text: $viewModel.name) // Name input field
                             .padding()
-                            .background(.white.opacity(0.4)) // Background color for the text field
-                        TextField("Age", text: $viewModel.age) // Age input field
-                            .padding()
-                            .background(.white.opacity(0.4)) // Background color for the text field
+                            .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                            .cornerRadius(12) // Background color for the text field
                         TextField("Username", text: $viewModel.username) // Username input field
                             .padding()
-                            .background(.white.opacity(0.4)) // Background color for the text field
+                            .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                            .cornerRadius(12) // Background color for the text field
+                        Text("Select Age")
+                            .padding(.top)
+                        LazyVGrid(columns: columns, spacing: 10) {
+                            ForEach(AgeRange.allCases, id: \.self) { range in
+                                Button(action: {
+                                    viewModel.age = range.rawValue
+                                }) {
+                                    Text(range.rawValue)
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(viewModel.age != range.rawValue ? Color.clear : colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#DFFFDF"))
+                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                        .cornerRadius(10)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#DFFFDF"), lineWidth: 2)
+                                        )
+                                }
+                            }
+                        }
+                        .padding(.bottom)
+                        
                     }
                 }
 
@@ -93,5 +127,28 @@ struct AddChildForm: View {
                 DpSelection(selectedImageName: $selectedImageName, isCompact: isCompact) // Image selection view
             }
         }
+    }
+}
+
+struct AgeRangeButtonFromParent: View {
+    let ageRange: AddChildForm.AgeRange
+    @Binding var selectedAgeRange: AddChildForm.AgeRange?
+    @Environment(\.colorScheme) var colorScheme
+    var body: some View {
+        Button(action: {
+            selectedAgeRange = ageRange
+        }) {
+            Text(ageRange.rawValue)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(selectedAgeRange != ageRange ? Color.clear : colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#DFFFDF"))
+                
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#DFFFDF"), lineWidth: 2)
+                )
+        }
+        
     }
 }

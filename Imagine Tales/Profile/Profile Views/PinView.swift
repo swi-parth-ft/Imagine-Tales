@@ -92,7 +92,10 @@ struct PinView: View {
                                 ipf = true // Set the app storage flag to true
                             } else {
                                 isPinWrong = true // Set incorrect PIN flag
-                                Drops.show("Incorrect PIN.")
+                                if !isResetting {
+                                    Drops.show("Incorrect PIN.")
+                                }
+                                
                                 otp = Array(repeating: "", count: otpLength) // Clear PIN fields
                             }
                         }
@@ -132,8 +135,14 @@ struct PinView: View {
                         Button {
                             Task {
                                 do {
-                                    try await reAuthModel.reAuthWithApple() // Attempt reauthentication with Apple
-                                    Drops.show("Signed in Successfully")
+                                   // try await reAuthModel.reAuthWithApple() // Attempt reauthentication with Apple
+                                    reAuthModel.reAuthWithApple { success in
+                                        if success {
+                                            Drops.show("Signed in Successfully")
+                                        } else {
+                                            
+                                        }
+                                    }
                                 } catch {
                                     print(error.localizedDescription) // Log any errors
                                 }
@@ -171,10 +180,14 @@ struct PinView: View {
                 if !reAuthModel.reAuthenticated && isPinWrong {
                     Button(isResetting ? (reAuthModel.signedInWithGoogle || reAuthModel.signedInWithApple ? "" : "Sign in") : "forgot PIN?") {
                         if isResetting {
-                            let reAuth = reAuthModel.reAuthWithEmail() // Attempt reauthentication with email
-                            if reAuth {
-                                Drops.show("Signed In Succesful.")
-                            }
+                            reAuthModel.reAuthWithEmail { success in
+                                if success {
+                                    Drops.show("Signed In Succesfully.")
+                                } else {
+                                    Drops.show("Password is Incorrect.")
+                                }
+                            } // Attempt reauthentication with email
+                           
                         }
                         isResetting = true // Set to resetting state
                         error = "" // Clear any existing error messages
@@ -189,12 +202,6 @@ struct PinView: View {
             focusedIndex = 0 // Set focus to the first input field
             reAuthModel.checkIfGoogle() // Check if the user signed in with Google
         }
-        .onChange(of: reAuthModel.reAuthenticated) {
-            if reAuthModel.reAuthenticated {
-                Drops.show("Signed In Succesfully.")
-            } else {
-                Drops.show("Incorrect Details")
-            }
-        }
+      
     }
 }
