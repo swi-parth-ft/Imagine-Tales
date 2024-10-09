@@ -2158,8 +2158,8 @@
             filePath = "Imagine Tales/SignInProcess/SignIn Views/SignInWithEmailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "628"
-            endingLineNumber = "628"
+            startingLineNumber = "629"
+            endingLineNumber = "629"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2174,8 +2174,8 @@
             filePath = "Imagine Tales/SignInProcess/SignIn Views/SignInWithEmailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "827"
-            endingLineNumber = "827"
+            startingLineNumber = "829"
+            endingLineNumber = "829"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2222,8 +2222,8 @@
             filePath = "Imagine Tales/SignInProcess/SignIn Views/SignInWithEmailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "553"
-            endingLineNumber = "553"
+            startingLineNumber = "554"
+            endingLineNumber = "554"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2864,6 +2864,38 @@
             endingLineNumber = "94"
             landmarkName = "reAuthWithEmail(completion:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FB3FF38A-26B7-4672-AF29-E663E21A1178"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/SignInProcess/SignIn Views/PhoneVarification.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
+            landmarkName = "verifyPhoneNumber(verificationID:verificationCode:completion:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1BFB0632-B030-4D15-A728-236FB9A9B28A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/SignInProcess/SignIn Views/PhoneVarification.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

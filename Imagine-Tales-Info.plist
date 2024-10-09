@@ -16,9 +16,21 @@
 				<string>com.googleusercontent.apps.500615670694-qdgqa8agkf4otbds3qgoh7iriv8cu366</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-500615670694-ios-d3acfa1048fd1b64897d67</string>
+			</array>
+		</dict>
 	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-9317484617449456~5534434331</string>
+	<key>GIDClientID</key>
+	<string>500615670694-qdgqa8agkf4otbds3qgoh7iriv8cu366.apps.googleusercontent.com</string>
 	<key>SKAdnetworkItems</key>
 	<array>
 		<dict>
@@ -26,13 +38,17 @@
 			<string>cstr6suwn9.skadnetwork</string>
 		</dict>
 	</array>
-	<key>GIDClientID</key>
-	<string>500615670694-qdgqa8agkf4otbds3qgoh7iriv8cu366.apps.googleusercontent.com</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>ComicNeue-Regular.ttf</string>
 		<string>ComicNeue-Bold.ttf</string>
 		<string>OpenSans.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+		<string>processing</string>
+		<string>fetch</string>
 	</array>
 </dict>
 </plist>

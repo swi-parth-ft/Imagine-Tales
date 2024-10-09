@@ -56,6 +56,28 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
         }
     }
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Auth.auth().setAPNSToken(deviceToken, type: .sandbox)
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+            // Forward the notification to Firebase
+            if Auth.auth().canHandleNotification(userInfo) {
+                completionHandler(.noData)
+                return
+            }
+            
+            // Handle your app's own notification handling logic here if needed
+            completionHandler(.newData)
+        }
+     
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        if Auth.auth().canHandle(url) {
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 // MARK: - Main App Structure

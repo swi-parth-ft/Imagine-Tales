@@ -509,6 +509,7 @@ struct SignInWithEmailView: View {
                                                                 return
                                                             } catch {
                                                                 print(error.localizedDescription)
+                                                                Drops.show(Drop(title: "\(error.localizedDescription)"))
                                                             }
                                                         }
                                                     } else {
@@ -816,7 +817,8 @@ struct SignInWithEmailView: View {
                     Spacer()
                 }.frame(width:  UIScreen.main.bounds.width * (isCompact ? 1 : 0.8), height:  UIScreen.main.bounds.height * (isCompact ? 1 : 0.7))
                     .sheet(isPresented: $isVarifyingNumber) {
-                        PhoneVarification()
+                        PhoneVarification(isCompact: isCompact)
+                            .interactiveDismissDisabled(true)
                     }
                 
             }

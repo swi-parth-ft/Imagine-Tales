@@ -51,7 +51,7 @@ struct UserInfoFormView: View {
                         .padding()
                         .foregroundStyle(colorScheme == .dark ? .white : .black)
                         .frame(width: UIScreen.main.bounds.width * 0.34, height: isCompact ? 35 : 55)
-                        .background(colorScheme == .dark ? (gender == "Male" ? Color(hex: "#FF6F61") : .black.opacity(0.2)) : (gender == "Female" ? Color(hex: "#FF6F61") : .white))
+                        .background(colorScheme == .dark ? (gender == "Male" ? Color(hex: "#FF6F61") : .black.opacity(0.2)) : (gender == "Male" ? Color(hex: "#FF6F61") : .white))
                         .cornerRadius(isCompact ? 6 : 12)
                 }
                 
