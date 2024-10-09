@@ -29,7 +29,7 @@ struct parentSettings: View {
     @StateObject private var reAuthModel = ReAuthentication()
     @State private var reAuthed = false
     @State private var isDeletingAccount = false
-    
+    @State private var isDeletingWithEmail = false
     
     var body: some View {
         NavigationStack {
@@ -92,18 +92,19 @@ struct parentSettings: View {
                     .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                     .cornerRadius(12)
                     
-                    
-                    if !isResettingPassword {
-                        Button {
-                            withAnimation {
-                                isResettingPassword.toggle()
+                    if reAuthModel.signedInWithEmail {
+                        if !isResettingPassword {
+                            Button {
+                                withAnimation {
+                                    isResettingPassword.toggle()
+                                }
+                            } label: {
+                                Text("Reset Passowrd")
+                                    .padding()
+                                    .frame(width: UIScreen.main.bounds.width * 0.5)
+                                    .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                                    .cornerRadius(12)
                             }
-                        } label: {
-                            Text("Reset Passowrd")
-                                .padding()
-                                .frame(width: UIScreen.main.bounds.width * 0.5)
-                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
-                                .cornerRadius(12)
                         }
                         
                     } else {
@@ -194,8 +195,11 @@ struct parentSettings: View {
                     }
                    
                         Button {
-                            isDeletingAccount.toggle()
-                            
+                            if reAuthModel.signedInWithEmail {
+                                isDeletingWithEmail.toggle()
+                            } else {
+                                isDeletingAccount.toggle()
+                            }
                         } label: {
                             Text("Delete Account")
                                 .foregroundStyle(.red)
@@ -230,6 +234,11 @@ struct parentSettings: View {
                     } catch {
                         print(error.localizedDescription)
                     }
+                }
+                .sheet(isPresented: $isDeletingWithEmail, onDismiss: {
+                    dismiss()
+                }) {
+                    DeleteWithEmail(showSigninView: $showSigninView)
                 }
                 
             }

@@ -2158,8 +2158,8 @@
             filePath = "Imagine Tales/SignInProcess/SignIn Views/SignInWithEmailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "555"
-            endingLineNumber = "555"
+            startingLineNumber = "628"
+            endingLineNumber = "628"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2174,8 +2174,8 @@
             filePath = "Imagine Tales/SignInProcess/SignIn Views/SignInWithEmailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "751"
-            endingLineNumber = "751"
+            startingLineNumber = "827"
+            endingLineNumber = "827"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2206,8 +2206,8 @@
             filePath = "Imagine Tales/SignInProcess/SignIn Views/SignInWithEmailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "324"
-            endingLineNumber = "324"
+            startingLineNumber = "328"
+            endingLineNumber = "328"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2222,8 +2222,8 @@
             filePath = "Imagine Tales/SignInProcess/SignIn Views/SignInWithEmailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "480"
-            endingLineNumber = "480"
+            startingLineNumber = "553"
+            endingLineNumber = "553"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2812,8 +2812,8 @@
             filePath = "Imagine Tales/Profile/Profile ViewModels/ReAuthentication.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "reAuthWithGoogle()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2828,8 +2828,8 @@
             filePath = "Imagine Tales/Profile/Profile ViewModels/ReAuthentication.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
             landmarkName = "reAuthWithGoogle()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2844,9 +2844,25 @@
             filePath = "Imagine Tales/Profile/Profile ViewModels/ReAuthentication.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "reAuthWithApple(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B8326251-D31E-4DCC-823B-43FCF9B09F6B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/Profile/Profile ViewModels/ReAuthentication.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "reAuthWithEmail(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

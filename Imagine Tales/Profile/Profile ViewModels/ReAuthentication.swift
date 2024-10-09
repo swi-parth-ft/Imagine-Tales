@@ -21,6 +21,9 @@ final class ReAuthentication: ObservableObject {
     @Published var password = "" // User's password for reauthentication
     @Published var signedInWithGoogle = false // Flag to check if the user signed in with Google
     @Published var signedInWithApple = false
+    @Published var signedInWithEmail = false
+    
+    
     let signInAppleHelper = SignInAppleHelper()
     /// Checks if the current user signed in with Google or Apple
     func checkIfGoogle() {
@@ -36,6 +39,8 @@ final class ReAuthentication: ObservableObject {
                     signedInWithApple = true // Set flag if signed in with Apple
                     // Perform actions specific to Apple-signed-in users here
                     break
+                } else {
+                    signedInWithEmail = true
                 }
                 // Get the user's email
                 self.email = user.email!

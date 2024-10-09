@@ -63,6 +63,8 @@
 		073F2CF42C6FA0A800BCF6F0 /* SignInWithEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */; };
 		073F2CF62C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */; };
 		074FCF742CB5949D00DEC20F /* AccountDeletionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF732CB5949D00DEC20F /* AccountDeletionViewModel.swift */; };
+		074FCF762CB6091800DEC20F /* PhoneVarification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF752CB6091800DEC20F /* PhoneVarification.swift */; };
+		074FCF782CB60FF700DEC20F /* DeleteWithEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF772CB60FF700DEC20F /* DeleteWithEmail.swift */; };
 		076C22982C7E66B6001DAB3F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 076C22972C7E66B6001DAB3F /* FirebaseStorage */; };
 		076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C22992C7E8C3E001DAB3F /* HomeView.swift */; };
 		07774ED22CAC4D4B0056E5BE /* StoryByGenreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07774ED12CAC4D4A0056E5BE /* StoryByGenreViewModel.swift */; };
@@ -173,6 +175,8 @@
 		073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithEmailView.swift; sourceTree = "<group>"; };
 		073F2CF52C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ComicNeue-Regular.ttf"; sourceTree = "<group>"; };
 		074FCF732CB5949D00DEC20F /* AccountDeletionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDeletionViewModel.swift; sourceTree = "<group>"; };
+		074FCF752CB6091800DEC20F /* PhoneVarification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVarification.swift; sourceTree = "<group>"; };
+		074FCF772CB60FF700DEC20F /* DeleteWithEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteWithEmail.swift; sourceTree = "<group>"; };
 		076C22992C7E8C3E001DAB3F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		07774ED12CAC4D4A0056E5BE /* StoryByGenreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryByGenreViewModel.swift; sourceTree = "<group>"; };
 		07774ED32CAE3BF70056E5BE /* parentSettingiPhone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parentSettingiPhone.swift; sourceTree = "<group>"; };
@@ -461,6 +465,7 @@
 			children = (
 				0711F3572C6D63F1006C86AA /* AuthenticationView.swift */,
 				073F2CF32C6FA0A800BCF6F0 /* SignInWithEmailView.swift */,
+				074FCF752CB6091800DEC20F /* PhoneVarification.swift */,
 				07D323652CA7280F00846FA3 /* UserInfoFormView.swift */,
 				073EFE882CB2C9F3004BC6AC /* AgeRangeButton.swift */,
 				07D323672CA7286600846FA3 /* PasswordFormView.swift */,
@@ -590,6 +595,7 @@
 				0792C1D92C7BD95E000C42A7 /* ParentView.swift */,
 				07D323AD2CA765C400846FA3 /* DpSelection.swift */,
 				07D323AB2CA765B300846FA3 /* parentSettings.swift */,
+				074FCF772CB60FF700DEC20F /* DeleteWithEmail.swift */,
 				07774ED32CAE3BF70056E5BE /* parentSettingiPhone.swift */,
 				07D323A72CA7659500846FA3 /* StoryView.swift */,
 				07D323A52CA7657900846FA3 /* ChildView.swift */,
@@ -780,6 +786,7 @@
 				074FCF742CB5949D00DEC20F /* AccountDeletionViewModel.swift in Sources */,
 				073F2CF22C6F9C1F00BCF6F0 /* UserManager.swift in Sources */,
 				07FB38642C63B3720070EEFA /* Environment.swift in Sources */,
+				074FCF782CB60FF700DEC20F /* DeleteWithEmail.swift in Sources */,
 				07774ED62CAF36D00056E5BE /* File.swift in Sources */,
 				0701FB8D2C822816004BEE9F /* FriendsView.swift in Sources */,
 				0701FBB02C862845004BEE9F /* DpSelectionView.swift in Sources */,
@@ -817,6 +824,7 @@
 				07FB38492C62BEAB0070EEFA /* Imagine_TalesApp.swift in Sources */,
 				07D323682CA7286600846FA3 /* PasswordFormView.swift in Sources */,
 				07D323662CA7280F00846FA3 /* UserInfoFormView.swift in Sources */,
+				074FCF762CB6091800DEC20F /* PhoneVarification.swift in Sources */,
 				079E92502C89250A00433869 /* CustomAlert.swift in Sources */,
 				07D3238C2CA7492E00846FA3 /* StoryRowView.swift in Sources */,
 				077BE2872C810FF800760D5A /* SavedStoryView.swift in Sources */,
