@@ -216,7 +216,9 @@ struct ChildView: View {
                                     VStack {
                                         Spacer()
                                             Button {
+                                                viewModel.removeFCMToken(childId: childId)
                                                 childId = child.id // Set the selected child's ID
+                                                viewModel.AddFCMToken(childId: child.id)
                                                 ipf = false // Update profile view state
                                                 viewModel.fetchProfileImage(dp: child.profileImage) // Fetch profile image
                                                 screenTimeViewModel.startScreenTime(for: childId) // Start tracking screen time

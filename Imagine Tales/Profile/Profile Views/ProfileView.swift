@@ -17,7 +17,7 @@ struct ProfileView: View {
     
     // StateObject for managing profile data and interactions
     @StateObject private var viewModel = ProfileViewModel()
-    
+    @StateObject private var parentViewModel = ParentViewModel()
     // Binding variables to manage the visibility of sign-in view and reload state
     @Binding var showSignInView: Bool
     @Binding var reload: Bool
@@ -29,7 +29,6 @@ struct ProfileView: View {
     
     // State variables for UI state management
     @State private var isAddingPin = false // To manage the display of the pin entry view
-    @StateObject var parentViewModel = ParentViewModel() // ViewModel for managing parent-related data
     @State private var selectedStory: Story? // The currently selected story for navigation
     @State private var isSelectingImage = false // To manage the image selection process
     @State private var profileURL = "" // URL for the user's profile image
@@ -159,13 +158,10 @@ struct ProfileView: View {
                     
                     .padding([.trailing, .leading])
                     // Button to toggle between "Your Stories" and "Shared with you"
-                    HStack(alignment: .bottom) {
-                        Text(isShowingSharedStories ? "Shared with you (\(viewModel.sharedStories.count))" : "Your Stories (\(parentViewModel.storyCount))")
-                            .font(.title2)
-                        Spacer()
-                        Button(isShowingSharedStories ? "Your Stories" : "Shared with you", systemImage: isShowingSharedStories ? "book.fill" : "paperplane.fill") {
+                    HStack {
+                        Button {
                             withAnimation {
-                                isShowingSharedStories.toggle() // Toggle shared stories view
+                                isShowingSharedStories = false// Toggle shared stories view
                                 if !isShowingSharedStories {
                                     parentViewModel.story = []
                                     Task {
@@ -173,13 +169,41 @@ struct ProfileView: View {
                                     }
                                 }
                             }
+                        } label: {
+                            VStack {
+                                Text("Your Stories (\(parentViewModel.storyCount))")
+                         
+                                Capsule()
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 10)
+                                    .foregroundColor(isShowingSharedStories ?  .clear : colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
+                            }
+                            .frame(maxWidth: .infinity)
                         }
-                        .padding()
-                        .background(colorScheme == .dark ? Color(hex: "#5A6D2A") : Color(hex: "#8AC640")) // Background color for the button
-                        .foregroundStyle(.white) // Text color
-                        .cornerRadius(22) // Rounded corners
+                        
+                        Button {
+                            withAnimation {
+                                isShowingSharedStories = true // Toggle shared stories view
+                                if !isShowingSharedStories {
+                                    parentViewModel.story = []
+                                    Task {
+                                        await parentViewModel.getStorie(isLoadMore: false, childId: childId)
+                                    }
+                                }
+                            }
+                        } label: {
+                            VStack {
+                                Text("Shared with you (\(viewModel.sharedStories.count))")
+                          
+                                Capsule()
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 10)
+                                    .foregroundColor(!isShowingSharedStories ?  .clear : colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
+                            }
+                        }
                     }
-                    .padding(.horizontal)
+                    .padding()
+                    .frame(maxWidth: .infinity)
                     
                     // Display user's stories or shared stories based on selection
                     if !isShowingSharedStories {
@@ -405,10 +429,7 @@ struct ProfileView: View {
                             
                         }
                         .scrollContentBackground(.hidden)
-                        .onAppear {
-                            // Fetch shared stories on appear
-                            viewModel.fetchSharedStories(childId: childId)
-                        }
+                        
                     }
                 }
                 .padding(.bottom, 50)
@@ -441,8 +462,10 @@ struct ProfileView: View {
 
                 // Custom alert for log out confirmation
                 CustomAlert(isShowing: $isShowingAlert, title: "Already Leaving?", message1: "You’ll miss all the fun! 😢", message2: "But don’t worry, you can come back anytime!", onConfirm: {
+                    parentViewModel.removeFCMToken(childId: childId)
                     Task {
                         do {
+                            
                             screenTimeViewModel.stopScreenTime() // Stop screen time tracking
                             try viewModel.logOut() // Log out the user
                             showSignInView = true // Show sign-in view
@@ -454,6 +477,12 @@ struct ProfileView: View {
             }
             .navigationTitle("Hey, \(viewModel.child?.name ?? "Loading...")") // Navigation title
             .onAppear {
+                
+                parentViewModel.AddFCMToken(childId: childId)
+                
+                    // Fetch shared stories on appear
+                    viewModel.fetchSharedStories(childId: childId)
+                
                     if orientation.isLandscape {
                         isExpanding = false
                     }

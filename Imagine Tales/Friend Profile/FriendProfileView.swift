@@ -15,6 +15,7 @@ struct FriendProfileView: View {
     var dp: String
     @StateObject var viewModel = FriendProfileViewModel()
     @StateObject var friendViewModel = FriendsViewModel()
+    @StateObject var homeViewModel = HomeViewModel()
     @State var counter: Int = 0
     @State var origin: CGPoint = .zero
     @State private var tiltAngle: Double = 0
@@ -211,6 +212,7 @@ struct FriendProfileView: View {
                                                                 }
                                                                 friendViewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "accepted", friendUserId: friendId)
                                                                 friendViewModel.deleteRequest(childId: childId, docID: friendId)
+                                                                homeViewModel.sendRequestRespoceNotification(fromId: childId, toUserId: friendId, fromChildUsername: viewModel.currentChild?.username ?? "", fromChildProfilePic: viewModel.currentDp, status: "Accepted")
                                                                 let drop = Drop(title: "You're now friends!", icon: UIImage(systemName: "figure.2.left.holdinghands"))
                                                                 Drops.show(drop)
                                                                 viewModel.checkFriendRequest(childId: childId, friendId: friendId)
@@ -230,6 +232,7 @@ struct FriendProfileView: View {
                                                                 }
                                                                 friendViewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "denied", friendUserId: friendId)
                                                                 friendViewModel.deleteRequest(childId: childId, docID: friendId)
+                                                                homeViewModel.sendRequestRespoceNotification(fromId: childId, toUserId: friendId, fromChildUsername: viewModel.currentChild?.username ?? "", fromChildProfilePic: viewModel.currentDp, status: "Rejected")
                                                                 let drop = Drop(title: "Request Denied!", icon: UIImage(systemName: "person.fill.xmark"))
                                                                 Drops.show(drop)
                                                                 viewModel.checkFriendRequest(childId: childId, friendId: friendId)
@@ -302,6 +305,7 @@ struct FriendProfileView: View {
                                                             }
                                                             friendViewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "accepted", friendUserId: friendId)
                                                             friendViewModel.deleteRequest(childId: childId, docID: friendId)
+                                                            homeViewModel.sendRequestRespoceNotification(fromId: childId, toUserId: friendId, fromChildUsername: viewModel.currentChild?.username ?? "", fromChildProfilePic: viewModel.currentDp, status: "Accepted")
                                                             let drop = Drop(title: "You're now friends!", icon: UIImage(systemName: "figure.2.left.holdinghands"))
                                                             Drops.show(drop)
                                                             viewModel.checkFriendRequest(childId: childId, friendId: friendId)
@@ -321,6 +325,7 @@ struct FriendProfileView: View {
                                                             }
                                                             friendViewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "denied", friendUserId: friendId)
                                                             friendViewModel.deleteRequest(childId: childId, docID: friendId)
+                                                            homeViewModel.sendRequestRespoceNotification(fromId: childId, toUserId: friendId, fromChildUsername: viewModel.currentChild?.username ?? "", fromChildProfilePic: viewModel.currentDp, status: "Denied")
                                                             let drop = Drop(title: "Request Denied!", icon: UIImage(systemName: "person.fill.xmark"))
                                                             Drops.show(drop)
                                                             viewModel.checkFriendRequest(childId: childId, friendId: friendId)
@@ -389,6 +394,7 @@ struct FriendProfileView: View {
                 viewModel.fetchChild(ChildId: friendId)
                 viewModel.getFriendsCount(childId: friendId)
                 viewModel.checkFriendshipStatus(childId: childId, friendChildId: friendId)
+                viewModel.fetchCurrentChild(ChildId: childId)
                 friendViewModel.fetchFriendRequests(childId: childId) // Fetch friend requests when the view appears
             }
             .toolbar {

@@ -9,6 +9,7 @@
 import FirebaseFirestore
 import FirebaseStorage
 import SwiftUI
+import FirebaseMessaging
 
 final class SignInWithEmailViewModel: ObservableObject {
     
@@ -115,5 +116,49 @@ final class SignInWithEmailViewModel: ObservableObject {
         userId = authDataResult.uid
         Firestore.firestore().collection("users").document(userId).updateData(["pin": pin])
     }
+    
+    // Fetch the FCM token and update Firestore with the selected child's token
+    func addFCMToken(childId: String) {
+        if let fcmToken = Messaging.messaging().fcmToken {
+            let currentChildId = childId // Get the active child ID from your app logic
+            
+            let childRef = Firestore.firestore().collection("Children2").document(currentChildId)
+
+                // Check if the child document exists
+                childRef.getDocument { (document, error) in
+                    if let error = error {
+                        print("Error fetching child document: \(error.localizedDescription)")
+                        return
+                    }
+
+                    // If the document does not exist, create it with the fcmToken
+                    if let document = document, document.exists {
+                        // Document exists, update the fcmToken
+                        childRef.updateData([
+                            "fcmToken": fcmToken
+                        ]) { error in
+                            if let error = error {
+                                print("Error updating FCM token: \(error.localizedDescription)")
+                            } else {
+                                print("FCM token updated successfully for child ID: \(currentChildId)")
+                            }
+                        }
+                    } else {
+                        // Document does not exist, create it with the fcmToken
+                        let childData: [String: Any] = [
+                            "fcmToken": fcmToken // Initialize the fcmToken field
+                        ]
+                        childRef.setData(childData) { error in
+                            if let error = error {
+                                print("Error creating child document: \(error.localizedDescription)")
+                            } else {
+                                print("Child document created successfully with FCM token for ID: \(currentChildId)")
+                            }
+                        }
+                    }
+                }
+        }
+    }
+            
     
 }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Drops
+import FirebaseMessaging
 
 
 struct SignInWithEmailView: View {
@@ -317,6 +318,7 @@ struct SignInWithEmailView: View {
                                                                 .onTapGesture {
                                                                     
                                                                     childId = child.id
+                                                                    viewModel.addFCMToken(childId: childId)
                                                                     showSignInView = false
                                                                     
                                                                     if !isiPhone {

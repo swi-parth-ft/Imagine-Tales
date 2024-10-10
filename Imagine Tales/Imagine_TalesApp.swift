@@ -18,6 +18,9 @@ import SwiftUI
 import FirebaseCore  // For initializing Firebase
 import FirebaseAuth  // For handling user authentication
 import GoogleMobileAds
+import UserNotifications
+import Firebase
+import FirebaseMessaging
 
 // MARK: - AppState Class
 
@@ -31,12 +34,22 @@ class AppState: ObservableObject {
 
 /// AppDelegate class responsible for configuring Firebase when the app launches and handling app termination events.
 class AppDelegate: NSObject, UIApplicationDelegate {
-    
+    @AppStorage("childId") var childId: String = "Default Value"
     /// Called when the app finishes launching. Initializes Firebase.
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()  // Initializes Firebase SDK
         GADMobileAds.sharedInstance().start(completionHandler: nil)
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                    if granted {
+                        DispatchQueue.main.async {
+                            UIApplication.shared.registerForRemoteNotifications()
+                        }
+                    }
+                }
+
+        
         return true
     }
     
@@ -58,7 +71,71 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Auth.auth().setAPNSToken(deviceToken, type: .sandbox)
+        Messaging.messaging().apnsToken = deviceToken
     }
+    
+    // Called when FCM token is updated
+        func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+            print("FCM Token: \(fcmToken ?? "")")
+            if let fcmToken = fcmToken {
+                // Update the active child’s FCM token in Firestore
+                updateFCMTokenForCurrentChild(fcmToken: fcmToken)
+            }
+        }
+        
+        // Update the FCM token for the active child in Firestore
+        func updateFCMTokenForCurrentChild(fcmToken: String) {
+            let currentChildId = childId // Get the active child ID from your app logic
+            
+            let childRef = Firestore.firestore().collection("Children2").document(currentChildId)
+
+                // Check if the child document exists
+                childRef.getDocument { (document, error) in
+                    if let error = error {
+                        print("Error fetching child document: \(error.localizedDescription)")
+                        return
+                    }
+
+                    // If the document does not exist, create it with the fcmToken
+                    if let document = document, document.exists {
+                        // Document exists, update the fcmToken
+                        childRef.updateData([
+                            "fcmToken": fcmToken
+                        ]) { error in
+                            if let error = error {
+                                print("Error updating FCM token: \(error.localizedDescription)")
+                            } else {
+                                print("FCM token updated successfully for child ID: \(currentChildId)")
+                            }
+                        }
+                    } else {
+                        // Document does not exist, create it with the fcmToken
+                        let childData: [String: Any] = [
+                            "fcmToken": fcmToken // Initialize the fcmToken field
+                        ]
+                        childRef.setData(childData) { error in
+                            if let error = error {
+                                print("Error creating child document: \(error.localizedDescription)")
+                            } else {
+                                print("Child document created successfully with FCM token for ID: \(currentChildId)")
+                            }
+                        }
+                    }
+                }
+            
+           
+        }
+
+        // Handle notification when the app is in the foreground
+        func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+            completionHandler([.alert, .sound, .badge])
+        }
+
+        // Handle notification click
+        func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+            print("User tapped on the notification: \(response.notification.request.content.userInfo)")
+            completionHandler()
+        }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
             // Forward the notification to Firebase
@@ -78,6 +155,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             return false
         }
     }
+  
 }
 
 // MARK: - Main App Structure

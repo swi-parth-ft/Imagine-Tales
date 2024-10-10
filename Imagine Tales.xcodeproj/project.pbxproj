@@ -65,6 +65,7 @@
 		074FCF742CB5949D00DEC20F /* AccountDeletionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF732CB5949D00DEC20F /* AccountDeletionViewModel.swift */; };
 		074FCF762CB6091800DEC20F /* PhoneVarification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF752CB6091800DEC20F /* PhoneVarification.swift */; };
 		074FCF782CB60FF700DEC20F /* DeleteWithEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF772CB60FF700DEC20F /* DeleteWithEmail.swift */; };
+		0764FDC12CB8223500F991BF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 0764FDC02CB8223500F991BF /* FirebaseMessaging */; };
 		076C22982C7E66B6001DAB3F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 076C22972C7E66B6001DAB3F /* FirebaseStorage */; };
 		076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C22992C7E8C3E001DAB3F /* HomeView.swift */; };
 		07774ED22CAC4D4B0056E5BE /* StoryByGenreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07774ED12CAC4D4A0056E5BE /* StoryByGenreViewModel.swift */; };
@@ -262,6 +263,7 @@
 				0788C4212CA8B9ED00FA5E65 /* Vortex in Frameworks */,
 				07D323422CA62F8B00846FA3 /* Drops in Frameworks */,
 				0711F3852C6DB62D006C86AA /* FirebaseAuth in Frameworks */,
+				0764FDC12CB8223500F991BF /* FirebaseMessaging in Frameworks */,
 				076C22982C7E66B6001DAB3F /* FirebaseStorage in Frameworks */,
 				073F2CF02C6F9B4600BCF6F0 /* FirebaseFirestore in Frameworks */,
 				0711F3662C6D6C6F006C86AA /* FirebaseAuth in Frameworks */,
@@ -1202,6 +1204,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		0764FDC02CB8223500F991BF /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0711F3622C6D6C6F006C86AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 		076C22972C7E66B6001DAB3F /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;

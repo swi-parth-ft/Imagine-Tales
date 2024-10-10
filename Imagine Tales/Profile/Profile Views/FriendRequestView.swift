@@ -10,6 +10,7 @@ import Drops
 
 struct FriendRequestView: View {
     @StateObject var viewModel = FriendsViewModel() // ViewModel for managing friend requests
+    @StateObject var homeViewModel = HomeViewModel() 
     @AppStorage("childId") var childId: String = "Default value" // User's child ID for data retrieval
     @State private var selectedFriend: UserChildren? // Track the selected friend
     @State private var selectedStory: Story?
@@ -51,36 +52,37 @@ struct FriendRequestView: View {
                                                systemImage: "bell",
                                                description: Text("You currently don't have any new friend requests or notifications."))
                         .listRowBackground(Color.white.opacity(0))
-                    }
-                    HStack {
-                        Button {
-                            withAnimation {
-                                showingTodaysNoti = true
-                            }
-                        } label: {
-                            Text("Today")
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(!showingTodaysNoti ? .clear : colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
-                                .foregroundStyle(.white)
-                                .cornerRadius(16)
+                    } else {
+                        HStack {
+                            Button {
+                                withAnimation {
+                                    showingTodaysNoti = true
+                                }
+                            } label: {
+                                Text("Today")
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(!showingTodaysNoti ? .clear : colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
+                                    .foregroundStyle(.white)
+                                    .cornerRadius(16)
                                 
-                        }
-                        Button {
-                            withAnimation {
-                                showingTodaysNoti = false
                             }
-                        } label: {
-                            Text("Older")
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(showingTodaysNoti ? .clear : colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
-                                .foregroundStyle(.white)
-                                .cornerRadius(16)
+                            Button {
+                                withAnimation {
+                                    showingTodaysNoti = false
+                                }
+                            } label: {
+                                Text("Older")
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(showingTodaysNoti ? .clear : colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
+                                    .foregroundStyle(.white)
+                                    .cornerRadius(16)
+                            }
                         }
+                        .padding()
+                        .frame(maxWidth: .infinity)
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity)
                         List {
                             if !viewModel.children.isEmpty {
                                 Section("Friend Requests") {
@@ -128,6 +130,7 @@ struct FriendRequestView: View {
                                                     }
                                                     viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "accepted", friendUserId: friend.id)
                                                     viewModel.deleteRequest(childId: childId, docID: friend.id)
+                                                    homeViewModel.sendRequestRespoceNotification(fromId: childId, toUserId: friend.id, fromChildUsername: viewModel.child?.username ?? "", fromChildProfilePic: viewModel.child?.profileImage ?? "", status: "Accepted")
                                                     Drops.show(Drop(title: "You're now friends with \(friend.username)!"))
                                                 }
                                             
@@ -150,6 +153,7 @@ struct FriendRequestView: View {
                                                     }
                                                     viewModel.respondToFriendRequest(childId: childId, requestId: requestId, response: "denied", friendUserId: friend.id)
                                                     viewModel.deleteRequest(childId: childId, docID: friend.id)
+                                                    homeViewModel.sendRequestRespoceNotification(fromId: childId, toUserId: friend.id, fromChildUsername: viewModel.child?.username ?? "", fromChildProfilePic: viewModel.child?.profileImage ?? "", status: "Denied")
                                                     Drops.show(Drop(title: "Request from \(friend.username) denied!"))
                                                 }
                                             
@@ -348,6 +352,53 @@ struct FriendRequestView: View {
                                                 
                                             }
                                         }
+                                        else if noti.type == "response" {
+                                            HStack(alignment: .center) {
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(colorScheme == .dark ? Color(hex: "#3A3A3A") : .white)
+                                                        .frame(width: 70)
+                                                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                                    // Assuming there's an AsyncDp for async loading of images
+                                                    Image(noti.fromChildProfileImage.removeJPGExtension())
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 60, height: 60)
+                                                        .cornerRadius(75)
+                                                }
+                                                .onTapGesture {
+                                                    let friend = UserChildren(id: noti.fromId, parentId: "", name: "", age: "", dateCreated: Date(), username: "", profileImage: noti.fromChildProfileImage)
+                                                    selectedFriend = friend
+                                                    
+                                                }
+                                                
+                                                
+                                                Text("\(noti.fromChildUsername) \(noti.storyStatus ?? "") your friend request.")
+                                                
+                                                Spacer()
+                                              
+                                                
+                                                
+                                            }
+                                            .padding()
+                                            .listRowBackground(Color.white.opacity(0))
+                                            .background(colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.4))
+                                            .listRowSeparator(.hidden) // Hide row separator
+                                            .cornerRadius(16)
+                                            .swipeActions {
+                                                
+                                                Button(role: .destructive) {
+                                                    viewModel.deleteNotification(withId: noti.id)
+                                                    viewModel.fetchNotifications(for: childId)
+                                                } label: {
+                                                    Label("Delete", systemImage: "trash")
+                                                    
+                                                }
+                                                .tint(.red)
+                                                .foregroundColor(.white)
+                                                
+                                            }
+                                        }
                                         else {
                                             HStack(alignment: .center) {
                                                 ZStack {
@@ -451,6 +502,7 @@ struct FriendRequestView: View {
                 }
             }
             .onAppear {
+                viewModel.fetchChild(ChildId: childId)
                 viewModel.fetchFriendRequests(childId: childId) // Fetch friend requests when the view appears
                 viewModel.fetchNotifications(for: childId)
             }

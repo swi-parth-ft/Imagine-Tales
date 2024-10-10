@@ -341,6 +341,18 @@ final class HomeViewModel: ObservableObject {
         }
     }
     
+    func sendRequestRespoceNotification(fromId: String, toUserId: String, fromChildUsername: String, fromChildProfilePic: String, status: String) {
+        let db = Firestore.firestore()
+        let notification = Notification(fromId: fromId, toId: toUserId, storyId: "", read: false, type: "response", fromChildUsername: fromChildUsername, fromChildProfileImage: fromChildProfilePic, storyTitle: "", storyStatus: status)
+        
+        do {
+            try db.collection("Notifications").document(notification.id).setData(from: notification)
+            print("Notification sent successfully")
+        } catch let error {
+            print("Error sending notification: \(error)")
+        }
+    }
+    
     
   //  @Published var stories: [Story] = []
     private var lastDocument: DocumentSnapshot? = nil

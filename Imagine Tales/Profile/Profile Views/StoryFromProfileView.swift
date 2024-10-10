@@ -304,6 +304,7 @@ struct StoryFromProfileView: View {
                                 Button(action: {
                                     homeViewModel.likeStory(childId: childId, storyId: story.id)
                                     homeViewModel.sendLikeNotification(fromUserId: childId, toUserId: story.childId, storyId: story.id, storyTitle: story.title, type: isLiked ? "Unliked" : "Liked")
+                                    
                                     isLiked.toggle()
                                 }) {
                                     Image(systemName: isLiked ? "heart.fill" : "heart")
@@ -337,6 +338,7 @@ struct StoryFromProfileView: View {
                     FriendProfileView(friendId: story.childId, dp: imgUrl) // Show friend's profile in full screen
                 }
                 .onAppear {
+                    homeViewModel.fetchChild(ChildId: childId)
                     // Check if the child has liked the story
                     homeViewModel.checkIfChildLikedStory(childId: childId, storyId: story.id) { hasLiked in
                         isLiked = hasLiked

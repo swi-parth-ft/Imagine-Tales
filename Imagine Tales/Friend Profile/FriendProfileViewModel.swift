@@ -7,6 +7,8 @@
 import FirebaseFirestore
 
 final class FriendProfileViewModel: ObservableObject {
+    @Published var currentChild: UserChildren?
+    @Published var currentDp = ""
     @Published var child: UserChildren?
     @Published var numberOfFriends = 0
     @Published var story: [Story] = []
@@ -92,6 +94,23 @@ final class FriendProfileViewModel: ObservableObject {
             case .success(let document):
                 self.child = document
                 self.profileImage = document.profileImage
+                
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
+    
+    func fetchCurrentChild(ChildId: String) {
+        let docRef = Firestore.firestore().collection("Children2").document(ChildId)
+        
+        
+        docRef.getDocument(as: UserChildren.self) { result in
+            switch result {
+            case .success(let document):
+                self.currentChild = document
+                self.currentDp = document.profileImage
                 
             case .failure(let error):
                 print(error.localizedDescription)
