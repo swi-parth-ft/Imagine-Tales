@@ -32,6 +32,13 @@ struct FriendRequestView: View {
             return dateFormatter.string(from: date)
         }
     
+    func isToday(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDateInToday(date)
+    }
+    @State private var showingTodaysNoti = true
+    
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -45,6 +52,35 @@ struct FriendRequestView: View {
                                                description: Text("You currently don't have any new friend requests or notifications."))
                         .listRowBackground(Color.white.opacity(0))
                     }
+                    HStack {
+                        Button {
+                            withAnimation {
+                                showingTodaysNoti = true
+                            }
+                        } label: {
+                            Text("Today")
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(!showingTodaysNoti ? .clear : colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
+                                .foregroundStyle(.white)
+                                .cornerRadius(16)
+                                
+                        }
+                        Button {
+                            withAnimation {
+                                showingTodaysNoti = false
+                            }
+                        } label: {
+                            Text("Older")
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(showingTodaysNoti ? .clear : colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
+                                .foregroundStyle(.white)
+                                .cornerRadius(16)
+                        }
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity)
                         List {
                             if !viewModel.children.isEmpty {
                                 Section("Friend Requests") {
@@ -129,8 +165,17 @@ struct FriendRequestView: View {
                             
                             if !viewModel.notifications.isEmpty {
                                 Section("Notifications") {
-                                    
-                                    ForEach(viewModel.notifications) { noti in
+                                    if showingTodaysNoti {
+                                        if viewModel.notifications.filter({ isToday($0.timeStamp) }).isEmpty {
+                                            ContentUnavailableView("No New Notifications",
+                                                                   systemImage: "bell",
+                                                                   description: Text("You currently don't have any new friend requests or notifications."))
+                                            .listRowBackground(Color.white.opacity(0))
+                                        }
+                                    }
+                                    ForEach(showingTodaysNoti ? viewModel.notifications.filter { isToday($0.timeStamp) } : viewModel.notifications.filter { !isToday($0.timeStamp) }) { noti in
+                                        
+                                        
                                         
                                         if noti.type == "status" {
                                             HStack(alignment: .center) {

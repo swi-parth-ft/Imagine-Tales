@@ -100,7 +100,7 @@ struct AddChildForm: View {
                 }
 
                 // Button to add the child
-                Button("Add Child") {
+                Button {
                     if viewModel.name.isEmpty || viewModel.username.isEmpty || viewModel.age.isEmpty {
                         Drops.show("Please fill all details.")
                     }
@@ -112,11 +112,14 @@ struct AddChildForm: View {
                             print(error.localizedDescription) // Print error message if operation fails
                         }
                     }
+                } label: {
+                    Text("Add Child")
+                        .frame(width: UIScreen.main.bounds.width * 0.5, height: 55) // Button size
+                        .background(Color(hex: "#FF6F61")) // Button background color
+                        .foregroundStyle(.white) // Button text color
+                        .cornerRadius(12) // Button corner radius for rounded edges
                 }
-                .frame(width: UIScreen.main.bounds.width * 0.5, height: 55) // Button size
-                .background(Color(hex: "#FF6F61")) // Button background color
-                .foregroundStyle(.white) // Button text color
-                .cornerRadius(12) // Button corner radius for rounded edges
+                
             }
             .padding() // Padding around the VStack
 

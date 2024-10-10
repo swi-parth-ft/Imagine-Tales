@@ -147,6 +147,7 @@ struct StoryView: View {
                         }
                         
                     }
+                    .padding()
                    
                 }
                 .padding()

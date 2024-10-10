@@ -255,6 +255,7 @@ struct ContentView: View {
                                     
                                 }
                                 .padding()
+                                .padding(.top)
                                 
                                 Spacer()
                                 //MARK: Buttons

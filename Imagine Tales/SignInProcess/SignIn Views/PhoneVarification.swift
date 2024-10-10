@@ -104,6 +104,9 @@ struct PhoneVarification: View {
                                                 if let error = error {
                                                     print("Error sending code: \(error.localizedDescription)")
                                                     Drops.show("Error sending code, Try again!")
+                                                    deleteUserData(userId: Auth.auth().currentUser?.uid ?? "") {_ in
+                                                        
+                                                    }
                                                 } else {
                                                     self.verificationID = id // Store verification ID
                                                     self.isCodeSent = true
@@ -138,8 +141,9 @@ struct PhoneVarification: View {
                             .multilineTextAlignment(.center)
                         // Code input and verification
                         TextField("Verification code", text: $verificationCode)
-                            .customTextFieldStyle(isCompact: isCompact)
                             .keyboardType(.numberPad)
+                            .padding()
+                            .frame(width: isCompact ? UIScreen.main.bounds.width * 0.7 : UIScreen.main.bounds.width * 0.5, height: isCompact ? 35 : 55)
                             .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                             .cornerRadius(isCompact ? 6 : 12)
                         Button {
@@ -171,7 +175,7 @@ struct PhoneVarification: View {
                         } label: {
                             Text("Verify Code")
                                 .padding()
-                                .frame(width: UIScreen.main.bounds.width * 0.7, height: isCompact ? 35 : 55)
+                                .frame(width: isCompact ? UIScreen.main.bounds.width * 0.7 : UIScreen.main.bounds.width * 0.5, height: isCompact ? 35 : 55)
                                 .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
                                 .foregroundStyle(.white)
                                 .cornerRadius(isCompact ? 6 : 12)
