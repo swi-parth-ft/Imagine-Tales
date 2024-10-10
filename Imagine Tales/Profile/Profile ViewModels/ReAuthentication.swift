@@ -210,6 +210,30 @@ final class ReAuthentication: ObservableObject {
         Firestore.firestore().collection("users").document(userId).delete { error in
             completion(error)
         }
+        
+        
+
+            // Reference to the collection
+            let collectionRef = Firestore.firestore().collection("phoneNumbers")
+
+            // Query the document where the 'email' field matches the provided email
+        collectionRef.whereField("userId", isEqualTo: userId).getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting documents: \(error)")
+                } else {
+                    // Iterate through the documents that match the query
+                    for document in querySnapshot!.documents {
+                        // Delete each document
+                        collectionRef.document(document.documentID).delete { error in
+                            if let error = error {
+                                print("Error deleting document: \(error)")
+                            } else {
+                                print("Document successfully deleted!")
+                            }
+                        }
+                    }
+                }
+            }
     }
 
     private func deleteFirebaseAccount(completion: @escaping (Error?) -> Void) {

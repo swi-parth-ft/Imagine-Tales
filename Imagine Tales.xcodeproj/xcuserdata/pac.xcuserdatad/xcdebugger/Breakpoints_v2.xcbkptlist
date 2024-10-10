@@ -2870,14 +2870,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "FB3FF38A-26B7-4672-AF29-E663E21A1178"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/SignInProcess/SignIn Views/PhoneVarification.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "151"
-            endingLineNumber = "151"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
             landmarkName = "verifyPhoneNumber(verificationID:verificationCode:completion:)"
             landmarkType = "9">
          </BreakpointContent>
@@ -2885,15 +2885,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1BFB0632-B030-4D15-A728-236FB9A9B28A"
-            shouldBeEnabled = "Yes"
+            uuid = "4450B1ED-4228-4CA3-89DF-67E8890E6CEA"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/SignInProcess/SignIn Views/PhoneVarification.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
