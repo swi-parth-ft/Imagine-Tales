@@ -8,10 +8,12 @@
 import SwiftUI
 import Drops
 import FirebaseMessaging
+import FirebaseAuth
 
 
 struct SignInWithEmailView: View {
     @StateObject var viewModel = SignInWithEmailViewModel()
+    @StateObject var parentViewModel = ParentViewModel()
     @Environment(\.dismiss) var dismiss
     @State private var newUser = true
     @State private var settingPassword = false
@@ -260,11 +262,12 @@ struct SignInWithEmailView: View {
                                                         }
                                                     }
                                                     .padding()
-                                                    Button("set") {
+                                                    Button {
                                                         do {
                                                             try viewModel.setPin(pin: otp.joined())
                                                             isSettingPin = false
-                                                            if isiPhone {
+                                                            if isiPhone || isParentFlow {
+                                                                parentViewModel.AddFCMTokenParent(parentId: Auth.auth().currentUser?.uid ?? "")
                                                                 showSignInView = false
                                                             }
                                                             
@@ -272,11 +275,14 @@ struct SignInWithEmailView: View {
                                                             print(error.localizedDescription )
                                                         }
                                                         
+                                                    } label: {
+                                                        Text("set")
+                                                            .frame(width:  UIScreen.main.bounds.width * 0.4, height: isCompact ? 35 : 55)
+                                                            .background(Color(hex: "#DFFFDF"))
+                                                            .foregroundStyle(.black)
+                                                            .cornerRadius(isCompact ? 6 : 12)
                                                     }
-                                                    .frame(width:  UIScreen.main.bounds.width * 0.4, height: isCompact ? 35 : 55)
-                                                    .background(Color(hex: "#DFFFDF"))
-                                                    .foregroundStyle(.black)
-                                                    .cornerRadius(isCompact ? 6 : 12)
+                                                    
                                                 }
                                             } else  if !isiPhone {
                                                 VStack(alignment: .leading) {
@@ -518,6 +524,7 @@ struct SignInWithEmailView: View {
                                                         Drops.show("Passwords don't match, Try again.")
                                                     }
                                                 } else if isSignedUp {
+                                                
                                                     withAnimation {
                                                         settingPassword = false
                                                         isSignedUp = false
@@ -551,12 +558,13 @@ struct SignInWithEmailView: View {
                                             if isSignedUp {
                                                 Button(action: {
                                                     withAnimation {
+                                                        parentViewModel.AddFCMTokenParent(parentId: Auth.auth().currentUser?.uid ?? "")
                                                         ipf = true
                                                         showSignInView = false
                                                         appState.isInSignInView = false
                                                     }
                                                 }) {
-                                                    Text("Add Later")
+                                                    Text("Go to Parent Dashboard")
                                                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                                                         .foregroundColor(.black)
                                                 }
@@ -652,6 +660,7 @@ struct SignInWithEmailView: View {
                                                         if let _ = try await viewModel.signInWithEmail() {
                                                             if isiPhone || isParentFlow {
                                                                 showSignInView = false
+                                                                parentViewModel.AddFCMTokenParent(parentId: Auth.auth().currentUser?.uid ?? "")
                                                             }
                                                             isSignedUp = true
                                                             settingPassword = false
@@ -835,6 +844,7 @@ struct SignInWithEmailView: View {
                 if !isNewGoogleUser && signedInWithGoogle {
                     // showSignInView = false
                     if isiPhone {
+                        parentViewModel.AddFCMTokenParent(parentId: Auth.auth().currentUser?.uid ?? "")
                         showSignInView = false
                     }
                     isSignedUp = true

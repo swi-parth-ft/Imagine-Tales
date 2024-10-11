@@ -25,6 +25,7 @@ final class ParentViewModel: ObservableObject {
     @Published var imageUrl = "" // URL for the child's image
     @Published var comment = "" // Parent's review comment
     @Published var storyCount: Int = 0
+    @Published var parentId = ""
     // Fetch reviews and comments for a specific story
     func fetchStoryAndReview(storyID: String) {
         let db = Firestore.firestore()
@@ -118,7 +119,7 @@ final class ParentViewModel: ObservableObject {
     // Fetch children associated with the logged-in parent
     func getChildren() throws {
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser() // Get authenticated user
-        
+        self.parentId = authDataResult.uid
         Firestore.firestore().collection("Children2").whereField("parentId", isEqualTo: authDataResult.uid).getDocuments() { (querySnapshot, error) in
             if let error = error {
                 print("Error getting documents: \(error)") // Error handling
@@ -312,6 +313,64 @@ final class ParentViewModel: ObservableObject {
                                 print("Error creating child document: \(error.localizedDescription)")
                             } else {
                                 print("Child document created successfully with FCM token for ID: \(currentChildId)")
+                            }
+                        }
+                    }
+                }
+        }
+    }
+    
+    // Fetch the FCM token and update Firestore with the selected parent's token
+    func removeFCMTokenParent(parentId: String) {
+        if let fcmToken = Messaging.messaging().fcmToken {
+            Firestore.firestore().collection("users").document(parentId).updateData([
+                "fcmToken": ""
+            ]) { error in
+                if let error = error {
+                    print("Error updating FCM token: \(error)")
+                } else {
+                    print("FCM token updated for \(parentId)")
+                }
+            }
+        }
+    }
+    
+    // Fetch the FCM token and update Firestore with the selected parent's token
+    func AddFCMTokenParent(parentId: String) {
+        if let fcmToken = Messaging.messaging().fcmToken {
+            
+            
+            let parentRef = Firestore.firestore().collection("users").document(parentId)
+
+                // Check if the child document exists
+            parentRef.getDocument { (document, error) in
+                    if let error = error {
+                        print("Error fetching parent document: \(error.localizedDescription)")
+                        return
+                    }
+
+                    // If the document does not exist, create it with the fcmToken
+                    if let document = document, document.exists {
+                        // Document exists, update the fcmToken
+                        parentRef.updateData([
+                            "fcmToken": fcmToken
+                        ]) { error in
+                            if let error = error {
+                                print("Error updating FCM token: \(error.localizedDescription)")
+                            } else {
+                                print("FCM token updated successfully for parent ID: \(parentId)")
+                            }
+                        }
+                    } else {
+                        // Document does not exist, create it with the fcmToken
+                        let parentData: [String: Any] = [
+                            "fcmToken": fcmToken // Initialize the fcmToken field
+                        ]
+                        parentRef.setData(parentData) { error in
+                            if let error = error {
+                                print("Error creating parent document: \(error.localizedDescription)")
+                            } else {
+                                print("Parent document created successfully with FCM token for ID: \(parentId)")
                             }
                         }
                     }

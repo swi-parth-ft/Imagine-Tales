@@ -171,6 +171,7 @@ struct parentSettingsiPhone: View {
                     Button {
                         Task {
                             do {
+                                viewModel.removeFCMTokenParent(parentId: viewModel.parent?.userId ?? "")
                                 try viewModel.logOut() // Attempt to log out
                                 showSigninView = true // Set binding to show sign-in view
                                 dismiss() // Dismiss the settings view

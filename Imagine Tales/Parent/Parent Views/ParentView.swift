@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import FirebaseAuth
 // Main view for the parent interface where they can manage their children
 struct ParentView: View {
     @StateObject var viewModel = ParentViewModel() // ViewModel to manage the parent's data
@@ -108,6 +108,7 @@ struct ParentView: View {
                     }
                 }
                 .onAppear {
+                    
                     // Check the horizontal size class and set the isCompact state
                     if horizontalSizeClass == .compact {
                         isCompact = true // Set isCompact to true for compact layouts

@@ -175,7 +175,7 @@ struct ProfileView: View {
                          
                                 Capsule()
                                     .frame(maxWidth: .infinity)
-                                    .frame(height: 10)
+                                    .frame(height: 5)
                                     .foregroundColor(isShowingSharedStories ?  .clear : colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
                             }
                             .frame(maxWidth: .infinity)
@@ -197,7 +197,7 @@ struct ProfileView: View {
                           
                                 Capsule()
                                     .frame(maxWidth: .infinity)
-                                    .frame(height: 10)
+                                    .frame(height: 5)
                                     .foregroundColor(!isShowingSharedStories ?  .clear : colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
                             }
                         }
@@ -317,14 +317,16 @@ struct ProfileView: View {
                                                 }
                                             }
                                             .onAppear {
-                                                if !orientation.isLandscape {
-                                                    if story.id == parentViewModel.story[6].id {
-                                                        withAnimation {
-                                                            isExpanding = false
-                                                        }
-                                                    } else if story.id == parentViewModel.story[1].id {
-                                                        withAnimation {
-                                                            isExpanding = true
+                                                if parentViewModel.storyCount > 6 {
+                                                    if !orientation.isLandscape {
+                                                        if story.id == parentViewModel.story[6].id {
+                                                            withAnimation {
+                                                                isExpanding = false
+                                                            }
+                                                        } else if story.id == parentViewModel.story[1].id {
+                                                            withAnimation {
+                                                                isExpanding = true
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -439,19 +441,11 @@ struct ProfileView: View {
                     viewModel.fetchChild(ChildId: childId)
                     viewModel.getFriendsCount(childId: childId)
                     try? viewModel.getPin()
-//                    Task {
-//                        await parentViewModel.getStorie(isLoadMore: true, childId: childId)
-//                    }
-                    do {
-                        
-                       // try parentViewModel.getStory(childId: childId)
-                    } catch {
-                        print(error.localizedDescription)
-                    }
+//
                 }
                 // Modal sheet for adding a pin
                 .sheet(isPresented: $isAddingPin) {
-                    PinView()
+                    PinView(childId: childId)
                 }
                 // Modal sheet for selecting a profile image
                 .sheet(isPresented: $isSelectingImage, onDismiss: {

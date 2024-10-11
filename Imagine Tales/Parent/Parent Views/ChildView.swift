@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 // View for displaying child profile details and their associated stories
 struct ChildView: View {
@@ -219,6 +220,7 @@ struct ChildView: View {
                                                 viewModel.removeFCMToken(childId: childId)
                                                 childId = child.id // Set the selected child's ID
                                                 viewModel.AddFCMToken(childId: child.id)
+                                                viewModel.removeFCMTokenParent(parentId: Auth.auth().currentUser?.uid ?? "")
                                                 ipf = false // Update profile view state
                                                 viewModel.fetchProfileImage(dp: child.profileImage) // Fetch profile image
                                                 screenTimeViewModel.startScreenTime(for: childId) // Start tracking screen time

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Drops
+import FirebaseAuth
 
 /// View for entering and resetting the user's PIN.
 struct PinView: View {
@@ -15,6 +16,7 @@ struct PinView: View {
 
     @AppStorage("ipf") private var ipf: Bool = true // AppStorage for a flag
     @StateObject private var viewModel = ProfileViewModel() // ViewModel for profile data
+    @StateObject private var parentViewModel = ParentViewModel()
     @StateObject private var reAuthModel = ReAuthentication() // ViewModel for reauthentication
     @State private var otp: [String] = Array(repeating: "", count: 4) // Array to hold each digit of the PIN
     @FocusState private var focusedIndex: Int? // State to track which text field is focused
@@ -23,7 +25,7 @@ struct PinView: View {
     @State private var isPinWrong = false // Flag to indicate if the entered PIN is incorrect
     @EnvironmentObject var screenTimeViewModel: ScreenTimeManager // EnvironmentObject for managing screen time
     @Environment(\.colorScheme) var colorScheme
-    
+    var childId: String
     var body: some View {
         ZStack {
             BackGroundMesh().ignoresSafeArea() // Background color for the view
@@ -89,6 +91,8 @@ struct PinView: View {
                                 Drops.show("Please enter a PIN.")
                             } else if otp.joined() == viewModel.pin {
                                 screenTimeViewModel.stopScreenTime() // Stop screen time management
+                                parentViewModel.removeFCMToken(childId: childId)
+                                parentViewModel.AddFCMTokenParent(parentId: Auth.auth().currentUser?.uid ?? "")
                                 ipf = true // Set the app storage flag to true
                             } else {
                                 isPinWrong = true // Set incorrect PIN flag

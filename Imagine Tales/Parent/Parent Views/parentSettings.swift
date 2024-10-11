@@ -175,8 +175,11 @@ struct parentSettings: View {
                     
                     // Button to log out the parent
                     Button {
+                        
                         Task {
                             do {
+                                viewModel.removeFCMTokenParent(parentId: viewModel.parent?.userId ?? "")
+                                
                                 try viewModel.logOut() // Attempt to log out
                                 showSigninView = true // Set binding to show sign-in view
                                 dismiss() // Dismiss the settings view
@@ -228,6 +231,7 @@ struct parentSettings: View {
                 }
                 .padding()
                 .onAppear {
+                    
                     reAuthModel.checkIfGoogle()
                     do {
                         try viewModel.fetchParent()

@@ -267,3 +267,49 @@ exports.sendSharedStoryNotification = functions.firestore
         return null;
       }
     });
+
+exports.sendStoryPostedNotification = functions.firestore
+    .document("Story/{storyId}")
+    .onCreate(async (snap, context) => {
+      const storyData = snap.data();
+      const childUsername = storyData.childUsername;
+      const parentId = storyData.parentId;
+
+      console.log("New story posted by:", childUsername);
+      console.log("Parent ID:", parentId);
+
+      const parentDoc = await admin.firestore()
+          .collection("users")
+          .doc(parentId)
+          .get();
+
+      if (!parentDoc.exists) {
+        console.error(`Parent with ID ${parentId} does not exist`);
+        return null;
+      }
+
+      const parentToken = parentDoc.data().fcmToken;
+
+      if (parentToken) {
+        const message = {
+          token: parentToken,
+          notification: {
+            title: "New Story Posted",
+            body: `${childUsername} posted a new story!`,
+          },
+          data: {
+            storyId: context.params.storyId,
+          },
+        };
+        return admin.messaging().send(message)
+            .then((response) => {
+              console.log("Notification sent successfully:", response);
+            })
+            .catch((error) => {
+              console.error("Error sending notification:", error);
+            });
+      } else {
+        console.log("No FCM token for parent:", parentId);
+        return null;
+      }
+    });
