@@ -22,6 +22,7 @@ struct SearchView: View {
     @State private var maxRetryAttempts = 3 // Maximum number of retry attempts
     @State private var retryDelay = 2.0 // Delay between retries
     @FocusState private var isTextFieldFocused: Bool
+    let storyLoader = StoryLoader()
     var body: some View {
         NavigationStack {
             ZStack {
@@ -239,6 +240,8 @@ struct SearchView: View {
                 }
             }
     }
+    
+    
 
 }
 

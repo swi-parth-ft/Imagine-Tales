@@ -63,7 +63,7 @@ struct FriendRequestView: View {
                                     .padding()
                                     .frame(maxWidth: .infinity)
                                     .background(!showingTodaysNoti ? .clear : colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
-                                    .foregroundStyle(.white)
+                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
                                     .cornerRadius(16)
                                 
                             }

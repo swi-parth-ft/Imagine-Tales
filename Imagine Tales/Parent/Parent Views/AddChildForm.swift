@@ -103,15 +103,16 @@ struct AddChildForm: View {
                 Button {
                     if viewModel.name.isEmpty || viewModel.username.isEmpty || viewModel.age.isEmpty {
                         Drops.show("Please fill all details.")
-                    }
-                    Task {
-                        do {
-                            try await viewModel.addChild() // Attempt to add the child using the view model
-                            dismiss() // Dismiss the view after successful addition
-                        } catch {
-                            print(error.localizedDescription) // Print error message if operation fails
+                    } else {
+                        Task {
+                            do {
+                                try await viewModel.addChild() // Attempt to add the child using the view model
+                                dismiss() // Dismiss the view after successful addition
+                            } catch {
+                                print(error.localizedDescription) // Print error message if operation fails
+                            }
                         }
-                    }
+                    }   
                 } label: {
                     Text("Add Child")
                         .frame(width: UIScreen.main.bounds.width * 0.5, height: 55) // Button size

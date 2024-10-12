@@ -25,152 +25,28 @@ struct ExploreView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                ZStack {
-                    // TabView for displaying a carousel of stories
-                    TabView(selection: $currentIndex) {
-                        ForEach(0..<min(viewModel.topStories.count, 3), id: \.self) { index in
-                            let story = viewModel.topStories[index] // Get the current story
-                            
-                                ZStack {
-                                    // Load the story image asynchronously
-                                    AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
-                                        switch phase {
-                                        case .empty:
-                                            // Placeholder for loading
-                                            MagicView()
-                                                .frame(height: isFullHeight ? 600 : 300)
-                                            
-                                        case .success(let image):
-                                            // Successfully loaded image
-                                            image
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(height: isFullHeight ? 600 : 300)
-                                                .clipped()
-                                                .cornerRadius(30)
-                                                .shadow(radius: 5)
-                                                
-                                            
-                                        case .failure(_):
-                                            // Placeholder for failed load
-                                            Image(systemName: "photo")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(height: 600)
-                                                .cornerRadius(10)
-                                                .padding()
-                                                .onAppear {
-                                                    // Retry loading if the count is below max attempts
-                                                    if retryCount < maxRetryAttempts {
-                                                        DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
-                                                            retryCount += 1
-                                                        }
-                                                    }
-                                                }
-                                        @unknown default:
-                                            EmptyView()
-                                        }
-                                    }
-                                    .frame(width: UIScreen.main.bounds.width + 30, height: isFullHeight ? 600 : 300)
-                                    .ignoresSafeArea()
-                                    
-                                    // Overlay gradient rectangle for styling
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(LinearGradient(colors: [.black, colorScheme == .dark ? .black.opacity(0.1) :  .white.opacity(0.1), colorScheme == .dark ? .black : .white.opacity(1)], startPoint: .bottom, endPoint: .top))
-                                        .frame(height: isFullHeight ? 600 : 300)
-                                        .ignoresSafeArea()
-                                    
-                                    // Display story title and genre
-                                    VStack {
-                                        Spacer()
-                                        VStack {
-                                            Text(story.title.trimmingCharacters(in: .newlines))
-                                                .font(.custom("ComicNeue-Bold", size: 46))
-                                                .foregroundStyle(colorScheme == .dark ? .white : (isFullHeight ? .black : .white))
-                                                .padding()
-                                            
-                                            if isFullHeight {
-                                                Spacer()
-                                                VStack {
-                                                    
-                                                    HStack(alignment: .center) {
-                                                        Text(story.genre)
-                                                            .font(.custom("ComicNeue-Bold", size: 32))
-                                                            .foregroundStyle(.white)
-                                                        Circle()
-                                                            .foregroundStyle(.white)
-                                                            .frame(width: 15)
-                                                            .padding(.horizontal)
-                                                        Text("\(story.likes) Likes")
-                                                            .font(.custom("ComicNeue-Bold", size: 32))
-                                                            .foregroundStyle(.white)
-                                                        
-                                                        
-                                                    }
-                                                    VStack {
-                                                        Text("@\(story.childUsername)")
-                                                            .font(.custom("ComicNeue-Bold", size: 26))
-                                                    }
-                                                    
-                                                    .foregroundStyle(.white)
-                                                    .frame(width: UIScreen.main.bounds.width * 0.5)
-                                                    
-                                                    NavigationLink(destination: StoryFromProfileView(story: story)) {
-                                                        HStack {
-                                                            Text("Read")
-                                                            Image(systemName: "book.pages")
-                                                        }
-                                                            .frame(width: UIScreen.main.bounds.width * 0.35)
-                                                        .padding()
-                                                        .font(.system(size: 16))
-                                                        .background(Color(hex: "#FF6F61"))
-                                                        .foregroundStyle(.white)
-                                                        .cornerRadius(16)
-                                                    }
-                                                }
-                                                .padding(.bottom)
-                                            }
-                                            
-                                            
-                                        }.padding()
-                                    }
-                                    .padding(.bottom)
-                                    .frame(height: isFullHeight ? 600 : 300)
-                                    .ignoresSafeArea()
-                                }
-                                .clipShape(RoundedCorners(radius: 50, corners: [.bottomLeft, .bottomRight]))
-                                .onPressingChanged { point in
-                                    if let point {
-                                        self.origin = point
-                                        self.counter += 1
-                                    }
-                                }
-                                .modifier(RippleEffect(at: self.origin, trigger: self.counter)) // Custom ripple effect
-                                .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 20) // Adds shadow at the bottom
-                              //  .shadow(radius: 20)
-                                .ignoresSafeArea()
-                                .onTapGesture {
-                                    withAnimation {
-                                            isFullHeight.toggle()
-                                        
-                                    }
-                                }
-                                .tag(index) // Tag for identifying the current story
-                            
-                        }
-                    }
-                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic)) // Enable pagination indicators
-                    
-                }
-                .frame(width: UIScreen.main.bounds.width + 30, height: isFullHeight ? 600 : 300)
-                .ignoresSafeArea()
+
                 
-                Spacer()
-                Text("Stories By Genre")
-                    .font(.custom("ComicNeue-Bold", size: 32))
-                    .padding(.leading, 30)
+              //  Spacer()
+                
                 // List to display stories grouped by genre
                 List {
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Text("Top Stories")
+                                .font(.custom("ComicNeue-Bold", size: 22))
+                            DeckView()
+                        }
+                        Spacer()
+                    }
+                    .listRowBackground(Color.white.opacity(0.0))
+                    .listRowSeparator(.hidden) // Hide list row separator
+                    Text("Stories By Genre")
+                        .font(.custom("ComicNeue-Bold", size: 32))
+                        .padding(.leading)
+                        .listRowBackground(Color.white.opacity(0.0))
+                        .listRowSeparator(.hidden) // Hide list row separator
                     ForEach(Array(viewModel.storiesByGenre.keys.sorted().enumerated()), id: \.element) { index, genre in
                         LazyVStack(alignment: .leading) {
                             HStack {
@@ -309,15 +185,15 @@ struct ExploreView: View {
                                 }
                     }
                 }
-                .ignoresSafeArea()
                 .scrollContentBackground(.hidden)
                 //.navigationTitle("Stories by Genre") // Set navigation title
                 .padding(.bottom)
                 .onAppear {
                     viewModel.fetchStories() // Fetch stories on appear
                 }
+                Spacer()
             }
-            Spacer()
+            
         }
         .onAppear {
             viewModel.getMostLikedStories() // Fetch top 3 stories on appear

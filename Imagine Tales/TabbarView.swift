@@ -58,7 +58,7 @@ struct TabbarView: View {
                 // Switch between views based on the selected tab
                 switch selectedTab {
                 case 0: HomeView(reload: $reload).padding()
-                case 1: ExploreView().padding().ignoresSafeArea(edges: .top)
+                case 1: ExploreView().edgesIgnoringSafeArea([.leading, .trailing])
                 case 2: ContentView().padding().padding(.top, 60).ignoresSafeArea(edges: .top)
                 case 3: SavedStoryView(reload: $reload).padding()
                 case 4: ProfileView(showSignInView: $showSignInView, reload: $reload, showingProfile: $showingProfile).padding()

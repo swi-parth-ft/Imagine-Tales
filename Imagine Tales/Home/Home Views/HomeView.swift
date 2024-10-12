@@ -48,47 +48,48 @@ struct HomeView: View {
             VStack {
                 
                 
-                  
-                // Horizontal scroll view for selecting different genres.
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        // Iterate through the list of genres and display a button for each.
-                        ForEach(genres, id: \.self) { category in
-                            Button(action: {
-                                // When a genre is selected, update the 'cat' variable and fetch stories.
-                                cat = category
-                                if category == "Following" {
-                                    // Fetch stories for followed accounts.
-                                    Task {
-                                        await viewModel.getFollowingStories(genre: category, childId: childId)
-                                        reload.toggle() // Toggle reload to update the view.
+                VStack(spacing: 0) {
+                    // Horizontal scroll view for selecting different genres.
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            // Iterate through the list of genres and display a button for each.
+                            ForEach(genres, id: \.self) { category in
+                                Button(action: {
+                                    // When a genre is selected, update the 'cat' variable and fetch stories.
+                                    withAnimation {
+                                        cat = category
                                     }
-                                } else {
-                                    // Fetch stories for a specific genre.
-                                    Task {
-                                        await viewModel.getStorie(genre: category)
-                                        reload.toggle() // Toggle reload to update the view.
+                                    if category == "Following" {
+                                        // Fetch stories for followed accounts.
+                                        Task {
+                                            await viewModel.getFollowingStories(genre: category, childId: childId)
+                                            reload.toggle() // Toggle reload to update the view.
+                                        }
+                                    } else {
+                                        // Fetch stories for a specific genre.
+                                        Task {
+                                            await viewModel.getStorie(genre: category)
+                                            reload.toggle() // Toggle reload to update the view.
+                                        }
                                     }
+                                }) {
+                                    // Button appearance: Change background color based on the selected category.
+                                    Text(category)
+                                        .padding()
+                                        .background(category == cat ? (colorScheme == .dark ? Color(hex: "#4B8A1C") : .green) : Color.clear)
+                                    
+                                        .foregroundColor(category == cat ? .white : .primary)
+                                        .clipShape(RoundedCorners(radius: 20, corners: [.topLeft, .topRight]))
                                 }
-                            }) {
-                                // Button appearance: Change background color based on the selected category.
-                                Text(category)
-                                    .padding()
-                                    .background(category == cat ? (colorScheme == .dark ? Color(hex: "#4B8A1C") : .green) : Color.clear)
-                                    .foregroundColor(category == cat ? .white : .primary)
-                                    .overlay(
-                                        // Add a green border around the button when it’s not selected.
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.green, lineWidth: category == cat ? 0 : 1)
-                                    )
-                                    .cornerRadius(10)
                             }
                         }
+                        .padding(.horizontal) // Padding on both sides of the horizontal scroll view.
                     }
-                    .padding(.horizontal) // Padding on both sides of the horizontal scroll view.
+                    Divider()
+                        .frame(height: 5) // You can set the thickness of the line
+                        .background((colorScheme == .dark ? Color(hex: "#4B8A1C") : .green)) // Set the color of the line
+                        .padding(.bottom) // Padding around the entire genre section.
                 }
-                .padding() // Padding around the entire genre section.
-
                 // If no stories are available, display a message.
                 if viewModel.newStories.isEmpty {
                     ContentUnavailableView {

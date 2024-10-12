@@ -1,5 +1,5 @@
 {
-  "originHash" : "4cc45288895af73b4f74f8fc6be0b6fb521d904b23db8a6d4878e542353fc556",
+  "originHash" : "ed816284ffa80799971453b01c46d989836fc9e09a0deca30e6f30786ee45b27",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -26,6 +26,15 @@
       "state" : {
         "revision" : "c89ed571ae140f8eb1142735e6e23d7bb8c34cb2",
         "version" : "1.7.5"
+      }
+    },
+    {
+      "identity" : "cardstack",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/notsobigcompany/CardStack.git",
+      "state" : {
+        "revision" : "33417ef29fdc4169712cb3b8bf0ddbd7b6ef52c5",
+        "version" : "1.0.0"
       }
     },
     {

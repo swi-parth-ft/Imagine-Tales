@@ -362,21 +362,21 @@ struct ProfileView: View {
                         }
                         
                     } else {
-                        
+                        if viewModel.sharedStories.isEmpty {
+                            // Placeholder when no shared stories are available
+                            ContentUnavailableView {
+                                Label("No Stories Yet", systemImage: "paperplane.fill")
+                            } description: {
+                                Text("Stories shared with you will appear here.")
+                            } actions: {
+                            }
+                            .listRowBackground(Color.clear)
+                        }
                         
                         // Display stories shared with the user
                         List {
                             
-                                if viewModel.sharedStories.isEmpty {
-                                    // Placeholder when no shared stories are available
-                                    ContentUnavailableView {
-                                        Label("No Stories Yet", systemImage: "paperplane.fill")
-                                    } description: {
-                                        Text("Stories shared with you will appear here.")
-                                    } actions: {
-                                    }
-                                    .listRowBackground(Color.clear)
-                                }
+                                
                                 // Display shared stories in a list
                                 ForEach(viewModel.sharedStories, id: \.self) { s in
                                     NavigationLink(destination: StoryFromProfileView(story: s.story)) {
