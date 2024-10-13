@@ -1950,8 +1950,8 @@
             filePath = "Imagine Tales/Generation/Generation Views/GeneratingProcessView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -1966,8 +1966,8 @@
             filePath = "Imagine Tales/Generation/Generation Views/GeneratingProcessView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2126,10 +2126,10 @@
             filePath = "Imagine Tales/Profile/Profile ViewModels/FriendsViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
             landmarkName = "fetchNotifications(for:)"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2142,10 +2142,10 @@
             filePath = "Imagine Tales/Profile/Profile ViewModels/FriendsViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "fetchNotifications(for:)"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2418,36 +2418,6 @@
             endingLineNumber = "59"
             landmarkName = "getSavedStories(forChild:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "D95F81A1-FF83-46D1-959F-3C9426B24DFB - 2e6949f4aa730e49"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(6) suspend resume partial function for Imagine_Tales.SavedStoryViewModel.getMySavedStories(isLoadMore: Swift.Bool, childId: Swift.String) async -&gt; ()"
-                  moduleName = "Imagine Tales.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Library/Lib%20ViewModel/SavedStoryViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "59"
-                  endingLineNumber = "59">
-               </Location>
-               <Location
-                  uuid = "D95F81A1-FF83-46D1-959F-3C9426B24DFB - 46d90ae3d9dea856"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(7) suspend resume partial function for Imagine_Tales.SavedStoryViewModel.getMySavedStories(isLoadMore: Swift.Bool, childId: Swift.String) async -&gt; ()"
-                  moduleName = "Imagine Tales.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Library/Lib%20ViewModel/SavedStoryViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "59"
-                  endingLineNumber = "59">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2524,8 +2494,8 @@
             filePath = "Imagine Tales/Generation/Generation Views/GeneratingProcessView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "533"
-            endingLineNumber = "533"
+            startingLineNumber = "614"
+            endingLineNumber = "614"
             landmarkName = "generateImagePrompt()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2540,8 +2510,8 @@
             filePath = "Imagine Tales/Generation/Generation Views/GeneratingProcessView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "409"
-            endingLineNumber = "409"
+            startingLineNumber = "490"
+            endingLineNumber = "490"
             landmarkName = "generateImageUsingOpenAI()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2582,7 +2552,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "D8CC959A-AE10-420D-A644-6E8848300682"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/Helpers/BannerView.swift"

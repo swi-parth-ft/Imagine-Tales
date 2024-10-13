@@ -193,6 +193,7 @@ struct ExploreView: View {
                 }
                 Spacer()
             }
+            .navigationTitle("Explore")
             
         }
         .onAppear {

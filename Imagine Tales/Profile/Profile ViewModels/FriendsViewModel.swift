@@ -18,6 +18,48 @@ final class FriendsViewModel: ObservableObject {
     @Published var friendReqIds = [String]()              // Array of friend request user IDs
     @Published var notifications: [Notification] = []
         
+    func deleteNotificationsWithToid(toid: String, completion: @escaping (Error?) -> Void) {
+        // Reference to the Firestore database
+        let db = Firestore.firestore()
+        
+        // Reference to the collection where notifications are stored
+        let notificationsCollection = db.collection("Notifications")
+        
+        // Query the collection for documents where 'toid' matches the provided value
+        notificationsCollection.whereField("toId", isEqualTo: toid).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                // Handle any errors in the query
+                print("Error getting documents: \(error.localizedDescription)")
+                completion(error)
+                return
+            }
+            
+            // Check if there are any documents to delete
+            guard let documents = querySnapshot?.documents else {
+                print("No documents found with toid: \(toid)")
+                completion(nil)
+                return
+            }
+            
+            // Iterate through the documents and delete each one
+            let batch = db.batch() // Using a batch to group deletions
+            
+            for document in documents {
+                batch.deleteDocument(document.reference)
+            }
+            
+            // Commit the batch deletion
+            batch.commit { batchError in
+                if let batchError = batchError {
+                    print("Error deleting documents: \(batchError.localizedDescription)")
+                    completion(batchError)
+                } else {
+                    print("Successfully deleted all documents with toid: \(toid)")
+                    completion(nil)
+                }
+            }
+        }
+    }
     // Function to delete a document by ID
         func deleteNotification(withId id: String) {
             let db = Firestore.firestore()

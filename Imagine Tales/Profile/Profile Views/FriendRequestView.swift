@@ -499,7 +499,34 @@ struct FriendRequestView: View {
                             StoryFromProfileView(story: story)
                         }
                     
+                    Spacer()
+                    
+                    if !viewModel.notifications.isEmpty {
+                        Button {
+                            viewModel.deleteNotificationsWithToid(toid: childId) { error in
+                                if let error = error {
+                                    print("Error during deletion: \(error.localizedDescription)")
+                                } else {
+                                    print("Documents successfully deleted")
+                                    Drops.show("Documents successfully deleted")
+                                    viewModel.fetchNotifications(for: childId)
+                                }
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "bubbles.and.sparkles.fill")
+                                Text("Clear all notifications")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 55)
+                            .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
+                            
+                        }
+                    }
+                    
+                    
                 }
+                
             }
             .onAppear {
                 viewModel.fetchChild(ChildId: childId)

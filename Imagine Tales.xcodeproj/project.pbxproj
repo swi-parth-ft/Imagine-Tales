@@ -70,6 +70,7 @@
 		0764FDC52CB9EEE700F991BF /* StoryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0764FDC42CB9EEE700F991BF /* StoryLoader.swift */; };
 		0764FDC72CB9F23100F991BF /* DeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0764FDC62CB9F23100F991BF /* DeckView.swift */; };
 		0764FDCA2CB9F4C300F991BF /* CardStack in Frameworks */ = {isa = PBXBuildFile; productRef = 0764FDC92CB9F4C300F991BF /* CardStack */; };
+		0764FDCC2CBB4E5E00F991BF /* ImagePlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0764FDCB2CBB4E5E00F991BF /* ImagePlaceholder.swift */; };
 		076C22982C7E66B6001DAB3F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 076C22972C7E66B6001DAB3F /* FirebaseStorage */; };
 		076C229A2C7E8C3E001DAB3F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C22992C7E8C3E001DAB3F /* HomeView.swift */; };
 		07774ED22CAC4D4B0056E5BE /* StoryByGenreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07774ED12CAC4D4A0056E5BE /* StoryByGenreViewModel.swift */; };
@@ -185,6 +186,7 @@
 		0764FDC22CB9E75200F991BF /* InvertedCornersShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvertedCornersShape.swift; sourceTree = "<group>"; };
 		0764FDC42CB9EEE700F991BF /* StoryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryLoader.swift; sourceTree = "<group>"; };
 		0764FDC62CB9F23100F991BF /* DeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckView.swift; sourceTree = "<group>"; };
+		0764FDCB2CBB4E5E00F991BF /* ImagePlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePlaceholder.swift; sourceTree = "<group>"; };
 		076C22992C7E8C3E001DAB3F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		07774ED12CAC4D4A0056E5BE /* StoryByGenreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryByGenreViewModel.swift; sourceTree = "<group>"; };
 		07774ED32CAE3BF70056E5BE /* parentSettingiPhone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parentSettingiPhone.swift; sourceTree = "<group>"; };
@@ -521,6 +523,7 @@
 				07D3236C2CA72AC000846FA3 /* CharacterView.swift */,
 				07D3236D2CA72AC000846FA3 /* ContentView.swift */,
 				07D3236E2CA72AC000846FA3 /* GeneratingProcessView.swift */,
+				0764FDCB2CBB4E5E00F991BF /* ImagePlaceholder.swift */,
 				07D323702CA72AC000846FA3 /* GenreSelectionView.swift */,
 				07D323712CA72AC000846FA3 /* MoodSelectionView.swift */,
 				07D323722CA72AC000846FA3 /* StoryReviewView.swift */,
@@ -824,6 +827,7 @@
 				078DACD62C8CA44900F04A65 /* StoryByGenreView.swift in Sources */,
 				07D323AA2CA765A500846FA3 /* AddChildForm.swift in Sources */,
 				073EFE892CB2C9F3004BC6AC /* AgeRangeButton.swift in Sources */,
+				0764FDCC2CBB4E5E00F991BF /* ImagePlaceholder.swift in Sources */,
 				0701FB9D2C83E49E004BEE9F /* Genie.metal in Sources */,
 				0701FB9E2C83E49E004BEE9F /* CircleWave.metal in Sources */,
 				0701FB9F2C83E49E004BEE9F /* DiamondWave.metal in Sources */,
