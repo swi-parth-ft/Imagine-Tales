@@ -26,6 +26,7 @@
 		0701FBB62C8755C5004BEE9F /* RippleEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBB52C8755C5004BEE9F /* RippleEffectView.swift */; };
 		0701FBB82C8755D1004BEE9F /* Ripple.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBB72C8755D1004BEE9F /* Ripple.metal */; };
 		0701FBBA2C87879F004BEE9F /* FriendProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701FBB92C87879F004BEE9F /* FriendProfileView.swift */; };
+		070796A52CBB5C9F00D69ED1 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 070796A42CBB5C9F00D69ED1 /* Launch Screen.storyboard */; };
 		0711F34F2C6D5D79006C86AA /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F34E2C6D5D79006C86AA /* RootView.swift */; };
 		0711F3512C6D5DCA006C86AA /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711F3502C6D5DCA006C86AA /* TabbarView.swift */; };
 		0711F3542C6D5F3F006C86AA /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 0711F3532C6D5F3F006C86AA /* FloatingTabBar */; };
@@ -65,6 +66,7 @@
 		074FCF742CB5949D00DEC20F /* AccountDeletionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF732CB5949D00DEC20F /* AccountDeletionViewModel.swift */; };
 		074FCF762CB6091800DEC20F /* PhoneVarification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF752CB6091800DEC20F /* PhoneVarification.swift */; };
 		074FCF782CB60FF700DEC20F /* DeleteWithEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF772CB60FF700DEC20F /* DeleteWithEmail.swift */; };
+		0761D7AB2CBCA09D00D457BE /* notification.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0761D7AA2CBCA09D00D457BE /* notification.wav */; };
 		0764FDC12CB8223500F991BF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 0764FDC02CB8223500F991BF /* FirebaseMessaging */; };
 		0764FDC32CB9E75200F991BF /* InvertedCornersShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0764FDC22CB9E75200F991BF /* InvertedCornersShape.swift */; };
 		0764FDC52CB9EEE700F991BF /* StoryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0764FDC42CB9EEE700F991BF /* StoryLoader.swift */; };
@@ -159,6 +161,7 @@
 		0701FBB52C8755C5004BEE9F /* RippleEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RippleEffectView.swift; sourceTree = "<group>"; };
 		0701FBB72C8755D1004BEE9F /* Ripple.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Ripple.metal; sourceTree = "<group>"; };
 		0701FBB92C87879F004BEE9F /* FriendProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendProfileView.swift; sourceTree = "<group>"; };
+		070796A42CBB5C9F00D69ED1 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		0711F34E2C6D5D79006C86AA /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		0711F3502C6D5DCA006C86AA /* TabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
 		0711F3572C6D63F1006C86AA /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
@@ -183,6 +186,7 @@
 		074FCF732CB5949D00DEC20F /* AccountDeletionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDeletionViewModel.swift; sourceTree = "<group>"; };
 		074FCF752CB6091800DEC20F /* PhoneVarification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVarification.swift; sourceTree = "<group>"; };
 		074FCF772CB60FF700DEC20F /* DeleteWithEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteWithEmail.swift; sourceTree = "<group>"; };
+		0761D7AA2CBCA09D00D457BE /* notification.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = notification.wav; sourceTree = "<group>"; };
 		0764FDC22CB9E75200F991BF /* InvertedCornersShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvertedCornersShape.swift; sourceTree = "<group>"; };
 		0764FDC42CB9EEE700F991BF /* StoryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryLoader.swift; sourceTree = "<group>"; };
 		0764FDC62CB9F23100F991BF /* DeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckView.swift; sourceTree = "<group>"; };
@@ -355,6 +359,7 @@
 			children = (
 				07D323B62CA76BB800846FA3 /* Explore View */,
 				07D323B52CA76BAA00846FA3 /* Explore ViewModel */,
+				070796A42CBB5C9F00D69ED1 /* Launch Screen.storyboard */,
 			);
 			path = Explore;
 			sourceTree = "<group>";
@@ -642,6 +647,7 @@
 				07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */,
 				0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */,
 				0711F34E2C6D5D79006C86AA /* RootView.swift */,
+				0761D7AA2CBCA09D00D457BE /* notification.wav */,
 				07D3235D2CA7197300846FA3 /* SignInProcess */,
 				0711F3502C6D5DCA006C86AA /* TabbarView.swift */,
 				07D323862CA7301400846FA3 /* Models */,
@@ -750,11 +756,13 @@
 				07AF26DD2C703B2C00E41509 /* ComicNeue-Bold.ttf in Resources */,
 				0711F3682C6D6D0D006C86AA /* GoogleService-Info.plist in Resources */,
 				073F2CED2C6F98D500BCF6F0 /* StoryLoading.json in Resources */,
+				070796A52CBB5C9F00D69ED1 /* Launch Screen.storyboard in Resources */,
 				073F2CF62C6FBFDB00BCF6F0 /* ComicNeue-Regular.ttf in Resources */,
 				07C9301D2C9F68B000AB8F06 /* OpenSans.ttf in Resources */,
 				07FB38502C62BEAC0070EEFA /* Preview Assets.xcassets in Resources */,
 				07FB384D2C62BEAC0070EEFA /* Assets.xcassets in Resources */,
 				0711F37C2C6D96C5006C86AA /* imageLoading.json in Resources */,
+				0761D7AB2CBCA09D00D457BE /* notification.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

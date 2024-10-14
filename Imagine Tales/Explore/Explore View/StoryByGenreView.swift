@@ -91,11 +91,10 @@ struct StoryByGenreView: View {
                                                 
                                                 VStack(spacing: 0) {
                                                     
-                                                    Text(story.title)
+                                                    Text(story.title.trimmingCharacters(in: .newlines))
                                                         .font(.system(size: 18))
                                                     Text("By \(story.childUsername)")
                                                         .font(.system(size: 16))
-                                                        .padding(.top, -20)
                                                     HStack {
                                                         Image(systemName: "heart.fill")
                                                             .foregroundStyle(.red)

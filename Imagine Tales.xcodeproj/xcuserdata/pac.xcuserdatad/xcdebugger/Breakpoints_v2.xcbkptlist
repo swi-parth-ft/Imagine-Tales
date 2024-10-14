@@ -2418,6 +2418,36 @@
             endingLineNumber = "59"
             landmarkName = "getSavedStories(forChild:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D95F81A1-FF83-46D1-959F-3C9426B24DFB - 2e6949f4aa730e49"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) suspend resume partial function for Imagine_Tales.SavedStoryViewModel.getMySavedStories(isLoadMore: Swift.Bool, childId: Swift.String) async -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Library/Lib%20ViewModel/SavedStoryViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59">
+               </Location>
+               <Location
+                  uuid = "D95F81A1-FF83-46D1-959F-3C9426B24DFB - 46d90ae3d9dea856"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for Imagine_Tales.SavedStoryViewModel.getMySavedStories(isLoadMore: Swift.Bool, childId: Swift.String) async -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Library/Lib%20ViewModel/SavedStoryViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

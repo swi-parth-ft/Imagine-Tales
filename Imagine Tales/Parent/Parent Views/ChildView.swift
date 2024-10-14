@@ -47,10 +47,9 @@ struct ChildView: View {
                             NavigationLink(destination: StoryView(story: story, child: child)) {
                                 ZStack {
                                     HStack {
-                                        VStack {
-                                            Spacer()
-                                            Text("\(story.title)") // Display story title
-                                        }
+                                      
+                                            Text("\(story.title.trimmingCharacters(in: .newlines))") // Display story title
+                                        
                                         Spacer()
                                         // Show story status with color coding
                                         Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending"))

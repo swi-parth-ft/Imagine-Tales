@@ -52,14 +52,50 @@ struct OnBoardingView: View {
                     }
                 }
                 .padding(.top, 80)
-
-                Spacer()
+                VStack {
+                    if page == 1 {
+                        Text("Blast off into a galaxy of adventure with friends as you explore the universe!")
+                            .font(.custom("ComicNeue-Bold", size: 30))
+                            .multilineTextAlignment(.center)
+                            .padding()
+                            .background(VisualEffectBlur(blurStyle: .systemThinMaterial))
+                            .cornerRadius(22)
+                        
+                        Spacer()
+                            
+                    } else if page == 2 {
+                        Spacer()
+                        Text("Float into a world of fun and creativity, where Imagination knows no bounds!")
+                            .font(.custom("ComicNeue-Bold", size: 30))
+                            .multilineTextAlignment(.center)
+                            .padding()
+                            .background(VisualEffectBlur(blurStyle: .systemThinMaterial))
+                            .cornerRadius(22)
+                            .padding(.bottom, 80)
+                    } else {
+                        
+                        Text("Journey backs in time to uncover thrilling tales of dinosaurs and their epic advantures!")
+                            .font(.custom("ComicNeue-Bold", size: 30))
+                            .multilineTextAlignment(.center)
+                            .padding()
+                            .background(VisualEffectBlur(blurStyle: .systemThinMaterial))
+                            .cornerRadius(22)
+                        Spacer()
+                    }
+                }
+                .frame(width: UIScreen.main.bounds.width * 0.7)
                 
                 
-                // "Continue" button to exit onboarding
-                continueButton
-                    .padding(.bottom, 80)
+                
+                if page == 3 {
+                    Spacer()
+                    // "Continue" button to exit onboarding
+                    continueButton
+                        .padding(.bottom, 80)
+                }
             }
+            
+            
         }
     }
 

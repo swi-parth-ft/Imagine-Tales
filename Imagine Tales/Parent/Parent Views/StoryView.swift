@@ -101,7 +101,7 @@ struct StoryView: View {
                             if status != "Reject" {
                                 Text(status == "Approve" ? "Approved" : "Approve")
                                     .padding()
-                                    .frame(width: 200)
+                                    .frame(width: 170)
                                     .background(colorScheme == .dark ? Color(hex: "#9F9F74").opacity(0.3) : Color(hex: "#F2F2DB"))
                                     .foregroundStyle(colorScheme == .dark ? .white : .black )
                                     .cornerRadius(12)
@@ -131,7 +131,7 @@ struct StoryView: View {
                             if status != "Approve" {
                                 Text(status == "Reject" ? "Rejected" : "Reject")
                                     .padding()
-                                    .frame(width: 200)
+                                    .frame(width: 170)
                                     .background(Color(hex: "#FF6F61"))
                                     .foregroundStyle(.white)
                                     .cornerRadius(12)

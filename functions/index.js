@@ -101,6 +101,7 @@ exports.sendLikeNotification = functions.firestore
           notification: {
             title: "Your Story Got a Like!",
             body: `${likerName} liked your story!`,
+            sound: "notification",
           },
           data: {
             storyId: storyId,

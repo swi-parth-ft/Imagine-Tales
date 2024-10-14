@@ -272,13 +272,13 @@ struct ProfileView: View {
                                                         
                                                         VStack(spacing: 0) {
                                                             
-                                                            Text(story.title)
+                                                            Text(story.title.trimmingCharacters(in: .newlines))
                                                                 .font(.system(size: 18))
                                                             Text(story.status == "Approve" ? "Approved" : (story.status == "Reject" ? "Rejected" : "Pending" ))
                                                                 .font(.system(size: 16))
                                                                 .bold()
                                                                 .foregroundStyle(story.status == "Approve" ? .green : (story.status == "Reject" ? .red : .blue ))
-                                                                .padding(.top, -20)
+                                                               
                                                             HStack {
                                                                 Image(systemName: "heart.fill")
                                                                     .foregroundStyle(.red)

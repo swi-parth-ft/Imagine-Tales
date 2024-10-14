@@ -508,7 +508,7 @@ struct FriendRequestView: View {
                                     print("Error during deletion: \(error.localizedDescription)")
                                 } else {
                                     print("Documents successfully deleted")
-                                    Drops.show("Documents successfully deleted")
+                                    Drops.show("Notifications cleared!")
                                     viewModel.fetchNotifications(for: childId)
                                 }
                             }

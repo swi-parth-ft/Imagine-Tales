@@ -406,10 +406,10 @@ struct GeneratingProcessView: View {
                         .padding()
                     }
 
-                    if isLoadingTextPart {
-                        Text("Loading")
-                            .frame(height: 55)
-                    }
+//                    if isLoadingTextPart {
+//                        Text("Loading")
+//                            .frame(height: 55)
+//                    }
 
                
                 }
