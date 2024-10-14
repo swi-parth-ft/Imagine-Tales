@@ -14,6 +14,9 @@ struct OnBoardingView: View {
 
     var shader = TransitionShader(name: "Crosswarp (→)", transition: .crosswarpLTR)  // Transition effect between onboarding screens
     @State private var backButtonPressed = false  // Tracks when the back button is pressed
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @State private var isiPhone = false
+    @State private var isShowingSpashScreen = false
     
     var body: some View {
         ZStack {
@@ -37,7 +40,8 @@ struct OnBoardingView: View {
                         HStack {
                             backButton
                             Spacer()
-                        }.padding(.leading, 100)
+                        }
+                        .padding(.leading)
                     }
 
                     // Stepper indicating progress through the onboarding pages
@@ -48,14 +52,17 @@ struct OnBoardingView: View {
                         HStack {
                             Spacer()
                             forwardButton
-                        }.padding(.trailing, 100)
+                        }
+                        .padding(.trailing)
                     }
                 }
+                .frame(width: UIScreen.main.bounds.width)
                 .padding(.top, 80)
+                
                 VStack {
                     if page == 1 {
                         Text("Blast off into a galaxy of adventure with friends as you explore the universe!")
-                            .font(.custom("ComicNeue-Bold", size: 30))
+                            .font(.custom("ComicNeue-Bold", size: isiPhone ? 22 : 30))
                             .multilineTextAlignment(.center)
                             .padding()
                             .background(VisualEffectBlur(blurStyle: .systemThinMaterial))
@@ -66,7 +73,7 @@ struct OnBoardingView: View {
                     } else if page == 2 {
                         Spacer()
                         Text("Float into a world of fun and creativity, where Imagination knows no bounds!")
-                            .font(.custom("ComicNeue-Bold", size: 30))
+                            .font(.custom("ComicNeue-Bold", size: isiPhone ? 22 : 30))
                             .multilineTextAlignment(.center)
                             .padding()
                             .background(VisualEffectBlur(blurStyle: .systemThinMaterial))
@@ -75,7 +82,7 @@ struct OnBoardingView: View {
                     } else {
                         
                         Text("Journey backs in time to uncover thrilling tales of dinosaurs and their epic advantures!")
-                            .font(.custom("ComicNeue-Bold", size: 30))
+                            .font(.custom("ComicNeue-Bold", size: isiPhone ? 22 : 30))
                             .multilineTextAlignment(.center)
                             .padding()
                             .background(VisualEffectBlur(blurStyle: .systemThinMaterial))
@@ -96,6 +103,16 @@ struct OnBoardingView: View {
             }
             
             
+        }
+        .onAppear {
+            if horizontalSizeClass == .compact {
+                isiPhone = true
+            }
+        }
+        .sheet(isPresented: $isShowingSpashScreen, onDismiss: {
+            isOnboarding = false
+        }) {
+            SpashScreen()
         }
     }
 
@@ -120,10 +137,11 @@ struct OnBoardingView: View {
             ZStack {
                 Circle()
                     .foregroundStyle(.white)
-                    .frame(width: 75, height: 75)
+                    .frame(width: isiPhone ? 50 : 75, height: isiPhone ? 50 : 75)
                     .shadow(radius: 10)
-                Image("arrow1")
-                    .frame(width: 55, height: 55)
+                Image(systemName: "arrowtriangle.backward.fill")
+                    .font(.system(size: isiPhone ? 20 : 40))
+                    .foregroundStyle(.black)
             }
         }
     }
@@ -136,10 +154,11 @@ struct OnBoardingView: View {
             ZStack {
                 Circle()
                     .foregroundStyle(.white)
-                    .frame(width: 75, height: 75)
+                    .frame(width: isiPhone ? 50 : 75, height: isiPhone ? 50 : 75)
                     .shadow(radius: 10)
-                Image("forward")
-                    .frame(width: 55, height: 55)
+                Image(systemName: "arrowtriangle.forward.fill")
+                    .font(.system(size: isiPhone ? 20 : 40))
+                    .foregroundStyle(.black)
             }
         }
     }
@@ -147,16 +166,20 @@ struct OnBoardingView: View {
     // Stepper to show onboarding progress
     private var stepper: some View {
         HStack {
-            Capsule().foregroundStyle(.orange).frame(width: 100, height: 7).shadow(radius: 10)
-            Capsule().foregroundStyle(page == 1 ? .white : .orange).frame(width: 100, height: 7).shadow(radius: 10)
-            Capsule().foregroundStyle(page == 1 ? .white : (page == 2 ? .white : .orange)).frame(width: 100, height: 7).shadow(radius: 10)
+            Capsule().foregroundStyle(.orange).frame(width: isiPhone ? 70 : 100, height: 7).shadow(radius: 10)
+            Capsule().foregroundStyle(page == 1 ? .white : .orange).frame(width: isiPhone ? 70 : 100, height: 7).shadow(radius: 10)
+            Capsule().foregroundStyle(page == 1 ? .white : (page == 2 ? .white : .orange)).frame(width: isiPhone ? 70 : 100, height: 7).shadow(radius: 10)
         }
     }
 
     // Continue button to exit the onboarding flow - entire button clickable
     private var continueButton: some View {
         Button(action: {
-            isOnboarding = false  // Dismiss onboarding when button is pressed
+            if isiPhone {
+                isShowingSpashScreen.toggle()
+            } else {
+                isOnboarding = false  // Dismiss onboarding when button is pressed
+            }
         }) {
             Text("Continue")
                 .frame(width: UIScreen.main.bounds.width / 2, height: 55)

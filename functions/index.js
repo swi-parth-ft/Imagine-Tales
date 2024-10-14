@@ -28,6 +28,13 @@ exports.sendFriendRequestNotification = functions.firestore
           data: {
             fromUserId: fromId,
           },
+          apns: {
+            payload: {
+              aps: {
+                sound: "notification",
+              },
+            },
+          },
         };
         return admin.messaging().send(message)
             .then((response) => {
@@ -101,10 +108,16 @@ exports.sendLikeNotification = functions.firestore
           notification: {
             title: "Your Story Got a Like!",
             body: `${likerName} liked your story!`,
-            sound: "notification",
           },
           data: {
             storyId: storyId,
+          },
+          apns: {
+            payload: {
+              aps: {
+                sound: "notification",
+              },
+            },
           },
         };
 
@@ -153,6 +166,13 @@ exports.sendStoryStatusNotification = functions.firestore
             },
             data: {
               storyId: storyId, // Pass storyId for any further actions
+            },
+            apns: {
+              payload: {
+                aps: {
+                  sound: "notification",
+                },
+              },
             },
           };
 
@@ -214,6 +234,13 @@ exports.sendFriendAcceptanceNotification = functions.firestore
           data: {
             friendUserId: friendUserId,
           },
+          apns: {
+            payload: {
+              aps: {
+                sound: "notification",
+              },
+            },
+          },
         };
 
         return admin.messaging().send(message)
@@ -254,6 +281,13 @@ exports.sendSharedStoryNotification = functions.firestore
           },
           data: {
             storyId: storyId,
+          },
+          apns: {
+            payload: {
+              aps: {
+                sound: "notification",
+              },
+            },
           },
         };
         return admin.messaging().send(message)
@@ -300,6 +334,13 @@ exports.sendStoryPostedNotification = functions.firestore
           },
           data: {
             storyId: context.params.storyId,
+          },
+          apns: {
+            payload: {
+              aps: {
+                sound: "notification",
+              },
+            },
           },
         };
         return admin.messaging().send(message)

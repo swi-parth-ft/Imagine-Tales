@@ -101,69 +101,69 @@ struct parentSettingsiPhone: View {
                                     .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                                     .cornerRadius(12)
                             }
-                        }
-                    } else {
-                        
-                        TextField("Enter your email", text: $enteredEmail)
-                            .padding()
-                            .frame(width: UIScreen.main.bounds.width * 0.9)
-                            .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
-                            .cornerRadius(12)
-                        
-                        HStack {
-                            Button {
-                                let parentEmail = viewModel.parent?.email?.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                                let enteredEmailTrimmed = enteredEmail.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-                                
-                                if enteredEmailTrimmed == parentEmail {
-                                    Task {
-                                        do {
-                                            try await reset()
-                                            Drops.show("Check your email for a reset link")
-                                            withAnimation {
-                                                isResettingPassword.toggle()
+                        } else {
+                            
+                            TextField("Enter your email", text: $enteredEmail)
+                                .padding()
+                                .frame(width: UIScreen.main.bounds.width * 0.9)
+                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                                .cornerRadius(12)
+                            
+                            HStack {
+                                Button {
+                                    let parentEmail = viewModel.parent?.email?.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                                    let enteredEmailTrimmed = enteredEmail.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+                                    
+                                    if enteredEmailTrimmed == parentEmail {
+                                        Task {
+                                            do {
+                                                try await reset()
+                                                Drops.show("Check your email for a reset link")
+                                                withAnimation {
+                                                    isResettingPassword.toggle()
+                                                }
+                                            } catch {
+                                                // Handle error
                                             }
-                                        } catch {
-                                            // Handle error
+                                        }
+                                    } else {
+                                        if !enteredEmail.isEmpty {
+                                            Drops.show("Please enter a valid email.")
+                                        } else {
+                                            Drops.show("Please enter a your email.")
                                         }
                                     }
-                                } else {
-                                    if !enteredEmail.isEmpty {
-                                        Drops.show("Please enter a valid email.")
-                                    } else {
-                                        Drops.show("Please enter a your email.")
-                                    }
+                                    
+                                    
+                                    
+                                } label: {
+                                    Text("Reset Password")
+                                        .padding()
+                                        .frame(width: UIScreen.main.bounds.width * 0.5)
+                                        .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                                        .cornerRadius(12)
+                                    
                                 }
                                 
-                                
-                                
-                            } label: {
-                                Text("Reset Password")
-                                    .padding()
-                                    .frame(width: UIScreen.main.bounds.width * 0.5)
-                                    .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
-                                    .cornerRadius(12)
-                                
+                                Button {
+                                    withAnimation {
+                                        isResettingPassword.toggle()
+                                    }
+                                } label: {
+                                    Text("Cancel")
+                                        .padding()
+                                        .frame(width: UIScreen.main.bounds.width * 0.3)
+                                        .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                                        .foregroundStyle(.red)
+                                        .cornerRadius(12)
+                                }
                             }
                             
-                            Button {
-                                withAnimation {
-                                    isResettingPassword.toggle()
-                                }
-                            } label: {
-                                Text("Cancel")
-                                    .padding()
-                                    .frame(width: UIScreen.main.bounds.width * 0.3)
-                                    .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
-                                    .foregroundStyle(.red)
-                                    .cornerRadius(12)
-                            }
+                            
+                            
+                            
+                            
                         }
-                        
-                       
-                        
-                        
-                        
                     }
                 
                     Spacer()

@@ -67,6 +67,7 @@
 		074FCF762CB6091800DEC20F /* PhoneVarification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF752CB6091800DEC20F /* PhoneVarification.swift */; };
 		074FCF782CB60FF700DEC20F /* DeleteWithEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF772CB60FF700DEC20F /* DeleteWithEmail.swift */; };
 		0761D7AB2CBCA09D00D457BE /* notification.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0761D7AA2CBCA09D00D457BE /* notification.wav */; };
+		0761D7AD2CBD708400D457BE /* SpashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0761D7AC2CBD708400D457BE /* SpashScreen.swift */; };
 		0764FDC12CB8223500F991BF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 0764FDC02CB8223500F991BF /* FirebaseMessaging */; };
 		0764FDC32CB9E75200F991BF /* InvertedCornersShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0764FDC22CB9E75200F991BF /* InvertedCornersShape.swift */; };
 		0764FDC52CB9EEE700F991BF /* StoryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0764FDC42CB9EEE700F991BF /* StoryLoader.swift */; };
@@ -187,6 +188,7 @@
 		074FCF752CB6091800DEC20F /* PhoneVarification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVarification.swift; sourceTree = "<group>"; };
 		074FCF772CB60FF700DEC20F /* DeleteWithEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteWithEmail.swift; sourceTree = "<group>"; };
 		0761D7AA2CBCA09D00D457BE /* notification.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = notification.wav; sourceTree = "<group>"; };
+		0761D7AC2CBD708400D457BE /* SpashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpashScreen.swift; sourceTree = "<group>"; };
 		0764FDC22CB9E75200F991BF /* InvertedCornersShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvertedCornersShape.swift; sourceTree = "<group>"; };
 		0764FDC42CB9EEE700F991BF /* StoryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryLoader.swift; sourceTree = "<group>"; };
 		0764FDC62CB9F23100F991BF /* DeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckView.swift; sourceTree = "<group>"; };
@@ -646,6 +648,7 @@
 				07DD158A2CB57114002E9410 /* Imagine Tales.entitlements */,
 				07FB38482C62BEAB0070EEFA /* Imagine_TalesApp.swift */,
 				0792C1D52C76A20D000C42A7 /* OnBoardingView.swift */,
+				0761D7AC2CBD708400D457BE /* SpashScreen.swift */,
 				0711F34E2C6D5D79006C86AA /* RootView.swift */,
 				0761D7AA2CBCA09D00D457BE /* notification.wav */,
 				07D3235D2CA7197300846FA3 /* SignInProcess */,
@@ -830,6 +833,7 @@
 				07D323A02CA762A800846FA3 /* DpSelectionViewModel.swift in Sources */,
 				0764FDC72CB9F23100F991BF /* DeckView.swift in Sources */,
 				073EFE8D2CB2CA6C004BC6AC /* SignInBG.swift in Sources */,
+				0761D7AD2CBD708400D457BE /* SpashScreen.swift in Sources */,
 				0701FB9B2C83E49E004BEE9F /* Pixellate.metal in Sources */,
 				0701FB9C2C83E49E004BEE9F /* Wind.metal in Sources */,
 				078DACD62C8CA44900F04A65 /* StoryByGenreView.swift in Sources */,

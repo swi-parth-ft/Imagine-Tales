@@ -92,7 +92,7 @@ struct PinView: View {
                             } else if otp.joined() == viewModel.pin {
                                 screenTimeViewModel.stopScreenTime() // Stop screen time management
                                 parentViewModel.removeFCMToken(childId: childId)
-                                parentViewModel.AddFCMTokenParent(parentId: Auth.auth().currentUser?.uid ?? "")
+                               // parentViewModel.AddFCMTokenParent(parentId: Auth.auth().currentUser?.uid ?? "")
                                 ipf = true // Set the app storage flag to true
                             } else {
                                 isPinWrong = true // Set incorrect PIN flag
