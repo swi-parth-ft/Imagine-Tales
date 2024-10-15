@@ -39,7 +39,7 @@ struct ContentView: View {
     
     
     let genres = ["Adventure", "Fantasy", "Mystery", "Romance", "Science Fiction", "Horror", "Thriller", "Historical", "Comedy", "Drama", "Detective", "Dystopian", "Fairy Tale", "Magical Realism", "Biography", "Coming-of-Age", "Action", "Paranormal", "Supernatural", "Western", "Mythology", "Cyberpunk", "Steampunk", "Family", "Slice of Life", "Satire", "Epic", "Noir", "Sports", "War", "Political", "Urban Fantasy", "Animal Fiction", "Travel", "Music", "Food", "Art", "Philosophical", "Self-Help"]
-    let themes = ["Magical Adventures", "Underwater Mysteries", "Dinosaur Discoveries", "Space Explorers", "FairyTale Kingdoms", "Superhero Chronicles", "Enchanted Forests", "Pirate Quests", "Animal Friends", "Time Traveling", "Monster Mischief", "Robot Wonders", "Mystical Creatures", "Lost Worlds", "Magical SchoolDays", "Jungle Safari", "Winter Wonderland", "Desert Dunes", "Alien Encounter", "Wizard’s Secrets","Parallel Universe Hops", "Rainbow Realms", "Cloud City Wonders", "Sky Circus", "Fishy Fiesta", "Starship Scouts", "Bunny Burrows", "Black Hole Bounce!", "Fruitopia Adventure", "Caribbean Car Race", "Moving Mountainland", "Floaty Pyramids", "Jelly Creatures", "Endless Maze", "Pizza Rocket Race", "Bubblegum Balloon Ride", "Popcorn Pirates", "Marshmallow Bouncy World", "Cocoa Volcano", "Waffle Adventureland"]
+    let themes = ["Magical Adventures", "Underwater Mysteries", "Dinosaur Discoveries", "Space Explorers", "FairyTale Kingdoms", "Superhero Chronicles", "Enchanted Forests", "Pirate Quests", "Animal Friends", "Time Traveling", "Monster Mischief", "Robot Wonders", "Mystical Creatures", "Lost Worlds", "Magical SchoolDays", "Jungle Safari", "Winter Wonderland", "Desert Dunes", "Alien Encounter", "Wizard’s Secrets","Parallel Universe Hops", "Rainbow Realms", "Cloud City Wonders", "Sky Circus", "Fishy Fiesta", "Starship Scouts", "Bunny Burrows", "Black Hole Bounce", "Fruitopia Adventure", "Caribbean Car Race", "Moving Mountainland", "Floaty Pyramids", "Jelly Creatures", "Endless Maze", "Pizza Rocket Race", "Bubblegum Balloon Ride", "Popcorn Pirates", "Marshmallow Bouncy World", "Cocoa Volcano", "Waffle Adventureland"]
 
     let themeColors: [Color] = [.purple, .teal, .green, .blue, .pink, .red, .green, .brown, .orange, .indigo, .purple, .gray, .purple, .green, .yellow, .green, .blue, .orange, .yellow, .gray, .purple, .mint, .blue, .orange, .teal, .cyan, .pink, .black, .green, .red, .brown, .yellow, .purple, .gray, .orange, .pink, .yellow, .white, .brown, .yellow]
 
@@ -84,7 +84,8 @@ struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var isAddingSuperHero = false
     private var adViewModel = InterstitialViewModel()
-    
+    @State private var isShowingPremiumPop = false
+    @State private var isPremium = false
     var body: some View {
         NavigationStack {
             ZStack {
@@ -331,6 +332,7 @@ struct ContentView: View {
                                                     }
                                                 } else if preview {
                                                     
+                                                    if isPremium {
                                                         generatedImage = nil
                                                         isLoading = true
                                                         isLoadingChunk = true
@@ -342,6 +344,9 @@ struct ContentView: View {
                                                                 print(error.localizedDescription)
                                                             }
                                                         }
+                                                    } else {
+                                                        isShowingPremiumPop.toggle()
+                                                    }
                                                     
                                                 }
                                             } label: {
@@ -399,6 +404,9 @@ struct ContentView: View {
                 }
             }) {
                 CharacterView()
+            }
+            .sheet(isPresented: $isShowingPremiumPop) {
+                PremiumPop(name: "", isPremium: $isPremium)
             }
         }
         .customNavBarStyle()

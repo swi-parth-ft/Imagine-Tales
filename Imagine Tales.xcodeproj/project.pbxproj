@@ -98,6 +98,9 @@
 		079E92522C89E64400433869 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079E92512C89E64400433869 /* ExploreView.swift */; };
 		07AF26DD2C703B2C00E41509 /* ComicNeue-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07AF26DC2C703B2C00E41509 /* ComicNeue-Bold.ttf */; };
 		07C9301D2C9F68B000AB8F06 /* OpenSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07C9301C2C9F68B000AB8F06 /* OpenSans.ttf */; };
+		07C96D9D2CBEB24A0034FA06 /* PremiumPlans.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C96D9C2CBEB24A0034FA06 /* PremiumPlans.swift */; };
+		07C96D9F2CBEB86F0034FA06 /* StrokedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C96D9E2CBEB86F0034FA06 /* StrokedText.swift */; };
+		07C96DA12CBED88E0034FA06 /* PremiumPop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C96DA02CBED88E0034FA06 /* PremiumPop.swift */; };
 		07D323422CA62F8B00846FA3 /* Drops in Frameworks */ = {isa = PBXBuildFile; productRef = 07D323412CA62F8B00846FA3 /* Drops */; };
 		07D323442CA6F25200846FA3 /* Extentions .swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D323432CA6F25200846FA3 /* Extentions .swift */; };
 		07D323622CA7246900846FA3 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D323612CA7246900846FA3 /* AuthenticationViewModel.swift */; };
@@ -214,6 +217,9 @@
 		079E92512C89E64400433869 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
 		07AF26DC2C703B2C00E41509 /* ComicNeue-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ComicNeue-Bold.ttf"; sourceTree = "<group>"; };
 		07C9301C2C9F68B000AB8F06 /* OpenSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = OpenSans.ttf; sourceTree = "<group>"; };
+		07C96D9C2CBEB24A0034FA06 /* PremiumPlans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumPlans.swift; sourceTree = "<group>"; };
+		07C96D9E2CBEB86F0034FA06 /* StrokedText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokedText.swift; sourceTree = "<group>"; };
+		07C96DA02CBED88E0034FA06 /* PremiumPop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumPop.swift; sourceTree = "<group>"; };
 		07D323432CA6F25200846FA3 /* Extentions .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extentions .swift"; sourceTree = "<group>"; };
 		07D323612CA7246900846FA3 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		07D323632CA724B500846FA3 /* SignInWithEmailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithEmailViewModel.swift; sourceTree = "<group>"; };
@@ -416,6 +422,7 @@
 			isa = PBXGroup;
 			children = (
 				07D323432CA6F25200846FA3 /* Extentions .swift */,
+				07C96D9E2CBEB86F0034FA06 /* StrokedText.swift */,
 				073EFE932CB4515C004BC6AC /* BannerView.swift */,
 				0764FDC62CB9F23100F991BF /* DeckView.swift */,
 				0764FDC22CB9E75200F991BF /* InvertedCornersShape.swift */,
@@ -529,6 +536,7 @@
 				07D3236B2CA72AC000846FA3 /* CharacterSelectionView.swift */,
 				07D3236C2CA72AC000846FA3 /* CharacterView.swift */,
 				07D3236D2CA72AC000846FA3 /* ContentView.swift */,
+				07C96DA02CBED88E0034FA06 /* PremiumPop.swift */,
 				07D3236E2CA72AC000846FA3 /* GeneratingProcessView.swift */,
 				0764FDCB2CBB4E5E00F991BF /* ImagePlaceholder.swift */,
 				07D323702CA72AC000846FA3 /* GenreSelectionView.swift */,
@@ -605,6 +613,7 @@
 				078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */,
 				07D323A32CA7653F00846FA3 /* ParentViewModel.swift */,
 				074FCF732CB5949D00DEC20F /* AccountDeletionViewModel.swift */,
+				07C96D9C2CBEB24A0034FA06 /* PremiumPlans.swift */,
 			);
 			path = "Parent ViewModels";
 			sourceTree = "<group>";
@@ -788,9 +797,11 @@
 				0788C4272CA90D8C00FA5E65 /* OpenAITTSManager.swift in Sources */,
 				07D3237B2CA72AC000846FA3 /* StoryReviewView.swift in Sources */,
 				07774ED82CAF3E280056E5BE /* StoriesManager.swift in Sources */,
+				07C96D9D2CBEB24A0034FA06 /* PremiumPlans.swift in Sources */,
 				073EFE872CB2C9BA004BC6AC /* FriendProfileViewModel.swift in Sources */,
 				07D3239E2CA7629000846FA3 /* FriendsViewModel.swift in Sources */,
 				07D3237C2CA72AC000846FA3 /* MoodSelectionView.swift in Sources */,
+				07C96DA12CBED88E0034FA06 /* PremiumPop.swift in Sources */,
 				07D3237D2CA72AC000846FA3 /* ThemeSelectionView.swift in Sources */,
 				07D3239A2CA761D600846FA3 /* ReAuthentication.swift in Sources */,
 				0701FBB82C8755D1004BEE9F /* Ripple.metal in Sources */,
@@ -844,6 +855,7 @@
 				0701FB9E2C83E49E004BEE9F /* CircleWave.metal in Sources */,
 				0701FB9F2C83E49E004BEE9F /* DiamondWave.metal in Sources */,
 				07D323812CA72FA400846FA3 /* SavedStoryViewModel.swift in Sources */,
+				07C96D9F2CBEB86F0034FA06 /* StrokedText.swift in Sources */,
 				0701FBA02C83E49E004BEE9F /* Crosswarp.metal in Sources */,
 				0701FBA12C83E49E004BEE9F /* Swirl.metal in Sources */,
 				0701FBAC2C83F194004BEE9F /* TransitionPreview.swift in Sources */,
