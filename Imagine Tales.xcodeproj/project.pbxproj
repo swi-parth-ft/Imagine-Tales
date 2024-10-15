@@ -362,6 +362,15 @@
 			path = LoadingAnimations;
 			sourceTree = "<group>";
 		};
+		07C96DA22CBF05C90034FA06 /* Premium */ = {
+			isa = PBXGroup;
+			children = (
+				07C96DA02CBED88E0034FA06 /* PremiumPop.swift */,
+				07C96D9C2CBEB24A0034FA06 /* PremiumPlans.swift */,
+			);
+			path = Premium;
+			sourceTree = "<group>";
+		};
 		07D323592CA7185500846FA3 /* Explore */ = {
 			isa = PBXGroup;
 			children = (
@@ -536,7 +545,6 @@
 				07D3236B2CA72AC000846FA3 /* CharacterSelectionView.swift */,
 				07D3236C2CA72AC000846FA3 /* CharacterView.swift */,
 				07D3236D2CA72AC000846FA3 /* ContentView.swift */,
-				07C96DA02CBED88E0034FA06 /* PremiumPop.swift */,
 				07D3236E2CA72AC000846FA3 /* GeneratingProcessView.swift */,
 				0764FDCB2CBB4E5E00F991BF /* ImagePlaceholder.swift */,
 				07D323702CA72AC000846FA3 /* GenreSelectionView.swift */,
@@ -613,7 +621,6 @@
 				078DACDB2C8DFA3300F04A65 /* ScreenTimeManager.swift */,
 				07D323A32CA7653F00846FA3 /* ParentViewModel.swift */,
 				074FCF732CB5949D00DEC20F /* AccountDeletionViewModel.swift */,
-				07C96D9C2CBEB24A0034FA06 /* PremiumPlans.swift */,
 			);
 			path = "Parent ViewModels";
 			sourceTree = "<group>";
@@ -662,6 +669,7 @@
 				0761D7AA2CBCA09D00D457BE /* notification.wav */,
 				07D3235D2CA7197300846FA3 /* SignInProcess */,
 				0711F3502C6D5DCA006C86AA /* TabbarView.swift */,
+				07C96DA22CBF05C90034FA06 /* Premium */,
 				07D323862CA7301400846FA3 /* Models */,
 				07D3237E2CA72F7200846FA3 /* Home */,
 				07D323742CA72AC000846FA3 /* Generation */,
