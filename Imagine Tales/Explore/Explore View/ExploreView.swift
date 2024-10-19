@@ -122,6 +122,8 @@ struct ExploreView: View {
                                                                 Text(story.title.trimmingCharacters(in: .newlines)) // Story title
                                                                     .foregroundStyle(colorScheme == .dark ? .white : .black)
                                                                     .font(.system(size: 18))
+                                                                    .lineLimit(1)
+                                                                        .truncationMode(.tail)
                                                                     
                                                                 
                                                                 VStack(alignment: .leading) {
