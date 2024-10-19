@@ -11,7 +11,7 @@ struct PremiumPop: View {
     @Environment(\.colorScheme) var colorScheme
     let name: String
     @State private var isShowingPremiumScreen = false
-    @Binding var isPremium: Bool
+    @EnvironmentObject var appState: AppState
     var body: some View {
         NavigationStack {
             ZStack {
@@ -45,7 +45,7 @@ struct PremiumPop: View {
                 }
                 .frame(width: UIScreen.main.bounds.width * 0.5)
                 .fullScreenCover(isPresented: $isShowingPremiumScreen) {
-                    PremiumPlans(isPremium: $isPremium)
+                    PremiumPlans()
                 }
             }
         }
@@ -53,5 +53,5 @@ struct PremiumPop: View {
 }
 
 #Preview {
-    PremiumPop(name: "parth", isPremium: .constant(false))
+    PremiumPop(name: "parth")
 }

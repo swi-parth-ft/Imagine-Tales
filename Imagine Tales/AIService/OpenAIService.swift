@@ -33,7 +33,8 @@ class OpenAIService {
             "model": "dall-e-3", // Specify the model to use
             "prompt": prompt, // The prompt for image generation
             "n": 1, // Number of images to generate
-            "size": "1024x1024" // Size of the generated image
+            "size": "1024x1024", // Size of the generated image
+            "quality": "standard"
         ]
         
         // Serialize the body to JSON
@@ -74,7 +75,6 @@ class OpenAIService {
                 completion(.success(image)) // Return the successfully generated image
             }.resume() // Start the task to fetch the image data
         }
-        
         task.resume() // Start the task to send the request
     }
 }

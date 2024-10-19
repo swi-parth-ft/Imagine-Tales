@@ -85,7 +85,8 @@ struct ContentView: View {
     @State private var isAddingSuperHero = false
     private var adViewModel = InterstitialViewModel()
     @State private var isShowingPremiumPop = false
-    @State private var isPremium = false
+    
+    @EnvironmentObject var appState: AppState
     var body: some View {
         NavigationStack {
             ZStack {
@@ -332,7 +333,7 @@ struct ContentView: View {
                                                     }
                                                 } else if preview {
                                                     
-                                                    if isPremium {
+                                                    if appState.isPremium {
                                                         generatedImage = nil
                                                         isLoading = true
                                                         isLoadingChunk = true
@@ -406,7 +407,7 @@ struct ContentView: View {
                 CharacterView()
             }
             .sheet(isPresented: $isShowingPremiumPop) {
-                PremiumPop(name: "", isPremium: $isPremium)
+                PremiumPop(name: "")
             }
         }
         .customNavBarStyle()

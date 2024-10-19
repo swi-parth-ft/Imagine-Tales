@@ -31,13 +31,13 @@ struct PremiumFeatureRow: View {
 
 struct PremiumPlans: View {
     @Environment(\.colorScheme) var colorScheme
-    @Binding var isPremium: Bool
     @Environment(\.dismiss) var dismiss
     @AppStorage("isInitiallyShowingPlansScreen") var isInitiallyShowingPlansScreen: Bool = true
     
     @AppStorage("remainingDays") var remainingDays: Int = 2
     @AppStorage("remainingStories") var remainingStories: Int = 3
     @State private var isiPhone = false
+    @EnvironmentObject var appState: AppState
     var body: some View {
         NavigationStack {
             ZStack {
@@ -167,7 +167,7 @@ struct PremiumPlans: View {
                                             .frame(width: 200, height: 150)
                                         
                                         Button {
-                                            isPremium = true
+                                            appState.isPremium = true
                                         } label: {
                                             Text("Purchase")
                                                 .padding()
@@ -216,7 +216,7 @@ struct PremiumPlans: View {
                                             .scaledToFit()
                                             .frame(width: 200, height: 150)
                                         Button {
-                                            isPremium = true
+                                            appState.isPremium = true
                                         } label: {
                                             Text("Purchase")
                                                 .padding()
@@ -258,7 +258,7 @@ struct PremiumPlans: View {
                                             .frame(width: 200, height: 200)
                                         
                                         Button {
-                                            isPremium = true
+                                            appState.isPremium = true
                                         } label: {
                                             Text("Purchase")
                                                 .padding()
@@ -307,7 +307,7 @@ struct PremiumPlans: View {
                                             .scaledToFit()
                                             .frame(width: 200, height: 200)
                                         Button {
-                                            isPremium = true
+                                            appState.isPremium = true
                                         } label: {
                                             Text("Purchase")
                                                 .padding()
@@ -375,5 +375,5 @@ struct PremiumPlans: View {
 }
 
 #Preview {
-    PremiumPlans(isPremium: .constant(false))
+    PremiumPlans()
 }

@@ -76,19 +76,16 @@ struct HomeView: View {
                                     // Button appearance: Change background color based on the selected category.
                                     Text(category)
                                         .padding()
-                                        .background(category == cat ? (colorScheme == .dark ? Color(hex: "#4B8A1C") : .green) : Color.clear)
-                                    
-                                        .foregroundColor(category == cat ? .white : .primary)
-                                        .clipShape(RoundedCorners(radius: 20, corners: [.topLeft, .topRight]))
+                                        .background(VisualEffectBlur(blurStyle: .systemThinMaterial))
+                                        .foregroundStyle(category == "Following" ? .orange : .primary)
+                                        .cornerRadius(12)
+                                        .shadow(radius: category == cat ? 7 : 0)
+                                        .scaleEffect(category == cat ? 1.1 : 1)
                                 }
                             }
                         }
-                        .padding(.horizontal) // Padding on both sides of the horizontal scroll view.
+                        .padding() // Padding on both sides of the horizontal scroll view.
                     }
-                    Divider()
-                        .frame(height: 5) // You can set the thickness of the line
-                        .background((colorScheme == .dark ? Color(hex: "#4B8A1C") : .green)) // Set the color of the line
-                        .padding(.bottom) // Padding around the entire genre section.
                 }
                 // If no stories are available, display a message.
                 if viewModel.newStories.isEmpty {

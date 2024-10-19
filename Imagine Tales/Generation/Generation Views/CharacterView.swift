@@ -39,6 +39,9 @@ struct CharacterView: View {
     // Available pets for selection
     let pets = ["Dog", "Cat", "Dragon", "Monkey", "Wolf", "Tiger", "Unicorn", "Baby Dinosaur"]
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var appState: AppState
+    @State private var isShowingPremiumPop = false
+    @EnvironmentObject var orientation: OrientationManager
     
     var body: some View {
         NavigationStack {
@@ -57,7 +60,7 @@ struct CharacterView: View {
                                 .padding()
                                 .background(colorScheme == .dark ? .black.opacity(0.2) : .white.opacity(0.8)) // Semi-transparent background
                                 .cornerRadius(22)
-                                .frame(width: UIScreen.main.bounds.width * 0.4)
+                                .frame(width: orientation.isLandscape ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.width * 0.4)
                             
                             Spacer()
                             
@@ -79,7 +82,7 @@ struct CharacterView: View {
                             }
                             
                         }
-                        .frame(width: UIScreen.main.bounds.width * 0.5,height: 70)
+                        .frame(width: orientation.isLandscape ? UIScreen.main.bounds.height * 0.4 : UIScreen.main.bounds.width * 0.5,height: 70)
                         
                         // Display selected gender and emotion
                         Text("\(viewModel.gender == "Male" ? "He" : "She") is a \(viewModel.emotion) Person")
@@ -114,7 +117,7 @@ struct CharacterView: View {
                             }
                             .padding([.leading, .vertical])
                         }
-                        .frame(width: UIScreen.main.bounds.width * 0.6)
+                        .frame(width: orientation.isLandscape ? UIScreen.main.bounds.height * 0.5 : UIScreen.main.bounds.width * 0.6)
                         
                         
                         // Age selection label
@@ -161,7 +164,7 @@ struct CharacterView: View {
                         } label: {
                             Text("Create Character")
                                 .foregroundStyle(.white)
-                                .frame(width: UIScreen.main.bounds.width * 0.5)
+                                .frame(width: orientation.isLandscape ? UIScreen.main.bounds.height * 0.4 : UIScreen.main.bounds.width * 0.5)
                         }
                         .padding()
                         .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61"))
@@ -177,7 +180,7 @@ struct CharacterView: View {
                             TextField("Pet Name", text: $viewModel.petName)
                                 .padding() // Padding around the TextField
                                 .background(colorScheme == .dark ? .black.opacity(0.2) : .white.opacity(0.8)) // Semi-transparent white background
-                                .frame(width: UIScreen.main.bounds.width * 0.5)
+                                .frame(width: orientation.isLandscape ? UIScreen.main.bounds.height * 0.3 : UIScreen.main.bounds.width * 0.4)
                                 .shadow(radius: 2) // Slight shadow around the TextField
                                 .cornerRadius(22) // Rounded corners
                                 .tint(colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#FF6F61")) // Custom tint color for text cursor
@@ -226,26 +229,30 @@ struct CharacterView: View {
                                 .padding() // Padding for the horizontal stack
                             }
                             .padding(.leading)
-                            .frame(width: UIScreen.main.bounds.width * 0.6)
+                            .frame(width: orientation.isLandscape ? UIScreen.main.bounds.height * 0.5 : UIScreen.main.bounds.width * 0.6)
                         }
                         
                         // Button for creating the pet
                         Button {
-                            // Perform asynchronous task to create the pet
-                            Task {
-                                do {
-                                    // Attempt to create the pet and fetch updated list
-                                    try await viewModel.createPet()
-                                    try PviewModel.getPets()
-                                    dismiss() // Dismiss the view on success
-                                } catch {
-                                    print(error.localizedDescription) // Print error if something goes wrong
+                            if appState.isPremium {
+                                // Perform asynchronous task to create the pet
+                                Task {
+                                    do {
+                                        // Attempt to create the pet and fetch updated list
+                                        try await viewModel.createPet()
+                                        try PviewModel.getPets()
+                                        dismiss() // Dismiss the view on success
+                                    } catch {
+                                        print(error.localizedDescription) // Print error if something goes wrong
+                                    }
                                 }
+                            } else  {
+                                isShowingPremiumPop.toggle()
                             }
                         } label: {
                             Text("Create Pet")
                                 .foregroundStyle(.white)
-                                .frame(width: UIScreen.main.bounds.width * 0.5)
+                                .frame(width: orientation.isLandscape ? UIScreen.main.bounds.height * 0.4 : UIScreen.main.bounds.width * 0.5)
                         }
                         .padding() // Padding around the button
                         .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61")) // Custom background color for button
@@ -279,6 +286,9 @@ struct CharacterView: View {
                 .font(.custom("ComicNeue-Bold", size: 22))
                 // Rounded corners for the button
                 .cornerRadius(22)
+            }
+            .sheet(isPresented: $isShowingPremiumPop) {
+                PremiumPop(name: "")
             }
         }
     }

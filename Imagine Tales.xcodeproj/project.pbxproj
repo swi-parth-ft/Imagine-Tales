@@ -66,6 +66,7 @@
 		074FCF742CB5949D00DEC20F /* AccountDeletionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF732CB5949D00DEC20F /* AccountDeletionViewModel.swift */; };
 		074FCF762CB6091800DEC20F /* PhoneVarification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF752CB6091800DEC20F /* PhoneVarification.swift */; };
 		074FCF782CB60FF700DEC20F /* DeleteWithEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074FCF772CB60FF700DEC20F /* DeleteWithEmail.swift */; };
+		075309872CC1A11E00BD9CAA /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 075309862CC1A11E00BD9CAA /* StoreKit.framework */; };
 		0761D7AB2CBCA09D00D457BE /* notification.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0761D7AA2CBCA09D00D457BE /* notification.wav */; };
 		0761D7AD2CBD708400D457BE /* SpashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0761D7AC2CBD708400D457BE /* SpashScreen.swift */; };
 		0764FDC12CB8223500F991BF /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 0764FDC02CB8223500F991BF /* FirebaseMessaging */; };
@@ -190,6 +191,7 @@
 		074FCF732CB5949D00DEC20F /* AccountDeletionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDeletionViewModel.swift; sourceTree = "<group>"; };
 		074FCF752CB6091800DEC20F /* PhoneVarification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVarification.swift; sourceTree = "<group>"; };
 		074FCF772CB60FF700DEC20F /* DeleteWithEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteWithEmail.swift; sourceTree = "<group>"; };
+		075309862CC1A11E00BD9CAA /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		0761D7AA2CBCA09D00D457BE /* notification.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = notification.wav; sourceTree = "<group>"; };
 		0761D7AC2CBD708400D457BE /* SpashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpashScreen.swift; sourceTree = "<group>"; };
 		0764FDC22CB9E75200F991BF /* InvertedCornersShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvertedCornersShape.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 				073F2CEA2C6EC85200BCF6F0 /* FirebaseVertexAI-Preview in Frameworks */,
 				0711F3832C6DB62D006C86AA /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				0711F3872C6DB67D006C86AA /* DotLottie in Frameworks */,
+				075309872CC1A11E00BD9CAA /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +344,7 @@
 		073F2CE82C6EC85200BCF6F0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				075309862CC1A11E00BD9CAA /* StoreKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

@@ -28,6 +28,7 @@ import FirebaseMessaging
 class AppState: ObservableObject {
     static let shared = AppState()  // Singleton instance of the app state
     @Published var isInSignInView: Bool = false  // Tracks if the user is currently in the sign-in view
+    @Published var isPremium: Bool = false
 }
 
 // MARK: - AppDelegate Class
