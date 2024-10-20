@@ -142,9 +142,11 @@ struct SearchView: View {
                                                 Spacer()
                                                 
                                                 ZStack {
-                                                    RoundedRectangle(cornerRadius: 0)
-                                                        .fill(Color.white.opacity(0.8))
+                                                    VisualEffectBlur(blurStyle: .systemThinMaterial)
                                                         .frame(width: 300, height: 150)
+//                                                    RoundedRectangle(cornerRadius: 0)
+//                                                        .fill(Color.white.opacity(0.8))
+//                                                        .frame(width: 300, height: 150)
                                                     
                                                     VStack(spacing: 0) {
                                                         
@@ -163,7 +165,7 @@ struct SearchView: View {
                                                         .cornerRadius(23)
                                                         .padding(.top)
                                                     }
-                                                    .foregroundStyle(.black)
+                                                    .foregroundStyle(.primary)
                                                     
                                                 }
                                                 .padding(.bottom, 10)

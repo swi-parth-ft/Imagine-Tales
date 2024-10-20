@@ -104,8 +104,12 @@ struct FriendProfileView: View {
                                                 Spacer()
                                                 
                                                 ZStack {
-                                                    RoundedRectangle(cornerRadius: 0)
-                                                        .fill(Color.white.opacity(0.8))
+//                                                    RoundedRectangle(cornerRadius: 0)
+//                                                        .fill(Color.white.opacity(0.8))
+//                                                        .frame(width: UIScreen.main.bounds.width * 0.43, height: 200)
+//                                                        .cornerRadius(16)
+                                                    
+                                                    VisualEffectBlur(blurStyle: .systemThinMaterial)
                                                         .frame(width: UIScreen.main.bounds.width * 0.43, height: 200)
                                                         .cornerRadius(16)
                                                     
@@ -145,9 +149,10 @@ struct FriendProfileView: View {
                                                         .cornerRadius(16)
                                                         .padding(.top)
                                                     }
-                                                    .foregroundStyle(.black)
+                                                    .foregroundStyle(.primary)
                                                     
                                                 }
+                                                .padding(.bottom)
                                             }
                                         }
                                         

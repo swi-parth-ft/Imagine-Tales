@@ -32,13 +32,13 @@ struct ExploreView: View {
                 // List to display stories grouped by genre
                 List {
                     HStack {
-                        Spacer()
+//                        Spacer()
                         VStack {
                             Text("Top Stories")
                                 .font(.custom("ComicNeue-Bold", size: 22))
                             DeckView()
                         }
-                        Spacer()
+//                        Spacer()
                     }
                     .listRowBackground(Color.white.opacity(0.0))
                     .listRowSeparator(.hidden) // Hide list row separator
@@ -68,12 +68,57 @@ struct ExploreView: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 20) {
                                     ForEach(viewModel.storiesByGenre[genre] ?? []) { story in
+                                        
+                                        let img: Image = Image(systemName: "xmark.circle.fill")
                                         NavigationLink(destination: StoryFromProfileView(story: story)) {
                                             ZStack(alignment: .top) {
-                                         
-                                                RoundedRectangle(cornerRadius: 22)
-                                                    .fill(LinearGradient(colors: [colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#F4F4DA"), colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#F4F4DA").opacity(0.3), .clear, .clear], startPoint: .bottomLeading, endPoint: .topTrailing))
+
+                                                AsyncImage(url: URL(string: story.storyText[0].image)) { phase in
+                                                    switch phase {
+                                                    case .empty:
+                                                        // Placeholder for loading
+                                                        MagicView()
+                                                            .frame(width: 250, height: 210)
+                                                        
+                                                    case .success(let image):
+                                                        // Successfully loaded image
+                                                        image
+                                                            .resizable()
+                                                            .scaledToFill()
+                                                            .frame(width: 250, height: 210)
+                                                            .clipped()
+                                                            .cornerRadius(12)
+                                                        
+                                                        
+                                                        
+                                                    case .failure(_):
+                                                        // Placeholder for failed load
+                                                        Image(systemName: "photo")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(width: 250, height: 210)
+                                                            .cornerRadius(10)
+                                                            .padding()
+                                                            .onAppear {
+                                                                // Retry loading logic
+                                                                if retryCount < maxRetryAttempts {
+                                                                    DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+                                                                        retryCount += 1
+                                                                    }
+                                                                }
+                                                            }
+                                                    @unknown default:
+                                                        EmptyView()
+                                                    }
+                                                }
+                                                .blur(radius: 10)
+                                                
+                                                VisualEffectBlur(blurStyle: .systemThinMaterial)
                                                     .frame(width: 300, height: 260)
+                                                    .cornerRadius(22)
+//                                                RoundedRectangle(cornerRadius: 22)
+//                                                    .fill(LinearGradient(colors: [colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#F4F4DA"), colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#F4F4DA").opacity(0.3), .clear, .clear], startPoint: .bottomLeading, endPoint: .topTrailing))
+//                                                    .frame(width: 300, height: 260)
                                                 
                                                 VStack(alignment: .center, spacing: 7) {
                                                     // Load the story image asynchronously
@@ -92,6 +137,8 @@ struct ExploreView: View {
                                                                 .frame(width: 300, height: 150)
                                                                 .clipped()
                                                                 .cornerRadius(12)
+                                                            
+                                                            
                                                             
                                                         case .failure(_):
                                                             // Placeholder for failed load
@@ -193,7 +240,7 @@ struct ExploreView: View {
                 .onAppear {
                     viewModel.fetchStories() // Fetch stories on appear
                 }
-                Spacer()
+               // Spacer()
             }
             .navigationTitle("Explore")
             

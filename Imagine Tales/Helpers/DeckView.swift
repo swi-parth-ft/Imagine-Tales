@@ -115,7 +115,7 @@ struct DeckView: View {
                     Spacer()
                 }
             }
-            .padding()
+           
         }
         .fullScreenCover(item: $selectedStory) { story in
             StoryFromProfileView(story: story)
