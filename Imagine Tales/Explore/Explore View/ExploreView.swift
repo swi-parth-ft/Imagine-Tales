@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ExploreView: View {
     @StateObject var viewModel = ExploreViewModel() // Instantiate the ViewModel
+    @StateObject var homeViewModel = HomeViewModel()
     @State private var retryCount = 0 // Count for retry attempts when loading images
     @State private var maxRetryAttempts = 3 // Maximum number of retry attempts
     @State private var retryDelay = 2.0 // Delay between retries
@@ -27,19 +28,16 @@ struct ExploreView: View {
             VStack(alignment: .leading) {
 
                 
-              //  Spacer()
-                
-                // List to display stories grouped by genre
                 List {
                     HStack {
-//                        Spacer()
                         VStack {
                             Text("Top Stories")
                                 .font(.custom("ComicNeue-Bold", size: 22))
                             DeckView()
+                               
                         }
-//                        Spacer()
                     }
+                    .frame(width: UIScreen.main.bounds.width)
                     .listRowBackground(Color.white.opacity(0.0))
                     .listRowSeparator(.hidden) // Hide list row separator
                     Text("Stories By Genre")
@@ -69,7 +67,7 @@ struct ExploreView: View {
                                 LazyHStack(spacing: 20) {
                                     ForEach(viewModel.storiesByGenre[genre] ?? []) { story in
                                         
-                                        let img: Image = Image(systemName: "xmark.circle.fill")
+                                        
                                         NavigationLink(destination: StoryFromProfileView(story: story)) {
                                             ZStack(alignment: .top) {
 
@@ -116,9 +114,6 @@ struct ExploreView: View {
                                                 VisualEffectBlur(blurStyle: .systemThinMaterial)
                                                     .frame(width: 300, height: 260)
                                                     .cornerRadius(22)
-//                                                RoundedRectangle(cornerRadius: 22)
-//                                                    .fill(LinearGradient(colors: [colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#F4F4DA"), colorScheme == .dark ? Color(hex: "#3A3A3A") : Color(hex: "#F4F4DA").opacity(0.3), .clear, .clear], startPoint: .bottomLeading, endPoint: .topTrailing))
-//                                                    .frame(width: 300, height: 260)
                                                 
                                                 VStack(alignment: .center, spacing: 7) {
                                                     // Load the story image asynchronously
@@ -208,7 +203,9 @@ struct ExploreView: View {
                             }
                             
                             
+                            
                         }
+                        
                         .listRowBackground(Color.white.opacity(0.0)) // Transparent background for list row
                         .listRowSeparator(.hidden) // Hide list row separator
                         .onAppear {
@@ -234,7 +231,10 @@ struct ExploreView: View {
                                 }
                     }
                 }
+                .listStyle(PlainListStyle()) // Removes extra padding from the list
+                .padding(.horizontal, 0) // Removes horizontal padding
                 .scrollContentBackground(.hidden)
+                .frame(width: UIScreen.main.bounds.width)
                 //.navigationTitle("Stories by Genre") // Set navigation title
                 .padding(.bottom)
                 .onAppear {
@@ -242,6 +242,7 @@ struct ExploreView: View {
                 }
                // Spacer()
             }
+            .frame(width: UIScreen.main.bounds.width)
             .navigationTitle("Explore")
             
         }

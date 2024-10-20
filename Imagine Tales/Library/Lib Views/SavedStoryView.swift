@@ -99,11 +99,10 @@ struct SavedStoryView: View {
                                         Spacer()
                                         
                                         ZStack {
-                                            RoundedRectangle(cornerRadius: 0)
-                                                .fill(Color.white.opacity(0.8))
+                                           
+                                            VisualEffectBlur(blurStyle: .systemThinMaterial)
                                                 .frame(width: orientation.isLandscape ? UIScreen.main.bounds.width * 0.28 : UIScreen.main.bounds.width * 0.43, height: 200)
                                                 .cornerRadius(16)
-                                            
                                             VStack(spacing: 0) {
                                                 
                                                 Text(story.title)
@@ -142,7 +141,7 @@ struct SavedStoryView: View {
                                                 .cornerRadius(16)
                                                 .padding(.top)
                                             }
-                                            .foregroundStyle(.black)
+                                            .foregroundStyle(.primary)
                                             
                                         }
                                         .padding(.bottom, 10)

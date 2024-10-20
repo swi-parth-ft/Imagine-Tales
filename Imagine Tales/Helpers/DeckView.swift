@@ -62,10 +62,11 @@ struct DeckView: View {
                         VStack {
                             Spacer()
                             ZStack {
-                                RoundedRectangle(cornerRadius: 23)
-                                        .fill(Color.white.opacity(0.8))
-                                        
-                                        .cornerRadius(16)
+                                
+                                
+                                VisualEffectBlur(blurStyle: .systemThinMaterial)
+                                    .cornerRadius(16)
+                                
                                 VStack(spacing: 0) {
                                     
                                     Text(story.title)
@@ -88,14 +89,16 @@ struct DeckView: View {
                                     }
                                     .font(.system(size: 16))
                                     .padding(.top)
-                                    Button {
-                                        selectedStory = story
-                                    } label: {
-                                        HStack {
-                                            Text("Read Now")
-                                            Image(systemName: "book.pages")
+                                    HStack {
+                                        Button {
+                                            selectedStory = story
+                                        } label: {
+                                            HStack {
+                                                Text("Read Now")
+                                                Image(systemName: "book.pages")
+                                            }
+                                            .frame(width: 300)
                                         }
-                                        .frame(width: 300)
                                     }
                                     .padding()
                                     .font(.system(size: 16))
@@ -104,7 +107,7 @@ struct DeckView: View {
                                     .cornerRadius(16)
                                     .padding(.top)
                                 }
-                                .foregroundStyle(.black)
+                                .foregroundStyle(.primary)
                             }
                             .frame(width: 450, height: 200)
                             .padding()

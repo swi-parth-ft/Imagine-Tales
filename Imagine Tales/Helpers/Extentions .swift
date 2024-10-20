@@ -21,18 +21,27 @@ extension TabbarView {
             Image(systemName: isActive ? imageName + ".fill" : imageName) // Use filled icon if active
                 .resizable()
                 .renderingMode(.template)
-                .foregroundColor(isActive ? .white : colorScheme == .dark ? .white : .black) // Change color based on active state
                 .frame(width: 20, height: 20)
+                .symbolEffect(.wiggle, value: isActive)
             if isActive {
                 Text(title)
                     .font(.system(size: 14))
-                    .foregroundColor(isActive ? .white : .black) // Change text color based on active state
+                    
             }
             Spacer()
         }
+        .foregroundColor(isActive ? .orange : .primary) // Change text color based on active state
         .frame(width: isActive ? 140 : 120, height: 50) // Dynamic width based on active state
-        .background(isActive ? (colorScheme == .dark ? Color(hex: "#5A6D2A") : Color(hex: "#8AC640")) : .clear) // Background color for active state
+       // .background(isActive ? (colorScheme == .dark ? Color(hex: "#5A6D2A") : Color(hex: "#8AC640")) : .clear) // Background color for active state
+        .scaleEffect(isActive ? 1.2 : 1)
+        .background(
+            isActive ?
+                VisualEffectBlur(blurStyle: .systemThinMaterial)
+            
+            
+            : nil)
         .cornerRadius(12) // Rounded corners
+        .shadow(radius: isActive ? 10 : 0)
         .padding(.horizontal, 5)
     }
 }
