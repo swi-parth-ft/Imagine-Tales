@@ -11,6 +11,7 @@
 */
 
 import SwiftUI
+import FirebaseAuth
 
 struct AuthenticationView: View {
     // MARK: - State & Binding Variables
@@ -44,7 +45,8 @@ struct AuthenticationView: View {
     
     /// Determines whether the current flow is for parents.
     @Binding var isParentFlow: Bool
-    
+    @StateObject var subViewModel = SubscriptionViewModel()
+    @EnvironmentObject var appState: AppState
     // MARK: - Body
     var body: some View {
         NavigationStack {
@@ -208,6 +210,8 @@ struct AuthenticationView: View {
                                         Task {
                                             do {
                                                 try await viewModel.signInApple()
+                                               
+                                                
                                             } catch {
                                                 print(error.localizedDescription) // Log any errors
                                             }
@@ -219,6 +223,11 @@ struct AuthenticationView: View {
                                             .frame(width: 55, height: 55) // Apple icon size
                                             .cornerRadius(22) // Rounded corners
                                     }
+                                    .onChange(of: viewModel.didSignInWithApple) { 
+                                        subViewModel.loginUser(with: Auth.auth().currentUser?.uid ?? "")
+                                        
+                                    }
+                                  
                                     .navigationDestination(isPresented: $viewModel.didSignInWithApple) {
                                         SignInWithEmailView(
                                             showSignInView: $showSignInView,
@@ -241,6 +250,9 @@ struct AuthenticationView: View {
                         }
                     }
                     .padding(isiPhone ? 12 : 20)
+                }
+                .onChange(of: subViewModel.hasActiveSubscription) {
+                    appState.isPremium = subViewModel.hasActiveSubscription
                 }
             }
             .toolbar(.hidden, for: .navigationBar) // Hide the navigation bar for a clean look

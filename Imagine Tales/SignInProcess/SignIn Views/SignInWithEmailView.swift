@@ -56,7 +56,7 @@ struct SignInWithEmailView: View {
     @State private var keyboardHeight: CGFloat = 0
     var isParentFlow: Bool
     @Binding var isChildFlow: Bool
-    
+    @StateObject var subViewModel = SubscriptionViewModel()
     
     @State private var isSettingPin = false
     @State private var pin = ""
@@ -665,6 +665,8 @@ struct SignInWithEmailView: View {
                                                             isSignedUp = true
                                                             settingPassword = false
                                                             newUser = true
+                                                            subViewModel.loginUser(with: Auth.auth().currentUser?.uid ?? "")
+                                                            
                                                         }
                                                     } catch {
                                                         Drops.show("Invalid email or password.")

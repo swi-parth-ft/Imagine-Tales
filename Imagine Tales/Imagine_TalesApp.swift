@@ -21,6 +21,7 @@ import GoogleMobileAds
 import UserNotifications
 import Firebase
 import FirebaseMessaging
+import RevenueCat
 
 // MARK: - AppState Class
 
@@ -50,7 +51,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                     }
                 }
 
-        
+       
+        Purchases.configure(withAPIKey: Env.catkey)
         return true
     }
     

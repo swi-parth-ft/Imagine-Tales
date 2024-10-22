@@ -10,6 +10,7 @@ import Foundation
 public enum Env {
     enum keys {
         static let apikey = "API_KEY"
+        static let catkey = "CAT_KEY"
     }
     
     private static let infoDirectory: [String : Any] = {
@@ -21,6 +22,13 @@ public enum Env {
     
     static let apikey: String = {
         guard let apiKeyString = Env.infoDirectory[keys.apikey] as? String else {
+            fatalError("API key is not set in plist")
+        }
+        return apiKeyString
+    }()
+    
+    static let catkey: String = {
+        guard let apiKeyString = Env.infoDirectory[keys.catkey] as? String else {
             fatalError("API key is not set in plist")
         }
         return apiKeyString

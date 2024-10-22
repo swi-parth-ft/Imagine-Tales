@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FloatingTabBar
+import FirebaseAuth
 
 // Enum to define different tab items with their titles and icon names
 enum TabItems: Int, CaseIterable {
@@ -48,6 +49,7 @@ struct TabbarView: View {
     @AppStorage("dpurl") private var dpUrl = ""  // URL for the profile picture (from AppStorage)
     @Environment(\.colorScheme) var colorScheme
     @StateObject var viewModel = FriendsViewModel()
+    @StateObject var subViewModel = SubscriptionViewModel()
     @AppStorage("childId") var childId: String = "Default Value"
     var body: some View {
         // Navigation container for the app
@@ -93,6 +95,11 @@ struct TabbarView: View {
                 viewModel.fetchFriendRequests(childId: childId)
                 viewModel.fetchNotifications(for: childId)
                 
+                subViewModel.loginUser(with: Auth.auth().currentUser?.uid ?? "")
+                
+            }
+            .onChange(of: subViewModel.hasActiveSubscription) {
+                appState.isPremium = subViewModel.hasActiveSubscription
             }
         }
         .toolbar {

@@ -2174,8 +2174,8 @@
             filePath = "Imagine Tales/SignInProcess/SignIn Views/SignInWithEmailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "840"
-            endingLineNumber = "840"
+            startingLineNumber = "842"
+            endingLineNumber = "842"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2190,8 +2190,8 @@
             filePath = "Imagine Tales/TabbarView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2544,6 +2544,36 @@
             endingLineNumber = "490"
             landmarkName = "generateImageUsingOpenAI()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "262517E8-B516-4B26-AE8C-8FC62F947B0C - ec610de15fbe0ab2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.UIImage, Swift.Error&gt;) -&gt; () in Imagine_Tales.GeneratingProcessView.generateImageUsingOpenAI() -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Generation/Generation%20Views/GeneratingProcessView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "490"
+                  endingLineNumber = "490">
+               </Location>
+               <Location
+                  uuid = "262517E8-B516-4B26-AE8C-8FC62F947B0C - ec610de15fbe0ab2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.UIImage, Swift.Error&gt;) -&gt; () in Imagine_Tales.GeneratingProcessView.generateImageUsingOpenAI() -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Generation/Generation%20Views/GeneratingProcessView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "490"
+                  endingLineNumber = "490">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2560,6 +2590,36 @@
             endingLineNumber = "480"
             landmarkName = "generateImageUsingOpenAI()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "8C33AE31-2402-45A6-8FD3-DE11EF01EC79 - 5f25231264a4af7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.UIImage, Swift.Error&gt;) -&gt; () in Imagine_Tales.ContentView.generateImageUsingOpenAI() -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Generation/Generation%20Views/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "480"
+                  endingLineNumber = "480">
+               </Location>
+               <Location
+                  uuid = "8C33AE31-2402-45A6-8FD3-DE11EF01EC79 - 5f25231264a4af7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.UIImage, Swift.Error&gt;) -&gt; () in Imagine_Tales.ContentView.generateImageUsingOpenAI() -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Generation/Generation%20Views/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "480"
+                  endingLineNumber = "480">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2614,14 +2674,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "F6EF2FF1-E6ED-4D1E-8775-AA627BC5D1EF"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/SignInProcess/SignIn ViewModel/AuthenticationViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "signInApple()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2662,14 +2722,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "5B1936A4-18E9-45E5-9B11-1E5CE980175D"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/SignInProcess/SignIn Views/AuthenticationView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "212"
-            endingLineNumber = "212"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2732,10 +2792,40 @@
             filePath = "Imagine Tales/SignInProcess/SignIn ViewModel/AuthenticationViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
             landmarkName = "signInApple()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D8EB44F8-4BCA-403C-9250-3EDA6FBD15CD - 6364a6c13ce78163"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Imagine_Tales.SignInWithAppleResult, Swift.Error&gt;) -&gt; () in Imagine_Tales.AuthenticationViewModel.signInApple() async throws -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/SignInProcess/SignIn%20ViewModel/AuthenticationViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "50"
+                  endingLineNumber = "50">
+               </Location>
+               <Location
+                  uuid = "D8EB44F8-4BCA-403C-9250-3EDA6FBD15CD - 6364a6c13ce78163"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Imagine_Tales.SignInWithAppleResult, Swift.Error&gt;) -&gt; () in Imagine_Tales.AuthenticationViewModel.signInApple() async throws -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/SignInProcess/SignIn%20ViewModel/AuthenticationViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "50"
+                  endingLineNumber = "50">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2908,8 +2998,8 @@
             filePath = "Imagine Tales/Imagine_TalesApp.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "messaging(_:didReceiveRegistrationToken:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2928,6 +3018,36 @@
             endingLineNumber = "352"
             landmarkName = "sendRequestRespoceNotification(fromId:toUserId:fromChildUsername:fromChildProfilePic:status:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B98A4763-5F42-4959-A537-017AD2F9654D - 4724aaaf03cdc0c8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Imagine_Tales.HomeViewModel.sendRequestRespoceNotification(fromId: Swift.String, toUserId: Swift.String, fromChildUsername: Swift.String, fromChildProfilePic: Swift.String, status: Swift.String) -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Home/Home%20ViewModel/HomeViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "352"
+                  endingLineNumber = "352">
+               </Location>
+               <Location
+                  uuid = "B98A4763-5F42-4959-A537-017AD2F9654D - 4724aaaf03cdc0c8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Imagine_Tales.HomeViewModel.sendRequestRespoceNotification(fromId: Swift.String, toUserId: Swift.String, fromChildUsername: Swift.String, fromChildProfilePic: Swift.String, status: Swift.String) -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Home/Home%20ViewModel/HomeViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "352"
+                  endingLineNumber = "352">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2944,6 +3064,36 @@
             endingLineNumber = "220"
             landmarkName = "body"
             landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "EA40ABC1-BD43-4BFE-B1D7-0152151B72F1 - cc12e136d4311eb0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Button&lt;SwiftUI.Text&gt;, SwiftUI.Button&lt;SwiftUI.Text&gt;)&gt; in closure #1 () -&gt; SwiftUI._ConditionalContent&lt;SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Button&lt;SwiftUI.Text&gt;, SwiftUI.Button&lt;SwiftUI.Text&gt;)&gt;&gt;, SwiftUI.TupleView&lt;(Swift.Optional&lt;Swift.Optional&lt;SwiftUI.Button&lt;SwiftUI.Label&lt;SwiftUI.Text, SwiftUI.Image&gt;&gt;&gt;&gt;, Swift.Optional&lt;SwiftUI.Button&lt;SwiftUI.Text&gt;&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(Imagine_Tales.ProfileInfoView, Swift.Optional&lt;Swift.Optional&lt;&lt;&lt;opaque return type of SwiftUI.View.shadow(color: SwiftUI.Color, radius: CoreGraphics.CGFloat, x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0&gt;&gt;)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(Imagine_Tales.ProfileCircleView, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Imagine_Tales.ProfileInfoView, Swift.Optional&lt;Swift.Optional&lt;&lt;&lt;opaque return type of SwiftUI.View.shadow(color: SwiftUI.Color, radius: CoreGraphics.CGFloat, x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0&gt;&gt;)&gt;&gt;)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.shadow(color: SwiftUI.Color, radius: CoreGraphics.CGFloat, x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.frame(width: Swift.Optional&lt;CoreGraphics.CGFloat&gt;, height: Swift.Optional&lt;CoreGraphics.CGFloat&gt;, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.frame(width: Swift.Optional&lt;CoreGraphics.CGFloat&gt;, height: Swift.Optional&lt;CoreGraphics.CGFloat&gt;, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0)&gt; in closure #4 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0, SwiftUI.Spacer)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0, SwiftUI.Spacer)&gt;&gt;)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.ignoresSafeArea(_: SwiftUI.SafeAreaRegions, edges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.toolbar&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ToolbarContent&gt;(content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in Imagine_Tales.FriendProfileView.body.getter : some"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Friend%20Profile/FriendProfileView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "220"
+                  endingLineNumber = "220">
+               </Location>
+               <Location
+                  uuid = "EA40ABC1-BD43-4BFE-B1D7-0152151B72F1 - cc12e136d4311eb0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Button&lt;SwiftUI.Text&gt;, SwiftUI.Button&lt;SwiftUI.Text&gt;)&gt; in closure #1 () -&gt; SwiftUI._ConditionalContent&lt;SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(SwiftUI.Button&lt;SwiftUI.Text&gt;, SwiftUI.Button&lt;SwiftUI.Text&gt;)&gt;&gt;, SwiftUI.TupleView&lt;(Swift.Optional&lt;Swift.Optional&lt;SwiftUI.Button&lt;SwiftUI.Label&lt;SwiftUI.Text, SwiftUI.Image&gt;&gt;&gt;&gt;, Swift.Optional&lt;SwiftUI.Button&lt;SwiftUI.Text&gt;&gt;, Swift.Optional&lt;SwiftUI.Text&gt;)&gt;&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(Imagine_Tales.ProfileInfoView, Swift.Optional&lt;Swift.Optional&lt;&lt;&lt;opaque return type of SwiftUI.View.shadow(color: SwiftUI.Color, radius: CoreGraphics.CGFloat, x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0&gt;&gt;)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(Imagine_Tales.ProfileCircleView, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(Imagine_Tales.ProfileInfoView, Swift.Optional&lt;Swift.Optional&lt;&lt;&lt;opaque return type of SwiftUI.View.shadow(color: SwiftUI.Color, radius: CoreGraphics.CGFloat, x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0&gt;&gt;)&gt;&gt;)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.shadow(color: SwiftUI.Color, radius: CoreGraphics.CGFloat, x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.frame(width: Swift.Optional&lt;CoreGraphics.CGFloat&gt;, height: Swift.Optional&lt;CoreGraphics.CGFloat&gt;, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.frame(width: Swift.Optional&lt;CoreGraphics.CGFloat&gt;, height: Swift.Optional&lt;CoreGraphics.CGFloat&gt;, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0)&gt; in closure #4 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0, SwiftUI.Spacer)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0, SwiftUI.Spacer)&gt;&gt;)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.ignoresSafeArea(_: SwiftUI.SafeAreaRegions, edges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.toolbar&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ToolbarContent&gt;(content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in Imagine_Tales.FriendProfileView.body.getter : some"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Friend%20Profile/FriendProfileView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "220"
+                  endingLineNumber = "220">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2966,7 +3116,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "E566A2A2-C6EF-4874-99A4-82DAF9A1DFA7"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Imagine Tales/Parent/Parent Views/parentSettings.swift"
@@ -2992,6 +3142,240 @@
             endingLineNumber = "237"
             landmarkName = "body"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5235D3D6-5874-4177-8550-08F1493DFB5D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/Premium/SubscriptionViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "checkSubscriptionStatus(customerInfo:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6CF985D8-DAF8-448B-9A31-57D4D597C46F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/Premium/SubscriptionViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "checkSubscriptionStatus(customerInfo:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8A197A73-7FEB-446B-86E6-D4B7F95557E6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/Premium/SubscriptionViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "loginUser(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "10198D57-46E1-40C5-98E5-6F6BA11C0158"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/Premium/SubscriptionViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "loginUser(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AC902A32-C350-4027-A207-0CD554DAFB84"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/SignInProcess/SignIn Views/AuthenticationView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "22A22EB0-CE4B-469B-9534-A4B47279A6B8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/SignInProcess/SignIn Views/AuthenticationView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0FF297EF-FA62-4721-8AA2-B19AD3D0F077"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/Premium/SubscriptionViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "restorePurchases()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0FF297EF-FA62-4721-8AA2-B19AD3D0F077 - 8fb860bfb2fafcf8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;RevenueCat.CustomerInfo&gt;, Swift.Optional&lt;__C.NSError&gt;) -&gt; () in Imagine_Tales.SubscriptionViewModel.restorePurchases() -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Premium/SubscriptionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "79"
+                  endingLineNumber = "79">
+               </Location>
+               <Location
+                  uuid = "0FF297EF-FA62-4721-8AA2-B19AD3D0F077 - 8fb860bfb2fafcba"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;RevenueCat.CustomerInfo&gt;, Swift.Optional&lt;__C.NSError&gt;) -&gt; () in Imagine_Tales.SubscriptionViewModel.restorePurchases() -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Premium/SubscriptionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "56A28AB3-28F5-41E6-8DE0-4C0098653E78"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/Premium/SubscriptionViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "restorePurchases()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "56A28AB3-28F5-41E6-8DE0-4C0098653E78 - 8fb860bfb2fafc17"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;RevenueCat.CustomerInfo&gt;, Swift.Optional&lt;__C.NSError&gt;) -&gt; () in Imagine_Tales.SubscriptionViewModel.restorePurchases() -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Premium/SubscriptionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "82"
+                  endingLineNumber = "82">
+               </Location>
+               <Location
+                  uuid = "56A28AB3-28F5-41E6-8DE0-4C0098653E78 - 8fb860bfb2fafc36"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;RevenueCat.CustomerInfo&gt;, Swift.Optional&lt;__C.NSError&gt;) -&gt; () in Imagine_Tales.SubscriptionViewModel.restorePurchases() -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Premium/SubscriptionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "81"
+                  endingLineNumber = "81">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AD1C503E-E7FE-4526-A143-1A8BA7DF0E1A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Imagine Tales/Premium/SubscriptionViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "restorePurchases()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "AD1C503E-E7FE-4526-A143-1A8BA7DF0E1A - 8fb860bfb2fafda3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;RevenueCat.CustomerInfo&gt;, Swift.Optional&lt;__C.NSError&gt;) -&gt; () in Imagine_Tales.SubscriptionViewModel.restorePurchases() -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Premium/SubscriptionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "70"
+                  endingLineNumber = "70">
+               </Location>
+               <Location
+                  uuid = "AD1C503E-E7FE-4526-A143-1A8BA7DF0E1A - 8fb860bfb2fafda3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;RevenueCat.CustomerInfo&gt;, Swift.Optional&lt;__C.NSError&gt;) -&gt; () in Imagine_Tales.SubscriptionViewModel.restorePurchases() -&gt; ()"
+                  moduleName = "Imagine Tales.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pac/Desktop/Swift/Imagine%20Tales/Imagine%20Tales/Premium/SubscriptionViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "70"
+                  endingLineNumber = "70">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

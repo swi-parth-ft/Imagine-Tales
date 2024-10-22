@@ -6,10 +6,42 @@
 //
 
 import SwiftUI
+import RevenueCat
+class PremiumPlansViewModel: ObservableObject {
+    @Published var monthlyPackage: Package?
+    @Published var annualPackage: Package?
+    @Published var errorMessage: String?
+    
+    // Fetch offerings
+    func fetchOfferings() {
+        Purchases.shared.getOfferings { (offerings, error) in
+            if let error = error {
+                self.errorMessage = error.localizedDescription
+            } else if let currentOffering = offerings?.current {
+                self.monthlyPackage = currentOffering.monthly
+                self.annualPackage = currentOffering.annual
+            }
+        }
+    }
+    
+    // Handle purchasing the selected package
+        func purchasePackage(_ package: Package) {
+            Purchases.shared.purchase(package: package) { (transaction, customerInfo, error, userCancelled) in
+                if let error = error {
+                    self.errorMessage = error.localizedDescription
+                } else if let customerInfo = customerInfo, customerInfo.entitlements["premium"]?.isActive == true {
+                    // Successful purchase logic
+                }
+            }
+        }
+    
+}
+
 struct PremiumFeatureRow: View {
     var icon: String
     var title: String
     var description: String
+    @StateObject private var viewModel = PremiumPlansViewModel()
     
     var body: some View {
         HStack(alignment: .top) {
@@ -37,12 +69,13 @@ struct PremiumPlans: View {
     @AppStorage("remainingDays") var remainingDays: Int = 2
     @AppStorage("remainingStories") var remainingStories: Int = 3
     @State private var isiPhone = false
-    @EnvironmentObject var appState: AppState
+    
+    @StateObject private var viewModel = PremiumPlansViewModel()
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 BackGroundMesh().ignoresSafeArea()
-                
                 ScrollView {
                     VStack {
                         
@@ -114,6 +147,7 @@ struct PremiumPlans: View {
                                             
                                         }.padding()
                                     }
+                                    
                                     // Trial status message
                                     Text("You have \(remainingStories) stories and \(remainingDays) days left of your trial!")
                                         .font(isiPhone ? .title2 : .title)
@@ -157,7 +191,7 @@ struct PremiumPlans: View {
                                                 
                                             )
                                         
-                                        Text("$14.99")
+                                        Text(viewModel.monthlyPackage?.localizedPriceString ?? "$1.99")
                                             .font(.title)
                                             .bold()
                                         
@@ -167,7 +201,10 @@ struct PremiumPlans: View {
                                             .frame(width: 200, height: 150)
                                         
                                         Button {
-                                            appState.isPremium = true
+                                            
+                                            if let monthly = viewModel.monthlyPackage {
+                                                viewModel.purchasePackage(monthly)
+                                            }
                                         } label: {
                                             Text("Purchase")
                                                 .padding()
@@ -205,7 +242,7 @@ struct PremiumPlans: View {
                                                     
                                                     alignment: .center
                                                 )
-                                            Text("$159.99")
+                                            Text(viewModel.annualPackage?.localizedPriceString ?? "$1.99")
                                                 .font(.largeTitle)
                                                 .bold()
                                         }
@@ -216,7 +253,10 @@ struct PremiumPlans: View {
                                             .scaledToFit()
                                             .frame(width: 200, height: 150)
                                         Button {
-                                            appState.isPremium = true
+                                            
+                                            if let annual = viewModel.annualPackage {
+                                                viewModel.purchasePackage(annual)
+                                            }
                                         } label: {
                                             Text("Purchase")
                                                 .padding()
@@ -248,7 +288,7 @@ struct PremiumPlans: View {
                                                 
                                             )
                                         
-                                        Text("$14.99")
+                                        Text(viewModel.monthlyPackage?.localizedPriceString ?? "$1.99")
                                             .font(.largeTitle)
                                             .bold()
                                         
@@ -258,7 +298,10 @@ struct PremiumPlans: View {
                                             .frame(width: 200, height: 200)
                                         
                                         Button {
-                                            appState.isPremium = true
+                                            
+                                            if let monthly = viewModel.monthlyPackage {
+                                                viewModel.purchasePackage(monthly)
+                                            }
                                         } label: {
                                             Text("Purchase")
                                                 .padding()
@@ -285,7 +328,7 @@ struct PremiumPlans: View {
                                                 
                                             )
                                         HStack {
-                                            Text("$179.88")
+                                            Text(viewModel.annualPackage?.localizedPriceString ?? "$1.99")
                                                 .font(.title3)
                                                 .foregroundStyle(.gray)
                                                 .bold()
@@ -307,7 +350,10 @@ struct PremiumPlans: View {
                                             .scaledToFit()
                                             .frame(width: 200, height: 200)
                                         Button {
-                                            appState.isPremium = true
+                                            
+                                            if let annual = viewModel.annualPackage {
+                                                viewModel.purchasePackage(annual)
+                                            }
                                         } label: {
                                             Text("Purchase")
                                                 .padding()
@@ -357,6 +403,9 @@ struct PremiumPlans: View {
                         
                         
                     }
+                }
+                .onAppear {
+                    viewModel.fetchOfferings()
                 }
                 
             }

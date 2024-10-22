@@ -7,6 +7,9 @@
 
 import GoogleSignIn
 import GoogleSignInSwift
+import RevenueCat
+import FirebaseAuth
+import FirebaseFirestore
 
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
@@ -35,14 +38,20 @@ final class AuthenticationViewModel: ObservableObject {
                     do {
                         let _ = try await AuthenticationManager.shared.signInWithApple(tokens: signInAppleResult)
                         self.didSignInWithApple = true
+                        
                     } catch {
                         print(error.localizedDescription)
                     }
                 }
+                
+                
                 
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
     }
+
+ 
+    
 }
