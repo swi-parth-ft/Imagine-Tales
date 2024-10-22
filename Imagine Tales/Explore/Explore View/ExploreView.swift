@@ -240,10 +240,11 @@ struct ExploreView: View {
                 .onAppear {
                     viewModel.fetchStories() // Fetch stories on appear
                 }
+                .navigationTitle("Explore")
                // Spacer()
             }
             .frame(width: UIScreen.main.bounds.width)
-            .navigationTitle("Explore")
+
             
         }
         .onAppear {
