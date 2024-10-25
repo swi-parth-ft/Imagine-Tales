@@ -117,6 +117,25 @@ final class SignInWithEmailViewModel: ObservableObject {
         Firestore.firestore().collection("users").document(userId).updateData(["pin": pin])
     }
     
+    func checkIfUserDocumentExists(documentId: String, completion: @escaping (Bool) -> Void) {
+        let db = Firestore.firestore()
+        
+        let docRef = db.collection("users").document(documentId)
+        
+        docRef.getDocument { (document, error) in
+            if let error = error {
+                print("Error checking document: \(error.localizedDescription)")
+                completion(false)
+            } else if let document = document, document.exists {
+                print("Document exists.")
+                completion(true)
+            } else {
+                print("Document does not exist.")
+                completion(false)
+            }
+        }
+    }
+    
     // Fetch the FCM token and update Firestore with the selected child's token
     func addFCMToken(childId: String) {
         if let fcmToken = Messaging.messaging().fcmToken {

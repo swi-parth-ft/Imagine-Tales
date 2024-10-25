@@ -91,86 +91,86 @@ struct AuthenticationView: View {
                                     isOnboarding = true // Set onboarding flag to true
                                 }
 
-                                // Navigation link for the Sign Up button
-                                NavigationLink {
-                                    SignInWithEmailView(
-                                        showSignInView: $showSignInView,
-                                        isiPhone: $isiPhone,
-                                        isParent: true, // Default to parent flow
-                                        continueAsChild: false,
-                                        signedInWithGoogle: false,
-                                        isParentFlow: false,
-                                        isChildFlow: $isParentFlow
-                                    )
-                                } label: {
-                                    Text("Sign Up")
-                                        .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
-                                        .frame(height: isiPhone ? 35 : 55)
-                                        .frame(maxWidth: .infinity)
-                                        .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61")) // Button color
-                                        .cornerRadius(isiPhone ? 6 : 12) // Rounded corners
-                                        .foregroundStyle(.black) // Text color
-                                }
-
-                                // Navigation link to Continue as Parent
-                                NavigationLink {
-                                    SignInWithEmailView(
-                                        showSignInView: $showSignInView,
-                                        isiPhone: $isiPhone,
-                                        isParent: false, // Switch to child flow
-                                        continueAsChild: true,
-                                        signedInWithGoogle: false,
-                                        isParentFlow: true,
-                                        isChildFlow: $isParentFlow
-                                    )
-                                } label: {
-                                    Text("Continue as Parent")
-                                        .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
-                                        .frame(height: isiPhone ? 35 : 55)
-                                        .frame(maxWidth: .infinity)
-                                        .background(colorScheme == .dark ? Color(hex: "#A6A6A6") : Color(hex: "#DFFFDF")) // Button color for parents
-                                        .cornerRadius(isiPhone ? 6 : 12)
-                                        .foregroundStyle(.black) // Text color
-                                }
-
-                                // Additional "Setup for Child" option for non-iPhone devices
-                                if !isiPhone {
-                                    NavigationLink {
-                                        SignInWithEmailView(
-                                            showSignInView: $showSignInView,
-                                            isiPhone: $isiPhone,
-                                            isParent: false,
-                                            continueAsChild: true,
-                                            signedInWithGoogle: false,
-                                            isParentFlow: false,
-                                            isChildFlow: $isParentFlow
-                                        )
-                                    } label: {
-                                        Text("Setup for Child")
-                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
-                                            .frame(height: isiPhone ? 35 : 55)
-                                            .frame(maxWidth: .infinity)
-                                            .background(colorScheme == .dark ? Color(hex: "#A6A6A6") : Color(hex: "#DFFFDF")) // Button color for child setup
-                                            .cornerRadius(isiPhone ? 6 : 12)
-                                            .foregroundStyle(.black) // Text color
-                                    }
-                                }
-                                
-                                // Divider with "or" text
-                                HStack {
-                                    Capsule()
-                                        .fill(Color(hex: "#E9E9E9"))
-                                        .frame(width: isiPhone ? 100 : 200, height: 1) // Left line
-                                    
-                                    Text("or") // Text between the lines
-                                    
-                                    Capsule()
-                                        .fill(Color(hex: "#E9E9E9"))
-                                        .frame(width: isiPhone ? 100 : 200, height: 1) // Right line
-                                }
+//                                // Navigation link for the Sign Up button
+//                                NavigationLink {
+//                                    SignInWithEmailView(
+//                                        showSignInView: $showSignInView,
+//                                        isiPhone: $isiPhone,
+//                                        isParent: true, // Default to parent flow
+//                                        continueAsChild: false,
+//                                        signedInWithGoogle: false,
+//                                        isParentFlow: false,
+//                                        isChildFlow: $isParentFlow
+//                                    )
+//                                } label: {
+//                                    Text("Sign Up")
+//                                        .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
+//                                        .frame(height: isiPhone ? 35 : 55)
+//                                        .frame(maxWidth: .infinity)
+//                                        .background(colorScheme == .dark ? Color(hex: "#B43E2B") : Color(hex: "#FF6F61")) // Button color
+//                                        .cornerRadius(isiPhone ? 6 : 12) // Rounded corners
+//                                        .foregroundStyle(.black) // Text color
+//                                }
+//
+//                                // Navigation link to Continue as Parent
+//                                NavigationLink {
+//                                    SignInWithEmailView(
+//                                        showSignInView: $showSignInView,
+//                                        isiPhone: $isiPhone,
+//                                        isParent: false, // Switch to child flow
+//                                        continueAsChild: true,
+//                                        signedInWithGoogle: false,
+//                                        isParentFlow: true,
+//                                        isChildFlow: $isParentFlow
+//                                    )
+//                                } label: {
+//                                    Text("Continue as Parent")
+//                                        .font(.custom("ComicNeue-Regular", size: isiPhone ? 15 : 24))
+//                                        .frame(height: isiPhone ? 35 : 55)
+//                                        .frame(maxWidth: .infinity)
+//                                        .background(colorScheme == .dark ? Color(hex: "#A6A6A6") : Color(hex: "#DFFFDF")) // Button color for parents
+//                                        .cornerRadius(isiPhone ? 6 : 12)
+//                                        .foregroundStyle(.black) // Text color
+//                                }
+//
+//                                // Additional "Setup for Child" option for non-iPhone devices
+//                                if !isiPhone {
+//                                    NavigationLink {
+//                                        SignInWithEmailView(
+//                                            showSignInView: $showSignInView,
+//                                            isiPhone: $isiPhone,
+//                                            isParent: false,
+//                                            continueAsChild: true,
+//                                            signedInWithGoogle: false,
+//                                            isParentFlow: false,
+//                                            isChildFlow: $isParentFlow
+//                                        )
+//                                    } label: {
+//                                        Text("Setup for Child")
+//                                            .font(.custom("ComicNeue-Regular", size: isiPhone ? 12 : 24))
+//                                            .frame(height: isiPhone ? 35 : 55)
+//                                            .frame(maxWidth: .infinity)
+//                                            .background(colorScheme == .dark ? Color(hex: "#A6A6A6") : Color(hex: "#DFFFDF")) // Button color for child setup
+//                                            .cornerRadius(isiPhone ? 6 : 12)
+//                                            .foregroundStyle(.black) // Text color
+//                                    }
+//                                }
+//                                
+//                                // Divider with "or" text
+//                                HStack {
+//                                    Capsule()
+//                                        .fill(Color(hex: "#E9E9E9"))
+//                                        .frame(width: isiPhone ? 100 : 200, height: 1) // Left line
+//                                    
+//                                    Text("or") // Text between the lines
+//                                    
+//                                    Capsule()
+//                                        .fill(Color(hex: "#E9E9E9"))
+//                                        .frame(width: isiPhone ? 100 : 200, height: 1) // Right line
+//                                }
                                 
                                 // Buttons for signing in with Google and Apple
-                                HStack {
+                                VStack {
                                     // Google sign-in button
                                     Button {
                                         Task {
@@ -183,15 +183,38 @@ struct AuthenticationView: View {
                                             }
                                         }
                                     } label: {
+//                                        ZStack {
+//                                            RoundedRectangle(cornerRadius: 22)
+//                                                .fill(.white)
+//                                                .frame(width: 55, height: 55) // Google button size
+//                                            Image("googleIcon") // Google icon
+//                                                .resizable()
+//                                                .scaledToFit()
+//                                                .frame(width: 22, height: 22) // Google icon size
+//                                        }
+                                        
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 22)
-                                                .fill(.white)
-                                                .frame(width: 55, height: 55) // Google button size
-                                            Image("googleIcon") // Google icon
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 22, height: 22) // Google icon size
+                                                .fill(colorScheme == .dark ? Color.white : Color(red: 66/255, green: 133/255, blue: 244/255))
+                                                .frame(width: (isiPhone ? UIScreen.main.bounds.width * 0.7 : UIScreen.main.bounds.width * 0.5), height: 55)
+                                                .shadow(color: colorScheme == .dark ? Color.gray.opacity(0.8) : Color.gray.opacity(0.4), radius: 10)
+                                            HStack {
+                                                Image("googleIcon")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 22, height: 22)
+                                                Text("Continue with Google")
+                                                    .font(.system(size: 16, weight: .medium))
+                                                                
+                                                    .foregroundColor(colorScheme == .dark ? .black : .white) // Adjust text color
+                                            }
                                         }
+                                    }
+                                    .onChange(of: viewModel.didSignInWithGoogle) {
+                                        Task {
+                                            try? await subViewModel.loginUser(with: Auth.auth().currentUser?.uid ?? "")
+                                        }
+                                        
                                     }
                                     .navigationDestination(isPresented: $isSignedInWithGoogle) {
                                         SignInWithEmailView(
@@ -217,14 +240,31 @@ struct AuthenticationView: View {
                                             }
                                         }
                                     } label: {
-                                        Image("appleIcon") // Apple icon
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 55, height: 55) // Apple icon size
-                                            .cornerRadius(22) // Rounded corners
+//                                        Image("appleIcon") // Apple icon
+//                                            .resizable()
+//                                            .scaledToFit()
+//                                            .frame(width: 55, height: 55) // Apple icon size
+//                                            .cornerRadius(22) // Rounded corners
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 22)
+                                                .fill(colorScheme == .dark ? .white : .black)
+                                                .frame(width: (isiPhone ? UIScreen.main.bounds.width * 0.7 : UIScreen.main.bounds.width * 0.5), height: 55)
+                                                .shadow(color: colorScheme == .dark ? Color.gray.opacity(0.8) : Color.gray.opacity(0.4), radius: 10)
+                                            HStack {
+                                                Image(systemName: "apple.logo")
+                                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                                    .font(.system(size: 22))
+                                                Text("Continue with Apple")
+                                                    .font(.system(size: 16, weight: .medium))
+                                                                
+                                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                            }
+                                        }
                                     }
-                                    .onChange(of: viewModel.didSignInWithApple) { 
-                                        subViewModel.loginUser(with: Auth.auth().currentUser?.uid ?? "")
+                                    .onChange(of: viewModel.didSignInWithApple) {
+                                        Task {
+                                            try? await subViewModel.loginUser(with: Auth.auth().currentUser?.uid ?? "")
+                                        }
                                         
                                     }
                                   
@@ -245,6 +285,8 @@ struct AuthenticationView: View {
 //                                        }
 //                                    }
                                 }
+                                
+                                Spacer()
                             }
                             .frame(width: UIScreen.main.bounds.width * (isiPhone ? 0.8 : 0.6), height: UIScreen.main.bounds.height * 0.4)
                         }

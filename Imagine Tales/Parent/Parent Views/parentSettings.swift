@@ -30,7 +30,11 @@ struct parentSettings: View {
     @State private var reAuthed = false
     @State private var isDeletingAccount = false
     @State private var isDeletingWithEmail = false
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var orientation: OrientationManager
+    @State private var isShowingPremiumPlans = false
     
+    var isiPhone: Bool
     var body: some View {
         NavigationStack {
             ZStack {
@@ -88,87 +92,138 @@ struct parentSettings: View {
                         }
                     }
                     .padding()
-                    .frame(width: UIScreen.main.bounds.width * 0.5)
+                    .frame(width: isiPhone ? UIScreen.main.bounds.width * 0.9 : (orientation.isLandscape ? UIScreen.main.bounds.width * 0.4 :  UIScreen.main.bounds.width * 0.5))
                     .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                     .cornerRadius(12)
                     
-                    if reAuthModel.signedInWithEmail {
-                        if !isResettingPassword {
-                            Button {
-                                withAnimation {
-                                    isResettingPassword.toggle()
+//                    if reAuthModel.signedInWithEmail {
+//                        if !isResettingPassword {
+//                            Button {
+//                                withAnimation {
+//                                    isResettingPassword.toggle()
+//                                }
+//                            } label: {
+//                                Text("Reset Passowrd")
+//                                    .padding()
+//                                    .frame(width: UIScreen.main.bounds.width * 0.5)
+//                                    .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+//                                    .cornerRadius(12)
+//                            }
+//                        }
+//                        
+//                        else {
+//                            
+//                            TextField("Enter your email", text: $enteredEmail)
+//                                .padding()
+//                                .frame(width: UIScreen.main.bounds.width * 0.5)
+//                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+//                                .cornerRadius(12)
+//                            
+//                            HStack {
+//                                Button {
+//                                    let parentEmail = viewModel.parent?.email?.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+//                                    let enteredEmailTrimmed = enteredEmail.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+//                                    
+//                                    if enteredEmailTrimmed == parentEmail {
+//                                        Task {
+//                                            do {
+//                                                try await reset()
+//                                                Drops.show("Check your email for a reset link")
+//                                                withAnimation {
+//                                                    isResettingPassword.toggle()
+//                                                }
+//                                            } catch {
+//                                                // Handle error
+//                                            }
+//                                        }
+//                                    } else {
+//                                        if !enteredEmail.isEmpty {
+//                                            Drops.show("Please enter a valid email.")
+//                                        } else {
+//                                            Drops.show("Please enter your email.")
+//                                        }
+//                                    }
+//                                    
+//                                    
+//                                    
+//                                } label: {
+//                                    Text("Reset Password")
+//                                        .padding()
+//                                        .frame(width: UIScreen.main.bounds.width * 0.3)
+//                                        .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+//                                        .cornerRadius(12)
+//                                    
+//                                }
+//                                
+//                                Button {
+//                                    withAnimation {
+//                                        isResettingPassword.toggle()
+//                                    }
+//                                } label: {
+//                                    Text("Cancel")
+//                                        .padding()
+//                                        .frame(width: UIScreen.main.bounds.width * 0.17)
+//                                        .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+//                                        .foregroundStyle(.red)
+//                                        .cornerRadius(12)
+//                                }
+//                            }
+//                            
+//                            
+//                            
+//                            
+//                            
+//                        }
+//                    }
+                    
+                    if reAuthModel.signedInWithApple && !reAuthModel.isLinkedWithGoogle {
+                        Button {
+                            Task {
+                                do {
+                                    try await reAuthModel.linkWithGoogle()
+                                } catch {
+                                    print(error.localizedDescription)
                                 }
-                            } label: {
-                                Text("Reset Passowrd")
-                                    .padding()
-                                    .frame(width: UIScreen.main.bounds.width * 0.5)
-                                    .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
-                                    .cornerRadius(12)
+                            }
+                         } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 22)
+                                    .fill(colorScheme == .dark ? .black : .white)
+                                    .frame(width: 250, height: 55)
+                                HStack {
+                                    Image("googleIcon")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 22, height: 22)
+                                    Text("Link Account with Google")
+                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                }
                             }
                         }
-                        
-                        else {
-                            
-                            TextField("Enter your email", text: $enteredEmail)
-                                .padding()
-                                .frame(width: UIScreen.main.bounds.width * 0.5)
-                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
-                                .cornerRadius(12)
-                            
-                            HStack {
-                                Button {
-                                    let parentEmail = viewModel.parent?.email?.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                                    let enteredEmailTrimmed = enteredEmail.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+                    }
+                    if reAuthModel.isLinkedWithGoogle {
+                        Button {
+                            Task {
+                                do {
+                                    try await reAuthModel.unlinkGoogleAccount()
+                                } catch {
                                     
-                                    if enteredEmailTrimmed == parentEmail {
-                                        Task {
-                                            do {
-                                                try await reset()
-                                                Drops.show("Check your email for a reset link")
-                                                withAnimation {
-                                                    isResettingPassword.toggle()
-                                                }
-                                            } catch {
-                                                // Handle error
-                                            }
-                                        }
-                                    } else {
-                                        if !enteredEmail.isEmpty {
-                                            Drops.show("Please enter a valid email.")
-                                        } else {
-                                            Drops.show("Please enter your email.")
-                                        }
-                                    }
-                                    
-                                    
-                                    
-                                } label: {
-                                    Text("Reset Password")
-                                        .padding()
-                                        .frame(width: UIScreen.main.bounds.width * 0.3)
-                                        .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
-                                        .cornerRadius(12)
-                                    
-                                }
-                                
-                                Button {
-                                    withAnimation {
-                                        isResettingPassword.toggle()
-                                    }
-                                } label: {
-                                    Text("Cancel")
-                                        .padding()
-                                        .frame(width: UIScreen.main.bounds.width * 0.17)
-                                        .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
-                                        .foregroundStyle(.red)
-                                        .cornerRadius(12)
                                 }
                             }
-                            
-                            
-                            
-                            
-                            
+                        } label: {
+                            Text("Unlink google account")
+                        }
+                    }
+                    
+                    if !appState.isPremium {
+                        Button {
+                            isShowingPremiumPlans.toggle()
+                        } label: {
+                            Text("Buy Premium")
+                                .padding()
+                                .frame(width: isiPhone ? UIScreen.main.bounds.width * 0.9 : (orientation.isLandscape ? UIScreen.main.bounds.width * 0.4 :  UIScreen.main.bounds.width * 0.5))
+                                .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
+                                .cornerRadius(12)
                         }
                     }
                     Spacer()
@@ -182,6 +237,7 @@ struct parentSettings: View {
                                 
                                 try viewModel.logOut() // Attempt to log out
                                 showSigninView = true // Set binding to show sign-in view
+                                appState.isPremium = false
                                 dismiss() // Dismiss the settings view
                             } catch {
                                 // Print error if logout fails
@@ -191,18 +247,16 @@ struct parentSettings: View {
                     } label: {
                         Text("Log Out")
                             .padding()
-                            .frame(width: UIScreen.main.bounds.width * 0.5)
+                            .frame(width: isiPhone ? UIScreen.main.bounds.width * 0.9 : (orientation.isLandscape ? UIScreen.main.bounds.width * 0.4 :  UIScreen.main.bounds.width * 0.5))
                             .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                             .foregroundStyle(.red)
                             .cornerRadius(12)
                     }
                    
                         Button {
-                            if reAuthModel.signedInWithEmail {
-                                isDeletingWithEmail.toggle()
-                            } else {
+                       
                                 isDeletingAccount.toggle()
-                            }
+                            
                         } label: {
                             Text("Delete Account")
                                 .foregroundStyle(.red)
@@ -243,6 +297,9 @@ struct parentSettings: View {
                     dismiss()
                 }) {
                     DeleteWithEmail(showSigninView: $showSigninView)
+                }
+                .fullScreenCover(isPresented: $isShowingPremiumPlans) {
+                    PremiumPlans()
                 }
                 
             }

@@ -112,6 +112,13 @@ struct TabbarView: View {
                 .onTapGesture {
                     selectedTab = 4
                 }
+                
+                if appState.isPremium {
+                    HStack {
+                        Image(systemName: "medal.star.fill")
+                        Text("Premium")
+                    }
+                }
             }
             
             // Toolbar items for search and notifications on the right side

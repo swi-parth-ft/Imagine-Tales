@@ -22,11 +22,13 @@ final class ReAuthentication: ObservableObject {
     @Published var signedInWithGoogle = false // Flag to check if the user signed in with Google
     @Published var signedInWithApple = false
     @Published var signedInWithEmail = false
-    
+    @Published var isLinkedWithGoogle = false
     
     let signInAppleHelper = SignInAppleHelper()
     /// Checks if the current user signed in with Google or Apple
     func checkIfGoogle() {
+        var isAppleLinked = false // Track if Apple is linked
+        var isGoogleLinked = false // Track if Google is linked
         if let user = Auth.auth().currentUser { // Get the current user
             // Loop through the user's provider data
             for userInfo in user.providerData {
@@ -34,16 +36,22 @@ final class ReAuthentication: ObservableObject {
                 if userInfo.providerID == "google.com" {
                     signedInWithGoogle = true // Set flag if signed in with Google
                     // Perform actions specific to Google-signed-in users here
-                    break
+                   // break
+                    isGoogleLinked = true
                 } else if userInfo.providerID == "apple.com" {
                     signedInWithApple = true // Set flag if signed in with Apple
                     // Perform actions specific to Apple-signed-in users here
-                    break
+                   // break
+                    isAppleLinked = true
                 } else {
                     signedInWithEmail = true
                 }
                 // Get the user's email
                 self.email = user.email!
+            }
+            
+            if isAppleLinked && isGoogleLinked {
+                self.isLinkedWithGoogle = true
             }
         } else {
             print("No user is signed in.") // Log if no user is signed in
@@ -74,6 +82,27 @@ final class ReAuthentication: ObservableObject {
                 self.reAuthenticated = true // Update reAuthenticated status
             }
         }
+    }
+    
+    func linkWithGoogle() async throws {
+        let helper = SignInGoogleHelper()
+            
+            // Sign in with Google and get tokens
+            let tokens = try await helper.signIn()
+
+            // Get the current Firebase user
+            guard let currentUser = Auth.auth().currentUser else {
+                throw NSError(domain: "LinkGoogleAccount", code: 0, userInfo: [NSLocalizedDescriptionKey: "No authenticated user found."])
+            }
+            
+            // Link Google account to the current user
+            let credential = GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
+            
+            let result = try await currentUser.link(with: credential)
+            
+            print("Successfully linked Google account: \(result.user.email ?? "No email found")")
+        
+        self.isLinkedWithGoogle = true
     }
     
     
@@ -152,6 +181,17 @@ final class ReAuthentication: ObservableObject {
                 print("PIN successfully updated!") // Log success
             }
         }
+    }
+    func unlinkGoogleAccount() async throws {
+        // Get the currently signed-in user
+        guard let currentUser = Auth.auth().currentUser else {
+            throw NSError(domain: "UnlinkGoogleAccount", code: 0, userInfo: [NSLocalizedDescriptionKey: "No authenticated user found."])
+        }
+        
+        // Unlink the Google provider from the current user
+        let user = try await currentUser.unlink(fromProvider: "google.com")
+        self.isLinkedWithGoogle = false
+        print("Successfully unlinked Google account from user: \(user.email ?? "No email found")")
     }
     
     func deleteAccount(completion: @escaping (Error?) -> Void) {

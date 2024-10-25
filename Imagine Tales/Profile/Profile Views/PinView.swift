@@ -109,7 +109,72 @@ struct PinView: View {
                 
                 // Handle reauthentication process if resetting the PIN
                 if isResetting && !reAuthModel.reAuthenticated {
-                    if reAuthModel.signedInWithGoogle {
+                    if reAuthModel.isLinkedWithGoogle {
+                        // Button for Google sign-in if user is resetting their PIN
+                        VStack {
+                            Button {
+                                Task {
+                                    do {
+                                        try await reAuthModel.reAuthWithGoogle() // Attempt reauthentication with Google
+                                        Drops.show("Signed in Successfully")
+                                    } catch {
+                                        print(error.localizedDescription) // Log any errors
+                                    }
+                                }
+                            } label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 22)
+                                        .fill(colorScheme == .dark ? Color.white : Color(red: 66/255, green: 133/255, blue: 244/255))
+                                        .frame(width: 250, height: 55)
+                                        .shadow(color: colorScheme == .dark ? Color.gray.opacity(0.8) : Color.gray.opacity(0.4), radius: 10)
+                                    HStack {
+                                        Image("googleIcon")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 22, height: 22)
+                                        Text("Continue with Google")
+                                            .font(.system(size: 16, weight: .medium))
+                                                        
+                                            .foregroundColor(colorScheme == .dark ? .black : .white) // Adjust text color
+                                    }
+                                }
+                            }
+                            
+                            Button {
+                                Task {
+                                    do {
+                                       // try await reAuthModel.reAuthWithApple() // Attempt reauthentication with Apple
+                                        reAuthModel.reAuthWithApple { success in
+                                            if success {
+                                                Drops.show("Signed in Successfully")
+                                            } else {
+                                                
+                                            }
+                                        }
+                                    } catch {
+                                        print(error.localizedDescription) // Log any errors
+                                    }
+                                }
+                            } label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 22)
+                                        .fill(colorScheme == .dark ? .white : .black)
+                                        .frame(width: 250, height: 55)
+                                        .shadow(color: colorScheme == .dark ? Color.gray.opacity(0.8) : Color.gray.opacity(0.4), radius: 10)
+                                    HStack {
+                                        Image(systemName: "apple.logo")
+                                            .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                            .font(.system(size: 22))
+                                        Text("Continue with Apple")
+                                            .font(.system(size: 16, weight: .medium))
+                                                        
+                                            .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if reAuthModel.signedInWithGoogle {
                         // Button for Google sign-in if user is resetting their PIN
                         Button {
                             Task {
@@ -123,15 +188,18 @@ struct PinView: View {
                         } label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 22)
-                                    .fill(colorScheme == .dark ? .gray : .white)
+                                    .fill(colorScheme == .dark ? Color.white : Color(red: 66/255, green: 133/255, blue: 244/255))
                                     .frame(width: 250, height: 55)
+                                    .shadow(color: colorScheme == .dark ? Color.gray.opacity(0.8) : Color.gray.opacity(0.4), radius: 10)
                                 HStack {
                                     Image("googleIcon")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 22, height: 22)
                                     Text("Continue with Google")
-                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                        .font(.system(size: 16, weight: .medium))
+                                                    
+                                        .foregroundColor(colorScheme == .dark ? .black : .white) // Adjust text color
                                 }
                             }
                         }
@@ -156,27 +224,30 @@ struct PinView: View {
                                 RoundedRectangle(cornerRadius: 22)
                                     .fill(colorScheme == .dark ? .white : .black)
                                     .frame(width: 250, height: 55)
+                                    .shadow(color: colorScheme == .dark ? Color.gray.opacity(0.8) : Color.gray.opacity(0.4), radius: 10)
                                 HStack {
                                     Image(systemName: "apple.logo")
                                         .foregroundStyle(colorScheme == .dark ? .black : .white)
                                         .font(.system(size: 22))
                                     Text("Continue with Apple")
+                                        .font(.system(size: 16, weight: .medium))
+                                                    
                                         .foregroundStyle(colorScheme == .dark ? .black : .white)
                                 }
                             }
                         }
                     } else {
-                        // Text fields for email and password if not using Google
-                        Text(reAuthModel.email)
-                            .padding()
-                            .frame(width: UIScreen.main.bounds.width * 0.5)
-                            .background(colorScheme == .dark ? .black.opacity(0.2) : Color(hex: "#D0FFD0"))
-                            .cornerRadius(12)
-                        SecureField("Password", text: $reAuthModel.password)
-                            .padding()
-                            .frame(width: UIScreen.main.bounds.width * 0.5)
-                            .background(colorScheme == .dark ? .black.opacity(0.2) : Color(hex: "#D0FFD0"))
-                            .cornerRadius(12)
+//                        // Text fields for email and password if not using Google
+//                        Text(reAuthModel.email)
+//                            .padding()
+//                            .frame(width: UIScreen.main.bounds.width * 0.5)
+//                            .background(colorScheme == .dark ? .black.opacity(0.2) : Color(hex: "#D0FFD0"))
+//                            .cornerRadius(12)
+//                        SecureField("Password", text: $reAuthModel.password)
+//                            .padding()
+//                            .frame(width: UIScreen.main.bounds.width * 0.5)
+//                            .background(colorScheme == .dark ? .black.opacity(0.2) : Color(hex: "#D0FFD0"))
+//                            .cornerRadius(12)
                     }
                 }
                 

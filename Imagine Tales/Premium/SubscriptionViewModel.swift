@@ -17,7 +17,9 @@ class SubscriptionViewModel: ObservableObject {
     @Published var isTrialModel = false
     
     // Function to log in the user and fetch customer info
-    func loginUser(with parentId: String) {
+    func loginUser(with parentId: String)  {
+        Purchases.configure(withAPIKey: "", appUserID: parentId)
+        
         Purchases.shared.logIn(parentId) { (customerInfo, created, error) in
             if let error = error {
                 self.errorMessage = "Error logging in: \(error.localizedDescription)"
@@ -30,8 +32,10 @@ class SubscriptionViewModel: ObservableObject {
                 print("Existing RevenueCat user logged in. \(parentId)")
             }
 
+            
             self.fetchCustomerInfo()
         }
+        
     }
     
     // Function to fetch customer info from RevenueCat
@@ -43,9 +47,9 @@ class SubscriptionViewModel: ObservableObject {
             }
 
             guard let customerInfo = customerInfo else { return }
-        
+            print("Customer Info: \(customerInfo.entitlements.active)")
             self.checkSubscriptionStatus(customerInfo: customerInfo)
-            self.restorePurchases()
+         //   self.restorePurchases()
         }
     }
     

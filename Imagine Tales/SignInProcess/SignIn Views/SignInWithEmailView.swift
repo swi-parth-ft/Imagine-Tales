@@ -32,7 +32,7 @@ struct SignInWithEmailView: View {
     
     @AppStorage("dpurl") private var dpUrl = ""
     @EnvironmentObject var appState: AppState
-    let isNewGoogleUser = AuthenticationManager.shared.isNewUser
+    @State private var isNewGoogleUser = false
     var continueAsChild: Bool
     var signedInWithGoogle: Bool
     
@@ -77,8 +77,7 @@ struct SignInWithEmailView: View {
     @State private var selectedCountry: String = "United States" // Default selection
     @State private var isDropdownExpanded: Bool = false
     @State private var isVarifyingNumber = false
-    
-    
+    @State private var hideBackButton = false
     var body: some View {
         NavigationStack {
             ZStack {
@@ -92,7 +91,8 @@ struct SignInWithEmailView: View {
                     ZStack(alignment: .leading) {
                         HStack {
                             //Back Button
-                            if !isSignedUp {
+                            
+                            if !isSignedUp && !hideBackButton{
                                 Button {
                                     
                                     if !isAddingChild {
@@ -364,6 +364,9 @@ struct SignInWithEmailView: View {
                                                 .customTextFieldStyle(isCompact: isCompact)
                                                 .background(colorScheme == .dark ? .black.opacity(0.2) : .white)
                                                 .cornerRadius(isCompact ? 6 : 12)
+                                                .onAppear {
+                                                    hideBackButton = true
+                                                }
                                                 
                                             
                                             TextField("Phone", text: $viewModel.number)
@@ -462,6 +465,7 @@ struct SignInWithEmailView: View {
                                                 if viewModel.name.isEmpty || viewModel.number.isEmpty || viewModel.country.isEmpty {
                                                     Drops.show("Please fill all details.")
                                                 } else {
+                                                    hideBackButton = false
                                                     Task {
                                                         do {
                                                             try await viewModel.createGoogleUserProfile(isParent: isParent)
@@ -665,7 +669,7 @@ struct SignInWithEmailView: View {
                                                             isSignedUp = true
                                                             settingPassword = false
                                                             newUser = true
-                                                            subViewModel.loginUser(with: Auth.auth().currentUser?.uid ?? "")
+                                                            try? await subViewModel.loginUser(with: Auth.auth().currentUser?.uid ?? "")
                                                             
                                                         }
                                                     } catch {
@@ -838,17 +842,39 @@ struct SignInWithEmailView: View {
             .ignoresSafeArea(.keyboard)
             .onAppear {
                 
-                
+                isNewGoogleUser = AuthenticationManager.shared.isNewUser
+                print(isNewGoogleUser)
+                appState.isNewUser = isNewGoogleUser
                 appState.isInSignInView = true
                 isChildFlow = isParentFlow
                 ipf = isParentFlow
                 
+                if signedInWithGoogle {
+                    viewModel.checkIfUserDocumentExists(documentId: Auth.auth().currentUser?.uid ?? "") { exists in
+                        if exists {
+                            print("The document exists in the database.")
+                            if isiPhone {
+                                
+                                parentViewModel.AddFCMTokenParent(parentId: Auth.auth().currentUser?.uid ?? "")
+                                showSignInView = false
+                                appState.isInSignInView = false
+                            }
+                        } else {
+                            isNewGoogleUser = true
+                            isSignedUp = false
+                            isShowingButtons = false
+                        }
+                    }
+                }
+                
                 if !isNewGoogleUser && signedInWithGoogle {
                     // showSignInView = false
-                    if isiPhone {
-                        parentViewModel.AddFCMTokenParent(parentId: Auth.auth().currentUser?.uid ?? "")
-                        showSignInView = false
-                    }
+//                    if isiPhone {
+//                        
+//                        parentViewModel.AddFCMTokenParent(parentId: Auth.auth().currentUser?.uid ?? "")
+//                        showSignInView = false
+//                        appState.isInSignInView = false
+//                    }
                     isSignedUp = true
                     settingPassword = false
                 }

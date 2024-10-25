@@ -63,7 +63,7 @@ struct ProfileView: View {
     @State private var retryDelay = 2.0 // Delay between retries
     @EnvironmentObject var orientation: OrientationManager
     @State private var isExpanding = true
-    
+    @EnvironmentObject var appState: AppState
     var body: some View {
         NavigationStack {
             ZStack {
@@ -463,7 +463,9 @@ struct ProfileView: View {
                             
                             screenTimeViewModel.stopScreenTime() // Stop screen time tracking
                             try viewModel.logOut() // Log out the user
+                            appState.isPremium = false
                             showSignInView = true // Show sign-in view
+                            
                         } catch {
                             print(error.localizedDescription)
                         }

@@ -29,6 +29,7 @@ struct parentSettingsiPhone: View {
     @State private var reAuthed = false
     @State private var isDeletingAccount = false
     @State private var isDeletingWithEmail = false
+    @EnvironmentObject var appState: AppState
     var body: some View {
         NavigationStack {
             ZStack {
@@ -165,7 +166,45 @@ struct parentSettingsiPhone: View {
                             
                         }
                     }
-                
+                    if reAuthModel.signedInWithApple && !reAuthModel.isLinkedWithGoogle {
+                        Button {
+                            Task {
+                                do {
+                                    try await reAuthModel.linkWithGoogle()
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
+                         } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 22)
+                                    .fill(colorScheme == .dark ? .gray : .white)
+                                    .frame(width: 250, height: 55)
+                                HStack {
+                                    Image("googleIcon")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 22, height: 22)
+                                    Text("Link Account with Google")
+                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                }
+                            }
+                        }
+                    }
+                    
+                    if reAuthModel.isLinkedWithGoogle {
+                        Button {
+                            Task {
+                                do {
+                                    try await reAuthModel.unlinkGoogleAccount()
+                                } catch {
+                                    
+                                }
+                            }
+                        } label: {
+                            Text("Unlink google account")
+                        }
+                    }
                     Spacer()
                     // Button to log out the parent
                     Button {
@@ -174,6 +213,7 @@ struct parentSettingsiPhone: View {
                                 viewModel.removeFCMTokenParent(parentId: viewModel.parent?.userId ?? "")
                                 try viewModel.logOut() // Attempt to log out
                                 showSigninView = true // Set binding to show sign-in view
+                                appState.isPremium = false
                                 dismiss() // Dismiss the settings view
                             } catch {
                                 // Print error if logout fails

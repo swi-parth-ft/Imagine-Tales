@@ -40,7 +40,8 @@ struct RootView: View {
     
     /// State variable that toggles to trigger a reload of the view. Defaults to `false`.
     @State private var reload = false
-    
+    @StateObject private var subViewModel = SubscriptionViewModel()
+    @EnvironmentObject var appState: AppState
     // MARK: - Body View
     
     var body: some View {
@@ -51,11 +52,15 @@ struct RootView: View {
                     ParentView(showSigninView: $showSignInView, reload: $reload, isiPhone: $isiPhone)
                 } else {
                     TabbarView(showSignInView: $showSignInView, reload: $reload)
+                        
                 }
             }
             .onAppear {
                 handleAuthentication() // Calls the method to handle user authentication when the view appears
                 updateDeviceType() // Updates the device type state when the view appears
+            }
+            .onChange(of: subViewModel.hasActiveSubscription) {
+                appState.isPremium = subViewModel.hasActiveSubscription
             }
             // Presents the AuthenticationView in full-screen mode if the user needs to sign in
             .fullScreenCover(isPresented: $showSignInView, onDismiss: { reload.toggle() }) {
@@ -77,6 +82,7 @@ struct RootView: View {
             let authUser = try AuthenticationManager.shared.getAuthenticatedUser()
             // If the authenticated user is nil, show the sign-in view
             showSignInView = authUser == nil
+            subViewModel.loginUser(with: authUser.uid)
         } catch {
             // Logs the error message in case of failure and shows the sign-in view
             print("Failed to get authenticated user: \(error.localizedDescription)")

@@ -69,7 +69,7 @@ struct PremiumPlans: View {
     @AppStorage("remainingDays") var remainingDays: Int = 2
     @AppStorage("remainingStories") var remainingStories: Int = 3
     @State private var isiPhone = false
-    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @StateObject private var viewModel = PremiumPlansViewModel()
     
     var body: some View {
@@ -408,6 +408,11 @@ struct PremiumPlans: View {
                     viewModel.fetchOfferings()
                 }
                 
+            }
+            .onAppear {
+                if horizontalSizeClass == .compact {
+                    isiPhone = true
+                }
             }
             .navigationTitle("Premium Plans")
             .toolbar {

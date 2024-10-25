@@ -30,6 +30,7 @@ class AppState: ObservableObject {
     static let shared = AppState()  // Singleton instance of the app state
     @Published var isInSignInView: Bool = false  // Tracks if the user is currently in the sign-in view
     @Published var isPremium: Bool = false
+    @Published var isNewUser: Bool = false
 }
 
 // MARK: - AppDelegate Class
@@ -52,7 +53,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 }
 
        
-        Purchases.configure(withAPIKey: Env.catkey)
+        
         return true
     }
     
@@ -64,12 +65,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     /// Logs out the current user if they are in the sign-in view to ensure session integrity.
     private func logoutUserIfInSignInView() {
         if AppState.shared.isInSignInView {
-            do {
-                try Auth.auth().signOut()  // Firebase sign out method
-                print("User logged out successfully.")  // Confirmation of logout
-            } catch {
-                print("Error signing out: \(error.localizedDescription)")  // Error handling in case sign out fails
-            }
+                do {
+                    try Auth.auth().signOut()  // Firebase sign out method
+                    print("User logged out successfully.")  // Confirmation of logout
+                } catch {
+                    print("Error signing out: \(error.localizedDescription)")  // Error handling in case sign out fails
+                }
+            
         }
     }
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {

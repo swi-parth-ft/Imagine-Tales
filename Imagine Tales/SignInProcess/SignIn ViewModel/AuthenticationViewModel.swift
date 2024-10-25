@@ -17,7 +17,8 @@ final class AuthenticationViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var didSignInWithApple = false
-
+    @Published var didSignInWithGoogle = false
+    
     let signInAppleHelper = SignInAppleHelper()
     
     func signInGoogle() async throws -> AuthDataResultModel?{
@@ -25,6 +26,7 @@ final class AuthenticationViewModel: ObservableObject {
         let tokens = try await helper.signIn()
         
         let authDataResult = try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
+        self.didSignInWithGoogle = true
             return authDataResult
         
       

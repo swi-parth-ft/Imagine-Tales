@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseAuth
+import SwiftUICore
 
 /// Model representing the authentication data result.
 struct AuthDataResultModel {
@@ -71,15 +72,7 @@ final class AuthenticationManager {
         try await user.updatePassword(to: password)
     }
     
-    /// Updates the user's email address.
-    /// - Throws: An error if the update fails.
-    func updateEmail(email: String) async throws {
-        guard let user = Auth.auth().currentUser else {
-            throw URLError(.badServerResponse)
-        }
-        
-        try await user.updateEmail(to: email)
-    }
+ 
     
     /// Signs in a user with Google credentials.
     /// - Throws: An error if the sign-in fails.

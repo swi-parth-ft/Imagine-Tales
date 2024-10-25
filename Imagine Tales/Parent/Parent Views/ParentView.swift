@@ -20,8 +20,8 @@ struct ParentView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass // Environment variable to check size class
     @State private var isCompact = false // State variable to track if the layout is compact
     @Environment(\.colorScheme) var colorScheme
-    
-    
+    @EnvironmentObject var appState: AppState
+    @StateObject private var subViewModel = SubscriptionViewModel()
     var body: some View {
         NavigationStack {
             ZStack {
@@ -78,6 +78,7 @@ struct ParentView: View {
                     }
                     .scrollContentBackground(.hidden) // Hide the background for the scroll view
                 }
+                
                 // Sheet for adding a new child
                 .sheet(isPresented: $isAddingNew, onDismiss: {
                     // Refresh children list after the sheet is dismissed
@@ -101,13 +102,13 @@ struct ParentView: View {
                         
                     }
                 }) {
-                    if isCompact {
-                        parentSettingsiPhone(showSigninView: $showSigninView)
-                    } else {
-                        parentSettings(showSigninView: $showSigninView) // Present the settings view
-                    }
+              
+                        parentSettings(showSigninView: $showSigninView, isiPhone: isCompact) // Present the settings view
+                    
                 }
                 .onAppear {
+                    
+                        
                     
                     // Check the horizontal size class and set the isCompact state
                     if horizontalSizeClass == .compact {
@@ -120,6 +121,10 @@ struct ParentView: View {
                 // Toolbar button to open the profile settings
                 Button("Profile", systemImage: "person.fill") {
                     isShowingSetting = true // Show settings when button is tapped
+                }
+                
+                if appState.isPremium {
+                    Text("Premium")
                 }
             }
         }
